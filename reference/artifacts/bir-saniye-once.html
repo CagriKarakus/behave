@@ -1,0 +1,562 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Bir Saniye Önce Devresi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Düzen: tek sütun, telefon önce. Üstte sabit ağ diyagramı, altta kaydırıcılar,
+   ekranın altına yapışık üç çıktı göstergesi. Bölge renkleri anlam taşır:
+   kırmızı = amigdala, mavi = frontal korteks, amber = dopamin. */
+:root {
+  --bg: #ECEFF3;
+  --panel: #F8F9FB;
+  --ink: #131C28;
+  --muted: #566475;
+  --line: #C9D1DB;
+  --edge: #46566A;
+  --amy: #C9382A;
+  --pfc: #1F66B0;
+  --dop: #B77800;
+  --lesion: #7B8797;
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B131D; --panel: #131D2A; --ink: #E7EDF4; --muted: #8FA0B3; --line: #263446;
+    --edge: #9FB0C3; --amy: #FF6A52; --pfc: #5BA9F2; --dop: #F4B63A; --lesion: #6F7F92;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0B131D; --panel: #131D2A; --ink: #E7EDF4; --muted: #8FA0B3; --line: #263446;
+  --edge: #9FB0C3; --amy: #FF6A52; --pfc: #5BA9F2; --dop: #F4B63A; --lesion: #6F7F92;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 14px; line-height: 1.5;
+  padding-inline: 16px; padding-block: 20px 150px;
+}
+.wrap { max-width: 560px; margin-inline: auto; display: flex; flex-direction: column; gap: 22px; }
+.eyebrow { margin: 0; font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { margin: 4px 0 8px; font-family: var(--f-display); font-weight: 700; font-size: 32px; line-height: 1.05; letter-spacing: -.01em; text-wrap: balance; }
+.lede { margin: 0; font-size: 15px; color: var(--muted); max-width: 46ch; }
+h2 { margin: 0 0 8px; font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+
+.chips { display: flex; gap: 8px; overflow-x: auto; margin-inline: -16px; padding-inline: 16px; padding-block: 2px 6px; scrollbar-width: thin; }
+.chip { flex: none; font: 500 13px/1 var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 10px 14px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+button:focus-visible, input:focus-visible, .node:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+.stage { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px 6px 8px; }
+.stage svg { display: block; width: 100%; height: auto; max-width: 100%; touch-action: manipulation; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 6px 10px 2px; font-size: 12px; color: var(--muted); align-items: center; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+.legend svg { display: inline-block; width: 26px; height: 10px; vertical-align: -1px; margin-right: 4px; }
+
+.node { cursor: pointer; }
+.grp-amy { --c: var(--amy); } .grp-pfc { --c: var(--pfc); } .grp-dop { --c: var(--dop); }
+.node .base { fill: var(--panel); stroke: var(--c); stroke-width: 1.6; }
+.node .fill { fill: var(--c); }
+.node .ring { fill: none; stroke: var(--ink); stroke-width: 1.6; opacity: 0; }
+.node.sel .ring { opacity: 1; }
+.node.les .base { stroke: var(--lesion); stroke-dasharray: 3 3; }
+.node text { pointer-events: none; text-anchor: middle; }
+.node .ab { font: 500 11px var(--f-mono); fill: var(--ink); paint-order: stroke; stroke: var(--panel); stroke-width: 3px; stroke-linejoin: round; }
+.node .pct { font: 400 9.5px var(--f-mono); fill: var(--ink); paint-order: stroke; stroke: var(--panel); stroke-width: 3px; stroke-linejoin: round; }
+.node .cap { font: 400 10px var(--f-body); fill: var(--muted); }
+.node .slash { stroke: var(--lesion); stroke-width: 1.6; }
+.edge { fill: none; stroke: var(--edge); stroke-linecap: round; }
+.edge.inh { stroke-dasharray: 6 4; }
+.mk { fill: var(--edge); }
+.mk-bar { stroke: var(--edge); stroke-width: 2.4; fill: none; }
+
+.detail { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.detail p { margin: 0; }
+.detail .hint { color: var(--muted); }
+.d-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.d-name { font-family: var(--f-display); font-weight: 600; font-size: 18px; line-height: 1.2; text-wrap: balance; }
+.d-pct { font: 500 15px var(--f-mono); font-variant-numeric: tabular-nums; }
+.track { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.track > b { display: block; height: 100%; width: 0; background: var(--c, var(--ink)); }
+.d-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+.d-list li { display: flex; justify-content: space-between; gap: 10px; }
+.d-list .v { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.btn { font: 500 13px/1 var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 10px; padding: 11px 14px; cursor: pointer; }
+.btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.chart svg { display: block; width: 100%; height: auto; max-width: 100%; }
+.chart text { font: 400 10px var(--f-mono); fill: var(--muted); }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .ln { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+
+.sliders { display: flex; flex-direction: column; gap: 14px; }
+.sl-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.sl-name { font-weight: 600; }
+.sl-val { font: 500 13px var(--f-mono); font-variant-numeric: tabular-nums; }
+.sl-hint { margin: 0; font-size: 12px; color: var(--muted); }
+input[type="range"] { width: 100%; height: 32px; margin: 0; accent-color: var(--c); }
+.sl-amy { --c: var(--amy); } .sl-pfc { --c: var(--pfc); } .sl-dop { --c: var(--dop); }
+
+.foot { margin: 0; font-size: 12px; color: var(--muted); max-width: 60ch; }
+
+.bar { position: fixed; left: 0; right: 0; bottom: 0; background: var(--panel); border-top: 1px solid var(--line);
+  padding: 9px 16px calc(9px + env(safe-area-inset-bottom, 0px)); }
+.bar-in { max-width: 560px; margin-inline: auto; display: flex; flex-direction: column; gap: 8px; }
+.say { margin: 0; font-size: 13px; line-height: 1.35; min-height: 2.7em; }
+.meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.m-top { display: flex; justify-content: space-between; font: 400 10.5px var(--f-mono); color: var(--muted); margin-bottom: 3px; gap: 4px; }
+.m-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
+.m .track > b { background: var(--c); }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Behave · Bölüm 2</p>
+    <h1>Bir Saniye Önce</h1>
+    <p class="lede">Amigdala, frontal korteks ve dopamin devresinin basitleştirilmiş modeli. Bir senaryo seç, bölgelere dokun, kaydırıcılarla oyna.</p>
+  </header>
+
+  <div class="chips" id="chips" role="group" aria-label="Senaryolar"></div>
+
+  <section aria-label="Beyin devresi">
+    <div class="stage">
+      <svg id="net" viewBox="0 0 360 475" role="group" aria-label="Dokunulabilir beyin devresi diyagramı">
+        <defs>
+          <marker id="mx" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto"><path class="mk" d="M0,1 L10,5 L0,9 z"/></marker>
+          <marker id="mi" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk-bar" d="M5,0 L5,10"/></marker>
+        </defs>
+        <g id="edges"></g>
+        <g id="nodes"></g>
+      </svg>
+      <div class="legend">
+        <span><i style="background:var(--pfc)"></i>Frontal korteks</span>
+        <span><i style="background:var(--amy)"></i>Amigdala</span>
+        <span><i style="background:var(--dop)"></i>Dopamin</span>
+        <span><svg viewBox="0 0 26 10"><line x1="1" y1="5" x2="20" y2="5" stroke="var(--edge)" stroke-width="2"/><path d="M17,1 L25,5 L17,9 z" fill="var(--edge)"/></svg>uyarır</span>
+        <span><svg viewBox="0 0 26 10"><line x1="1" y1="5" x2="22" y2="5" stroke="var(--edge)" stroke-width="2" stroke-dasharray="5 3"/><line x1="23" y1="0" x2="23" y2="10" stroke="var(--edge)" stroke-width="2.4"/></svg>engeller</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="detail" id="detail"></section>
+
+  <div class="row">
+    <button class="btn" id="pulse" type="button">Ani tehdit ver (1 sn)</button>
+    <button class="btn" id="pause" type="button" aria-pressed="false">Duraklat</button>
+    <button class="btn" id="reset" type="button">Sıfırla</button>
+  </div>
+
+  <section class="chart" aria-label="Zaman grafiği">
+    <h2>Son 12 saniye</h2>
+    <svg id="chart" viewBox="0 0 360 140" role="img" aria-label="Korku tepkisi, isteme ve frontal kontrolün zaman içindeki değişimi"></svg>
+  </section>
+
+  <section aria-label="Girdiler">
+    <h2>Girdiler</h2>
+    <div class="sliders" id="sliders"></div>
+  </section>
+
+  <p class="foot">Nitel bir model: ağırlıklar ve sayılar ölçüm değildir, Bölüm 2'de anlatılan ilişkilerin yönünü ve zamanlamasını gösterir. Stres ve frontal güç ayarları, frontal korteksin enerji ve yorgunlukla zayıfladığı fikrinin sadeleştirmesidir. Gerçek beyin bundan çok daha karmaşıktır.</p>
+</div>
+
+<div class="bar" aria-label="Anlık çıktılar">
+  <div class="bar-in">
+    <p class="say" id="say"></p>
+    <div class="meters">
+      <div class="m" style="--c: var(--amy)"><div class="m-top"><span>Korku · CeA</span><b id="m-cea">0%</b></div><div class="track"><b id="b-cea"></b></div></div>
+      <div class="m" style="--c: var(--dop)"><div class="m-top"><span>İsteme · NAcc</span><b id="m-nacc">0%</b></div><div class="track"><b id="b-nacc"></b></div></div>
+      <div class="m" style="--c: var(--pfc)"><div class="m-top"><span>Kontrol · PFC</span><b id="m-ctl">0%</b></div><div class="track"><b id="b-ctl"></b></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Nitel beyin modeli: 9 bölge, 15 bağlantı, sızıntılı hız (rate) dinamiği.
+// Sayılar ölçüm değildir; ilişkilerin yönünü ve zamanlamasını gösterir.
+
+const NODES = [
+  { id: 'ofc',   ab: 'OFC',   cap: 'orbitofrontal',   grp: 'pfc', x: 70,  y: 60,  tau: 0.6,  b: 0.2 },
+  { id: 'acc',   ab: 'ACC',   cap: 'ön singulat',     grp: 'pfc', x: 180, y: 60,  tau: 0.5,  b: 0.2 },
+  { id: 'dlpfc', ab: 'dlPFC', cap: 'dorsolateral',    grp: 'pfc', x: 290, y: 60,  tau: 0.8,  b: 0.25 },
+  { id: 'vmpfc', ab: 'vmPFC', cap: 'ventromedial',    grp: 'pfc', x: 180, y: 170, tau: 0.7,  b: 0.1 },
+  { id: 'bla',   ab: 'BLA',   cap: 'bazolateral',     grp: 'amy', x: 70,  y: 290, tau: 0.3,  b: 0.15 },
+  { id: 'itc',   ab: 'ITC',   cap: 'ardışık hücre',   grp: 'amy', x: 180, y: 290, tau: 0.4,  b: 0.1 },
+  { id: 'cea',   ab: 'CeA',   cap: 'merkezi',         grp: 'amy', x: 290, y: 290, tau: 0.35, b: 0.1 },
+  { id: 'vta',   ab: 'VTA',   cap: 'dopamin kaynağı', grp: 'dop', x: 70,  y: 420, tau: 0.3,  b: 0.2 },
+  { id: 'nacc',  ab: 'NAcc',  cap: 'akumbens',        grp: 'dop', x: 290, y: 420, tau: 0.4,  b: 0.15 },
+];
+
+// from, to, ağırlık (+ uyarır, − engeller), bend (çizimde eğrilik, px)
+const EDGES = [
+  { from: 'acc',   to: 'dlpfc', w: 0.6,  bend: 0 },
+  { from: 'dlpfc', to: 'vmpfc', w: 0.5,  bend: 0 },
+  { from: 'ofc',   to: 'vmpfc', w: 0.5,  bend: 0 },
+  { from: 'bla',   to: 'ofc',   w: 0.5,  bend: 0 },
+  { from: 'bla',   to: 'vmpfc', w: 0.4,  bend: 26 },
+  { from: 'vmpfc', to: 'bla',   w: -0.5, bend: 26 },
+  { from: 'vmpfc', to: 'itc',   w: 0.8,  bend: 0 },
+  { from: 'bla',   to: 'itc',   w: 0.3,  bend: 0 },
+  { from: 'itc',   to: 'cea',   w: -0.5, bend: 0 },
+  { from: 'bla',   to: 'cea',   w: 1.2,  bend: 70 },
+  { from: 'bla',   to: 'nacc',  w: 0.35,  bend: 0 },
+  { from: 'vta',   to: 'nacc',  w: 1.0,  bend: 0 },
+  { from: 'vta',   to: 'bla',   w: 0.3,  bend: 0 },
+  { from: 'vta',   to: 'ofc',   w: 0.35, bend: -80 },
+  { from: 'dlpfc', to: 'nacc',  w: -0.4, bend: -80 },
+];
+
+const REST = { threat: 0, cue: 0, prob: 0.5, effort: 0, frontal: 1, stress: 0 };
+
+const sig = (z) => 1 / (1 + Math.exp(-7 * (z - 0.5)));
+
+// Dışarıdan gelen girdi: kaydırıcılar -> bölgeler
+function inputs(u) {
+  const unc = 4 * u.prob * (1 - u.prob); // %50'de 1, uçlarda 0
+  return {
+    bla: 1.1 * u.threat + 0.35 * u.cue + 0.5 * u.effort,
+    acc: 0.7 * u.effort,
+    vta: u.cue * (0.25 * u.prob + 0.75 * unc),
+  };
+}
+
+// Bölge kazançları: frontal güç ve stres burada devreye girer
+function gains(u) {
+  const f = u.frontal * (1 - 0.45 * u.stress);
+  return { ofc: f, acc: f, dlpfc: f, vmpfc: f, bla: 1 + 0.5 * u.stress, cea: 1 + 0.35 * u.stress, itc: 1, vta: 1, nacc: 1 };
+}
+
+// Her bölgenin net girdisi ve bileşenleri (arayüz ayrıntı paneli de kullanır)
+function netInput(id, x, u, lesion) {
+  const ext = inputs(u)[id] || 0;
+  const g = gains(u)[id];
+  const parts = [];
+  for (const e of EDGES) {
+    if (e.to === id) parts.push({ from: e.from, v: lesion[e.from] ? 0 : e.w * x[e.from] * g });
+  }
+  if (ext) parts.push({ from: 'dış girdi', v: ext * g });
+  const node = NODES.find((n) => n.id === id);
+  const z = g * node.b + parts.reduce((s, p) => s + p.v, 0);
+  return { z, parts };
+}
+
+function step(x, u, lesion, dt) {
+  const next = {};
+  for (const n of NODES) {
+    if (lesion[n.id]) { next[n.id] = 0; continue; }
+    const { z } = netInput(n.id, x, u, lesion);
+    next[n.id] = x[n.id] + (dt / n.tau) * (-x[n.id] + sig(z));
+  }
+  return next;
+}
+
+function settle(u, lesion, seconds = 12, dt = 0.02, x0) {
+  let x = x0 || Object.fromEntries(NODES.map((n) => [n.id, 0]));
+  for (let t = 0; t < seconds; t += dt) x = step(x, u, lesion, dt);
+  return x;
+}
+
+const controlOf = (x) => (x.dlpfc + x.vmpfc) / 2;
+
+// Durumu Türkçe tek cümleye çevirir
+function describe(x, u, lesion) {
+  const ctl = controlOf(x);
+  const thr = u.threat;
+  if (lesion.bla && lesion.cea) return 'Amigdala devre dışı: tehdit olsa bile alarm üretilmiyor ("evcilleşme etkisi").';
+  if (lesion.bla && thr > 0.3) return 'BLA yok: tehdit bilgisi merkezi amigdalaya ulaşmıyor, tepki çok zayıf.';
+  if (lesion.vmpfc && x.cea > 0.3) return 'vmPFC yok: amigdalayı yatıştıran fren eksik, alarm uzuyor.';
+  if (x.cea > 0.55 && ctl < 0.4) return 'Amigdala baskın, frontal fren zayıf: tepki dizginlenemiyor.';
+  if (x.cea > 0.55) return 'Amigdala yüksek; frontal korteks devrede ama tehdit çok güçlü.';
+  if (thr > 0.3 && x.cea < 0.3 && ctl >= 0.4) return 'Tehdit var, ama frontal korteks ve ITC kapısı amigdalayı yatıştırıyor.';
+  if (x.nacc > 0.55 && x.bla >= 0.45) return 'İsteme yüksek ve amigdala devrede: arzunun içindeki gerginlik.';
+  if (x.nacc > 0.55) return 'Ödül devresi açık, amigdala sakin: pasif ilgi ve haz.';
+  if (x.vta > 0.55) return 'Dopamin yüksek: ödülün kendisinden çok beklenti ve belirsizlik sürüyor.';
+  return 'Dinlenme hâli: tüm devreler düşük, frontal korteks denetimde.';
+}
+
+if (typeof module !== 'undefined') module.exports = { NODES, EDGES, REST, sig, inputs, gains, netInput, step, settle, controlOf, describe };
+
+</script>
+<script>
+(() => {
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  const R = 25;
+  const byId = Object.fromEntries(NODES.map((n) => [n.id, n]));
+  const GRP_NAME = { amy: 'Amigdala', pfc: 'Frontal korteks', dop: 'Dopamin' };
+
+  const INFO = {
+    bla: ['Bazolateral amigdala (BLA)', 'Duyusal bilgiyi alır ve uyaranın önemini etiketler. Korku ve ödül öğrenmesinde rol oynar; ödülün ya da cezanın miktarı değişince de tepki verir. Çıktısını merkezi amigdalaya hem doğrudan hem ITC kapısı üzerinden gönderir.'],
+    itc: ['Ardışık hücreler (ITC)', 'BLA ile merkezi amigdala arasındaki küçük engelleyici hücreler. Bir kapı gibi çalışır: vmPFC bu hücreleri uyardığında merkezi amigdala susar. Korkunun söndürülmesi bu yoldan geçer.'],
+    cea: ['Merkezi amigdala (CeA)', 'Amigdalanın çıkış kapısı. BLA\'dan gelen alarmı hipotalamusa ve beyin sapına ileterek korku, saldırganlık ve otonom uyarılma tepkisini başlatır.'],
+    dlpfc: ['Dorsolateral prefrontal korteks (dlPFC)', 'Planlama, çalışma belleği ve ertelenmiş ödülün bölgesi. Mantıksal "soğuk" kontrol burada yapılır ve dürtüsel isteği (NAcc) yatıştırır. En geç olgunlaşan bölgelerdendir.'],
+    vmpfc: ['Ventromedial prefrontal korteks (vmPFC)', 'Duygu ile mantığın kesiştiği yer. Amigdalayı hem doğrudan hem ITC kapısı üzerinden yatıştırır. Bir şeyin artık korkutucu olmadığını öğrenmek burada gerçekleşir.'],
+    ofc: ['Orbitofrontal korteks (OFC)', 'Davranışı sosyal bağlama uydurur ve ödülün değerini taşır; hasar görünce kişi uygunsuz davranabilir. Amigdaladan gelen bilgiyi vmPFC\'ye aktarır.'],
+    acc: ['Ön singulat korteks (ACC)', 'Çatışmayı ve çabayı izler, empati ve başkasının acısıyla da ilgilidir. Çaba arttığında devreye girer ve dlPFC\'yi çağırır.'],
+    vta: ['Ventral tegmental alan (VTA)', 'Dopamin nöronlarının kaynağı. Dopamin zevkten çok beklenti ve peşinden gitmeyle ilgilidir; ödül belirsizken (%50 olasılık) en yüksek düzeye çıkar. Nükleus akumbense (mezolimbik) ve frontal kortekse (mezokortikal) uzanır.'],
+    nacc: ['Nükleus akumbens (NAcc)', 'Ödül devresinin merkezi. VTA\'dan dopamin alır ve "isteme" ile motivasyonu taşır; hoşlanmanın tadından çok peşinden koşmayla ilgilidir. dlPFC onu dizginler.'],
+  };
+
+  const SCEN = [
+    { id: 'rest',    name: 'Dinlenme',               u: {} },
+    { id: 'threat',  name: 'Ani tehdit',             u: { threat: 0.9 } },
+    { id: 'calm',    name: 'Tehdit · güçlü frontal', u: { threat: 0.5 } },
+    { id: 'weak',    name: 'Tehdit · zayıf frontal', u: { threat: 0.5, frontal: 0.3 } },
+    { id: 'look',    name: 'Pasif bakış',            u: { cue: 0.8, prob: 0.5 } },
+    { id: 'press',   name: 'Düğmeye bas',            u: { cue: 0.8, prob: 0.5, effort: 0.9 } },
+    { id: 'sure',    name: 'Kesin ödül',             u: { cue: 0.8, prob: 1 } },
+    { id: 'stress',  name: 'Stres + yorgunluk',      u: { threat: 0.4, stress: 0.9, frontal: 0.5 } },
+    { id: 'teen',    name: 'Ergen beyni',            u: { threat: 0.3, cue: 0.8, prob: 0.5, frontal: 0.4 } },
+    { id: 'amyL',    name: 'Amigdala lezyonu',       u: { threat: 0.9 }, lesion: ['bla', 'cea'] },
+    { id: 'vmL',     name: 'vmPFC lezyonu',          u: { threat: 0.5 }, lesion: ['vmpfc'] },
+  ];
+
+  const SLIDERS = [
+    { key: 'threat',  name: 'Tehdit',          hint: 'Yılan, karanlık sokak, öfkeli bir yüz', cls: 'sl-amy' },
+    { key: 'cue',     name: 'Ödül ipucu',      hint: 'Çekici bir fotoğraf ya da bildirim sesi', cls: 'sl-dop' },
+    { key: 'prob',    name: 'Ödül olasılığı',  hint: 'Dopamin en çok %50 civarında tepe yapar', cls: 'sl-dop' },
+    { key: 'effort',  name: 'Çaba',            hint: 'Ödülü görmek için sürekli düğmeye basmak', cls: 'sl-dop' },
+    { key: 'frontal', name: 'Frontal güç',     hint: '100 sağlıklı yetişkin; ergen ya da yorgun beyinde daha düşük', cls: 'sl-pfc' },
+    { key: 'stress',  name: 'Stres',           hint: 'Amigdalayı güçlendirir, frontal gücü düşürür', cls: 'sl-amy' },
+  ];
+
+  const S = { u: { ...REST }, lesion: {}, x: null, t: 0, pulseUntil: -1, paused: false, sel: null, scen: 'rest', hist: [], lastSample: 0 };
+  S.x = settle(S.u, S.lesion, 12);
+
+  const $ = (s) => document.querySelector(s);
+  const mk = (tag, attrs, parent) => {
+    const e = document.createElementNS(SVGNS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  };
+  const pct = (v) => Math.round(v * 100);
+  const eff = () => (S.t < S.pulseUntil ? { ...S.u, threat: Math.min(1, S.u.threat + 0.8) } : S.u);
+
+  // ---- Ağ diyagramı ----
+  function edgePath(e) {
+    const a = byId[e.from], b = byId[e.to];
+    const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy);
+    const cx = (a.x + b.x) / 2 + (-dy / len) * e.bend;
+    const cy = (a.y + b.y) / 2 + (dx / len) * e.bend;
+    const unit = (x1, y1, x2, y2) => { const l = Math.hypot(x2 - x1, y2 - y1); return [(x2 - x1) / l, (y2 - y1) / l]; };
+    const [sx, sy] = unit(a.x, a.y, cx, cy);
+    const [ex, ey] = unit(b.x, b.y, cx, cy);
+    const f = (n) => n.toFixed(1);
+    return `M${f(a.x + sx * (R + 2))},${f(a.y + sy * (R + 2))} Q${f(cx)},${f(cy)} ${f(b.x + ex * (R + 3))},${f(b.y + ey * (R + 3))}`;
+  }
+
+  const edgeEls = EDGES.map((e) => {
+    const p = mk('path', { class: 'edge' + (e.w < 0 ? ' inh' : ''), d: edgePath(e), 'marker-end': e.w < 0 ? 'url(#mi)' : 'url(#mx)' }, $('#edges'));
+    return { e, p };
+  });
+
+  const nodeEls = {};
+  for (const n of NODES) {
+    const g = mk('g', { class: 'node grp-' + n.grp, tabindex: '0', role: 'button', 'aria-label': INFO[n.id][0], transform: `translate(${n.x},${n.y})` }, $('#nodes'));
+    mk('circle', { r: R + 10, fill: 'transparent' }, g);
+    mk('circle', { class: 'ring', r: R + 5 }, g);
+    mk('circle', { class: 'base', r: R }, g);
+    const fill = mk('circle', { class: 'fill', r: R - 0.8, 'fill-opacity': 0 }, g);
+    const slash = mk('line', { class: 'slash', x1: -R * 0.7, y1: R * 0.7, x2: R * 0.7, y2: -R * 0.7, opacity: 0 }, g);
+    const ab = mk('text', { class: 'ab', y: -2 }, g); ab.textContent = n.ab;
+    const pc = mk('text', { class: 'pct', y: 10 }, g);
+    const cap = mk('text', { class: 'cap', y: R + 14 }, g); cap.textContent = n.cap;
+    g.addEventListener('click', () => select(n.id));
+    g.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); select(n.id); } });
+    nodeEls[n.id] = { g, fill, slash, pc };
+  }
+
+  function drawNet() {
+    for (const { e, p } of edgeEls) {
+      const mag = Math.min(1, (S.x[e.from] * Math.abs(e.w)) / 0.8);
+      p.style.strokeWidth = (1 + 2.2 * mag).toFixed(2);
+      p.style.opacity = (0.12 + 0.78 * mag).toFixed(2);
+    }
+    for (const n of NODES) {
+      const o = nodeEls[n.id];
+      const les = !!S.lesion[n.id];
+      o.fill.setAttribute('fill-opacity', les ? 0 : (0.08 + 0.92 * S.x[n.id]).toFixed(2));
+      o.slash.setAttribute('opacity', les ? 1 : 0);
+      o.g.classList.toggle('les', les);
+      o.g.classList.toggle('sel', S.sel === n.id);
+      o.pc.textContent = les ? '' : pct(S.x[n.id]) + '%';
+    }
+  }
+
+  // ---- Ayrıntı paneli ----
+  const detail = $('#detail');
+  function buildDetail() {
+    if (!S.sel) {
+      detail.innerHTML = '<p class="hint">Bir bölgeye dokun: rolünü, kimden ne kadar etkilendiğini ve lezyon seçeneğini gör. Dolgusu koyulaştıkça bölge daha aktif, çizgiler kalınlaştıkça etki daha güçlü.</p>';
+      return;
+    }
+    const n = byId[S.sel];
+    detail.innerHTML =
+      `<div class="d-head grp-${n.grp}"><span class="d-name">${INFO[n.id][0]}</span><span class="d-pct" id="dPct">0%</span></div>` +
+      `<div class="track grp-${n.grp}"><b id="dFill"></b></div>` +
+      `<p>${INFO[n.id][1]}</p>` +
+      `<ul class="d-list" id="dList"></ul>` +
+      `<div class="row"><button class="btn" id="dLes" type="button" aria-pressed="${!!S.lesion[n.id]}">${S.lesion[n.id] ? 'Lezyonu kaldır' : 'Lezyon oluştur'}</button></div>`;
+    $('#dLes').addEventListener('click', () => {
+      S.lesion[n.id] = !S.lesion[n.id];
+      if (!S.lesion[n.id]) delete S.lesion[n.id];
+      setScenario(null);
+      buildDetail();
+    });
+    updateDetail();
+  }
+  function updateDetail() {
+    if (!S.sel) return;
+    const n = byId[S.sel];
+    const les = !!S.lesion[n.id];
+    $('#dPct').textContent = les ? 'lezyon' : pct(S.x[n.id]) + '%';
+    $('#dFill').style.width = (les ? 0 : pct(S.x[n.id])) + '%';
+    const { parts } = netInput(n.id, S.x, eff(), S.lesion);
+    const rows = parts
+      .filter((p) => Math.abs(p.v) >= 0.02)
+      .sort((a, b) => Math.abs(b.v) - Math.abs(a.v))
+      .slice(0, 5)
+      .map((p) => {
+        const nm = p.from === 'dış girdi' ? 'Dış girdi (kaydırıcılar)' : byId[p.from].ab;
+        return `<li><span>${nm} ${p.v < 0 ? 'engelliyor' : 'uyarıyor'}</span><span class="v">${p.v < 0 ? '−' : '+'}${Math.abs(p.v).toFixed(2)}</span></li>`;
+      });
+    $('#dList').innerHTML = les ? '<li><span>Bölge devre dışı</span></li>' : (rows.join('') || '<li><span>Belirgin bir girdi yok</span></li>');
+  }
+  function select(id) {
+    S.sel = S.sel === id ? null : id;
+    buildDetail();
+  }
+
+  // ---- Senaryolar ve kaydırıcılar ----
+  const chips = $('#chips');
+  for (const sc of SCEN) {
+    const b = document.createElement('button');
+    b.className = 'chip'; b.type = 'button'; b.textContent = sc.name; b.dataset.id = sc.id; b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', () => applyScenario(sc));
+    chips.appendChild(b);
+  }
+  function setScenario(id) {
+    S.scen = id;
+    for (const b of chips.children) b.setAttribute('aria-pressed', String(b.dataset.id === id));
+  }
+
+  const sliderEls = {};
+  for (const s of SLIDERS) {
+    const w = document.createElement('div');
+    w.className = s.cls;
+    w.innerHTML = `<div class="sl-top"><label class="sl-name" for="s-${s.key}">${s.name}</label><span class="sl-val" id="v-${s.key}"></span></div>` +
+      `<input type="range" id="s-${s.key}" min="0" max="100" step="1"><p class="sl-hint">${s.hint}</p>`;
+    $('#sliders').appendChild(w);
+    const inp = w.querySelector('input');
+    inp.addEventListener('input', () => { S.u[s.key] = inp.value / 100; setScenario(null); syncSliders(); });
+    sliderEls[s.key] = inp;
+  }
+  function syncSliders() {
+    for (const s of SLIDERS) {
+      sliderEls[s.key].value = Math.round(S.u[s.key] * 100);
+      $('#v-' + s.key).textContent = pct(S.u[s.key]) + '%';
+    }
+  }
+  function applyScenario(sc) {
+    S.u = { ...REST, ...sc.u };
+    S.lesion = Object.fromEntries((sc.lesion || []).map((k) => [k, true]));
+    S.pulseUntil = -1;
+    setScenario(sc.id);
+    syncSliders();
+    buildDetail();
+  }
+
+  $('#pulse').addEventListener('click', () => { S.pulseUntil = S.t + 1; });
+  $('#pause').addEventListener('click', (ev) => {
+    S.paused = !S.paused;
+    ev.currentTarget.setAttribute('aria-pressed', String(S.paused));
+    ev.currentTarget.textContent = S.paused ? 'Devam et' : 'Duraklat';
+  });
+  $('#reset').addEventListener('click', () => applyScenario(SCEN[0]));
+
+  // ---- Zaman grafiği ----
+  const CH = { x0: 36, x1: 348, top: 10, bot: 100, span: 12 };
+  const chart = $('#chart');
+  const yOf = (v) => CH.bot - (CH.bot - CH.top) * v;
+  for (const v of [0, 0.5, 1]) {
+    mk('line', { class: 'grid', x1: CH.x0, x2: CH.x1, y1: yOf(v), y2: yOf(v) }, chart);
+    const t = mk('text', { x: CH.x0 - 6, y: yOf(v) + 3.5, 'text-anchor': 'end' }, chart); t.textContent = pct(v);
+  }
+  const tl = mk('text', { x: CH.x0, y: 116 }, chart); tl.textContent = '−12 sn';
+  const tr = mk('text', { x: CH.x1, y: 116, 'text-anchor': 'end' }, chart); tr.textContent = 'şimdi';
+  const SERIES = [
+    { key: 'cea', color: 'var(--amy)', name: 'Korku (CeA)', get: (x) => x.cea },
+    { key: 'nacc', color: 'var(--dop)', name: 'İsteme (NAcc)', get: (x) => x.nacc },
+    { key: 'ctl', color: 'var(--pfc)', name: 'Frontal kontrol', get: (x) => controlOf(x) },
+  ];
+  let lx = CH.x0;
+  for (const s of SERIES) {
+    mk('rect', { x: lx, y: 126, width: 9, height: 9, rx: 2, fill: s.color }, chart);
+    const t = mk('text', { x: lx + 14, y: 134 }, chart); t.textContent = s.name;
+    lx += 14 + s.name.length * 6.2 + 12;
+    s.line = mk('polyline', { class: 'ln', stroke: s.color, points: '' }, chart);
+    s.dot = mk('circle', { r: 3.5, fill: s.color, cx: CH.x1, cy: CH.bot }, chart);
+  }
+  function drawChart() {
+    for (const s of SERIES) {
+      const pts = S.hist.map((h) => `${(CH.x1 - ((S.t - h.t) / CH.span) * (CH.x1 - CH.x0)).toFixed(1)},${yOf(h[s.key]).toFixed(1)}`);
+      s.line.setAttribute('points', pts.join(' '));
+      const last = S.hist[S.hist.length - 1];
+      if (last) { s.dot.setAttribute('cx', CH.x1); s.dot.setAttribute('cy', yOf(last[s.key]).toFixed(1)); }
+    }
+  }
+  function sample() {
+    const h = { t: S.t };
+    for (const s of SERIES) h[s.key] = s.get(S.x);
+    S.hist.push(h);
+    while (S.hist.length && S.t - S.hist[0].t > CH.span) S.hist.shift();
+  }
+
+  // ---- Alt çubuk ----
+  let sayText = '';
+  function drawBar() {
+    const c = controlOf(S.x);
+    $('#m-cea').textContent = pct(S.x.cea) + '%'; $('#b-cea').style.width = pct(S.x.cea) + '%';
+    $('#m-nacc').textContent = pct(S.x.nacc) + '%'; $('#b-nacc').style.width = pct(S.x.nacc) + '%';
+    $('#m-ctl').textContent = pct(c) + '%'; $('#b-ctl').style.width = pct(c) + '%';
+  }
+  function drawSay() {
+    const t = describe(S.x, eff(), S.lesion);
+    if (t !== sayText) { sayText = t; $('#say').textContent = t; }
+  }
+
+  // ---- Döngü ----
+  const DT = 0.02;
+  let last = performance.now(), acc = 0, tSay = 0, tDet = 0;
+  function frame(now) {
+    const dt = Math.min(0.1, (now - last) / 1000);
+    last = now;
+    if (!S.paused) {
+      acc += dt;
+      while (acc >= DT) {
+        S.x = step(S.x, eff(), S.lesion, DT);
+        S.t += DT; acc -= DT;
+        if (S.t - S.lastSample >= 0.1) { S.lastSample = S.t; sample(); }
+      }
+    }
+    drawNet(); drawBar(); drawChart();
+    tSay += dt; tDet += dt;
+    if (tSay > 0.25) { tSay = 0; drawSay(); }
+    if (tDet > 0.15) { tDet = 0; updateDetail(); }
+    requestAnimationFrame(frame);
+  }
+
+  syncSliders();
+  setScenario('rest');
+  buildDetail();
+  sample();
+  drawSay();
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body></html>

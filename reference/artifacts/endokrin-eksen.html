@@ -1,0 +1,679 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Endokrin Eksen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Düzen: tek sütun, telefon önce. Üç sekme (Eksen, Reseptör, Süre), altta sabit açıklama çubuğu.
+   Renkler anlam taşır: mavi = hipotalamus, mor = hipofiz, yeşilimsi = bez, amber = hedef hücre yanıtı,
+   kırmızı = glikoz ve yanlış hormon. */
+:root {
+  --bg: #ECEFF3; --panel: #F8F9FB; --ink: #131C28; --muted: #566475; --line: #C9D1DB; --edge: #46566A;
+  --hyp: #1F66B0; --pit: #7B4FB8; --gld: #0E8573; --eff: #B77800; --red: #C9382A;
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B131D; --panel: #131D2A; --ink: #E7EDF4; --muted: #8FA0B3; --line: #263446; --edge: #9FB0C3;
+    --hyp: #5BA9F2; --pit: #B795F0; --gld: #3CC4AE; --eff: #F4B63A; --red: #FF6A52;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0B131D; --panel: #131D2A; --ink: #E7EDF4; --muted: #8FA0B3; --line: #263446; --edge: #9FB0C3;
+  --hyp: #5BA9F2; --pit: #B795F0; --gld: #3CC4AE; --eff: #F4B63A; --red: #FF6A52;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 14px; line-height: 1.5; padding-inline: 16px; padding-block: 20px 130px; }
+.wrap { max-width: 560px; margin-inline: auto; display: flex; flex-direction: column; gap: 20px; }
+.eyebrow { margin: 0; font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { margin: 4px 0 8px; font-family: var(--f-display); font-weight: 700; font-size: 32px; line-height: 1.05; letter-spacing: -.01em; text-wrap: balance; }
+.lede { margin: 0; font-size: 15px; color: var(--muted); max-width: 46ch; }
+h2 { margin: 0 0 8px; font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+p { margin: 0; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+.tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
+.tab { font: 600 13px/1.1 var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 9px; padding: 11px 6px; cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
+.pane { display: flex; flex-direction: column; gap: 18px; }
+
+.chips { display: flex; gap: 8px; overflow-x: auto; margin-inline: -16px; padding-inline: 16px; padding-block: 2px 6px; scrollbar-width: thin; }
+.chip { flex: none; font: 500 13px/1 var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 10px 14px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.btn { font: 500 13px/1 var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 10px; padding: 11px 14px; cursor: pointer; }
+.btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.card .note { font-size: 13px; color: var(--muted); }
+.stage { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 8px 6px 6px; }
+.stage svg, .chart svg { display: block; width: 100%; height: auto; max-width: 100%; }
+
+.sliders { display: flex; flex-direction: column; gap: 14px; }
+.sl-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.sl-name { font-weight: 600; }
+.sl-val { font: 500 13px var(--f-mono); font-variant-numeric: tabular-nums; }
+.sl-hint { font-size: 12px; color: var(--muted); }
+input[type="range"] { width: 100%; height: 32px; margin: 0; accent-color: var(--c, var(--ink)); }
+
+.chart text, .stage text { font-family: var(--f-mono); }
+.chart text { font-size: 10px; fill: var(--muted); }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .ln { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+
+.box { fill: var(--panel); stroke: var(--line); stroke-width: 1.2; }
+.t-title { font: 600 12px var(--f-body); fill: var(--ink); }
+.t-hor { font: 400 10.5px var(--f-mono); fill: var(--muted); }
+.t-pct { font: 500 11px var(--f-mono); fill: var(--ink); text-anchor: end; }
+.t-cap { font: 400 10.5px var(--f-body); fill: var(--muted); text-anchor: middle; }
+.trk { fill: var(--line); }
+.arrow { fill: none; stroke: var(--edge); stroke-linecap: round; }
+.fbk { fill: none; stroke: var(--edge); stroke-dasharray: 6 4; stroke-linecap: round; }
+.mk { fill: var(--edge); }
+.mk-bar { stroke: var(--edge); stroke-width: 2.4; fill: none; }
+
+.meters { display: flex; flex-direction: column; gap: 8px; }
+.m-top { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--muted); margin-bottom: 3px; }
+.m-top b { font: 500 12px var(--f-mono); color: var(--ink); font-variant-numeric: tabular-nums; }
+.track { height: 7px; border-radius: 4px; background: var(--line); overflow: hidden; }
+.track > b { display: block; height: 100%; width: 0; background: var(--c, var(--ink)); }
+.readout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.ro { border: 1px solid var(--line); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.ro .k { font-size: 12px; color: var(--muted); }
+.ro .v { font: 500 13px var(--f-mono); font-variant-numeric: tabular-nums; }
+.foot { font-size: 12px; color: var(--muted); max-width: 60ch; }
+
+.bar { position: fixed; left: 0; right: 0; bottom: 0; background: var(--panel); border-top: 1px solid var(--line); padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); }
+.bar-in { max-width: 560px; margin-inline: auto; }
+.say { font-size: 13px; line-height: 1.4; min-height: 2.8em; }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Behave · Ek 2</p>
+    <h1>Endokrin Eksen</h1>
+    <p class="lede">Hormonların sinyal zincirini, reseptörün rolünü ve etkinin ne kadar sürdüğünü canlı simüle eden model. Kaydırıcılarla oyna.</p>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Bölümler">
+    <button class="tab" role="tab" id="tab-axis" data-pane="axis" aria-selected="true" type="button">Eksen</button>
+    <button class="tab" role="tab" id="tab-rec" data-pane="rec" aria-selected="false" type="button">Reseptör</button>
+    <button class="tab" role="tab" id="tab-time" data-pane="time" aria-selected="false" type="button">Süre</button>
+  </div>
+
+  <!-- ===== EKSEN ===== -->
+  <section class="pane" id="pane-axis" aria-labelledby="tab-axis">
+    <div class="chips" id="axChips" role="group" aria-label="Eksen yapısı"></div>
+    <p class="note" id="axNote" style="font-size:13px;color:var(--muted)"></p>
+    <div class="stage"><svg id="axSvg" role="group" aria-label="Hormon ekseni diyagramı"></svg></div>
+    <div class="row">
+      <button class="btn" id="axPulse" type="button"></button>
+      <button class="btn" id="axFb" type="button" aria-pressed="true">Geri bildirim: açık</button>
+      <button class="btn" id="axPause" type="button" aria-pressed="false">Duraklat</button>
+      <button class="btn" id="axSpeed" type="button">Hız ×1</button>
+      <button class="btn" id="axReset" type="button">Sıfırla</button>
+    </div>
+    <section class="chart" aria-label="Zaman grafiği">
+      <h2>Son 6 saat</h2>
+      <svg id="axChart" viewBox="0 0 360 160" role="img" aria-label="Eksenin basamaklarının ve hedef hücre yanıtının zaman içindeki değişimi"></svg>
+    </section>
+    <section aria-label="Eksen girdileri"><h2>Girdiler</h2><div class="sliders" id="axSliders"></div></section>
+    <p class="foot" id="axFoot"></p>
+  </section>
+
+  <!-- ===== RESEPTÖR ===== -->
+  <section class="pane" id="pane-rec" aria-labelledby="tab-rec" hidden>
+    <p class="note" style="font-size:13px;color:var(--muted)">Hormon kilide anahtar gibi girer. Her hormonun kendi reseptörü vardır; reseptörün sayısı, bağlanma isteği ve titizliği hücrenin yanıtını belirler. Kitaptaki benzetmeyle: hormon düzeyi konuşma sesi, reseptör düzeyi kulağın duyma keskinliğidir.</p>
+    <div class="chips" id="rcChips" role="group" aria-label="Hazır durumlar"></div>
+    <div class="stage"><svg id="rcSvg" viewBox="0 0 360 250" role="img" aria-label="Reseptörlü bir hücre; bağlanan hormonlar renkli noktalarla gösterilir"></svg>
+      <div class="legend" style="display:flex;flex-wrap:wrap;gap:6px 14px;padding:4px 10px 2px;font-size:12px;color:var(--muted)">
+        <span><i style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--hyp);margin-right:5px"></i>Östrojen (asıl hormon)</span>
+        <span><i style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--red);margin-right:5px"></i>Testosteron (benzer hormon)</span>
+      </div>
+    </div>
+    <div class="meters card" id="rcMeters"></div>
+    <section aria-label="Reseptör girdileri"><h2>Girdiler</h2><div class="sliders" id="rcSliders"></div></section>
+    <p class="foot">Kitapta örnekler: tiroit hormonu reseptörleri iribaşın yalnızca kuyruk hücrelerinde bulunur; kuyruk kurbağaya dönüşürken kaybolur. Bazı meme kanserleri "ER pozitif"tir: hücrelerinde östrojen reseptörü vardır ve hormonun büyümeyi destekleyen etkisine açıktır. Reseptördeki bir mutasyon yüzünden, hormon salgılansa bile sinyalin ulaşmadığı endokrin hastalıkları da vardır.</p>
+  </section>
+
+  <!-- ===== SÜRE ===== -->
+  <section class="pane" id="pane-time" aria-labelledby="tab-time" hidden>
+    <div class="card">
+      <h2>Nörotransmitter ve hormon: kapsam ve süre</h2>
+      <p class="note">Nörotransmitter yalnızca sinapsın öbür tarafındaki nörona, milisaniyeler içinde etki eder. Hormon kana karışır, vücuttaki trilyonlarca hücreyi etkileme potansiyeline sahiptir ve etkisi saatlerce, günlerce sürebilir. Zaman ekseni logaritmiktir: kaydırıcıyı oynat.</p>
+      <svg id="tmSvg" viewBox="0 0 360 170" role="img" aria-label="Nörotransmitter ve hormon etkisinin logaritmik zaman ekseninde karşılaştırması" style="display:block;width:100%;height:auto"></svg>
+      <div class="sliders"><div>
+        <div class="sl-top"><label class="sl-name" for="tmSl">Sinyalden bu yana geçen süre</label><span class="sl-val" id="tmVal"></span></div>
+        <input type="range" id="tmSl" min="0" max="894" step="1" value="40">
+      </div></div>
+      <div class="readout" id="tmRead"></div>
+    </div>
+
+    <div class="card">
+      <h2>Organizasyonel ve aktivasyon etkisi</h2>
+      <p class="note">Gelişim döneminde hormonlar beynin yapılandırılma biçimini şekillendirir (organizasyonel etki, kalıcı). Aktivasyon etkisi ise yalnızca saatler ya da günler sürer. İkisi iç içedir: fetüs beynindeki organizasyonel etkiler, yetişkinlikte aynı hormonun ne yapacağını belirler.</p>
+      <div class="sliders" id="orSliders"></div>
+      <div class="meters" id="orMeters"></div>
+      <div class="row"><button class="btn" id="orCut" type="button">Yetişkin hormonunu kes</button></div>
+    </div>
+    <p class="foot">Süre eğrileri ve organizasyonel etki sayıları sembolik. Yalnızca yönü ve büyüklük sırasını gösterir.</p>
+  </section>
+</div>
+
+<div class="bar" aria-live="polite"><div class="bar-in"><p class="say" id="say"></p></div></div>
+
+<script>
+// Endokrin modelin çekirdeği (nitel). Zaman birimi: dakika.
+// Sayılar ölçüm değildir; Ek 2'de anlatılan yapıların yönünü ve göreli hızını gösterir.
+
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+// Üstel yaklaşım: dt ne olursa olsun kararlı. Çıkış ve iniş hızları farklı olabilir.
+const lag = (x, target, tauUp, tauDown, dt) => x + (target - x) * (1 - Math.exp(-dt / (target > x ? tauUp : tauDown)));
+
+// n: basamak sayısı. 'glu': glikoz (düzenleyici) -> pankreas (insülin).
+const AX = { hpa: { n: 3 }, hpg: { n: 3 }, two: { n: 2 }, glu: { n: 2 } };
+const U0 = { drive: 0, other: 0, feedback: 1, meal: 0, brain: 0 };
+
+function stepAxis(axis, x, u, dt) {
+  const s = x.s;
+  let ns, L;
+  if (axis === 'glu') {
+    const [G, I] = s;
+    const sg = 1 / (1 + Math.exp(-8 * (G - 0.5)));
+    const nI = lag(I, clamp(0.05 + 0.9 * sg + 0.25 * u.brain), 8, 15, dt);
+    const nG = clamp(G + ((0.25 + 0.7 * u.meal - G) / 40 - 0.04 * I * G) * dt);
+    ns = [nG, nI]; L = nI;
+  } else {
+    const n = AX[axis].n, fb = u.feedback ? 1 : 0, last = s[n - 1];
+    const h = lag(s[0], clamp(0.1 + 0.9 * u.drive - 0.7 * fb * last), 3, 6, dt);
+    if (n === 3) {
+      const p = lag(s[1], clamp(0.08 + 0.7 * s[0] + 0.5 * u.other - 0.6 * fb * last), 8, 15, dt);
+      const g = lag(s[2], clamp(0.1 + 0.9 * s[1]), 20, 50, dt);
+      ns = [h, p, g]; L = g;
+    } else {
+      const p = lag(s[1], clamp(0.08 + 0.8 * s[0] + 0.4 * u.other), 8, 15, dt);
+      ns = [h, p]; L = p;
+    }
+  }
+  // Reseptörü olan hedef hücre: hormon düzeyini yavaş izler (saatler)
+  return { s: ns, e: lag(x.e, L, 40, 150, dt) };
+}
+
+function settleAxis(axis, u, minutes = 900) {
+  let x = { s: AX[axis].n === 3 ? [0, 0, 0] : [0, 0], e: 0 };
+  if (axis === 'glu') x.s = [0.2, 0.1];
+  for (let t = 0; t < minutes; t++) x = stepAxis(axis, x, u, 1);
+  return x;
+}
+
+function describeAxis(axis, x, u, pulsing) {
+  const s = x.s, n = s.length, last = s[n - 1], top = s[0];
+  if (axis === 'glu') {
+    if (u.meal < 0.1 && s[0] < 0.3) return 'Dinlenme: glikoz düşük, pankreas az insülin salgılıyor.';
+    if (s[0] > 0.45 && s[1] < s[0] - 0.05) return 'Glikoz yükseldi; insülin geriden geliyor. Düzenleyici beyin değil, kandaki glikoz.';
+    if (s[1] > 0.4) return 'İnsülin yükseldi ve glikozu aşağı çekiyor: kendi kendini söndüren döngü.';
+    return 'Glikoz ve insülin dengeye doğru ilerliyor.';
+  }
+  if (Math.max(...s) < 0.22) return 'Dinlenme: eksen düşük, hedef hücreler sakin.';
+  if ((pulsing || u.drive > 0.3) && top > last + 0.2) return 'Sinyal yukarıdan aşağı ilerliyor: önce hipotalamus, sonra hipofiz, en son bez yanıt veriyor.';
+  if (u.drive < 0.2 && !pulsing && last > top + 0.1) return 'Üst basamaklar sakinleşti ama hormon kanda kalıyor; hedef hücrenin yanıtı saatlerce sürüyor.';
+  if (u.feedback && last > 0.3 && top < 0.7 * (0.1 + 0.9 * Math.max(u.drive, pulsing ? 1 : 0))) return 'Geri bildirim devrede: son hormon yükselince eksenin üst basamakları kısılıyor.';
+  if (!u.feedback && last > 0.6) return 'Geri bildirim yok: son hormon yükselse bile üst basamaklar kısılmıyor, düzey çok yüksek kalıyor.';
+  return 'Eksen çalışıyor: her basamak bir sonrakini yönlendiriyor.';
+}
+
+// ---- Reseptör ----
+// kd: bağlanma isteği yüksekse küçük (az hormon yeter). c: benzer hormonun reseptöre karışma oranı.
+function receptor(p) {
+  const kd = 0.05 + 0.95 * (1 - p.affinity);
+  const c = 0.9 * (1 - p.specificity);
+  const a = p.hormone / kd, b = (p.other * c) / kd;
+  const den = 1 + a + b;
+  const occE = a / den, occO = b / den, occ = occE + occO;
+  return { occE, occO, occ, response: p.number * occ, wrongShare: occ > 0 ? occO / occ : 0 };
+}
+
+// ---- Süre: haberciler ----
+const MS = { s: 1000, min: 60e3, h: 3600e3, day: 86400e3 };
+const neuroAt = (ms) => Math.exp(-ms / 15) * (1 - Math.exp(-ms / 0.5));
+const hormAt = (ms) => (1 - Math.exp(-ms / (2 * MS.min))) * Math.exp(-ms / (1.5 * MS.day));
+const msOfLog = (v) => Math.pow(10, v); // v: 0..8.94 (1 ms .. 10 gün)
+
+// ---- Organizasyonel / aktivasyon ----
+function organ(fetal, adult) {
+  const structure = 0.3 + 0.7 * fetal;
+  return { structure, effect: clamp(adult * structure) };
+}
+
+if (typeof module !== 'undefined') module.exports = { clamp, lag, AX, U0, stepAxis, settleAxis, describeAxis, receptor, neuroAt, hormAt, msOfLog, MS, organ };
+
+</script>
+<script>
+(() => {
+  const NS = 'http://www.w3.org/2000/svg';
+  const $ = (s) => document.querySelector(s);
+  const pct = (v) => Math.round(v * 100);
+  const mk = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+  const txt = (parent, attrs, s) => { const t = mk('text', attrs, parent); t.textContent = s; return t; };
+  const BG = 'var(--bg)';
+
+  /* ---------- Sekmeler ---------- */
+  let tab = 'axis';
+  const SAY = {};
+  function showTab(id) {
+    tab = id;
+    for (const b of document.querySelectorAll('.tab')) b.setAttribute('aria-selected', String(b.dataset.pane === id));
+    for (const p of document.querySelectorAll('.pane')) p.hidden = p.id !== 'pane-' + id;
+    say();
+  }
+  for (const b of document.querySelectorAll('.tab')) b.addEventListener('click', () => showTab(b.dataset.pane));
+  let lastSay = '';
+  function say() { const t = (SAY[tab] && SAY[tab]()) || ''; if (t !== lastSay) { lastSay = t; $('#say').textContent = t; } }
+
+  /* =====================================================
+     EKSEN
+     ===================================================== */
+  const STRUCT = {
+    hpa: {
+      chip: 'Stres (HPA)',
+      stages: [
+        { t: 'Hipotalamus', h: 'CRH (kortikotropin salgılatıcı hormon)', c: '--hyp' },
+        { t: 'Hipofiz', h: 'ACTH (adrenokortikotropik hormon)', c: '--pit' },
+        { t: 'Böbreküstü bezi', h: 'Glukokortikoid (insanda kortizol)', c: '--gld' },
+      ],
+      note: 'Stres sırasında hipotalamustaki nöronlar CRH salgılar. CRH hipofiz hücrelerinin ACTH salgılamasına, ACTH da böbreküstü bezlerinin glukokortikoid salgılamasına yol açar. Tek bir sinyal üç basamakta ilerleyip kana karışır ve her yere ulaşır.',
+      drive: ['Stres düzeyi', 'Hipotalamustaki CRH nöronlarını uyaran stres'],
+      pulse: 'Stres darbesi (30 dk)',
+      series: ['CRH', 'ACTH', 'Kortizol'],
+    },
+    hpg: {
+      chip: 'Üreme (HPG)',
+      stages: [
+        { t: 'Hipotalamus', h: 'GnRH (gonadotropin salgılayan hormon)', c: '--hyp' },
+        { t: 'Hipofiz', h: 'LH (luteinizan hormon)', c: '--pit' },
+        { t: 'Yumurtalık', h: 'Östrojen', c: '--gld' },
+      ],
+      note: 'Kitaptaki ikinci örnek: hipotalamus GnRH salgılar, hipofiz LH salgılar, en sonunda yumurtalıklar östrojen salgılar. Aynı üç basamaklı yapı, farklı hormonlarla. (Gerçek döngü dalgalıdır; burada yalnızca yapıyı gösteriyorum.)',
+      drive: ['Hipotalamik sürücü', 'GnRH nöronlarına gelen uyarı'],
+      pulse: 'Sinyal darbesi (30 dk)',
+      series: ['GnRH', 'LH', 'Östrojen'],
+    },
+    two: {
+      chip: 'İki aşamalı',
+      stages: [
+        { t: 'Hipotalamus', h: 'Hipotalamik hormon', c: '--hyp' },
+        { t: 'Hipofiz', h: 'Hipofiz hormonu (örn. büyüme hormonu)', c: '--pit' },
+      ],
+      note: 'Bazı eksenler iki aşamalıdır: hipotalamus hipofizi yönlendirir ve hipofiz hormonu etkisini doğrudan bütün vücuda yayar. Mesela büyüme hormonu genelde bu yolu izler. Üçüncü bir bez yoktur.',
+      drive: ['Hipotalamik sürücü', 'Hipofizi yönlendiren hipotalamik sinyal'],
+      pulse: 'Sinyal darbesi (30 dk)',
+      series: ['Hipotalamik hormon', 'Hipofiz hormonu'],
+    },
+    glu: {
+      chip: 'Pankreas',
+      stages: [
+        { t: 'Kandaki glikoz', h: 'Ana düzenleyici (dolaşımdaki glikoz)', c: '--red' },
+        { t: 'Pankreas', h: 'İnsülin', c: '--gld' },
+      ],
+      note: 'Her sistemde düzenleyici beyin değildir. Pankreas ve onun salgıladığı insülinde ana düzenleyici dolaşımdaki glikoz düzeyidir. Beyin yalnızca belli bir beze projeksiyon göndererek salgılanmasına yardımcı olur.',
+      pulse: 'Yemek ye (30 dk)',
+      series: ['Glikoz', 'İnsülin'],
+    },
+  };
+  const FOOT = {
+    hpa: 'Ek 2 ayrıca şunu söyler: tek bir hipotalamik hormon her zaman tek başına yönetmez. CRH\'nin yanında ACTH\'yi hem uyaran hem engelleyen başka hipotalamik hormonlar vardır ve farklı stres kaynakları farklı kombinasyonlar üretir. "Diğer hipotalamik hormonlar" kaydırıcısı bunu temsil eder. Geri bildirim bu sayfalarda anlatılmıyor; modeli gerçekçi yapmak için ekledim.',
+    hpg: 'Geri bildirim bu sayfalarda anlatılmıyor; modeli gerçekçi yapmak için ekledim. Sayılar ölçüm değil, sembolik.',
+    two: 'Geri bildirim bu sayfalarda anlatılmıyor; modeli gerçekçi yapmak için ekledim. Sayılar ölçüm değil, sembolik.',
+    glu: 'Kitap ayrıca kalp ya da bağırsak gibi beklenmedik yerlerden salgılanan tuhaf hormonlardan söz eder; beyin bunların salgılanmasını dolaylı yollarla düzenler. Bunlar modele dahil değil.',
+  };
+
+  const A = { axis: 'hpa', x: null, t: 0, hist: [], lastSample: 0, pulseUntil: -1, paused: false, speed: 1,
+    u: { ...U0, drive: 0, other: 0, feedback: 1, meal: 0, brain: 0 } };
+  const cfg = () => STRUCT[A.axis];
+  const effU = () => {
+    const pulsing = A.t < A.pulseUntil;
+    if (A.axis === 'glu') return { ...A.u, meal: pulsing ? 1 : A.u.meal };
+    return { ...A.u, drive: pulsing ? 1 : A.u.drive };
+  };
+  const resettle = () => { A.x = settleAxis(A.axis, { ...A.u, drive: A.u.drive, meal: A.u.meal }, 900); A.hist = []; A.t = 0; A.lastSample = 0; A.pulseUntil = -1; };
+
+  // ---- Eksen sliderları ----
+  const axSliders = $('#axSliders');
+  const axSl = {};
+  function makeSlider(parent, id, name, hint, min, max, val, cb, valFmt, cls) {
+    const w = document.createElement('div');
+    w.innerHTML = `<div class="sl-top"><label class="sl-name" for="${id}">${name}</label><span class="sl-val" id="${id}-v"></span></div><input type="range" id="${id}" min="${min}" max="${max}" step="1" value="${val}">` + (hint ? `<p class="sl-hint">${hint}</p>` : '');
+    if (cls) w.style.setProperty('--c', cls);
+    parent.appendChild(w);
+    const inp = w.querySelector('input');
+    const out = w.querySelector('.sl-val');
+    const upd = () => { out.textContent = valFmt ? valFmt(+inp.value) : inp.value + '%'; };
+    inp.addEventListener('input', () => { upd(); cb(+inp.value); });
+    upd();
+    return { inp, set: (v) => { inp.value = v; upd(); }, wrap: w };
+  }
+  function buildAxSliders() {
+    axSliders.innerHTML = '';
+    for (const k in axSl) delete axSl[k];
+    if (A.axis === 'glu') {
+      axSl.meal = makeSlider(axSliders, 'sl-meal', 'Yemek (glikoz girişi)', 'Kana giren glikoz. Pankreas bunu insülinle karşılar.', 0, 100, pct(A.u.meal), (v) => { A.u.meal = v / 100; }, null, 'var(--red)');
+      axSl.brain = makeSlider(axSliders, 'sl-brain', 'Beyin desteği', 'Beynin pankreas salgısına yardımcı olan projeksiyonları.', 0, 100, pct(A.u.brain), (v) => { A.u.brain = v / 100; }, null, 'var(--hyp)');
+    } else {
+      const [nm, ht] = cfg().drive;
+      axSl.drive = makeSlider(axSliders, 'sl-drive', nm, ht, 0, 100, pct(A.u.drive), (v) => { A.u.drive = v / 100; }, null, 'var(--hyp)');
+      axSl.other = makeSlider(axSliders, 'sl-other', 'Diğer hipotalamik hormonlar', A.axis === 'two' ? 'Hipofizi uyaran (+) ya da engelleyen (−) başka hipotalamik hormonlar.' : 'Kitap isim vermiyor: ACTH\'yi uyaran (+) ya da engelleyen (−) başka hipotalamik hormonlar.', -100, 100, Math.round(A.u.other * 100), (v) => { A.u.other = v / 100; }, (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v) + '%', 'var(--pit)');
+      if (A.axis === 'hpg') axSl.other.wrap.querySelector('.sl-hint').textContent = 'LH\'yi uyaran (+) ya da engelleyen (−) ek hipotalamik sinyaller (sembolik).';
+    }
+  }
+
+  // ---- Diyagram ----
+  let D = null; // çizim öğeleri
+  const BX = 18, BW = 216, BH = 64, GAP = 36, Y0 = 10;
+  function buildDiagram() {
+    const svg = $('#axSvg');
+    svg.innerHTML = '';
+    const c = cfg(), n = c.stages.length;
+    const bloodY = Y0 + (n - 1) * (BH + GAP) + BH + 28;
+    const cellY = bloodY + 34 + 52;
+    const H = cellY + 26 + 30;
+    svg.setAttribute('viewBox', `0 0 360 ${H}`);
+    const defs = mk('defs', {}, svg);
+    const m1 = mk('marker', { id: 'ma', viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 9, markerHeight: 9, markerUnits: 'userSpaceOnUse', orient: 'auto' }, defs);
+    mk('path', { class: 'mk', d: 'M0,1 L10,5 L0,9 z' }, m1);
+    const m2 = mk('marker', { id: 'mb', viewBox: '0 0 10 10', refX: 5, refY: 5, markerWidth: 10, markerHeight: 10, markerUnits: 'userSpaceOnUse', orient: 'auto' }, defs);
+    mk('path', { class: 'mk-bar', d: 'M5,0 L5,10' }, m2);
+    D = { n, stages: [], arrows: [], fbs: [], bloodY, cellY };
+
+    const stageY = (i) => Y0 + i * (BH + GAP);
+    c.stages.forEach((s, i) => {
+      const y = stageY(i);
+      const g = mk('g', {}, svg);
+      mk('rect', { class: 'box', x: BX, y, width: BW, height: BH, rx: 10 }, g);
+      mk('rect', { x: BX, y: y + 12, width: 4, height: BH - 24, rx: 2, fill: `var(${s.c})` }, g);
+      txt(g, { class: 't-title', x: BX + 14, y: y + 20 }, s.t);
+      const hs = s.h.length > 34 ? s.h.slice(0, 33) + '…' : s.h;
+      txt(g, { class: 't-hor', x: BX + 14, y: y + 35 }, hs);
+      mk('rect', { class: 'trk', x: BX + 14, y: y + 46, width: 150, height: 7, rx: 3.5 }, g);
+      const fill = mk('rect', { x: BX + 14, y: y + 46, width: 0, height: 7, rx: 3.5, fill: `var(${s.c})` }, g);
+      const pc = txt(g, { class: 't-pct', x: BX + BW - 12, y: y + 53 }, '0%');
+      D.stages.push({ fill, pc });
+      if (i < n - 1) {
+        const x = BX + BW / 2;
+        D.arrows.push(mk('path', { class: 'arrow', d: `M${x},${y + BH + 3} L${x},${y + BH + GAP - 4}`, 'marker-end': 'url(#ma)' }, svg));
+      }
+    });
+    if (A.axis === 'glu') { // beyin desteği etiketi
+      const y = stageY(1);
+      D.brain = txt(svg, { class: 't-hor', x: BX + BW + 12, y: y + 56, style: 'fill:var(--hyp)' }, '');
+    }
+    // geri bildirim: son basamaktan öncekilere
+    const lastC = stageY(n - 1) + BH / 2;
+    const targets = A.axis === 'hpa' || A.axis === 'hpg' ? [0, 1] : [0];
+    targets.forEach((j, k) => {
+      const yj = stageY(j) + BH / 2, bx = 276 + k * 26;
+      D.fbs.push(mk('path', { class: 'fbk', d: `M${BX + BW + 2},${lastC + (k ? 10 : -4)} C${bx + 40},${lastC + (k ? 10 : -4)} ${bx + 40},${yj} ${BX + BW + 6},${yj}`, 'marker-end': 'url(#mb)' }, svg));
+    });
+    txt(svg, { class: 't-hor', x: BX + BW + 10, y: stageY(n - 1) + BH + 18 }, '↑ geri bildirim');
+    // kan dolaşımı
+    const lastBottom = stageY(n - 1) + BH;
+    mk('path', { class: 'arrow', d: `M${BX + BW / 2},${lastBottom + 3} L${BX + BW / 2},${bloodY - 4}`, 'marker-end': 'url(#ma)' }, svg);
+    mk('rect', { class: 'trk', x: BX, y: bloodY, width: 324, height: 28, rx: 14 }, svg);
+    const bl = mk('rect', { x: BX, y: bloodY, width: 0, height: 28, rx: 14, fill: `var(${c.stages[n - 1].c})`, opacity: 0.85 }, svg);
+    txt(svg, { class: 't-title', x: BX + 162, y: bloodY + 18, 'text-anchor': 'middle', fill: 'var(--ink)', style: 'paint-order:stroke;stroke:var(--panel);stroke-width:3px;stroke-linejoin:round' }, 'Kan dolaşımı: hormon her yere ulaşır');
+    D.blood = bl;
+    // hedef hücreler
+    const cx1 = 100, cx2 = 260;
+    for (const cx of [cx1, cx2]) mk('path', { class: 'arrow', d: `M${cx},${bloodY + 32} L${cx},${cellY - 32}`, 'marker-end': 'url(#ma)' }, svg);
+    D.cellA = mk('circle', { cx: cx1, cy: cellY, r: 26, fill: 'var(--eff)', 'fill-opacity': 0.1, stroke: 'var(--eff)', 'stroke-width': 2 }, svg);
+    for (let k = 0; k < 6; k++) { // reseptör çentikleri
+      const a = (k / 6) * Math.PI * 2;
+      mk('rect', { x: cx1 - 3, y: cellY - 26 - 6, width: 6, height: 6, rx: 1.5, fill: 'var(--eff)', transform: `rotate(${(a * 180) / Math.PI} ${cx1} ${cellY})` }, svg);
+    }
+    D.cellAp = txt(svg, { class: 't-pct', x: cx1, y: cellY + 4, style: 'text-anchor:middle' }, '0%');
+    txt(svg, { class: 't-cap', x: cx1, y: cellY + 46 }, 'Reseptörü olan hücre');
+    mk('circle', { cx: cx2, cy: cellY, r: 26, fill: 'none', stroke: 'var(--muted)', 'stroke-width': 1.6, 'stroke-dasharray': '4 4' }, svg);
+    txt(svg, { class: 't-pct', x: cx2, y: cellY + 4, style: 'text-anchor:middle;fill:var(--muted)' }, '0%');
+    txt(svg, { class: 't-cap', x: cx2, y: cellY + 46 }, 'Reseptörü olmayan hücre');
+  }
+
+  function drawDiagram() {
+    const s = A.x.s, c = cfg();
+    s.forEach((v, i) => { D.stages[i].fill.setAttribute('width', (150 * v).toFixed(1)); D.stages[i].pc.textContent = pct(v) + '%'; });
+    D.arrows.forEach((a, i) => { const v = s[i]; a.style.strokeWidth = (1 + 2.6 * v).toFixed(2); a.style.opacity = (0.25 + 0.7 * v).toFixed(2); });
+    const last = s[s.length - 1], on = A.axis === 'glu' || A.u.feedback;
+    D.fbs.forEach((f) => { f.style.strokeWidth = (1 + 2.4 * last).toFixed(2); f.style.opacity = on ? (0.2 + 0.7 * last).toFixed(2) : '0.12'; });
+    D.blood.setAttribute('width', (324 * last).toFixed(1));
+    D.cellA.setAttribute('fill-opacity', (0.08 + 0.92 * A.x.e).toFixed(2));
+    D.cellAp.textContent = pct(A.x.e) + '%';
+    if (D.brain) D.brain.textContent = A.u.brain > 0.02 ? `← beyin ${pct(A.u.brain)}%` : '';
+  }
+
+  // ---- Grafik ----
+  const CH = { x0: 34, x1: 350, top: 10, bot: 108, span: 360 };
+  const yOf = (v) => CH.bot - (CH.bot - CH.top) * v;
+  let chartSeries = [];
+  function buildChart() {
+    const svg = $('#axChart');
+    svg.innerHTML = '';
+    for (const v of [0, 0.5, 1]) { mk('line', { class: 'grid', x1: CH.x0, x2: CH.x1, y1: yOf(v), y2: yOf(v) }, svg); txt(svg, { x: CH.x0 - 6, y: yOf(v) + 3.5, 'text-anchor': 'end' }, pct(v)); }
+    txt(svg, { x: CH.x0, y: 124 }, '−6 sa'); txt(svg, { x: CH.x1, y: 124, 'text-anchor': 'end' }, 'şimdi');
+    const c = cfg();
+    const defs = c.stages.map((s, i) => ({ name: c.series[i], color: `var(${s.c})`, get: (x) => x.s[i] }));
+    defs.push({ name: 'Hedef hücre yanıtı', color: 'var(--eff)', get: (x) => x.e, dash: '5 3' });
+    chartSeries = [];
+    let lx = CH.x0, ly = 138;
+    for (const s of defs) {
+      const w = 14 + s.name.length * 6.1 + 10;
+      if (lx + w > CH.x1 + 4) { lx = CH.x0; ly += 14; }
+      mk('rect', { x: lx, y: ly - 8, width: 9, height: 9, rx: 2, fill: s.color }, svg);
+      txt(svg, { x: lx + 14, y: ly }, s.name);
+      lx += w;
+      const attrs = { class: 'ln', stroke: s.color, points: '' };
+      if (s.dash) attrs['stroke-dasharray'] = s.dash;
+      chartSeries.push({ ...s, line: mk('polyline', attrs, svg), dot: mk('circle', { r: 3.4, fill: s.color, cx: CH.x1, cy: CH.bot }, svg) });
+    }
+    svg.setAttribute('viewBox', `0 0 360 ${ly + 8}`);
+  }
+  function drawChart() {
+    for (const s of chartSeries) {
+      const pts = A.hist.map((h) => `${(CH.x1 - ((A.t - h.t) / CH.span) * (CH.x1 - CH.x0)).toFixed(1)},${yOf(s.get(h.x)).toFixed(1)}`);
+      s.line.setAttribute('points', pts.join(' '));
+      const last = A.hist[A.hist.length - 1];
+      if (last) s.dot.setAttribute('cy', yOf(s.get(last.x)).toFixed(1));
+    }
+  }
+
+  // ---- Eksen kontrolleri ----
+  function setAxis(key) {
+    A.axis = key;
+    for (const b of $('#axChips').children) b.setAttribute('aria-pressed', String(b.dataset.k === key));
+    $('#axNote').textContent = cfg().note;
+    $('#axFoot').textContent = FOOT[key];
+    $('#axPulse').textContent = cfg().pulse;
+    $('#axFb').hidden = key === 'glu';
+    $('#axFb').setAttribute('aria-pressed', String(!!A.u.feedback));
+    $('#axFb').textContent = 'Geri bildirim: ' + (A.u.feedback ? 'açık' : 'kapalı');
+    resettle();
+    buildAxSliders(); buildDiagram(); buildChart();
+    sampleAx();
+  }
+  for (const k of Object.keys(STRUCT)) {
+    const b = document.createElement('button');
+    b.className = 'chip'; b.type = 'button'; b.dataset.k = k; b.textContent = STRUCT[k].chip; b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', () => setAxis(k));
+    $('#axChips').appendChild(b);
+  }
+  $('#axPulse').addEventListener('click', () => { A.pulseUntil = A.t + 30; });
+  $('#axFb').addEventListener('click', (ev) => { A.u.feedback = A.u.feedback ? 0 : 1; ev.currentTarget.setAttribute('aria-pressed', String(!!A.u.feedback)); ev.currentTarget.textContent = 'Geri bildirim: ' + (A.u.feedback ? 'açık' : 'kapalı'); });
+  $('#axPause').addEventListener('click', (ev) => { A.paused = !A.paused; ev.currentTarget.setAttribute('aria-pressed', String(A.paused)); ev.currentTarget.textContent = A.paused ? 'Devam et' : 'Duraklat'; });
+  const SPEEDS = [1, 3, 10];
+  $('#axSpeed').addEventListener('click', (ev) => { A.speed = SPEEDS[(SPEEDS.indexOf(A.speed) + 1) % SPEEDS.length]; ev.currentTarget.textContent = 'Hız ×' + A.speed; });
+  $('#axReset').addEventListener('click', () => { A.u = { ...U0 }; setAxis(A.axis); });
+
+  function sampleAx() { A.hist.push({ t: A.t, x: A.x }); while (A.hist.length && A.t - A.hist[0].t > CH.span) A.hist.shift(); }
+  SAY.axis = () => describeAxis(A.axis, A.x, effU(), A.t < A.pulseUntil);
+
+  /* =====================================================
+     RESEPTÖR
+     ===================================================== */
+  const RC = { hormone: 0.5, number: 0.6, affinity: 0.5, specificity: 1, other: 0 };
+  const RPRE = [
+    { n: 'Normal', v: { hormone: 0.5, number: 0.6, affinity: 0.5, specificity: 1, other: 0 } },
+    { n: 'Reseptör mutasyonu', v: { hormone: 0.9, number: 0, affinity: 0.5, specificity: 1, other: 0 } },
+    { n: 'Çok reseptör, az hormon', v: { hormone: 0.15, number: 1, affinity: 0.9, specificity: 1, other: 0 } },
+    { n: 'Az reseptör, çok hormon', v: { hormone: 0.95, number: 0.15, affinity: 0.5, specificity: 1, other: 0 } },
+    { n: 'Titiz olmayan reseptör', v: { hormone: 0.4, number: 0.6, affinity: 0.5, specificity: 0.15, other: 0.8 } },
+  ];
+  const rcSl = {};
+  const rcDefs = [
+    ['hormone', 'Östrojen düzeyi', 'Konuşma sesi: kandaki hormon miktarı.', 'var(--hyp)'],
+    ['number', 'Reseptör sayısı', 'Kulak: hücre yüzeyindeki reseptör sayısı.', 'var(--eff)'],
+    ['affinity', 'Bağlanma isteği', 'Bağlanma alanının şekli: yüksekse az hormon yeter.', 'var(--eff)'],
+    ['specificity', 'Reseptör titizliği', 'Düşükse benzer bir steroid hormon da kilide girebilir.', 'var(--gld)'],
+    ['other', 'Benzer hormon (testosteron)', 'Yapısal olarak benzer, farklı bir steroid hormon.', 'var(--red)'],
+  ];
+  for (const [k, nm, ht, col] of rcDefs) rcSl[k] = makeSlider($('#rcSliders'), 'rc-' + k, nm, ht, 0, 100, pct(RC[k]), (v) => { RC[k] = v / 100; setRcChip(null); }, null, col);
+  function setRcChip(i) { for (const b of $('#rcChips').children) b.setAttribute('aria-pressed', String(+b.dataset.i === i)); }
+  RPRE.forEach((p, i) => {
+    const b = document.createElement('button');
+    b.className = 'chip'; b.type = 'button'; b.dataset.i = i; b.textContent = p.n; b.setAttribute('aria-pressed', String(i === 0));
+    b.addEventListener('click', () => { Object.assign(RC, p.v); for (const [k] of rcDefs) rcSl[k].set(pct(RC[k])); setRcChip(i); });
+    $('#rcChips').appendChild(b);
+  });
+  const rcM = $('#rcMeters');
+  rcM.innerHTML = [['Reseptör doluluğu', 'occ', 'var(--hyp)'], ['Hücre yanıtı', 'resp', 'var(--eff)'], ['Yanıtın yanlış hormondan gelen payı', 'wrong', 'var(--red)']]
+    .map(([n, k, c]) => `<div style="--c:${c}"><div class="m-top"><span>${n}</span><b id="rm-${k}">0%</b></div><div class="track"><b id="rb-${k}"></b></div></div>`).join('');
+  const SLOTS = 24;
+  const rcSvg = $('#rcSvg'), CX = 180, CY = 120, CR = 62;
+  const rcCell = mk('circle', { cx: CX, cy: CY, r: CR, fill: 'var(--eff)', 'fill-opacity': 0.1, stroke: 'var(--eff)', 'stroke-width': 2 }, rcSvg);
+  const rcRecG = mk('g', {}, rcSvg);
+  const rcCenter = txt(rcSvg, { x: CX, y: CY - 2, 'text-anchor': 'middle', style: 'font:500 22px var(--f-mono);fill:var(--ink);paint-order:stroke;stroke:var(--panel);stroke-width:4px;stroke-linejoin:round' }, '0%');
+  txt(rcSvg, { x: CX, y: CY + 16, 'text-anchor': 'middle', style: 'font:400 11px var(--f-body);fill:var(--muted)' }, 'hücre yanıtı');
+  function drawReceptor() {
+    const r = receptor(RC), count = Math.round(RC.number * SLOTS);
+    rcCell.setAttribute('fill-opacity', (0.06 + 0.94 * r.response).toFixed(2));
+    rcCell.setAttribute('stroke-dasharray', count === 0 ? '5 4' : '');
+    rcRecG.innerHTML = '';
+    let accT = 0, accW = 0;
+    const w = r.occ > 0 ? r.occO / r.occ : 0;
+    for (let k = 0; k < count; k++) {
+      const ang = (k / count) * 360;
+      const g = mk('g', { transform: `rotate(${ang} ${CX} ${CY})` }, rcRecG);
+      mk('rect', { x: CX - 5, y: CY - CR - 10, width: 10, height: 11, rx: 2.5, fill: 'var(--eff)' }, g);
+      mk('rect', { x: CX - 2.5, y: CY - CR - 10, width: 5, height: 4, fill: 'var(--panel)' }, g); // kilit çentiği
+      accT += r.occ;
+      if (accT >= 1) { // bu yuva dolu
+        accT -= 1; accW += w;
+        const wrong = accW >= 1; if (wrong) accW -= 1;
+        mk('circle', { cx: CX, cy: CY - CR - 22, r: 6, fill: wrong ? 'var(--red)' : 'var(--hyp)', stroke: 'var(--panel)', 'stroke-width': 1.5 }, g);
+      }
+    }
+    rcCenter.textContent = pct(r.response) + '%';
+    const set = (k, v) => { $('#rm-' + k).textContent = pct(v) + '%'; $('#rb-' + k).style.width = pct(v) + '%'; };
+    set('occ', r.occ); set('resp', r.response); set('wrong', r.wrongShare);
+    return r;
+  }
+  SAY.rec = () => {
+    const r = receptor(RC);
+    if (RC.number === 0) return 'Hücrede reseptör yok: hormon bol olsa da sinyal ulaşmıyor. Bazı endokrin hastalıkları böyle işler.';
+    if (r.wrongShare > 0.3) return 'Reseptör titiz değil: benzer hormon da kilide girip yanlış sinyal üretiyor.';
+    if (r.response < 0.12 && RC.hormone > 0.7) return 'Hormon yüksek ama yanıt zayıf: reseptör düzeyi hormon düzeyi kadar önemli.';
+    if (r.response > 0.5 && RC.hormone < 0.25) return 'Hormon az ama yanıt güçlü: çok sayıda ve istekli reseptör az hormonu yeter kılıyor.';
+    return 'Yanıt = hormon miktarı × reseptörün sayısı ve bağlanma isteği.';
+  };
+
+  /* =====================================================
+     SÜRE
+     ===================================================== */
+  const TM = { x0: 30, x1: 350, top: 12, bot: 124, max: 8.94 };
+  const tx = (lv) => TM.x0 + (lv / TM.max) * (TM.x1 - TM.x0);
+  const ty = (v) => TM.bot - (TM.bot - TM.top) * v;
+  const tmSvg = $('#tmSvg');
+  for (const v of [0, 0.5, 1]) mk('line', { x1: TM.x0, x2: TM.x1, y1: ty(v), y2: ty(v), stroke: 'var(--line)', 'stroke-width': 1 }, tmSvg);
+  for (const [lv, lb] of [[0, '1 ms'], [3, '1 sn'], [4.78, '1 dk'], [6.56, '1 sa'], [7.94, '1 g'], [8.94, '10 g']]) {
+    mk('line', { x1: tx(lv), x2: tx(lv), y1: TM.bot, y2: TM.bot + 4, stroke: 'var(--muted)' }, tmSvg);
+    txt(tmSvg, { x: Math.min(tx(lv), 346), y: TM.bot + 15, 'text-anchor': lv === 0 ? 'start' : lv >= 8.9 ? 'end' : 'middle', style: 'font:400 10px var(--f-mono);fill:var(--muted)' }, lb);
+  }
+  const curve = (fn, color) => {
+    const pts = []; for (let i = 0; i <= 150; i++) { const lv = (i / 150) * TM.max; pts.push(`${tx(lv).toFixed(1)},${ty(fn(msOfLog(lv))).toFixed(1)}`); }
+    mk('polyline', { points: pts.join(' '), fill: 'none', stroke: color, 'stroke-width': 2.2, 'stroke-linejoin': 'round' }, tmSvg);
+  };
+  curve(neuroAt, 'var(--hyp)'); curve(hormAt, 'var(--eff)');
+  txt(tmSvg, { x: tx(0.9), y: 24, style: 'font:500 10.5px var(--f-body);fill:var(--hyp)' }, 'Nörotransmitter');
+  txt(tmSvg, { x: tx(5.4), y: 24, style: 'font:500 10.5px var(--f-body);fill:var(--eff)' }, 'Hormon');
+  const tmCur = mk('line', { y1: TM.top - 4, y2: TM.bot, stroke: 'var(--ink)', 'stroke-width': 1.4 }, tmSvg);
+  const tmDotN = mk('circle', { r: 4, fill: 'var(--hyp)', stroke: 'var(--panel)', 'stroke-width': 1.5 }, tmSvg);
+  const tmDotH = mk('circle', { r: 4, fill: 'var(--eff)', stroke: 'var(--panel)', 'stroke-width': 1.5 }, tmSvg);
+  function fmtMs(ms) {
+    if (ms < 1000) return (ms < 10 ? ms.toFixed(1) : Math.round(ms)) + ' ms';
+    if (ms < MS.min) return (ms / 1000).toFixed(ms < 10000 ? 1 : 0) + ' sn';
+    if (ms < MS.h) return Math.round(ms / MS.min) + ' dk';
+    if (ms < MS.day) return (ms / MS.h).toFixed(1).replace('.0', '') + ' sa';
+    return (ms / MS.day).toFixed(1).replace('.0', '') + ' gün';
+  }
+  const tmSl = $('#tmSl');
+  function drawTime() {
+    const lv = tmSl.value / 100, ms = msOfLog(lv), n = neuroAt(ms), h = hormAt(ms);
+    $('#tmVal').textContent = fmtMs(ms);
+    tmCur.setAttribute('x1', tx(lv)); tmCur.setAttribute('x2', tx(lv));
+    tmDotN.setAttribute('cx', tx(lv)); tmDotN.setAttribute('cy', ty(n));
+    tmDotH.setAttribute('cx', tx(lv)); tmDotH.setAttribute('cy', ty(h));
+    $('#tmRead').innerHTML =
+      `<div class="ro"><span class="k" style="color:var(--hyp)">Nörotransmitter</span><span class="v">etki ${pct(n)}%</span><span class="k">ulaşan: 1 komşu nöron</span></div>` +
+      `<div class="ro"><span class="k" style="color:var(--eff)">Hormon</span><span class="v">etki ${pct(h)}%</span><span class="k">ulaşan: reseptörü olan trilyonlarca hücre</span></div>`;
+  }
+  tmSl.addEventListener('input', drawTime);
+  SAY.time = () => {
+    const ms = msOfLog(tmSl.value / 100);
+    if (neuroAt(ms) > 0.3 && hormAt(ms) < 0.05) return 'Milisaniyeler: nörotransmitter etkisini çoktan göstermiş, hormon henüz yoldadır.';
+    if (neuroAt(ms) < 0.02 && ms < MS.h) return 'Nörotransmitter sinyali çoktan bitti; hormonun etkisi ise yeni yeni oturuyor.';
+    if (neuroAt(ms) < 0.02 && hormAt(ms) > 0.3) return 'Nörotransmitter sinyali bitmiş; hormonun etkisi saatlerdir sürüyor.';
+    if (hormAt(ms) > 0.02 && ms > MS.day) return 'Günler sonra: hormon etkisi hâlâ ölçülebilir. Hormon etkileri kalıcı da olabilir.';
+    return 'Kaydırıcıyı oynat: nörotransmitter milisaniyede söner, hormon saatlerce günlerce sürer.';
+  };
+
+  const OR = { fetal: 0.5, adult: 0.6 };
+  const orSl = {};
+  orSl.fetal = makeSlider($('#orSliders'), 'or-fetal', 'Fetüs ve çocukluk döneminde hormon', 'Beynin yapılandırılmasını şekillendirir (kalıcı).', 0, 100, 50, (v) => { OR.fetal = v / 100; drawOrgan(); }, null, 'var(--pit)');
+  orSl.adult = makeSlider($('#orSliders'), 'or-adult', 'Yetişkinlikte hormon', 'Aktivasyon etkisi: yalnızca saatler ya da günler sürer.', 0, 100, 60, (v) => { OR.adult = v / 100; drawOrgan(); }, null, 'var(--eff)');
+  $('#orMeters').innerHTML = [['Kalıcı yapı: hormona duyarlılık', 'st', 'var(--pit)'], ['Anlık etki (aktivasyon)', 'ef', 'var(--eff)']]
+    .map(([n, k, c]) => `<div style="--c:${c}"><div class="m-top"><span>${n}</span><b id="om-${k}">0%</b></div><div class="track"><b id="ob-${k}"></b></div></div>`).join('');
+  function drawOrgan() {
+    const o = organ(OR.fetal, OR.adult);
+    $('#om-st').textContent = pct(o.structure) + '%'; $('#ob-st').style.width = pct(o.structure) + '%';
+    $('#om-ef').textContent = pct(o.effect) + '%'; $('#ob-ef').style.width = pct(o.effect) + '%';
+  }
+  $('#orCut').addEventListener('click', () => { OR.adult = 0; orSl.adult.set(0); drawOrgan(); });
+
+  /* ---------- Döngü ---------- */
+  let last = performance.now(), acc = 0, tSay = 0;
+  function frame(now) {
+    const dt = Math.min(0.1, (now - last) / 1000);
+    last = now;
+    if (tab === 'axis' && !A.paused) {
+      acc += dt * 6 * A.speed; // 1 sn gerçek = 6 dk sim (×1)
+      while (acc >= 1) {
+        A.x = stepAxis(A.axis, A.x, effU(), 1);
+        A.t += 1; acc -= 1;
+        if (A.t - A.lastSample >= 2) { A.lastSample = A.t; sampleAx(); }
+      }
+    }
+    if (tab === 'axis') { drawDiagram(); drawChart(); }
+    if (tab === 'rec') drawReceptor();
+    tSay += dt;
+    if (tSay > 0.25) { tSay = 0; say(); }
+    requestAnimationFrame(frame);
+  }
+
+  setAxis('hpa');
+  drawReceptor(); drawTime(); drawOrgan();
+  showTab('axis');
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body></html>
