@@ -1,0 +1,84 @@
+.sim-erg .tabs .chip[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sim-erg .tabs { flex-wrap: wrap; overflow: visible; }
+.sim-erg .panel { display: flex; flex-direction: column; gap: 18px; }
+.sim-erg .panel[hidden] { display: none; }
+.sim-erg .sl-amy { --c: var(--amy); } .sim-erg .sl-dop { --c: var(--dop); }
+
+.sim-erg .meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.sim-erg .m-top { display: flex; justify-content: space-between; font: 400 10.5px var(--f-mono); color: var(--muted); margin-bottom: 3px; gap: 4px; }
+.sim-erg .m-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* Beyin silueti */
+.sim-erg .b-out { fill: none; stroke: var(--edge); stroke-width: 2; }
+.sim-erg .b-cb, .sim-erg .b-stem { fill: var(--line); stroke: var(--edge); stroke-width: 1.4; }
+.sim-erg .b-front { fill: var(--pfc); }
+.sim-erg .b-edge { fill: none; stroke: var(--pfc); stroke-width: 1.4; stroke-dasharray: 4 3; }
+.sim-erg .b-limb { fill: var(--dop); stroke: var(--dop); stroke-width: 1.4; stroke-opacity: .9; }
+.sim-erg .b-nacc { fill: var(--dop); stroke: var(--ink); stroke-width: 1.4; }
+.sim-erg .b-dot { fill: var(--ink); }
+.sim-erg .b-fibres path { fill: none; stroke: var(--pit); stroke-linecap: round; }
+.sim-erg .b-lab, .sim-erg .b-val, .sim-erg .b-small { fill: var(--ink); paint-order: stroke; stroke: var(--panel); stroke-width: 3px; stroke-linejoin: round; }
+.sim-erg .b-lab { font: 600 11px var(--f-body); }
+.sim-erg .b-val { font: 500 10.5px var(--f-mono); }
+.sim-erg .b-small { font: 400 9.5px var(--f-body); fill: var(--muted); }
+
+/* Eğriler */
+.sim-erg .chart .ln.dash { stroke-dasharray: 6 4; }
+.sim-erg .chart .ln.dot { stroke-dasharray: 1.5 4; stroke-width: 2.6; }
+.sim-erg .chart .gapfill { fill: var(--dop); fill-opacity: .22; stroke: none; }
+.sim-erg .chart .gaplab { fill: var(--eff-text); font: 600 10.5px var(--f-body); }
+.sim-erg .chart .ref { stroke: var(--edge); stroke-width: 1; stroke-dasharray: 2 3; }
+.sim-erg .chart .mk1 { stroke: var(--ink); stroke-width: 1.4; }
+.sim-erg .chart .glab { font: 500 10.5px var(--f-body); fill: var(--ink); }
+.sim-erg .chart .glab.sm { font: 400 9.5px var(--f-mono); fill: var(--muted); }
+.sim-erg .chart .glab.sel { font-weight: 700; text-decoration: underline; }
+.sim-erg .chart .bar-a { fill: var(--lesion); }
+.sim-erg .chart .bar-p { fill: var(--amy); }
+.sim-erg .chart .bar-g { fill: var(--gld); }
+.sim-erg .chart .bar-b { fill: var(--amy); }
+.sim-erg .chart .accdot { fill: var(--ink); stroke: var(--panel); stroke-width: 1.6; }
+
+/* Kavşak sahnesi */
+.sim-erg .s-road { fill: var(--line); }
+.sim-erg .s-dash { stroke: var(--panel); stroke-width: 2; stroke-dasharray: 8 7; }
+.sim-erg .s-stop { stroke: var(--ink); stroke-width: 3; }
+.sim-erg .s-pole { stroke: var(--edge); stroke-width: 3; }
+.sim-erg .s-box { fill: var(--ink); }
+.sim-erg .s-car { fill: var(--pfc); stroke: var(--ink); stroke-width: 1.2; }
+.sim-erg .s-win { fill: var(--panel); }
+.sim-erg .s-wheel { fill: var(--ink); }
+.sim-erg .s-cross rect { fill: var(--pit); stroke: var(--ink); stroke-width: 1.2; }
+.sim-erg .s-face { fill: var(--panel); stroke: var(--ink); stroke-width: 1.4; }
+.sim-erg .s-eye { fill: var(--ink); }
+.sim-erg .s-mouth { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-linecap: round; }
+.sim-erg .s-note { font: 500 11px var(--f-body); fill: var(--ink); }
+.sim-erg .s-status { font: 500 11.5px var(--f-body); fill: var(--ink); }
+.sim-erg .s-burst path { stroke: var(--red); stroke-width: 4; stroke-linecap: round; }
+.sim-erg .s-burst text { font: 700 12px var(--f-body); fill: var(--red-text); paint-order: stroke; stroke: var(--panel); stroke-width: 3px; }
+
+.sim-erg .btn.go { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sim-erg .btn:disabled { opacity: .45; cursor: default; }
+.sim-erg .tally { font-size: 13px; min-height: 2.7em; }
+
+/* Haber güncelleme */
+.sim-erg .contested { border: 1px solid var(--line); border-left: 4px solid var(--dop); background: var(--panel); border-radius: 12px; padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+.sim-erg .badge { align-self: flex-start; font: 600 12px var(--f-mono); color: var(--eff-text); letter-spacing: .03em; }
+.sim-erg .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.sim-erg .card[hidden] { display: none; }
+.sim-erg .card-k { font: 600 11px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.sim-erg .card-t { font: 600 17px/1.3 var(--f-display); }
+.sim-erg .news { font-size: 14px; }
+.sim-erg .k-good { color: var(--gld-text); } .sim-erg .k-bad { color: var(--red-text); }
+.sim-erg .rows { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+.sim-erg .rows li { display: flex; justify-content: space-between; gap: 10px; padding: 3px 6px; border-radius: 6px; }
+.sim-erg .rows li.sel { background: var(--bg); font-weight: 600; }
+.sim-erg .rows li.me { border-top: 1px dashed var(--control-border); border-radius: 0; margin-top: 4px; padding-top: 6px; }
+.sim-erg .rows .v { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sim-erg .sl[hidden], .sim-erg .row[hidden] { display: none; }
+
+.sim-erg .how { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font-size: 13px; }
+.sim-erg .how summary { cursor: pointer; font-weight: 600; min-height: 32px; display: flex; align-items: center; }
+.sim-erg .how p { margin-top: 8px; }
+.sim-erg .book { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.sim-erg .book ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+.sim-erg .book a { color: var(--ink); text-underline-offset: 2px; font-weight: 600; }
