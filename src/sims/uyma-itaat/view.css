@@ -1,0 +1,51 @@
+.sim-uyma .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.sim-uyma .tabs .chip[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sim-uyma .panel { display: flex; flex-direction: column; gap: 18px; }
+.sim-uyma .panel[hidden] { display: none; }
+.sim-uyma .sl-amy { --c: var(--amy); } .sim-uyma .sl-pfc { --c: var(--pfc); } .sim-uyma .sl-dop { --c: var(--dop); }
+.sim-uyma .sliders > div > .row { margin-block: 4px; }
+.sim-uyma .tg { width: 100%; text-align: left; }
+.sim-uyma .btn-go { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+.sim-uyma .meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.sim-uyma .m-top { display: flex; justify-content: space-between; font: 400 10.5px var(--f-mono); color: var(--muted); margin-bottom: 3px; gap: 4px; }
+.sim-uyma .m-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.sim-uyma .stage svg text { font: 400 10px var(--f-body); fill: var(--muted); }
+.sim-uyma .stage .card { fill: none; stroke: var(--line); stroke-width: 1.2; }
+.sim-uyma .stage .cap.lt { font: 600 12px var(--f-mono); fill: var(--ink); }
+.sim-uyma .stage .bar { stroke: var(--ink); stroke-width: 9; stroke-linecap: butt; }
+.sim-uyma .stage .status { font: 500 11.5px var(--f-body); fill: var(--ink); }
+.sim-uyma .seat { fill: var(--panel); stroke: var(--edge); stroke-width: 1.2; }
+.sim-uyma .seat.subj { stroke: var(--ink); stroke-width: 2.4; }
+.sim-uyma .seat.ally { stroke: var(--ink); stroke-width: 1.6; stroke-dasharray: 2.5 2; }
+.sim-uyma .seat.bad { fill: var(--amy); stroke: var(--amy); }
+.sim-uyma .seat.good { fill: var(--pfc); stroke: var(--pfc); }
+.sim-uyma .seat.subj.bad, .sim-uyma .seat.subj.good { stroke: var(--ink); }
+.sim-uyma .stage .seat-t { font: 600 11px var(--f-mono); fill: var(--ink); pointer-events: none; }
+.sim-uyma .seat.bad + .seat-t, .sim-uyma .seat.good + .seat-t { fill: var(--bg); }
+.sim-uyma .tally { font-size: 12px; color: var(--muted); min-height: 1.4em; }
+
+.sim-uyma .rung { fill: var(--amy); fill-opacity: 0; stroke: var(--line); stroke-width: 1; }
+.sim-uyma .rung.on { stroke: var(--amy); }
+.sim-uyma .tick { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 2; }
+.sim-uyma .ag { fill: var(--amy); stroke: var(--amy); stroke-width: 2; }
+.sim-uyma .ag.quit { fill: transparent; stroke: var(--pfc); }
+.sim-uyma .stage .big { font: 600 22px var(--f-mono); fill: var(--ink); }
+.sim-uyma .stage .cap2 { font: 500 12px var(--f-body); fill: var(--ink); }
+
+.sim-uyma .chart .ln.cur { stroke: var(--amy); stroke-width: 2.4; }
+.sim-uyma .chart .ln.ref { stroke: var(--muted); stroke-width: 1.6; stroke-dasharray: 5 4; }
+.sim-uyma .chart .ln.surv { stroke: var(--ink); }
+.sim-uyma .chart .grid.dash { stroke-dasharray: 2 3; }
+.sim-uyma .chart .dot { fill: var(--amy); stroke: var(--panel); stroke-width: 1.5; }
+.sim-uyma .chart .dot-t { fill: var(--ink); font-weight: 600; }
+.sim-uyma .chart .bar-stop { fill: var(--pfc); }
+.sim-uyma .chart .bar-full { fill: var(--amy); }
+
+.sim-uyma .how { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.sim-uyma .how summary { cursor: pointer; font-weight: 600; min-height: 24px; }
+.sim-uyma .how p { margin-top: 8px; font-size: 13px; }
+.sim-uyma .book { border: 1px solid var(--line); border-left: 4px solid var(--dop); border-radius: 12px; padding: 12px 14px; }
+.sim-uyma .book ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+.sim-uyma .book a { color: var(--ink); text-decoration: underline; }
