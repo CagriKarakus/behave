@@ -6,7 +6,7 @@ import { sourceFromContent } from './content';
 import { createApp } from './app';
 import { simsFor } from './sims/registry';
 
-const CH02_SIMS = simsFor('ch02').length;
+const CH02_SIMS = 1; // yalnızca seçili simülasyon bağlanır (ch02 çoklu: sekmeli)
 
 const flush = async () => { for (let i = 0; i < 10; i++) await new Promise((r) => setTimeout(r, 10)); };
 const until = async (fn: () => boolean) => { for (let i = 0; i < 200 && !fn(); i++) await new Promise((r) => setTimeout(r, 10)); };
@@ -67,6 +67,22 @@ describe('uygulama kabuğu ve yönlendirme', () => {
     await go('#/bolum/ch02?deney=ch02-e2');
     expect(host.querySelector('.sim')).toBe(sim);
     expect(host.querySelector('.exp-target')?.id).toBe('exp-ch02-e2');
+  });
+  it('?sim= doğrudan açar; aynı bölümde sim değişince yalnızca seçili sim kalır; geçersiz sim ilkine düşer', async () => {
+    const ids = simsFor('ch02').map((x) => x.id);
+    dispose = createApp(host, sourceFromContent(normalizeContent(newSchema)));
+    await go(`#/bolum/ch02?sim=${ids[1]}`);
+    await until(() => host.querySelectorAll('.sim').length === 1);
+    expect(host.querySelector<HTMLElement>('.sim-host')!.dataset.sim).toBe(ids[1]);
+    const page = host.querySelector('.chapter');
+    await go(`#/bolum/ch02?sim=${ids[0]}`);
+    await until(() => host.querySelector<HTMLElement>('.sim-host')!.dataset.sim === ids[0] && host.querySelectorAll('.sim').length === 1);
+    expect(host.querySelector('.chapter')).toBe(page); // sayfa yeniden kurulmadı
+    expect(host.querySelectorAll('.sim')).toHaveLength(1);
+    await go('#/bolum/ch03');
+    await go('#/bolum/ch02?sim=yok');
+    await until(() => host.querySelectorAll('.sim').length === 1);
+    expect(host.querySelector<HTMLElement>('.sim-host')!.dataset.sim).toBe(ids[0]);
   });
   it('bilinmeyen bölüm ve rota 404 gösterir', async () => {
     dispose = createApp(host, sourceFromContent(normalizeContent(newSchema)));

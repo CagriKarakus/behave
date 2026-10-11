@@ -2,7 +2,7 @@ import type { ChapterDetail, ChapterMeta } from '../content/types';
 import type { ContentSource } from '../content';
 import { CONF_DOTS, chapterLabel } from '../content/normalize';
 import { html, raw, type Safe } from '../lib/html';
-import { chapterHref } from '../lib/router';
+import { chapterHref, withSim } from '../lib/router';
 import { simsFor } from '../sims/registry';
 import { experimentCard } from './experiment';
 import { staticPage, type Page } from './page';
@@ -75,13 +75,16 @@ function restHtml(c: ChapterMeta, d: ChapterDetail, hasSim: boolean, byId: Map<s
  * Bölüm sayfası. Başlık ve gezinti özetten hemen çizilir; metin, kavramlar ve deneyler bölüm
  * ayrıntısı yüklenince, simülasyon da kendi parçası yüklenince gelir.
  */
-export function renderChapter(el: HTMLElement, src: ContentSource, id: string, focusExp?: string): Page {
+export function renderChapter(el: HTMLElement, src: ContentSource, id: string, focusExp?: string, simId?: string): Page {
   const chapters = src.index.chapters;
   const idx = chapters.findIndex((c) => c.id === id);
   if (idx < 0) return renderNotFound(el, `“${id}” kimlikli bir bölüm yok.`);
   const c = chapters[idx];
   const sims = simsFor(c.id);
   const byId = new Map(chapters.map((x) => [x.id, x]));
+  // Geçersiz ya da eksik ?sim= ilk simülasyona düşer.
+  const indexOf = (id?: string): number => Math.max(0, sims.findIndex((x) => x.id === id));
+  const start = indexOf(simId);
 
   el.innerHTML = html`
   <article class="page chapter${sims.length ? ' has-sim' : ''}" aria-labelledby="page-title">
@@ -97,12 +100,23 @@ export function renderChapter(el: HTMLElement, src: ContentSource, id: string, f
       <div class="summary prose" data-slot="summary"></div>
     </header>
 
-    ${sims.length ? html`<aside class="ch-sim" aria-label="Simülasyon">
-      ${sims.map((s, i) => html`<section class="sim-card" aria-labelledby="simh-${i}">
-        <h2 id="simh-${i}" class="sim-title">${s.title}</h2>
-        <p class="muted sim-blurb">${s.blurb}</p>
-        <div class="sim-host" data-sim="${s.id}"></div>
-      </section>`)}
+    ${sims.length > 1 ? html`<aside class="ch-sim" aria-label="Simülasyon">
+      <div class="sim-tabs" role="tablist" aria-label="Simülasyonlar">
+        ${sims.map((s, i) => html`<button type="button" class="sim-tab" role="tab" id="simtab-${i}" data-sim-tab="${s.id}" aria-controls="simpanel"
+          aria-selected="${i === start ? 'true' : 'false'}" tabindex="${i === start ? '0' : '-1'}">
+          <span class="sim-tab-title">${s.title}</span>
+          <span class="sim-tab-blurb">${s.blurb}</span>
+        </button>`)}
+      </div>
+      <div class="sim-card" id="simpanel" role="tabpanel" aria-labelledby="simtab-${start}" tabindex="-1">
+        <div class="sim-host" data-sim="${sims[start].id}"></div>
+      </div>
+    </aside>` : sims.length ? html`<aside class="ch-sim" aria-label="Simülasyon">
+      <section class="sim-card" aria-labelledby="simh-0">
+        <h2 id="simh-0" class="sim-title">${sims[0].title}</h2>
+        <p class="muted sim-blurb">${sims[0].blurb}</p>
+        <div class="sim-host" data-sim="${sims[0].id}"></div>
+      </section>
     </aside>` : ''}
 
     <div class="ch-rest">
@@ -115,20 +129,55 @@ export function renderChapter(el: HTMLElement, src: ContentSource, id: string, f
   </article>`.value;
 
   let disposed = false;
-  const cleanups: Array<() => void> = [];
   const slot = (name: string) => el.querySelector<HTMLElement>(`[data-slot="${name}"]`) as HTMLElement;
 
-  // Simülasyonlar: kendi parçaları yüklenince bağlanır; sayfa o arada değişirse bağlanmaz.
-  const simsReady = Promise.all(Array.from(el.querySelectorAll<HTMLElement>('.sim-host')).map(async (host, i) => {
+  // Yalnızca seçili simülasyon bağlanır; sekme değişince eskisi unmount edilir, yenisi dinamik yüklenir.
+  // Sayfa ya da seçim o arada değişirse geç gelen yükleme bağlanmaz (`seq`).
+  const host = el.querySelector<HTMLElement>('.sim-host');
+  const tabs = Array.from(el.querySelectorAll<HTMLButtonElement>('.sim-tab'));
+  let current = -1;
+  let unmountSim: (() => void) | null = null;
+  let seq = 0;
+
+  const activate = async (i: number): Promise<void> => {
+    if (!host || i === current) return;
+    const my = ++seq;
+    current = i;
+    unmountSim?.(); unmountSim = null;
+    host.replaceChildren();
+    host.dataset.sim = sims[i].id;
+    tabs.forEach((tb, k) => { tb.setAttribute('aria-selected', String(k === i)); tb.tabIndex = k === i ? 0 : -1; });
+    el.querySelector('#simpanel')?.setAttribute('aria-labelledby', `simtab-${i}`);
     try {
       const mount = await sims[i].load();
-      if (disposed) return;
-      cleanups.push(mount(host));
+      if (disposed || my !== seq) return;
+      unmountSim = mount(host);
     } catch (e) {
       console.error(e);
-      if (!disposed) host.textContent = 'Simülasyon yüklenemedi.';
+      if (!disposed && my === seq) host.textContent = 'Simülasyon yüklenemedi.';
     }
-  }));
+  };
+  const simsReady = sims.length ? activate(start) : Promise.resolve();
+
+  const choose = (i: number, focus: boolean): void => {
+    if (focus) tabs[i].focus();
+    if (i === current) return;
+    try { history.replaceState(history.state, '', withSim(location.hash, c.id, sims[i].id)); } catch { /* kısıtlı ortam */ }
+    void activate(i);
+  };
+  const onTabClick = (e: Event) => { const i = tabs.indexOf((e.target as HTMLElement).closest('.sim-tab') as HTMLButtonElement); if (i >= 0) choose(i, false); };
+  const onTabKey = (e: KeyboardEvent) => {
+    const i = tabs.indexOf(e.target as HTMLButtonElement);
+    if (i < 0) return;
+    const n = tabs.length;
+    const next = e.key === 'ArrowRight' ? (i + 1) % n : e.key === 'ArrowLeft' ? (i + n - 1) % n : e.key === 'Home' ? 0 : e.key === 'End' ? n - 1 : -1;
+    if (next < 0) return;
+    e.preventDefault();
+    choose(next, true);
+  };
+  const tablist = el.querySelector('.sim-tabs');
+  tablist?.addEventListener('click', onTabClick);
+  tablist?.addEventListener('keydown', onTabKey as EventListener);
 
   const focusCard = (expId: string): boolean => {
     const cards = Array.from(el.querySelectorAll<HTMLElement>('.exp'));
@@ -164,10 +213,14 @@ export function renderChapter(el: HTMLElement, src: ContentSource, id: string, f
   return {
     dispose() {
       disposed = true;
-      for (const f of cleanups.splice(0)) f();
+      seq++;
+      unmountSim?.(); unmountSim = null;
+      tablist?.removeEventListener('click', onTabClick);
+      tablist?.removeEventListener('keydown', onTabKey as EventListener);
       el.innerHTML = '';
     },
     ready: Promise.all([detailReady, simsReady]).then(() => (focusExp ? focusCard(focusExp) : false)),
     focusExperiment,
+    selectSim: sims.length > 1 ? async (id: string) => { if (!disposed) await activate(indexOf(id)); } : undefined,
   };
 }

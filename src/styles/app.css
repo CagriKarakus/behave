@@ -81,6 +81,16 @@ h1 { margin: 6px 0 4px; font-weight: 700; font-size: clamp(28px, 6vw, 44px); let
 .sim-card + .sim-card { margin-top: 32px; }
 .sim-title { margin: 0; font-size: 22px; }
 .sim-blurb { font-size: 14px; margin: 2px 0 14px; }
+/* Birden fazla simülasyon: ARIA sekme seçici. Tek simülasyonlu bölümde çizilmez. */
+.sim-tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 8px; margin-bottom: 14px; }
+.sim-tab { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-height: 48px; padding: 8px 12px; text-align: left; font: inherit; color: var(--ink); background: var(--panel); border: 1px solid var(--control-border); border-radius: 12px; cursor: pointer; }
+.sim-tab:hover { border-color: var(--ink); }
+.sim-tab:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.sim-tab-title { font: 600 16px/1.25 var(--f-display); }
+.sim-tab-blurb { font-size: 13px; line-height: 1.35; color: var(--muted); }
+.sim-tab[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.sim-tab[aria-selected="true"] .sim-tab-blurb { color: var(--bg); }
+.sim-card:focus { outline: none; }
 
 .concepts { margin: 0; display: grid; gap: 10px; }
 .concept { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }

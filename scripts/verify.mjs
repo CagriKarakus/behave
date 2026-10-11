@@ -217,12 +217,39 @@ for (const w of [390, 1280]) {
       await open(hash, 700);
       if (name === 'app2') for (const t of [2, 3]) { await page.click(`.sim .tab:nth-child(${t})`); await page.waitForTimeout(200); bad.push(...(await page.evaluate(contrastProbe)).map((b) => `[app2/${t}] ${b}`)); }
       if (name === 'deneyler') await page.evaluate(() => document.querySelectorAll('.exp-body').forEach((d) => d.setAttribute('open', '')));
-      if (name === 'ch02') { await page.click('.sim .chip:nth-child(10)'); await page.waitForTimeout(300); }
+      if (name === 'ch02') { await page.click('.sim .chip:nth-child(10)'); await page.waitForTimeout(300); bad.push(...(await page.evaluate(contrastProbe)).map((b) => `[ch02/ilk] ${b}`)); await page.click('.sim-tabs [role=tab]:nth-child(2)'); await page.waitForTimeout(600); }
       bad.push(...(await page.evaluate(contrastProbe)).map((b) => `[${name}] ${b}`));
     }
     check(bad.length === 0, `kontrast (${theme}, ${w}px): ${bad.length} sorun ${bad.slice(0, 6).join(' | ')}`);
   }
   await page.evaluate(() => { try { localStorage.removeItem('behave-theme'); } catch { /* */ } });
+
+  // 12) Çoklu simülasyon sekmeleri (ch02): yalnızca seçili sim bağlı, rAF 1 döngü, ok tuşları, ?sim=, taşma yok
+  await open('#/bolum/ch02', 900);
+  const tabInfo = () => page.evaluate(() => ({ tabs: document.querySelectorAll('.sim-tabs [role=tab]').length, sims: document.querySelectorAll('.sim').length, sel: document.querySelector('.sim-tabs [aria-selected=true]')?.dataset.simTab, hash: location.hash, sw: document.documentElement.scrollWidth, iw: innerWidth }));
+  let ti = await tabInfo();
+  check(ti.tabs >= 2 && ti.sims === 1, `sekmeler: ${ti.tabs} sekme, ${ti.sims} sim bağlı (${ti.sel})`);
+  await page.evaluate(() => document.querySelector('.ch-sim').scrollIntoView()); await page.waitForTimeout(150);
+  await page.screenshot({ path: `${OUT}/ch02-sekmeler-${w}.png` });
+  await page.focus('.sim-tabs [aria-selected=true]');
+  await page.keyboard.press('ArrowRight'); await page.waitForTimeout(700);
+  const ti2 = await tabInfo();
+  check(ti2.sel !== ti.sel && ti2.sims === 1 && ti2.hash.includes(`sim=${ti2.sel}`) && ti2.sw <= ti2.iw, `ArrowRight: ${ti.sel} -> ${ti2.sel}, sim=${ti2.sims}, ${ti2.hash}`);
+  await page.evaluate(() => window.scrollTo(0, document.querySelector('.sim').getBoundingClientRect().top + scrollY - 60)); await page.waitForTimeout(300);
+  const raf2 = await page.evaluate(async () => { const a = window.__raf; await new Promise((r) => setTimeout(r, 500)); return window.__raf - a; });
+  check(raf2 > 10 && raf2 < 45, `tek rAF döngüsü sürüyor (rAF/500ms=${raf2})`);
+  const bars = await page.evaluate(() => document.querySelectorAll('.sim-bar').length);
+  check(bars === 1, `tek .sim-bar (${bars})`);
+  await page.focus('.sim-tabs [aria-selected=true]'); await page.keyboard.press('Home'); await page.waitForTimeout(700);
+  ti = await tabInfo();
+  check(ti.sims === 1 && ti.sel === ti.hash.split('sim=')[1], `Home: ilk sekme (${ti.sel})`);
+  await open(`#/bolum/ch02?sim=ultimatum`, 900);
+  ti = await tabInfo();
+  check(ti.sel === 'ultimatum' && ti.sims === 1 && ti.sw <= ti.iw, `?sim=ultimatum doğrudan açılır (${ti.sel})`);
+  if (w === 1280) await page.screenshot({ path: `${OUT}/ch02-sekmeler-ultimatum-${w}.png` });
+  await open(`#/bolum/ch02?sim=yok`, 900);
+  ti = await tabInfo();
+  check(ti.sel === 'bir-saniye-once' && ti.sims === 1, `geçersiz ?sim= ilkine düşer (${ti.sel})`);
 
   check(errors.length === 0, `konsol hataları: ${errors.length} ${errors.slice(0, 3).join(' | ')}`);
   await ctx.close();

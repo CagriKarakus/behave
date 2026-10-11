@@ -21,7 +21,7 @@ Robert Sapolsky'nin *Behave* kitabını zaman ölçeklerine göre (bir saniye ö
 - `src/sims/registry.ts`: bölüm id -> simülasyonlar
 - `reference/artifacts/`: orijinal tek dosyalık simülasyonlar (eşdeğerlik testinin kaynağı)
 
-Yollar: `#/`, `#/bolum/ch02`, `#/deneyler`, `#/bolum/ch12?deney=ch12-e3`.
+Yollar: `#/`, `#/bolum/ch02`, `#/deneyler`, `#/bolum/ch12?deney=ch12-e3`, `#/bolum/ch02?sim=ultimatum` (bölümde birden fazla simülasyon varsa sekmeli seçici; yalnızca seçili olan bağlanır, `?deney=` ile birlikte kullanılabilir).
 
 ## Yeni simülasyon ekleme
 1. `src/sims/<isim>/model.ts` içine saf modeli yaz ve test et (varsa orijinal HTML ile eşdeğerlik testi ekle).

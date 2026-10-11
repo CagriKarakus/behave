@@ -6,6 +6,8 @@ export interface Page {
   ready: Promise<boolean>;
   /** Aynı bölüm sayfasında başka bir deneye geçer (sayfayı ve simülasyonu yeniden kurmadan). */
   focusExperiment?(id: string): Promise<boolean>;
+  /** Aynı bölüm sayfasında başka bir simülasyona geçer (yalnızca birden fazla simülasyon varsa). */
+  selectSim?(id: string): Promise<void>;
 }
 
 export const staticPage = (dispose: () => void): Page => ({ dispose, ready: Promise.resolve(false) });

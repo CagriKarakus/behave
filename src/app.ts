@@ -63,9 +63,10 @@ export function createApp(host: HTMLElement, src: ContentSource): () => void {
 
   function show(route: Route): void {
     const t = ++token;
-    // Aynı bölümde başka bir deneye geçiş: sayfayı ve simülasyonu yeniden kurma, kartı göster.
-    if (route.name === 'chapter' && route.experiment && page?.focusExperiment && chapterId === route.id) {
-      void page.focusExperiment(route.experiment).then((found) => { if (t === token && !found) window.scrollTo(0, 0); });
+    // Aynı bölümde başka bir deneye ya da simülasyona geçiş: sayfayı yeniden kurma.
+    if (route.name === 'chapter' && chapterId === route.id && page && ((route.experiment && page.focusExperiment) || (route.sim && page.selectSim))) {
+      if (route.sim) void page.selectSim?.(route.sim);
+      if (route.experiment) void page.focusExperiment?.(route.experiment).then((found) => { if (t === token && !found) window.scrollTo(0, 0); });
       return;
     }
     // Önceki sayfanın simülasyonu (rAF, dinleyiciler) burada durdurulur.
@@ -77,7 +78,7 @@ export function createApp(host: HTMLElement, src: ContentSource): () => void {
     } else if (route.name === 'chapter') {
       const ch = src.index.chapters.find((c) => c.id === route.id);
       title = ch ? `${ch.titleTr} · ${book.titleTr}` : `Bulunamadı · ${book.titleTr}`;
-      page = renderChapter(main, src, route.id, route.experiment);
+      page = renderChapter(main, src, route.id, route.experiment, route.sim);
       if (ch) chapterId = ch.id;
     } else if (route.name === 'experiments') {
       title = `Deneyler · ${book.titleTr}`;

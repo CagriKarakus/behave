@@ -1,6 +1,6 @@
 import { normalizeId } from '../content/normalize';
 
-export type Route = { name: 'home' } | { name: 'chapter'; id: string; experiment?: string } | { name: 'experiments' } | { name: 'notfound'; hash: string };
+export type Route = { name: 'home' } | { name: 'chapter'; id: string; experiment?: string; sim?: string } | { name: 'experiments' } | { name: 'notfound'; hash: string };
 
 export function parseHash(hash: string): Route {
   const [h, query = ''] = hash.replace(/^#/, '').split('?');
@@ -10,14 +10,23 @@ export function parseHash(hash: string): Route {
   if (parts[0] === 'bolum' && parts.length === 2) {
     let id = parts[1];
     try { id = decodeURIComponent(id); } catch { /* ham kalsın */ }
-    const experiment = new URLSearchParams(query).get('deney') || undefined;
-    return { name: 'chapter', id: normalizeId(id), experiment };
+    const q = new URLSearchParams(query);
+    const route: Route = { name: 'chapter', id: normalizeId(id), experiment: q.get('deney') || undefined };
+    const sim = q.get('sim');
+    if (sim) route.sim = sim;
+    return route;
   }
   return { name: 'notfound', hash };
 }
 
 export const experimentHref = (chapterId: string, expId: string): string => `#/bolum/${chapterId}?deney=${encodeURIComponent(expId)}`;
 export const chapterHref = (id: string): string => `#/bolum/${id}`;
+/** `sim` parametresini (varsa `deney` dahil diğer sorgu parametrelerini koruyarak) bir bölüm hash'ine yazar. */
+export const withSim = (hash: string, chapterId: string, simId: string): string => {
+  const q = new URLSearchParams(hash.split('?')[1] ?? '');
+  q.set('sim', simId);
+  return `${chapterHref(chapterId)}?${q}`;
+};
 
 /**
  * Uygulama rotaları `#/` ile başlar (ya da boştur). `#main` gibi sayfa içi çapalar (atlama bağlantısı vb.)

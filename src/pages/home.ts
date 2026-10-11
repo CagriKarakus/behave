@@ -7,12 +7,13 @@ import { simsFor } from '../sims/registry';
 import { staticPage, type Page } from './page';
 
 export function chapterCard(c: ChapterMeta): Safe {
-  const hasSim = simsFor(c.id).length > 0;
+  const simCount = simsFor(c.id).length;
+  const hasSim = simCount > 0;
   return html`<li class="card-item">
     <a class="ch-card${hasSim ? ' has-sim' : ''}" href="${chapterHref(c.id)}">
       <span class="ch-card-top">
         <span class="ch-no">${chapterLabel(c)}</span>
-        ${hasSim ? raw('<span class="badge badge-sim">Simülasyon</span>') : ''}
+        ${hasSim ? raw(`<span class="badge badge-sim">${simCount > 1 ? `${simCount} simülasyon` : 'Simülasyon'}</span>`) : ''}
       </span>
       <span class="ch-card-title">${c.titleTr}</span>
       ${c.titleEn ? html`<span class="ch-card-en" lang="en">${c.titleEn}</span>` : ''}
