@@ -1,0 +1,93 @@
+.sim-nrp { gap: 20px; }
+.sim-nrp .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
+.sim-nrp .tab { min-height: 44px; font: 600 13px/1.15 var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 9px; padding: 8px 6px; cursor: pointer; }
+.sim-nrp .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
+.sim-nrp .pane { display: flex; flex-direction: column; gap: 18px; }
+.sim-nrp .pane[hidden] { display: none; }
+.sim-nrp .note { font-size: 13px; color: var(--muted); }
+.sim-nrp .pnote:empty { display: none; }
+.sim-nrp .hebb { font-size: 13px; border-left: 3px solid var(--pit); padding: 4px 0 4px 10px; min-height: 3.2em; }
+.sim-nrp .say { min-height: 4em; }
+.sim-nrp .legend i.sq { border-radius: 2px; }
+.sim-nrp .row .btn:disabled { opacity: .45; cursor: default; }
+.sim-nrp .is-off { opacity: .5; }
+
+/* Anlık sayaçlar (sim-bar içinde) */
+.sim-nrp .meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.sim-nrp .m-top { display: flex; justify-content: space-between; gap: 4px; font: 400 10.5px/1.25 var(--f-mono); color: var(--muted); margin-bottom: 3px; }
+.sim-nrp .m-top span { min-width: 0; }
+.sim-nrp .m-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sim-nrp .track { position: relative; height: 7px; border-radius: 4px; }
+.sim-nrp .track > b { background: var(--c, var(--ink)); transition: width .15s linear; }
+.sim-nrp .track.has-mark::after { content: ""; position: absolute; top: -2px; bottom: -2px; left: var(--mark); width: 2px; background: var(--ink); opacity: .7; }
+
+/* Açılır ayrıntı ve kitapta kutusu */
+.sim-nrp .more { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 0 14px; }
+.sim-nrp .more summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 600; }
+.sim-nrp .more summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.sim-nrp .more > div { display: flex; flex-direction: column; gap: 8px; padding-bottom: 14px; font-size: 13px; color: var(--muted); }
+.sim-nrp .book { border: 1px solid var(--line); border-left: 4px solid var(--pit); border-radius: 12px; padding: 12px 14px; background: var(--panel); }
+.sim-nrp .book ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.sim-nrp .book li { display: flex; flex-direction: column; gap: 2px; font-size: 13px; }
+.sim-nrp .book a { color: var(--ink); text-underline-offset: 2px; min-height: 24px; }
+.sim-nrp .book .rep { font-size: 12px; color: var(--muted); }
+
+/* ---- Sinaps diyagramı ---- */
+.sim-nrp .stage svg text { font-family: var(--f-body); }
+.sim-nrp .cell { fill: var(--bg); stroke: var(--edge); stroke-width: 1.4; }
+.sim-nrp .axon { fill: none; stroke: var(--edge); stroke-width: 2; transition: stroke .1s; }
+.sim-nrp .axon.hot { stroke: var(--dop); stroke-width: 3.4; }
+.sim-nrp .ves { fill: var(--panel); stroke: var(--dop); stroke-width: 1.6; }
+.sim-nrp .glu { fill: var(--dop); stroke: var(--panel); stroke-width: .8; }
+.sim-nrp .ca { fill: var(--gld); stroke: var(--panel); stroke-width: .8; }
+.sim-nrp .fill-ca { fill: var(--gld); opacity: .5; }
+.sim-nrp .thr { stroke: var(--ink); stroke-width: 1; stroke-dasharray: 4 3; opacity: .65; }
+.sim-nrp .rec { fill: var(--pfc); opacity: 0; transition: opacity .35s; }
+.sim-nrp .rec.on { opacity: 1; }
+.sim-nrp .nmda { fill: var(--pit); }
+.sim-nrp .mg { fill: var(--lesion); stroke: var(--panel); stroke-width: 1.2; }
+.sim-nrp .flash { fill: var(--dop); opacity: 0; pointer-events: none; }
+.sim-nrp .lab { font: 400 10px var(--f-body); fill: var(--muted); }
+.sim-nrp .lab.eff { fill: var(--eff-text); }
+.sim-nrp .lab.ctr { text-anchor: middle; }
+.sim-nrp .lab.strong { fill: var(--ink); font-weight: 600; }
+.sim-nrp .val { font: 500 11px var(--f-mono); fill: var(--ink); }
+.sim-nrp .val.ctr { text-anchor: middle; }
+.sim-nrp .lead { stroke: var(--muted); stroke-width: 1; }
+
+/* ---- Harita ---- */
+.sim-nrp .terr { fill: var(--line); stroke: var(--edge); stroke-width: 1.2; }
+.sim-nrp .terr.tgt { fill: none; stroke: var(--ink); stroke-width: 1.6; }
+.sim-nrp .b-base { fill: var(--pfc); opacity: .8; }
+.sim-nrp .b-slow { fill: var(--pit); }
+.sim-nrp .b-fast { fill: var(--dop); }
+.sim-nrp .stage .terr.tgt + text { paint-order: stroke; stroke: var(--panel); stroke-width: 3px; stroke-linejoin: round; }
+.sim-nrp .brk { fill: none; stroke: var(--muted); stroke-width: 1.2; }
+.sim-nrp .fing { fill: var(--panel); stroke: var(--edge); stroke-width: 1.3; }
+.sim-nrp .fing.act { stroke: var(--dop); stroke-width: 1.8; }
+.sim-nrp .palm { fill: var(--panel); stroke: var(--edge); stroke-width: 1.3; }
+.sim-nrp .thought { fill: var(--panel); stroke: var(--pit); stroke-width: 1.3; stroke-dasharray: 3 2; }
+
+/* ---- Zaman grafikleri ---- */
+.sim-nrp .chart .base { stroke: var(--edge); stroke-width: 1.2; stroke-dasharray: 5 3; }
+.sim-nrp .chart .dash { stroke-dasharray: 3 3; }
+.sim-nrp .chart .cur { stroke: var(--ink); stroke-width: 1.2; opacity: .6; }
+.sim-nrp .chart .shade { fill: var(--line); opacity: .45; }
+
+/* ---- Dendrit çizimleri ---- */
+.sim-nrp .pnl { fill: var(--bg); stroke: var(--line); stroke-width: 1; }
+.sim-nrp .tree .dn { stroke: var(--tc); stroke-linecap: round; fill: none; }
+.sim-nrp .tree .dn0 { stroke-width: 3.2; }
+.sim-nrp .tree .dn1 { stroke-width: 2.4; }
+.sim-nrp .tree .dn2 { stroke-width: 1.8; }
+.sim-nrp .tree .dn3 { stroke-width: 1.3; }
+.sim-nrp .tree .sp { fill: var(--muted); }
+.sim-nrp .tree .soma { fill: var(--tc); stroke: var(--panel); stroke-width: 1.5; }
+
+@media (max-width: 420px) {
+  .sim-nrp .m-top { font-size: 10px; }
+  .sim-nrp .meters { gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sim-nrp .rec, .sim-nrp .track > b, .sim-nrp .axon { transition: none; }
+}
