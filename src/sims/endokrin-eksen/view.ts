@@ -1,6 +1,6 @@
 import '../sim.css';
 import './view.css';
-import { Scope, hideBarWhenAway, pct, ref, svg, svgText, uid } from '../kit';
+import { Scope, pct, ref, svg, svgText, uid } from '../kit';
 import {
   U0, hormAt, msOfLog, MS, neuroAt, organ, receptor, settleAxis, stepAxis, describeAxis,
   type AxisInputs, type AxisKey, type AxisState, type ReceptorParams,
@@ -11,7 +11,7 @@ type Tab = 'axis' | 'rec' | 'time';
 interface StageDef { t: string; h: string; c: string }
 interface StructDef { chip: string; stages: StageDef[]; note: string; drive?: [string, string]; pulse: string; series: string[] }
 
-const STRUCT: Record<AxisKey, StructDef> = {
+export const STRUCT: Record<AxisKey, StructDef> = {
   hpa: {
     chip: 'Stres (HPA)',
     stages: [
@@ -58,21 +58,21 @@ const STRUCT: Record<AxisKey, StructDef> = {
     series: ['Glikoz', 'İnsülin'],
   },
 };
-const FOOT: Record<AxisKey, string> = {
+export const FOOT: Record<AxisKey, string> = {
   hpa: 'Ek 2 ayrıca şunu söyler: tek bir hipotalamik hormon her zaman tek başına yönetmez. CRH\'nin yanında ACTH\'yi hem uyaran hem engelleyen başka hipotalamik hormonlar vardır ve farklı stres kaynakları farklı kombinasyonlar üretir. "Diğer hipotalamik hormonlar" kaydırıcısı bunu temsil eder. Geri bildirim bu sayfalarda anlatılmıyor; modeli gerçekçi yapmak için ekledim.',
   hpg: 'Geri bildirim bu sayfalarda anlatılmıyor; modeli gerçekçi yapmak için ekledim. Sayılar ölçüm değil, sembolik.',
   two: 'Geri bildirim bu sayfalarda anlatılmıyor; modeli gerçekçi yapmak için ekledim. Sayılar ölçüm değil, sembolik.',
   glu: 'Kitap ayrıca kalp ya da bağırsak gibi beklenmedik yerlerden salgılanan tuhaf hormonlardan söz eder; beyin bunların salgılanmasını dolaylı yollarla düzenler. Bunlar modele dahil değil.',
 };
 
-const RPRE: { n: string; v: ReceptorParams }[] = [
+export const RPRE: { n: string; v: ReceptorParams }[] = [
   { n: 'Normal', v: { hormone: 0.5, number: 0.6, affinity: 0.5, specificity: 1, other: 0 } },
   { n: 'Reseptör mutasyonu', v: { hormone: 0.9, number: 0, affinity: 0.5, specificity: 1, other: 0 } },
   { n: 'Çok reseptör, az hormon', v: { hormone: 0.15, number: 1, affinity: 0.9, specificity: 1, other: 0 } },
   { n: 'Az reseptör, çok hormon', v: { hormone: 0.95, number: 0.15, affinity: 0.5, specificity: 1, other: 0 } },
   { n: 'Titiz olmayan reseptör', v: { hormone: 0.4, number: 0.6, affinity: 0.5, specificity: 0.15, other: 0.8 } },
 ];
-const RC_DEFS: [keyof ReceptorParams, string, string, string][] = [
+export const RC_DEFS: [keyof ReceptorParams, string, string, string][] = [
   ['hormone', 'Östrojen düzeyi', 'Konuşma sesi: kandaki hormon miktarı.', 'var(--hyp)'],
   ['number', 'Reseptör sayısı', 'Kulak: hücre yüzeyindeki reseptör sayısı.', 'var(--eff)'],
   ['affinity', 'Bağlanma isteği', 'Bağlanma alanının şekli: yüksekse az hormon yeter.', 'var(--eff)'],
@@ -89,6 +89,9 @@ const TEMPLATE = (id: string) => `
     <button class="tab" role="tab" id="${id}-tab-rec" data-pane="rec" aria-controls="${id}-pane-rec" aria-selected="false" tabindex="-1" type="button">Reseptör</button>
     <button class="tab" role="tab" id="${id}-tab-time" data-pane="time" aria-controls="${id}-pane-time" aria-selected="false" tabindex="-1" type="button">Süre</button>
   </div>
+
+  <div class="sim-bar" role="group" aria-label="Anlık açıklama" data-ref="bar"><div class="sim-bar-in"><p class="say" data-ref="say"></p></div></div>
+  <p class="sr-only" aria-live="polite" data-ref="live"></p>
 
   <section class="pane" role="tabpanel" id="${id}-pane-axis" data-pane="axis" aria-labelledby="${id}-tab-axis">
     <div class="chips" data-ref="axChips" role="group" aria-label="Eksen yapısı"></div>
@@ -144,8 +147,6 @@ const TEMPLATE = (id: string) => `
     </div>
     <p class="foot">Süre eğrileri ve organizasyonel etki sayıları sembolik. Yalnızca yönü ve büyüklük sırasını gösterir.</p>
   </section>
-
-  <div class="sim-bar" role="group" aria-label="Anlık açıklama" data-ref="bar"><div class="sim-bar-in"><p class="say" data-ref="say" aria-live="polite"></p></div></div>
 </div>`;
 
 export function mount(container: HTMLElement): () => void {
@@ -161,8 +162,11 @@ export function mount(container: HTMLElement): () => void {
   const tabBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('.tab'));
   const panes = Array.from(root.querySelectorAll<HTMLElement>('.pane'));
   const sayEl = $('say');
+  // Duraklatılmışken ve girdi değişmemişken eksen yeniden çizilmez; her kullanıcı eylemi işaretler.
+  let dirty = true;
   function showTab(t: Tab, focus = false): void {
     tab = t;
+    dirty = true;
     for (const b of tabBtns) {
       const on = b.dataset.pane === t;
       b.setAttribute('aria-selected', String(on));
@@ -186,7 +190,7 @@ export function mount(container: HTMLElement): () => void {
   /* ---------- Ortak kaydırıcı ---------- */
   interface SliderHandle { inp: HTMLInputElement; set: (v: number) => void; wrap: HTMLElement }
   function makeSlider(parent: HTMLElement, key: string, name: string, hint: string, min: number, max: number, val: number,
-    cb: (v: number) => void, valFmt: ((v: number) => string) | null, color: string): SliderHandle {
+    cb: (v: number) => void, valFmt: ((v: number) => string) | null, color: string, sc: Scope = scope): SliderHandle {
     const sid = `${id}-sl-${key}`;
     const w = document.createElement('div');
     w.innerHTML = `<div class="sl-top"><label class="sl-name" for="${sid}">${name}</label><span class="sl-val"></span></div><input type="range" id="${sid}" min="${min}" max="${max}" step="1" value="${val}">` + (hint ? `<p class="sl-hint">${hint}</p>` : '');
@@ -195,7 +199,7 @@ export function mount(container: HTMLElement): () => void {
     const inp = w.querySelector('input') as HTMLInputElement;
     const out = w.querySelector('.sl-val') as HTMLElement;
     const upd = () => { out.textContent = valFmt ? valFmt(+inp.value) : inp.value + '%'; };
-    scope.on(inp, 'input', () => { upd(); cb(+inp.value); });
+    sc.on(inp, 'input', () => { upd(); cb(+inp.value); });
     upd();
     return { inp, set: (v) => { inp.value = String(v); upd(); }, wrap: w };
   }
@@ -211,27 +215,31 @@ export function mount(container: HTMLElement): () => void {
     if (A.axis === 'glu') return { ...A.u, meal: pulsing ? 1 : A.u.meal };
     return { ...A.u, drive: pulsing ? 1 : A.u.drive };
   };
-  const resettle = () => { A.x = settleAxis(A.axis, { ...A.u, drive: A.u.drive, meal: A.u.meal }, 900); A.hist = []; A.t = 0; A.lastSample = 0; A.pulseUntil = -1; };
+  const resettle = () => { A.x = settleAxis(A.axis, { ...A.u }, 900); A.hist = []; A.t = 0; A.lastSample = 0; A.pulseUntil = -1; };
 
   const axSliders = $('axSliders');
   const axSl: Record<string, SliderHandle> = {};
+  // Eksen değişince kaydırıcılar yeniden kurulur; eski dinleyiciler ayrı bir kapsamda bırakılır.
+  let axScope = new Scope();
+  scope.onDispose(() => axScope.dispose());
   function buildAxSliders(): void {
+    axScope.dispose(); axScope = new Scope();
     axSliders.innerHTML = '';
     for (const k in axSl) delete axSl[k];
     if (A.axis === 'glu') {
-      axSl.meal = makeSlider(axSliders, 'meal', 'Yemek (glikoz girişi)', 'Kana giren glikoz. Pankreas bunu insülinle karşılar.', 0, 100, pct(A.u.meal), (v) => { A.u.meal = v / 100; }, null, 'var(--red)');
-      axSl.brain = makeSlider(axSliders, 'brain', 'Beyin desteği', 'Beynin pankreas salgısına yardımcı olan projeksiyonları.', 0, 100, pct(A.u.brain), (v) => { A.u.brain = v / 100; }, null, 'var(--hyp)');
+      axSl.meal = makeSlider(axSliders, 'meal', 'Yemek (glikoz girişi)', 'Kana giren glikoz. Pankreas bunu insülinle karşılar.', 0, 100, pct(A.u.meal), (v) => { A.u.meal = v / 100; }, null, 'var(--red)', axScope);
+      axSl.brain = makeSlider(axSliders, 'brain', 'Beyin desteği', 'Beynin pankreas salgısına yardımcı olan projeksiyonları.', 0, 100, pct(A.u.brain), (v) => { A.u.brain = v / 100; }, null, 'var(--hyp)', axScope);
     } else {
       const [nm, ht] = cfg().drive as [string, string];
-      axSl.drive = makeSlider(axSliders, 'drive', nm, ht, 0, 100, pct(A.u.drive), (v) => { A.u.drive = v / 100; }, null, 'var(--hyp)');
-      axSl.other = makeSlider(axSliders, 'other', 'Diğer hipotalamik hormonlar', A.axis === 'two' ? 'Hipofizi uyaran (+) ya da engelleyen (−) başka hipotalamik hormonlar.' : 'Kitap isim vermiyor: ACTH\'yi uyaran (+) ya da engelleyen (−) başka hipotalamik hormonlar.', -100, 100, Math.round(A.u.other * 100), (v) => { A.u.other = v / 100; }, (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v) + '%', 'var(--pit)');
+      axSl.drive = makeSlider(axSliders, 'drive', nm, ht, 0, 100, pct(A.u.drive), (v) => { A.u.drive = v / 100; }, null, 'var(--hyp)', axScope);
+      axSl.other = makeSlider(axSliders, 'other', 'Diğer hipotalamik hormonlar', A.axis === 'two' ? 'Hipofizi uyaran (+) ya da engelleyen (−) başka hipotalamik hormonlar.' : 'Kitap isim vermiyor: ACTH\'yi uyaran (+) ya da engelleyen (−) başka hipotalamik hormonlar.', -100, 100, Math.round(A.u.other * 100), (v) => { A.u.other = v / 100; }, (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v) + '%', 'var(--pit)', axScope);
       if (A.axis === 'hpg') (axSl.other.wrap.querySelector('.sl-hint') as HTMLElement).textContent = 'LH\'yi uyaran (+) ya da engelleyen (−) ek hipotalamik sinyaller (sembolik).';
     }
   }
 
   // ---- Diyagram ----
   interface Diagram {
-    n: number; stages: { fill: SVGElement; pc: SVGElement }[]; arrows: SVGElement[]; fbs: SVGElement[];
+    stages: { fill: SVGElement; pc: SVGElement }[]; arrows: SVGElement[]; fbs: SVGElement[];
     blood: SVGElement; cellA: SVGElement; cellAp: SVGElement; brain?: SVGElement;
   }
   let D: Diagram | null = null;
@@ -250,7 +258,7 @@ export function mount(container: HTMLElement): () => void {
     svg('path', { class: 'mk', d: 'M0,1 L10,5 L0,9 z' }, m1);
     const m2 = svg('marker', { id: `${id}-mb`, viewBox: '0 0 10 10', refX: 5, refY: 5, markerWidth: 10, markerHeight: 10, markerUnits: 'userSpaceOnUse', orient: 'auto' }, defs);
     svg('path', { class: 'mk-bar', d: 'M5,0 L5,10' }, m2);
-    const d: Diagram = { n, stages: [], arrows: [], fbs: [], blood: null as unknown as SVGElement, cellA: null as unknown as SVGElement, cellAp: null as unknown as SVGElement };
+    const d: Diagram = { stages: [], arrows: [], fbs: [], blood: null as unknown as SVGElement, cellA: null as unknown as SVGElement, cellAp: null as unknown as SVGElement };
 
     const stageY = (i: number) => Y0 + i * (BH + GAP);
     c.stages.forEach((s, i) => {
@@ -392,11 +400,11 @@ export function mount(container: HTMLElement): () => void {
   const rcSl = {} as Record<keyof ReceptorParams, SliderHandle>;
   const rcChips = $('rcChips');
   function setRcChip(i: number | null): void { for (const b of Array.from(rcChips.children)) b.setAttribute('aria-pressed', String(Number((b as HTMLElement).dataset.i) === i)); }
-  for (const [k, nm, ht, col] of RC_DEFS) rcSl[k] = makeSlider($('rcSliders'), 'rc-' + k, nm, ht, 0, 100, pct(RC[k]), (v) => { RC[k] = v / 100; setRcChip(null); }, null, col);
+  for (const [k, nm, ht, col] of RC_DEFS) rcSl[k] = makeSlider($('rcSliders'), 'rc-' + k, nm, ht, 0, 100, pct(RC[k]), (v) => { RC[k] = v / 100; setRcChip(null); drawReceptor(); }, null, col);
   RPRE.forEach((p, i) => {
     const b = document.createElement('button');
     b.className = 'chip'; b.type = 'button'; b.dataset.i = String(i); b.textContent = p.n; b.setAttribute('aria-pressed', String(i === 0));
-    scope.on(b, 'click', () => { Object.assign(RC, p.v); for (const [k] of RC_DEFS) rcSl[k].set(pct(RC[k])); setRcChip(i); });
+    scope.on(b, 'click', () => { Object.assign(RC, p.v); for (const [k] of RC_DEFS) rcSl[k].set(pct(RC[k])); setRcChip(i); drawReceptor(); });
     rcChips.appendChild(b);
   });
   $('rcMeters').innerHTML = ([['Reseptör doluluğu', 'occ', 'var(--hyp)'], ['Hücre yanıtı', 'resp', 'var(--eff)'], ['Yanıtın yanlış hormondan gelen payı', 'wrong', 'var(--red)']] as const)
@@ -458,7 +466,7 @@ export function mount(container: HTMLElement): () => void {
   };
   curve(neuroAt, 'var(--hyp)'); curve(hormAt, 'var(--eff)');
   svgText(tmSvg, { x: tx(0.9), y: 24, style: 'font:500 10.5px var(--f-body);fill:var(--hyp)' }, 'Nörotransmitter');
-  svgText(tmSvg, { x: tx(5.4), y: 24, style: 'font:500 10.5px var(--f-body);fill:var(--eff)' }, 'Hormon');
+  svgText(tmSvg, { x: tx(5.4), y: 24, style: 'font:500 10.5px var(--f-body);fill:var(--eff-text)' }, 'Hormon');
   const tmCur = svg('line', { y1: TM.top - 4, y2: TM.bot, stroke: 'var(--ink)', 'stroke-width': 1.4 }, tmSvg);
   const tmDotN = svg('circle', { r: 4, fill: 'var(--hyp)', stroke: 'var(--panel)', 'stroke-width': 1.5 }, tmSvg);
   const tmDotH = svg('circle', { r: 4, fill: 'var(--eff)', stroke: 'var(--panel)', 'stroke-width': 1.5 }, tmSvg);
@@ -479,7 +487,7 @@ export function mount(container: HTMLElement): () => void {
     tmDotH.setAttribute('cx', String(tx(lv))); tmDotH.setAttribute('cy', String(ty(h)));
     $('tmRead').innerHTML =
       `<div class="ro"><span class="k" style="color:var(--hyp)">Nörotransmitter</span><span class="v">etki ${pct(n)}%</span><span class="k">ulaşan: 1 komşu nöron</span></div>` +
-      `<div class="ro"><span class="k" style="color:var(--eff)">Hormon</span><span class="v">etki ${pct(h)}%</span><span class="k">ulaşan: reseptörü olan trilyonlarca hücre</span></div>`;
+      `<div class="ro"><span class="k" style="color:var(--eff-text)">Hormon</span><span class="v">etki ${pct(h)}%</span><span class="k">ulaşan: reseptörü olan trilyonlarca hücre</span></div>`;
   }
   scope.on(tmSl, 'input', drawTime);
   SAY.time = () => {
@@ -517,8 +525,8 @@ export function mount(container: HTMLElement): () => void {
         if (A.t - A.lastSample >= 2) { A.lastSample = A.t; sampleAx(); }
       }
     }
-    if (tab === 'axis') { drawDiagram(); drawChart(); }
-    if (tab === 'rec') drawReceptor();
+    if (tab === 'axis' && (!A.paused || dirty)) { dirty = false; drawDiagram(); drawChart(); }
+    // Reseptör sekmesi yalnızca girdi değişince (kaydırıcı/çip) çizilir; her karede yeniden kurulmaz.
     tSay += dt;
     if (tSay > 0.25) { tSay = 0; say(); }
   }
@@ -526,8 +534,13 @@ export function mount(container: HTMLElement): () => void {
   setAxis('hpa');
   drawReceptor(); drawTime(); drawOrgan();
   showTab('axis');
-  hideBarWhenAway(root, $('bar'), scope);
-  scope.loop(frame);
+  // Görünür metin kendiliğinden değişir; ekran okuyucuya yalnızca kullanıcı eyleminden sonra duyurulur.
+  const poke = scope.announcer($('live'), () => lastSay);
+  const onAction = () => { dirty = true; poke(); };
+  scope.on(root, 'click', onAction);
+  scope.on(root, 'input', onAction);
+  // Ekran dışındayken döngü durur; dönünce zaman sıçramasın diye `last` sıfırlanır.
+  scope.loop(frame, { root, onResume: () => { last = performance.now(); dirty = true; } });
 
   return () => {
     scope.dispose();

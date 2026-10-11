@@ -1,13 +1,12 @@
-import type { Chapter, Content } from '../content/types';
-import { chapterLabel } from '../content/normalize';
+import type { ChapterMeta, ContentIndex } from '../content/types';
+import { CONF_DOTS, chapterLabel } from '../content/normalize';
 import { html, raw, type Safe } from '../lib/html';
 import { chapterHref } from '../lib/router';
-import { AXIS_TICKS, buildTimeline, formatDuration, logPosition } from '../lib/timeline';
+import { buildTimeline, formatDuration, logPosition } from '../lib/timeline';
 import { simsFor } from '../sims/registry';
+import { staticPage, type Page } from './page';
 
-const CONF_DOTS = { 'yüksek': '●●●', 'orta': '●●○', 'düşük': '●○○' } as const;
-
-export function chapterCard(c: Chapter): Safe {
+export function chapterCard(c: ChapterMeta): Safe {
   const hasSim = simsFor(c.id).length > 0;
   return html`<li class="card-item">
     <a class="ch-card${hasSim ? ' has-sim' : ''}" href="${chapterHref(c.id)}">
@@ -25,9 +24,9 @@ export function chapterCard(c: Chapter): Safe {
   </li>`;
 }
 
-export function renderHome(el: HTMLElement, content: Content): () => void {
+export function renderHome(el: HTMLElement, content: ContentIndex): Page {
   const tl = buildTimeline(content.chapters);
-  const ticks = AXIS_TICKS.filter((t) => Math.log10(t.s) <= tl.maxLog + 0.05);
+  const ticks = tl.ticks;
 
   el.innerHTML = html`
   <div class="page home">
@@ -49,7 +48,7 @@ export function renderHome(el: HTMLElement, content: Content): () => void {
           const p = logPosition(t.s, tl.minLog, tl.maxLog) * 100;
           return html`<span class="tick${['1 ay', '100 yıl', '1 gün'].includes(t.label) ? ' minor' : ''}${ti === ticks.length - 1 ? ' tick-last' : ''}${ti === 0 ? ' tick-first' : ''}" style="left:${p.toFixed(2)}%"><i></i><span>${t.label}</span></span>`;
         })}
-        ${tl.stops.map((s) => html`<span class="mark" style="left:${(s.pos * 100).toFixed(2)}%" title="${s.label}"></span>`)}
+        ${tl.stops.map((s) => html`<span class="mark" style="left:${(s.pos * 100).toFixed(2)}%;--lane:${s.lane}" title="${s.label}"></span>`)}
       </div>
       <p class="axis-note">Şerit logaritmiktir: soldaki bir saniye, sağdaki evrimsel zaman. Dikey sıra davranıştan geriye doğrudur.</p>
       <ol class="stops">
@@ -80,5 +79,5 @@ export function renderHome(el: HTMLElement, content: Content): () => void {
     <p class="foot-note">Bu uygulama bir inceleme aracıdır; kitabın yerini tutmaz. Simülasyonlar nitel modellerdir: sayılar ölçüm değildir, ilişkilerin yönünü gösterir.</p>
   </div>`.value;
 
-  return () => { el.innerHTML = ''; };
+  return staticPage(() => { el.innerHTML = ''; });
 }

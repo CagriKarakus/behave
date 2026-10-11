@@ -10,6 +10,11 @@
   --muted: #566475;
   --line: #C9D1DB;
   --edge: #46566A;
+  /* Denetim kenarları (WCAG 1.4.11, >= 3:1) ve renkli metin için koyu tonlar (>= 4.5:1). */
+  --control-border: #718096;
+  --eff-text: #8F5B00;
+  --gld-text: #0B7061;
+  --red-text: #B8301F;
 
   --amy: #C9382A;
   --pfc: #1F66B0;
@@ -22,21 +27,23 @@
   --eff: #B77800;
   --red: #C9382A;
 
-  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-display: "Bricolage Grotesque Variable", "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0B131D; --panel: #131D2A; --ink: #E7EDF4; --muted: #8FA0B3; --line: #263446; --edge: #9FB0C3;
+    --bg: #0B131D; --panel: #131D2A; --ink: #E7EDF4; --muted: #8FA0B3; --line: #263446; --edge: #9FB0C3; --control-border: #617489;
+    --eff-text: #F4B63A; --gld-text: #3CC4AE; --red-text: #FF6A52;
     --amy: #FF6A52; --pfc: #5BA9F2; --dop: #F4B63A; --lesion: #6F7F92;
     --hyp: #5BA9F2; --pit: #B795F0; --gld: #3CC4AE; --eff: #F4B63A; --red: #FF6A52;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0B131D; --panel: #131D2A; --ink: #E7EDF4; --muted: #8FA0B3; --line: #263446; --edge: #9FB0C3;
+  --bg: #0B131D; --panel: #131D2A; --ink: #E7EDF4; --muted: #8FA0B3; --line: #263446; --edge: #9FB0C3; --control-border: #617489;
+  --eff-text: #F4B63A; --gld-text: #3CC4AE; --red-text: #FF6A52;
   --amy: #FF6A52; --pfc: #5BA9F2; --dop: #F4B63A; --lesion: #6F7F92;
   --hyp: #5BA9F2; --pit: #B795F0; --gld: #3CC4AE; --eff: #F4B63A; --red: #FF6A52;
   color-scheme: dark;

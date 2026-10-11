@@ -1,11 +1,14 @@
-import { mount as mountBso } from './bir-saniye-once/view';
-import { mount as mountEndo } from './endokrin-eksen/view';
+// Simülasyon görünümleri dinamik import edilir: ana sayfa ve simülasyonsuz bölümler
+// simülasyon JS/CSS'ini indirmez; her simülasyon kendi parçasında gelir.
+
+export type Unmount = () => void;
+export type Mount = (container: HTMLElement) => Unmount;
 
 export interface SimDef {
   id: string;
   title: string;
   blurb: string;
-  mount: (container: HTMLElement) => () => void;
+  load: () => Promise<Mount>;
 }
 
 /** Bölüm id (normalleştirilmiş) -> simülasyonlar. Yeni simülasyon için README'deki adımlara bak. */
@@ -14,13 +17,13 @@ export const SIMS: Record<string, SimDef[]> = {
     id: 'bir-saniye-once',
     title: 'Bir Saniye Önce devresi',
     blurb: 'Amigdala, frontal korteks ve dopamin ağı',
-    mount: mountBso,
+    load: () => import('./bir-saniye-once/view').then((m) => m.mount),
   }],
   app2: [{
     id: 'endokrin-eksen',
     title: 'Endokrin eksen',
     blurb: 'HPA / HPG / pankreas eksenleri, reseptör ve süre',
-    mount: mountEndo,
+    load: () => import('./endokrin-eksen/view').then((m) => m.mount),
   }],
 };
 

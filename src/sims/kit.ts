@@ -33,14 +33,49 @@ export class Scope {
     this.offs.push(() => target.removeEventListener(type, fn as EventListener));
   }
 
-  /** Her karede fn(now) çağırır; dispose edilince biter. */
-  loop(fn: (now: number) => void): void {
+  /**
+   * Her karede fn(now) çağırır; dispose edilince biter. `root` verilirse kök ekran dışına çıkınca
+   * döngü durur (pil/CPU), yeniden görününce `onResume` çağrılıp devam eder.
+   */
+  loop(fn: (now: number) => void, opts: { root?: Element; onResume?: () => void } = {}): void {
+    let visible = true;
     const tick = (now: number) => {
+      this.rafId = 0;
       if (this.disposed) return;
       fn(now);
-      if (!this.disposed) this.rafId = requestAnimationFrame(tick);
+      if (!this.disposed && visible) this.rafId = requestAnimationFrame(tick);
     };
-    this.rafId = requestAnimationFrame(tick);
+    const start = () => { if (!this.rafId && !this.disposed) this.rafId = requestAnimationFrame(tick); };
+    if (opts.root && typeof IntersectionObserver !== 'undefined') {
+      const io = new IntersectionObserver((entries) => {
+        const v = entries[entries.length - 1].isIntersecting;
+        if (v === visible) return;
+        visible = v;
+        if (v) { opts.onResume?.(); start(); }
+        else if (this.rafId) { cancelAnimationFrame(this.rafId); this.rafId = 0; }
+      });
+      io.observe(opts.root);
+      this.onDispose(() => io.disconnect());
+    }
+    start();
+  }
+
+  /**
+   * Ekran okuyucu bildirimi için gizli bir canlı bölge besler. Dönen `poke`, kullanıcı eyleminden
+   * `delay` ms sonra (metin değiştiyse) metni bölgeye yazar. Kendiliğinden değişen görünür metin
+   * her karede duyurulmasın diye yalnızca eylemlerden sonra çağrılır.
+   */
+  announcer(live: HTMLElement, getText: () => string, delay = 1000): () => void {
+    let timer = 0;
+    let lastText = '';
+    this.onDispose(() => clearTimeout(timer));
+    return () => {
+      clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        const t = getText();
+        if (t && t !== lastText) { lastText = t; live.textContent = t; }
+      }, delay);
+    };
   }
 
   onDispose(fn: () => void): void { this.offs.push(fn); }
@@ -58,16 +93,6 @@ export function ref<T extends Element = HTMLElement>(root: ParentNode, name: str
   const el = root.querySelector<T>(`[data-ref="${name}"]`);
   if (!el) throw new Error(`Simülasyon öğesi bulunamadı: ${name}`);
   return el;
-}
-
-/** Sabit alt çubuk (mobil), simülasyon ekran dışındayken gizlensin. */
-export function hideBarWhenAway(root: HTMLElement, bar: HTMLElement, scope: Scope): void {
-  if (typeof IntersectionObserver === 'undefined') return;
-  const io = new IntersectionObserver((entries) => {
-    for (const en of entries) bar.toggleAttribute('data-away', !en.isIntersecting);
-  });
-  io.observe(root);
-  scope.onDispose(() => io.disconnect());
 }
 
 export const pct = (v: number): number => Math.round(v * 100);

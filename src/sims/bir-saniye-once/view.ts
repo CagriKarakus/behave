@@ -1,6 +1,6 @@
 import '../sim.css';
 import './view.css';
-import { Scope, hideBarWhenAway, pct, ref, svg, svgText, uid } from '../kit';
+import { Scope, pct, ref, svg, svgText, uid } from '../kit';
 import {
   EDGES, NODES, REST, controlOf, describe, netInput, settle, step,
   type Activity, type Inputs, type Lesion, type RegionId,
@@ -9,7 +9,7 @@ import {
 const R = 25;
 const byId = Object.fromEntries(NODES.map((n) => [n.id, n])) as Record<RegionId, (typeof NODES)[number]>;
 
-const INFO: Record<RegionId, [string, string]> = {
+export const INFO: Record<RegionId, [string, string]> = {
   bla: ['Bazolateral amigdala (BLA)', 'Duyusal bilgiyi alır ve uyaranın önemini etiketler. Korku ve ödül öğrenmesinde rol oynar; ödülün ya da cezanın miktarı değişince de tepki verir. Çıktısını merkezi amigdalaya hem doğrudan hem ITC kapısı üzerinden gönderir.'],
   itc: ['Ardışık hücreler (ITC)', 'BLA ile merkezi amigdala arasındaki küçük engelleyici hücreler. Bir kapı gibi çalışır: vmPFC bu hücreleri uyardığında merkezi amigdala susar. Korkunun söndürülmesi bu yoldan geçer.'],
   cea: ['Merkezi amigdala (CeA)', 'Amigdalanın çıkış kapısı. BLA\'dan gelen alarmı hipotalamusa ve beyin sapına ileterek korku, saldırganlık ve otonom uyarılma tepkisini başlatır.'],
@@ -21,8 +21,8 @@ const INFO: Record<RegionId, [string, string]> = {
   nacc: ['Nükleus akumbens (NAcc)', 'Ödül devresinin merkezi. VTA\'dan dopamin alır ve "isteme" ile motivasyonu taşır; hoşlanmanın tadından çok peşinden koşmayla ilgilidir. dlPFC onu dizginler.'],
 };
 
-interface Scenario { id: string; name: string; u: Partial<Inputs>; lesion?: RegionId[] }
-const SCEN: Scenario[] = [
+export interface Scenario { id: string; name: string; u: Partial<Inputs>; lesion?: RegionId[] }
+export const SCEN: Scenario[] = [
   { id: 'rest',   name: 'Dinlenme',               u: {} },
   { id: 'threat', name: 'Ani tehdit',             u: { threat: 0.9 } },
   { id: 'calm',   name: 'Tehdit · güçlü frontal', u: { threat: 0.5 } },
@@ -36,7 +36,7 @@ const SCEN: Scenario[] = [
   { id: 'vmL',    name: 'vmPFC lezyonu',          u: { threat: 0.5 }, lesion: ['vmpfc'] },
 ];
 
-const SLIDERS: { key: keyof Inputs; name: string; hint: string; cls: string }[] = [
+export const SLIDERS: { key: keyof Inputs; name: string; hint: string; cls: string }[] = [
   { key: 'threat',  name: 'Tehdit',         hint: 'Yılan, karanlık sokak, öfkeli bir yüz', cls: 'sl-amy' },
   { key: 'cue',     name: 'Ödül ipucu',     hint: 'Çekici bir fotoğraf ya da bildirim sesi', cls: 'sl-dop' },
   { key: 'prob',    name: 'Ödül olasılığı', hint: 'Dopamin en çok %50 civarında tepe yapar', cls: 'sl-dop' },
@@ -49,6 +49,18 @@ const TEMPLATE = (id: string) => `
 <div class="sim sim-bso">
   <p class="lede">Amigdala, frontal korteks ve dopamin devresinin basitleştirilmiş modeli. Bir senaryo seç, bölgelere dokun, kaydırıcılarla oyna.</p>
   <div class="chips" data-ref="chips" role="group" aria-label="Senaryolar"></div>
+
+  <div class="sim-bar" role="group" aria-label="Anlık çıktılar" data-ref="bar">
+    <div class="sim-bar-in">
+      <p class="say" data-ref="say"></p>
+      <div class="meters">
+        <div class="m" style="--c: var(--amy)"><div class="m-top"><span>Korku · CeA</span><b data-ref="m-cea">0%</b></div><div class="track"><b data-ref="b-cea"></b></div></div>
+        <div class="m" style="--c: var(--dop)"><div class="m-top"><span>İsteme · NAcc</span><b data-ref="m-nacc">0%</b></div><div class="track"><b data-ref="b-nacc"></b></div></div>
+        <div class="m" style="--c: var(--pfc)"><div class="m-top"><span>Kontrol · PFC</span><b data-ref="m-ctl">0%</b></div><div class="track"><b data-ref="b-ctl"></b></div></div>
+      </div>
+    </div>
+  </div>
+  <p class="sr-only" aria-live="polite" data-ref="live"></p>
 
   <section aria-label="Beyin devresi">
     <div class="stage">
@@ -89,17 +101,6 @@ const TEMPLATE = (id: string) => `
   </section>
 
   <p class="foot">Nitel bir model: ağırlıklar ve sayılar ölçüm değildir, Bölüm 2'de anlatılan ilişkilerin yönünü ve zamanlamasını gösterir. Stres ve frontal güç ayarları, frontal korteksin enerji ve yorgunlukla zayıfladığı fikrinin sadeleştirmesidir. Gerçek beyin bundan çok daha karmaşıktır.</p>
-
-  <div class="sim-bar" role="group" aria-label="Anlık çıktılar" data-ref="bar">
-    <div class="sim-bar-in">
-      <p class="say" data-ref="say"></p>
-      <div class="meters">
-        <div class="m" style="--c: var(--amy)"><div class="m-top"><span>Korku · CeA</span><b data-ref="m-cea">0%</b></div><div class="track"><b data-ref="b-cea"></b></div></div>
-        <div class="m" style="--c: var(--dop)"><div class="m-top"><span>İsteme · NAcc</span><b data-ref="m-nacc">0%</b></div><div class="track"><b data-ref="b-nacc"></b></div></div>
-        <div class="m" style="--c: var(--pfc)"><div class="m-top"><span>Kontrol · PFC</span><b data-ref="m-ctl">0%</b></div><div class="track"><b data-ref="b-ctl"></b></div></div>
-      </div>
-    </div>
-  </div>
 </div>`;
 
 export function mount(container: HTMLElement): () => void {
@@ -114,6 +115,8 @@ export function mount(container: HTMLElement): () => void {
     sel: RegionId | null; scen: string | null; hist: Array<Record<string, number>>; lastSample: number;
   }
   const S: State = { u: { ...REST }, lesion: {}, x: settle(REST, {}, 12), t: 0, pulseUntil: -1, paused: false, sel: null, scen: 'rest', hist: [], lastSample: 0 };
+  // Duraklatılmışken ve girdi değişmemişken yeniden çizmeye gerek yok: kullanıcı eylemleri bunu işaretler.
+  let dirty = true;
   const eff = (): Inputs => (S.t < S.pulseUntil ? { ...S.u, threat: Math.min(1, S.u.threat + 0.8) } : S.u);
 
   // ---- Ağ diyagramı ----
@@ -211,6 +214,7 @@ export function mount(container: HTMLElement): () => void {
     ref(detail, 'dList').innerHTML = les ? '<li><span>Bölge devre dışı</span></li>' : (rows.join('') || '<li><span>Belirgin bir girdi yok</span></li>');
   }
   function select(rid: RegionId): void {
+    dirty = true;
     S.sel = S.sel === rid ? null : rid;
     for (const n of NODES) nodeEls[n.id].g.setAttribute('aria-pressed', String(S.sel === n.id));
     buildDetail();
@@ -225,6 +229,7 @@ export function mount(container: HTMLElement): () => void {
     chips.appendChild(b);
   }
   function setScenario(sid: string | null): void {
+    dirty = true;
     S.scen = sid;
     for (const b of Array.from(chips.children)) b.setAttribute('aria-pressed', String((b as HTMLElement).dataset.id === sid));
   }
@@ -259,9 +264,10 @@ export function mount(container: HTMLElement): () => void {
   }
 
   const pauseBtn = $('pause');
-  scope.on($('pulse'), 'click', () => { S.pulseUntil = S.t + 1; });
+  scope.on($('pulse'), 'click', () => { S.pulseUntil = S.t + 1; dirty = true; });
   scope.on(pauseBtn, 'click', () => {
     S.paused = !S.paused;
+    dirty = true;
     pauseBtn.setAttribute('aria-pressed', String(S.paused));
     pauseBtn.textContent = S.paused ? 'Devam et' : 'Duraklat';
   });
@@ -307,9 +313,10 @@ export function mount(container: HTMLElement): () => void {
 
   // ---- Alt çubuk ----
   let sayText = '';
-  const meter = (k: string, v: number) => { $(`m-${k}`).textContent = pct(v) + '%'; $(`b-${k}`).style.width = pct(v) + '%'; };
+  const meters = (['cea', 'nacc', 'ctl'] as const).map((k) => ({ k, val: $(`m-${k}`), bar: $(`b-${k}`) }));
   function drawBar(): void {
-    meter('cea', S.x.cea); meter('nacc', S.x.nacc); meter('ctl', controlOf(S.x));
+    const v = { cea: S.x.cea, nacc: S.x.nacc, ctl: controlOf(S.x) };
+    for (const m of meters) { m.val.textContent = pct(v[m.k]) + '%'; m.bar.style.width = pct(v[m.k]) + '%'; }
   }
   const sayEl = $('say');
   function drawSay(): void {
@@ -331,10 +338,13 @@ export function mount(container: HTMLElement): () => void {
         if (S.t - S.lastSample >= 0.1) { S.lastSample = S.t; sample(); }
       }
     }
+    if (S.paused && !dirty) return;
+    const force = S.paused; // duraklatılmışken yalnızca eylemden sonra, tek seferde tam çizim
+    dirty = false;
     drawNet(); drawBar(); drawChart();
     tSay += dt; tDet += dt;
-    if (tSay > 0.25) { tSay = 0; drawSay(); }
-    if (tDet > 0.15) { tDet = 0; updateDetail(); }
+    if (force || tSay > 0.25) { tSay = 0; drawSay(); }
+    if (force || tDet > 0.15) { tDet = 0; updateDetail(); }
   }
 
   syncSliders();
@@ -342,8 +352,12 @@ export function mount(container: HTMLElement): () => void {
   buildDetail();
   sample();
   drawSay();
-  hideBarWhenAway(root, $('bar'), scope);
-  scope.loop(frame);
+  // Ekran okuyucu: görünür metin sürekli değişir; yalnızca kullanıcı eyleminden sonra duyurulur.
+  const poke = scope.announcer($('live'), () => sayEl.textContent ?? '');
+  scope.on(root, 'click', poke);
+  scope.on(root, 'input', poke);
+  // Ekran dışındayken döngü durur; dönünce zaman sıçramasın diye `last` sıfırlanır.
+  scope.loop(frame, { root, onResume: () => { last = performance.now(); dirty = true; } });
 
   return () => {
     scope.dispose();

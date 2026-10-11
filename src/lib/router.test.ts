@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseHash } from './router';
+import { isRouteHash, parseHash } from './router';
 import { esc, html } from './html';
 
 describe('router', () => {
@@ -10,6 +10,14 @@ describe('router', () => {
     expect(parseHash('#/bolum/ch12?deney=ch12-e3')).toEqual({ name: 'chapter', id: 'ch12', experiment: 'ch12-e3' });
     expect(parseHash('#/deneyler')).toEqual({ name: 'experiments' });
     expect(parseHash('#/yok').name).toBe('notfound');
+  });
+});
+describe('sayfa içi çapalar', () => {
+  it('#main (atlama bağlantısı) rota değildir', () => {
+    expect(isRouteHash('#main')).toBe(false);
+    expect(isRouteHash('#/bolum/ch02')).toBe(true);
+    expect(isRouteHash('')).toBe(true);
+    expect(isRouteHash('#')).toBe(true);
   });
 });
 describe('html', () => {

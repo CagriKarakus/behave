@@ -19,9 +19,15 @@ export function parseHash(hash: string): Route {
 export const experimentHref = (chapterId: string, expId: string): string => `#/bolum/${chapterId}?deney=${encodeURIComponent(expId)}`;
 export const chapterHref = (id: string): string => `#/bolum/${id}`;
 
+/**
+ * Uygulama rotaları `#/` ile başlar (ya da boştur). `#main` gibi sayfa içi çapalar (atlama bağlantısı vb.)
+ * rota değildir: sayfayı değiştirmemeli.
+ */
+export const isRouteHash = (hash: string): boolean => hash === '' || hash === '#' || hash.startsWith('#/');
+
 /** Hash değişimini dinler; dönen fonksiyon dinleyiciyi kaldırır. */
 export function startRouter(onRoute: (r: Route) => void): () => void {
-  const handler = () => onRoute(parseHash(location.hash));
+  const handler = () => { if (isRouteHash(location.hash)) onRoute(parseHash(location.hash)); };
   window.addEventListener('hashchange', handler);
   handler();
   return () => window.removeEventListener('hashchange', handler);

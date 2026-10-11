@@ -1,12 +1,12 @@
 /* Uygulama kabuğu, ana sayfa ve bölüm sayfası. Simülasyonların kendi stili src/sims altında. */
 .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 16px; min-height: 56px; border-bottom: 1px solid var(--line); background: var(--panel); position: sticky; top: 0; z-index: 30; }
-.brand { display: inline-flex; align-items: center; gap: 10px; min-height: 40px; text-decoration: none; font: 700 18px var(--f-display); }
+.brand { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 44px; min-width: 44px; text-decoration: none; font: 700 18px var(--f-display); }
 .brand-mark { width: 22px; height: 22px; border-radius: 6px; background: var(--ink); position: relative; }
 .brand-mark::before, .brand-mark::after { content: ""; position: absolute; border-radius: 50%; }
 .brand-mark::before { width: 8px; height: 8px; left: 3px; top: 7px; background: var(--amy); }
 .brand-mark::after { width: 6px; height: 6px; right: 3px; top: 4px; background: var(--pfc); box-shadow: 0 9px 0 var(--dop); }
 @media (max-width: 479px) { .brand-name { display: none; } }
-.theme-btn { white-space: nowrap; min-height: 40px; min-width: 40px; font: 500 13px var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; cursor: pointer; }
+.theme-btn { white-space: nowrap; min-height: 40px; min-width: 40px; font: 500 13px var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--control-border); border-radius: 10px; padding: 8px 12px; cursor: pointer; }
 
 .page { max-width: 1200px; margin-inline: auto; padding: 24px 16px 64px; }
 .page.narrow { max-width: 640px; }
@@ -34,7 +34,7 @@ h1 { margin: 6px 0 4px; font-weight: 700; font-size: clamp(28px, 6vw, 44px); let
 .tick { position: absolute; top: 8px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 4px; font: 400 11px var(--f-mono); color: var(--muted); white-space: nowrap; }
 .tick i { width: 1px; height: 14px; background: var(--muted); }
 .tick-first { transform: translateX(-6px); align-items: flex-start; }
-.mark { position: absolute; top: 9px; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: var(--ink); border: 2px solid var(--bg); }
+.mark { position: absolute; top: calc(9px + var(--lane, 0) * 4px); width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: var(--ink); border: 2px solid var(--bg); }
 .axis-note { color: var(--muted); font-size: 13px; margin: 6px 0 18px; }
 .tick-last { transform: translateX(-100%); align-items: flex-end; }
 @media (max-width: 599px) { .tick.minor { display: none; } }
@@ -66,6 +66,8 @@ h1 { margin: 6px 0 4px; font-weight: 700; font-size: clamp(28px, 6vw, 44px); let
   .stops::before { left: 13px; }
   .stop-dot { left: -32px; width: 26px; height: 26px; font-size: 12px; line-height: 26px; }
   .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* Zaman basamaklarında çoğunlukla tek bölüm var: kart ekranın üçte birine sıkışıp geri kalan boş kalmasın. */
+  .stop .cards { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); max-width: 760px; }
 }
 
 /* ---- Bölüm sayfası ---- */
@@ -140,12 +142,13 @@ h1 { margin: 6px 0 4px; font-weight: 700; font-size: clamp(28px, 6vw, 44px); let
 .exp-sources ul { margin: 0; padding-left: 18px; font-size: 14px; }
 .exp-sources li { margin-top: 4px; overflow-wrap: anywhere; }
 .doi { font: 400 12px var(--f-mono); color: var(--muted); }
-.repl-sağlam { color: var(--gld); border-color: var(--gld); }
-.repl-karışık { color: var(--eff); border-color: var(--eff); }
-.repl-tartışmalı { color: var(--red); border-color: var(--red); }
+.repl-sağlam { color: var(--gld-text); border-color: var(--gld-text); }
+.repl-karışık { color: var(--eff-text); border-color: var(--eff-text); }
+.repl-tartışmalı { color: var(--red-text); border-color: var(--red-text); }
 .repl-bilinmiyor { color: var(--muted); border-style: dashed; }
 .exp-chlink { text-decoration: none; color: var(--ink); min-height: 28px; }
 .filters { display: grid; gap: 10px; margin: 16px 0 8px; grid-template-columns: minmax(0, 1fr); }
 .filters label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
-.filters input, .filters select { min-height: 44px; font: 400 16px var(--f-body); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; width: 100%; }
+.filters input, .filters select { min-height: 44px; font: 400 16px var(--f-body); color: var(--ink); background: var(--panel); border: 1px solid var(--control-border); border-radius: 10px; padding: 8px 12px; width: 100%; }
 @media (min-width: 720px) { .filters { grid-template-columns: 2fr 1.5fr 1fr; } }
+.ch-rest-body { display: flex; flex-direction: column; gap: 32px; }

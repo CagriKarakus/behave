@@ -1,7 +1,7 @@
 import type {
   Experiment, ExperimentSource, Replication, ReplicationStatus,
-  Chapter, ChapterKind, ChapterLink, Confidence, Content, KeyConcept, KeyStudy, SimulationIdea,
-} from './types';
+  Chapter, ChapterDetail, ChapterKind, ChapterLink, ChapterMeta, Confidence, Content, ContentIndex, KeyConcept, KeyStudy, SimulationIdea,
+} from './types.ts';
 
 type Obj = Record<string, unknown>;
 const isObj = (v: unknown): v is Obj => typeof v === 'object' && v !== null && !Array.isArray(v);
@@ -47,24 +47,44 @@ function studies(v: unknown): KeyStudy[] {
   });
 }
 const REPL: ReplicationStatus[] = ['sağlam', 'karışık', 'tartışmalı', 'bilinmiyor'];
-const numOrNull = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
+/** Sayı ya da sayıya çevrilebilen dize ("12", " 60 "); aksi halde null. */
+const numOrNull = (v: unknown): number | null => {
+  if (typeof v === 'number') return Number.isFinite(v) ? v : null;
+  if (typeof v === 'string' && v.trim() !== '' && Number.isFinite(Number(v))) return Number(v);
+  return null;
+};
+/** "https://doi.org/10.1/x", "doi:10.1/x" ya da düz "10.1/x" -> "10.1/x". */
+export function cleanDoi(v: unknown): string | null {
+  const s = strOrNull(v);
+  if (!s) return null;
+  return s.trim().replace(/^(?:https?:\/\/(?:dx\.)?doi\.org\/|doi:\s*)/i, '').trim() || null;
+}
+/** Geliştirme sırasında atılan kayıtları görünür kılar; üretimde sessiz. */
+const warn = (msg: string): void => { if (import.meta.env?.DEV) console.warn('[içerik] ' + msg); };
 function experiments(v: unknown, chapterId: string): Experiment[] {
+  const used = new Set<string>();
   return arr(v).flatMap((c, i): Experiment[] => {
     if (!isObj(c)) return [];
     const name = str(c.name);
-    if (!name) return [];
+    if (!name) { warn(`${chapterId}: adı olmayan deney atıldı (#${i + 1})`); return []; }
     const sources = arr(c.sources).flatMap((s): ExperimentSource[] => {
       if (typeof s === 'string') return s.trim() ? [{ citation: s, journal: null, year: null, doi: null, url: null }] : [];
       if (!isObj(s)) return [];
-      return [{ citation: str(s.citation), journal: strOrNull(s.journal), year: numOrNull(s.year), doi: strOrNull(s.doi), url: strOrNull(s.url) }];
+      return [{ citation: str(s.citation), journal: strOrNull(s.journal), year: numOrNull(s.year), doi: cleanDoi(s.doi), url: strOrNull(s.url) }];
     });
     let replication: Replication | null = null;
     if (isObj(c.replication)) {
-      const st = REPL.includes(c.replication.status as ReplicationStatus) ? (c.replication.status as ReplicationStatus) : 'bilinmiyor';
+      const raw = str(c.replication.status).trim().toLocaleLowerCase('tr') as ReplicationStatus;
+      const st = REPL.includes(raw) ? raw : 'bilinmiyor';
       replication = { status: st, note: str(c.replication.note), refs: strList(c.replication.refs) };
     }
+    // Kimlik çakışırsa -2, -3 ... eklenir (sayfada tekrarlanan id olmasın).
+    const base = str(c.id).trim() || `${chapterId}-e${i + 1}`;
+    let id = base;
+    for (let n = 2; used.has(id); n++) id = `${base}-${n}`;
+    used.add(id);
     return [{
-      id: str(c.id) || `${chapterId}-e${i + 1}`, name, researchers: str(c.researchers), year: numOrNull(c.year),
+      id, name, researchers: str(c.researchers), year: numOrNull(c.year),
       question: str(c.question), method: str(c.method), finding: str(c.finding), roleInChapter: str(c.roleInChapter),
       sources, caveats: strOrNull(c.caveats), replication, simulatable: c.simulatable === true,
     }];
@@ -85,51 +105,75 @@ function links(v: unknown): ChapterLink[] {
   });
 }
 
-export function normalizeChapter(raw: unknown): Chapter | null {
+export function normalizeMeta(raw: unknown): ChapterMeta | null {
   if (!isObj(raw)) return null;
   const id = normalizeId(raw.id);
   if (!id) return null;
   const kind = KINDS.includes(raw.kind as ChapterKind) ? (raw.kind as ChapterKind) : inferKind(id);
-  const secs = typeof raw.timescaleSeconds === 'number' && Number.isFinite(raw.timescaleSeconds) && raw.timescaleSeconds > 0
-    ? raw.timescaleSeconds : null;
+  const secs = numOrNull(raw.timescaleSeconds);
   return {
     id,
     kind,
-    number: typeof raw.number === 'number' && Number.isFinite(raw.number) ? raw.number : null,
+    number: numOrNull(raw.number),
     titleEn: str(raw.titleEn),
     titleTr: str(raw.titleTr) || str(raw.titleEn) || id,
     timescale: strOrNull(raw.timescale),
-    timescaleSeconds: secs,
-    summary: str(raw.summary),
-    keyConcepts: concepts(raw.keyConcepts),
-    keyStudies: studies(raw.keyStudies),
-    experiments: experiments(raw.experiments, id),
-    simulationIdeas: ideas(raw.simulationIdeas),
-    links: links(raw.links),
+    timescaleSeconds: secs != null && secs > 0 ? secs : null,
     confidence: CONF.includes(raw.confidence as Confidence) ? (raw.confidence as Confidence) : null,
-    verifyNotes: strList(raw.verifyNotes),
   };
+}
+
+/** Bölüm ayrıntısı; ham değer yoksa ya da bozuksa boş ayrıntı. */
+export function normalizeDetail(raw: unknown, chapterId: string): ChapterDetail {
+  const r = isObj(raw) ? raw : {};
+  return {
+    summary: str(r.summary),
+    keyConcepts: concepts(r.keyConcepts),
+    keyStudies: studies(r.keyStudies),
+    experiments: experiments(r.experiments, chapterId),
+    simulationIdeas: ideas(r.simulationIdeas),
+    links: links(r.links),
+    verifyNotes: strList(r.verifyNotes),
+  };
+}
+
+export function normalizeChapter(raw: unknown): Chapter | null {
+  const meta = normalizeMeta(raw);
+  return meta ? { ...meta, ...normalizeDetail(raw, meta.id) } : null;
+}
+
+function normalizeBook(root: Obj): Content['book'] {
+  const b = isObj(root.book) ? root.book : {};
+  return {
+    titleEn: str(b.titleEn) || 'Behave',
+    titleTr: str(b.titleTr) || 'Davranış',
+    author: str(b.author) || 'Robert M. Sapolsky',
+    year: numOrNull(b.year),
+  };
+}
+
+/** Yinelenen kimlikli ya da kimliksiz kayıtları atar (ilki kazanır). */
+function dedupe<T extends { id: string }>(items: Array<T | null>): T[] {
+  const seen = new Set<string>();
+  const out: T[] = [];
+  for (const c of items) {
+    if (!c) { warn('kimliği olmayan ya da geçersiz bölüm atıldı'); continue; }
+    if (seen.has(c.id)) { warn(`yinelenen bölüm kimliği atıldı: ${c.id}`); continue; }
+    seen.add(c.id); out.push(c);
+  }
+  return out;
+}
+
+/** Yalnızca üst veri (ana sayfa/gezinti). Ayrıntı alanları yok sayılır. */
+export function normalizeIndex(raw: unknown): ContentIndex {
+  const root = isObj(raw) ? raw : {};
+  return { book: normalizeBook(root), chapters: dedupe(arr(root.chapters).map(normalizeMeta)) };
 }
 
 /** Eski taslak, yeni sürüm ya da kısmen bozuk veri: çökmeden Content üretir. */
 export function normalizeContent(raw: unknown): Content {
   const root = isObj(raw) ? raw : {};
-  const b = isObj(root.book) ? root.book : {};
-  const seen = new Set<string>();
-  const chapters: Chapter[] = [];
-  for (const c of arr(root.chapters)) {
-    const ch = normalizeChapter(c);
-    if (ch && !seen.has(ch.id)) { seen.add(ch.id); chapters.push(ch); }
-  }
-  return {
-    book: {
-      titleEn: str(b.titleEn) || 'Behave',
-      titleTr: str(b.titleTr) || 'Davranış',
-      author: str(b.author) || 'Robert M. Sapolsky',
-      year: typeof b.year === 'number' ? b.year : null,
-    },
-    chapters,
-  };
+  return { book: normalizeBook(root), chapters: dedupe(arr(root.chapters).map(normalizeChapter)) };
 }
 
 export const chapterLabel = (c: Pick<Chapter, 'kind' | 'number'>): string => {
@@ -140,3 +184,5 @@ export const chapterLabel = (c: Pick<Chapter, 'kind' | 'number'>): string => {
     default: return c.number != null ? `Bölüm ${c.number}` : 'Bölüm';
   }
 };
+
+export const CONF_DOTS = { 'yüksek': '●●●', 'orta': '●●○', 'düşük': '●○○' } as const;

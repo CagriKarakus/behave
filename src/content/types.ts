@@ -39,7 +39,8 @@ export interface RawChapter {
 }
 export interface RawContent { book: Book; chapters: RawChapter[] }
 
-export interface Chapter {
+/** Ana sayfa, zaman şeridi ve gezinti için yeterli üst veri (içerik özetine girer). */
+export interface ChapterMeta {
   id: string;
   kind: ChapterKind;
   number: number | null;
@@ -47,13 +48,18 @@ export interface Chapter {
   titleTr: string;
   timescale: string | null;
   timescaleSeconds: number | null;
+  confidence: Confidence | null;
+}
+/** Bölüm sayfasında gereken ayrıntı; bölüm başına ayrı yüklenir. */
+export interface ChapterDetail {
   summary: string;
   keyConcepts: KeyConcept[];
   keyStudies: KeyStudy[];
   experiments: Experiment[];
   simulationIdeas: SimulationIdea[];
   links: ChapterLink[];
-  confidence: Confidence | null;
   verifyNotes: string[];
 }
+export type Chapter = ChapterMeta & ChapterDetail;
+export interface ContentIndex { book: Book; chapters: ChapterMeta[] }
 export interface Content { book: Book; chapters: Chapter[] }
