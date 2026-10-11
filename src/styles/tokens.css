@@ -1,0 +1,43 @@
+/* Ortak tasarım jetonları. İki simülasyonun (Bölüm 2 ve Ek 2) paletinin birleşimi.
+   Renkler anlam taşır:
+   --amy kırmızı = amigdala · --pfc mavi = frontal korteks · --dop amber = dopamin
+   --hyp mavi = hipotalamus · --pit mor = hipofiz · --gld yeşilimsi = bez · --eff amber = hedef hücre yanıtı
+   --red = glikoz ve yanlış hormon · --lesion gri = lezyon */
+:root {
+  --bg: #ECEFF3;
+  --panel: #F8F9FB;
+  --ink: #131C28;
+  --muted: #566475;
+  --line: #C9D1DB;
+  --edge: #46566A;
+
+  --amy: #C9382A;
+  --pfc: #1F66B0;
+  --dop: #B77800;
+  --lesion: #7B8797;
+
+  --hyp: #1F66B0;
+  --pit: #7B4FB8;
+  --gld: #0E8573;
+  --eff: #B77800;
+  --red: #C9382A;
+
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B131D; --panel: #131D2A; --ink: #E7EDF4; --muted: #8FA0B3; --line: #263446; --edge: #9FB0C3;
+    --amy: #FF6A52; --pfc: #5BA9F2; --dop: #F4B63A; --lesion: #6F7F92;
+    --hyp: #5BA9F2; --pit: #B795F0; --gld: #3CC4AE; --eff: #F4B63A; --red: #FF6A52;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0B131D; --panel: #131D2A; --ink: #E7EDF4; --muted: #8FA0B3; --line: #263446; --edge: #9FB0C3;
+  --amy: #FF6A52; --pfc: #5BA9F2; --dop: #F4B63A; --lesion: #6F7F92;
+  --hyp: #5BA9F2; --pit: #B795F0; --gld: #3CC4AE; --eff: #F4B63A; --red: #FF6A52;
+  color-scheme: dark;
+}

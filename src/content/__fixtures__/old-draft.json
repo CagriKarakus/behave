@@ -1,0 +1,809 @@
+{
+  "book": {
+    "titleEn": "Behave: The Biology of Humans at Our Best and Worst",
+    "titleTr": "Davranış: İnsanın En İyi ve En Kötü Hâlinin Biyolojisi (Türkçe başlık doğrulanmalı)",
+    "author": "Robert M. Sapolsky",
+    "year": 2017
+  },
+  "chapters": [
+    {
+      "id": "intro",
+      "kind": "intro",
+      "number": null,
+      "titleEn": "Introduction",
+      "titleTr": "Giriş",
+      "timescale": null,
+      "timescaleSeconds": null,
+      "summary": "Giriş, bir davranışı tek bir nedene bağlamanın yetersizliğini savunur ve aynı eylemin hem o anki beyin etkinliğinden hem de yıllar, kuşaklar ve evrim boyunca biriken etkilerden kaynaklanabileceğini gösterir. Kitabın temel aracı olan zaman ölçeği çerçevesi burada tanıtılır: davranıştan geriye doğru, bir saniye öncesinden evrimsel geçmişe uzanan bir merdiven. Farklı bilim dallarının bu merdivenin farklı basamaklarında konuştuğu ve bu konuşmaların birbirini tamamladığı fikri öne çıkar. Yazar ayrıca 'neden' sorusunun kolay cevaplarının neden çoğu zaman yanıltıcı olduğunu tartışır.",
+      "keyConcepts": [
+        { "term": "Zaman ölçeği çerçevesi", "explanation": "Bir davranışın nedenleri, davranıştan ne kadar önce ortaya çıktıklarına göre dizilebilir. Kitap bu sıralamayı bütün bölümlerin omurgası olarak kullanır." },
+        { "term": "Yakın ve nihai nedenler", "explanation": "Yakın nedenler davranışı o anda tetikleyen mekanizmaları, nihai nedenler ise bu mekanizmaların evrimsel olarak neden var olduğunu açıklar." },
+        { "term": "Disiplinler arası yaklaşım", "explanation": "Nörobilim, endokrinoloji, gelişim biyolojisi, antropoloji ve evrim biyolojisi aynı davranışa farklı mercekler tutar ve bu bakışlar birleştirilmelidir." },
+        { "term": "İndirgemecilik sınırları", "explanation": "Her şeyi tek bir gene, tek bir hormona ya da tek bir beyin bölgesine bağlamak, davranışın karmaşıklığını gözden kaçırmaya yol açar." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Zaman Merdiveni",
+          "shows": "Seçilmiş bir davranışın, bir saniye öncesinden evrimsel geçmişe kadar uzanan nedenlerinin katmanlar hâlinde nasıl dizildiğini görsel olarak gösterir.",
+          "inputs": ["Davranış seçimi (ör. ani öfke, cömertlik, korku)", "Gösterilecek zaman ölçeği aralığı"],
+          "outputs": ["Her basamakta öne çıkan neden listesi", "Basamaklar arası ilişkiyi gösteren bağlantı çizgileri"]
+        }
+      ],
+      "links": [
+        { "to": "ch2", "why": "Merdivenin en alt basamağı, yani bir saniye öncesi, ilk bölümde ayrıntılı olarak ele alınır." },
+        { "to": "epilogue", "why": "Sonsöz, katmanlı nedenselliğin sorumluluk ve özgür irade tartışmasına etkisini yeniden ele alır." }
+      ],
+      "confidence": "orta",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: girişte kullanılan tam örnek olaylar ve anlatım sırası",
+        "kitaptan doğrulanmalı: yakın/nihai neden ayrımının girişte açıkça yapılıp yapılmadığı",
+        "kitaptan doğrulanmalı: Türkçe çeviri başlığı (book.titleTr alanı)"
+      ]
+    },
+    {
+      "id": "ch1",
+      "kind": "chapter",
+      "number": 1,
+      "titleEn": "Chapter 1 (title to verify)",
+      "titleTr": "Birinci bölüm: açılış ve temel soru",
+      "timescale": null,
+      "timescaleSeconds": null,
+      "summary": "Açılış bölümü, kitabın ele aldığı temel soruyu somut bir olay üzerinden ortaya koymayı amaçlar. Davranışın anlık tetikleyicileriyle uzun vadeli belirleyicilerinin nasıl iç içe geçtiği üzerinde durulur. Bölüm, sonraki zaman ölçeği yolculuğunun ilk adımı olarak okunabilir. Ancak bu bölümün tam olarak hangi zaman basamağına oturduğu bu aşamada kesin değildir.",
+      "keyConcepts": [
+        { "term": "Anlık tetikleyici", "explanation": "Bir davranışı o an başlatan dış uyaran ya da iç durumdur." },
+        { "term": "Uzun vadeli belirleyici", "explanation": "Bireyin geçmişinde biriken deneyim, biyoloji ve çevrenin davranış üzerindeki dolaylı etkisidir." },
+        { "term": "Sorumluluk sorusu", "explanation": "Nedenlerin çokluğu, bir eylemden kimin ve ne ölçüde sorumlu olduğu sorusunu başlatır." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Tetikleyici Katmanları",
+          "shows": "Bir olayın anlık tetikleyicilerinin ve arka plandaki uzun vadeli etkenlerin birlikte nasıl bir sonuç ürettiğini gösterir.",
+          "inputs": ["Anlık uyaran şiddeti", "Arka plan etkenlerinin ağırlıkları"],
+          "outputs": ["Davranış olasılığı", "Hangi katmanın sonucu ne kadar etkilediği"]
+        }
+      ],
+      "links": [
+        { "to": "intro", "why": "Açılış, girişte kurulan zaman ölçeği çerçevesinin somut bir uygulaması gibi okunabilir." },
+        { "to": "ch2", "why": "Anlık tetikleyiciler bir sonraki bölümde beyin devreleri düzeyinde incelenir." }
+      ],
+      "confidence": "düşük",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: birinci bölümün İngilizce başlığı ve Türkçe karşılığı",
+        "kitaptan doğrulanmalı: bölümün açılış olayı ve kapsamı",
+        "kitaptan doğrulanmalı: bölümün hangi zaman ölçeğine ait olduğu (null bırakıldı)"
+      ]
+    },
+    {
+      "id": "ch2",
+      "kind": "chapter",
+      "number": 2,
+      "titleEn": "One Second Before (to verify)",
+      "titleTr": "Bir saniye önce",
+      "timescale": "Bir saniye önce",
+      "timescaleSeconds": 1,
+      "summary": "Bölüm, bir davranışın hemen öncesinde beyinde işleyen devreleri inceler. Duyusal girdinin tehdit ya da ödül olarak nasıl değerlendirildiği, amigdalanın duygusal tepkideki rolü ve prefrontal korteksin dürtüleri frenleme ve planlama kapasitesi ele alınır. Dopaminin ödül beklentisiyle ilgili sinyalleri de bu hesaplamanın parçasıdır. Bu devrelerin birbirini nasıl dengelediği, bir eylemin 'seçilmesinden' önce yaşanan kısa süreli hesaplamanın özünü oluşturur.",
+      "keyConcepts": [
+        { "term": "Amigdala", "explanation": "Tehdit ve duygusal önemi hızlı biçimde değerlendiren, korku ve öfke gibi tepkilerde öne çıkan bir beyin yapısıdır." },
+        { "term": "Prefrontal korteks", "explanation": "Planlama, dürtü kontrolü ve sonuçları tartma işlevlerini üstlenen ön beyin bölgesidir." },
+        { "term": "Dopamin ve ödül beklentisi", "explanation": "Dopamin, bir ödülün gerçekleşmesinden çok ödülün beklenmesiyle ilişkili sinyaller üretir ve karar vermeyi yönlendirir." },
+        { "term": "Dürtü kontrolü", "explanation": "Prefrontal korteksin amigdaladan gelen hızlı tepkileri yavaşlatma ya da değiştirme kapasitesidir." },
+        { "term": "Duyusal işleme hızı", "explanation": "Uyaranın beyine ulaşıp işlenmesi için geçen süre, tepkinin zamanlamasını belirler." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Bir Saniye Önce Devresi",
+          "shows": "Amigdala, prefrontal korteks ve dopamin sinyallerinin bir uyarana verilen tepkide birbirini nasıl etkilediğini ve bu etkileşimin davranışı nasıl şekillendirdiğini gösterir.",
+          "inputs": ["Tehdit şiddeti", "Prefrontal kontrol gücü", "Ödül beklentisi düzeyi", "Tepki gecikmesi"],
+          "outputs": ["Seçilen davranış", "Devrelerin etkinlik zaman çizelgesi", "Dürtü kontrolünün başarılı olup olmadığı"]
+        },
+        {
+          "title": "Karar Yarışı",
+          "shows": "Tehdit ve kontrol sinyallerinin bir eşik etrafında yarışmasını, hangisinin önce eşiği geçtiğinde tepkinin belirlendiğini gösterir.",
+          "inputs": ["Amigdala sinyal hızı", "Prefrontal sinyal hızı", "Eşik değeri"],
+          "outputs": ["Kazanan sinyal", "Tepki zamanı", "Yarış süresince sinyal grafiği"]
+        }
+      ],
+      "links": [
+        { "to": "intro", "why": "Bu bölüm, zaman merdiveninin en alt basamağını oluşturur." },
+        { "to": "ch3", "why": "Amigdalanın tetiklediği stres yanıtı, saniyelerden dakikalara uzanan etkilerle devam eder." },
+        { "to": "ch7", "why": "Prefrontal korteksin gelişimi ergenlikte sürdüğü için dürtü kontrolünün yaşla değişimi bağlantılıdır." },
+        { "to": "app1", "why": "Nörotransmitterler ve sinaps işleyişi bu bölümdeki devrelerin temelini ekler." }
+      ],
+      "confidence": "orta",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: bölümün açılış olayı ve kullanılan vaka örnekleri",
+        "kitaptan doğrulanmalı: dopamin tartışmasının kapsamı ve ödül beklentisi vurgusunun metindeki yeri",
+        "kitaptan doğrulanmalı: İngilizce başlık 'One Second Before' ifadesinin doğruluğu"
+      ]
+    },
+    {
+      "id": "ch3",
+      "kind": "chapter",
+      "number": 3,
+      "titleEn": "Chapter 3 (title to verify)",
+      "titleTr": "Stres tepkisi: saniyeler ve dakikalar",
+      "timescale": "Saniyeler-dakikalar",
+      "timescaleSeconds": 60,
+      "summary": "Bölüm, kısa süreli stres yanıtının vücudu tehdide hazırlayan enerji seferberliğini anlatır. Sempatik sinir sistemi ve adrenalin gibi hızlı sistemlerin hayatta kalmaya nasıl yardım ettiği üzerinde durulur. Aynı sistemin kısa süreli kullanımda işe yarar olmasına karşın uzun süre devam ettiğinde bedende zarar birikebileceği fikri öne çıkar. Bu bağlamda vahşi hayvanların stres yaşamasıyla insanların stres deneyimi arasındaki farklar karşılaştırılır.",
+      "keyConcepts": [
+        { "term": "Sempatik sinir sistemi", "explanation": "Tehdit anında kalp hızını, solunumu ve kas hazırlığını artıran, vücudu kaçma ya da savaşma durumuna geçiren otonom sistemdir." },
+        { "term": "Adrenalin", "explanation": "Stres anında böbrek üstü bezlerinden salınan ve enerjiyi hızla seferber eden bir hormondur." },
+        { "term": "Enerji seferberliği", "explanation": "Stres anında vücut, metabolizma ve dolaşımı ani bir eylem için yeniden düzenler." },
+        { "term": "Akut stres yanıtı", "explanation": "Kısa süreli ve sonlanan tehdide verilen hızlı, geçici bir biyolojik tepkidir." },
+        { "term": "Yanıtın kapanması", "explanation": "Tehdit geçtikten sonra sistemin normal duruma dönmesi, kronik hasarı önlemek için kritik öneme sahiptir." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Savaş-Kaç Dinamikleri",
+          "shows": "Bir tehdit başladığında ve sona erdiğinde sempatik sistemin kalp hızı, enerji dağılımı ve adrenalin düzeyini nasıl değiştirdiğini gösterir.",
+          "inputs": ["Tehdit süresi", "Kaçış imkânı", "Tehdit şiddeti"],
+          "outputs": ["Kalp hızı zaman çizelgesi", "Enerji dağılımı", "Tehdit sonrası toparlanma süresi"]
+        }
+      ],
+      "links": [
+        { "to": "ch2", "why": "Stres yanıtını tetikleyen amigdala devresi bir önceki bölümde ele alınır." },
+        { "to": "ch6", "why": "Kısa süreli yanıt kronikleştiğinde ortaya çıkan etkiler bir sonraki zaman basamağında incelenir." },
+        { "to": "app2", "why": "Stres hormonlarının salınımını yöneten HPA ekseni endokrin ekler bölümünde açıklanır." }
+      ],
+      "confidence": "orta",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: vahşi hayvan karşılaştırmasının bu bölümde mi yoksa başka bir bölümde mi yer aldığı",
+        "kitaptan doğrulanmalı: İngilizce başlık ve bölüm numarası",
+        "kitaptan doğrulanmalı: sempatik sistem ve adrenalin tartışmasının bu bölümdeki derinliği"
+      ]
+    },
+    {
+      "id": "ch4",
+      "kind": "chapter",
+      "number": 4,
+      "titleEn": "Chapter 4 (title to verify)",
+      "titleTr": "Hormonlar ve bağlam: testosteron ve oksitosin",
+      "timescale": "Dakikalar-saatler",
+      "timescaleSeconds": 3600,
+      "summary": "Bölüm, testosteron ve oksitosin gibi hormonların davranış üzerindeki etkisini dakikalar ve saatler ölçeğinde ele alır. Hormonların davranışı doğrudan belirlemediği, onun yerine bağlama bağlı olarak etkiyi güçlendirdiği ya da zayıflattığı fikri öne çıkar. Hormonlar ayrıca davranışın sonuçlarına göre değişebilir, yani etki tek yönlü değildir. Oksitosinin sosyal bağ üzerindeki çok yönlü etkisi de bu çerçevede tartışılır.",
+      "keyConcepts": [
+        { "term": "Testosteron ve bağlam", "explanation": "Testosteronun etkisi, durumun sosyal bağlamına ve kişinin o anki statüsüne göre değişir." },
+        { "term": "Oksitosin ve sosyal bağ", "explanation": "Oksitosin güven ve yakınlıkla ilişkilendirilse de etkisi her durumda olumlu değildir ve ortama göre farklılaşır." },
+        { "term": "İzin verici etki", "explanation": "Hormonlar bir davranışı zorunlu kılmak yerine, belirli davranışların olasılığını artırabilir ya da azaltabilir." },
+        { "term": "Çift yönlü ilişki", "explanation": "Davranış da hormon düzeyini değiştirir; dolayısıyla neden ve sonuç ayrımı her zaman kolay değildir." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Testosteron Bağlam Simülatörü",
+          "shows": "Aynı hormon düzeyinin farklı sosyal durumlarda farklı davranışlara yol açabildiğini gösterir.",
+          "inputs": ["Hormon düzeyi", "Sosyal statü", "Rakip var mı", "Kazanma olasılığı"],
+          "outputs": ["Davranış eğilimi", "Statü değişimi", "Hormon düzeyinin zaman içindeki değişimi"]
+        }
+      ],
+      "links": [
+        { "to": "ch3", "why": "Akut stres ve hormon etkileşimi bu bölümde dakikalar ölçeğinde bir devam sunar." },
+        { "to": "ch5", "why": "Hormon düzeylerinin günlük ritmi bir sonraki bölümde saatler-günler ölçeğinde ele alınır." },
+        { "to": "app2", "why": "Hormonların üretimi ve geri bildirim döngüleri endokrin ekler bölümünde ayrıntılanır." }
+      ],
+      "confidence": "orta",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: hangi hormonların bu bölümde ele alındığı (oksitosin tartışmasının bu bölümde mi yoksa sonraki bir bölümde mi olduğu)",
+        "kitaptan doğrulanmalı: testosteron tartışmasının hangi çalışmalara dayandığı",
+        "kitaptan doğrulanmalı: İngilizce başlık ve bölüm numarası"
+      ]
+    },
+    {
+      "id": "ch5",
+      "kind": "chapter",
+      "number": 5,
+      "titleEn": "Chapter 5 (title to verify)",
+      "titleTr": "Uyku, açlık ve duygusal dalgalanmalar",
+      "timescale": "Saatler-günler",
+      "timescaleSeconds": 86400,
+      "summary": "Bölüm, uykunun, açlığın ve günlük hormon ritimlerinin yargı ve duygu düzenlemesi üzerindeki etkisini ele alır. Sirkadiyen ritmin bozulmasının, yorgunluk ve açlıkla birleştiğinde karar verme kapasitesini zayıflattığı vurgulanır. Günlük kortizol değişimleri gibi döngülerin, bir gün içindeki duygusal dalgalanmaların biyolojik zeminini oluşturduğu anlatılır. Bölüm, bu etkenlerin bireysel sorumluluk tartışmasına nasıl girdiğini de sorgular.",
+      "keyConcepts": [
+        { "term": "Sirkadiyen ritim", "explanation": "Yaklaşık yirmi dört saatlik, uyku ve hormon salınımını düzenleyen biyolojik saat döngüsüdür." },
+        { "term": "Uyku yoksunluğu", "explanation": "Yetersiz uyku, dikkat ve duygu düzenlemesini zayıflatarak yargıyı bozabilir." },
+        { "term": "Açlık ve glikoz", "explanation": "Kan şekerindeki düşüş, dürtü kontrolünü ve karar vermeyi etkileyebilir." },
+        { "term": "Duygusal regülasyon", "explanation": "Duyguları yönetme kapasitesi, uyku ve beslenme durumuna bağlı olarak değişkenlik gösterir." },
+        { "term": "Günlük kortizol ritmi", "explanation": "Kortizol günün belirli saatlerinde doğal olarak yükselir ve azalır, bu da duygusal eğilimleri etkiler." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Uyku Borcu Ölçeri",
+          "shows": "Uyku süresi ve zamanlamasının biriken etkisini ve bunun karar verme performansına yansımasını gösterir.",
+          "inputs": ["Gece uyku süresi", "Uyanıklık saati", "Açlık düzeyi"],
+          "outputs": ["Dikkat ve yargı skoru", "Duygusal tepki eğilimi", "Toparlanma için gereken süre"]
+        }
+      ],
+      "links": [
+        { "to": "ch4", "why": "Hormonların davranış üzerindeki etkisi, günlük ritim perspektifinden yeniden ele alınır." },
+        { "to": "ch6", "why": "Günlük döngülerin bozulmasının uzun süre devam etmesi kronik stres tartışmasına bağlanır." }
+      ],
+      "confidence": "düşük",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: bölümün gerçekten uyku ve açlığı kapsayıp kapsamadığı",
+        "kitaptan doğrulanmalı: sirkadiyen ritim tartışmasının bu bölümdeki yeri",
+        "kitaptan doğrulanmalı: İngilizce başlık ve bölüm numarası"
+      ]
+    },
+    {
+      "id": "ch6",
+      "kind": "chapter",
+      "number": 6,
+      "titleEn": "Chapter 6 (title to verify)",
+      "titleTr": "Kronik stres ve dayanıklılık",
+      "timescale": "Günler-aylar",
+      "timescaleSeconds": 2600000,
+      "summary": "Bölüm, stresin günlerden aylara uzanan birikimli etkisini inceler. Uzun süren stresin beyin bölgelerini, bağışıklık sistemini ve metabolizmayı nasıl değiştirebildiği anlatılır. Sosyal statünün stres yükünü belirleyen önemli bir etken olduğu ve sosyal desteğin bu yükü hafifletebildiği üzerinde durulur. Dayanıklılığın hem biyolojik hem sosyal bir olgu olduğu fikri bu bölümün merkezindedir.",
+      "keyConcepts": [
+        { "term": "Kronik stres", "explanation": "Uzun süre devam eden stres, vücudun düzenleyici sistemlerini sürekli zorlar ve zamanla hasara yol açabilir." },
+        { "term": "Hipokampüs ve hafıza", "explanation": "Hipokampüs, kronik stresten etkilenebilen ve hafıza işlevlerinde rol oynayan bir beyin bölgesidir." },
+        { "term": "Sosyal statü", "explanation": "Toplumsal hiyerarşideki konum, stres yükünün büyüklüğünü ve dağılımını etkiler." },
+        { "term": "Yük birikimi", "explanation": "Stres tepkisinin tekrarlanması, bedende zamanla biriken bir maliyet oluşturur." },
+        { "term": "Sosyal destek", "explanation": "Yakın ilişkiler stresin zararlı etkilerini azaltan bir tampon işlevi görebilir." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Stres Birikim Hesaplayıcı",
+          "shows": "Kısa ve uzun süreli stres olaylarının toplam yükünü, sosyal destek ve statü faktörleriyle birlikte nasıl etkilediğini gösterir.",
+          "inputs": ["Stres olayı sıklığı", "Olay şiddeti", "Sosyal destek düzeyi", "Sosyal statü"],
+          "outputs": ["Biriken stres yükü", "Hipokampüs etkinliği tahmini", "Dayanıklılık skoru"]
+        }
+      ],
+      "links": [
+        { "to": "ch3", "why": "Kısa süreli stres yanıtı, bu bölümde uzun vadeli sonuçlarıyla karşılaştırılır." },
+        { "to": "ch9", "why": "Erken yaşam stresinin yetişkinlik dönemindeki etkileri çocukluk bölümünde devam eder." },
+        { "to": "app2", "why": "Stres ekseninin geri bildirim döngüleri bu bölümün biyolojik zeminini oluşturur." }
+      ],
+      "confidence": "orta",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: sosyal statü tartışmasında hangi primat çalışmalarına yer verildiği",
+        "kitaptan doğrulanmalı: bağışıklık ve metabolizma etkilerinin bu bölümde mi yoksa başka bir bölümde mi ele alındığı",
+        "kitaptan doğrulanmalı: İngilizce başlık ve bölüm numarası"
+      ]
+    },
+    {
+      "id": "ch7",
+      "kind": "chapter",
+      "number": 7,
+      "titleEn": "Chapter 7 (title to verify)",
+      "titleTr": "Ergenlik: hormonlar ve beynin yeniden yapılanması",
+      "timescale": "Ergenlik",
+      "timescaleSeconds": 400000000,
+      "summary": "Bölüm, ergenlik dönemindeki hormonal değişimin, özellikle cinsiyet steroitlerinin, davranış üzerindeki etkisini ele alır. Bu dönemde beynin hızlı bir yeniden yapılanma geçirdiği ve ödül duyarlılığının yükseldiği vurgulanır. Ergenliğin bir gelişim penceresi olarak nasıl okunabileceği ve bu pencerenin hem risk hem fırsat taşıdığı anlatılır. Hormonal değişimin, sosyal çevreyle birlikte davranışı şekillendirdiği fikri bölümün çerçevesidir.",
+      "keyConcepts": [
+        { "term": "Puberte", "explanation": "Üreme olgunluğuna geçişi başlatan hormonal ve bedensel değişimler bütünüdür." },
+        { "term": "Cinsiyet steroitleri", "explanation": "Testosteron ve östrojen gibi hormonlar, ergenlikte beyin devrelerini ve davranışı etkiler." },
+        { "term": "Beynin yeniden yapılanması", "explanation": "Ergenlikte sinaptik bağlantılar budanır ve devreler yetişkin işleyişine göre düzenlenir." },
+        { "term": "Ödül duyarlılığı", "explanation": "Ergenlikte ödüllere verilen tepki artabilir ve bu da yeni deneyimlere yönelimi güçlendirebilir." },
+        { "term": "Gelişim penceresi", "explanation": "Ergenlik, beynin deneyimlere karşı özellikle duyarlı olduğu bir dönem olarak değerlendirilir." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Ergen Beyni Gelişim Zaman Çizelgesi",
+          "shows": "Ergenlik boyunca hormon düzeylerinin, ödül duyarlılığının ve dürtü kontrolünün birbirine göre nasıl değiştiğini gösterir.",
+          "inputs": ["Yaş", "Hormon profili", "Sosyal ortam yoğunluğu"],
+          "outputs": ["Ödül duyarlılığı eğrisi", "Dürtü kontrolü eğrisi", "Risk alma eğilimi"]
+        }
+      ],
+      "links": [
+        { "to": "ch2", "why": "Dürtü kontrolünü sağlayan prefrontal korteksin gelişimi bu bölümde ergenlik perspektifinden ele alınır." },
+        { "to": "ch8", "why": "Hormonal değişimin davranışa yansıyan sonuçları bir sonraki bölümde risk ve akran etkisiyle sürer." },
+        { "to": "ch4", "why": "Hormonların bağlama bağlı etkisi ergenlik döneminde daha belirgin olabilir." }
+      ],
+      "confidence": "düşük",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: bölümün ergenlik hormonlarına mı yoksa ergenlik beynine mi ağırlık verdiği",
+        "kitaptan doğrulanmalı: ergenlik zaman ölçeğinin kitaptaki tanımı (timescaleSeconds yaklaşık değerdir)",
+        "kitaptan doğrulanmalı: İngilizce başlık ve bölüm numarası"
+      ]
+    },
+    {
+      "id": "ch8",
+      "kind": "chapter",
+      "number": 8,
+      "titleEn": "Chapter 8 (title to verify)",
+      "titleTr": "Ergenlikte risk, akran baskısı ve yetişkinliğe geçiş",
+      "timescale": "Ergenlik",
+      "timescaleSeconds": 400000000,
+      "summary": "Bölüm, ergenlikteki risk alma eğilimini ve akran etkisini inceler. Prefrontal korteksin geç olgunlaşması ile ödül sisteminin erken olgunlaşması arasındaki zamanlama farkının risk davranışını nasıl etkilediği tartışılır. Akran baskısının bu dönemde kararları nasıl yönlendirdiği ve yetişkin sorumluluğuna geçişin biyolojik ve toplumsal boyutları ele alınır. Bölüm, ergenlik davranışının salt bir kusur değil, gelişimin bir parçası olarak da okunabileceğini gösterir.",
+      "keyConcepts": [
+        { "term": "Risk alma", "explanation": "Ödül ve tehlikenin birlikte değerlendirildiği durumlarda riskli seçeneklere yönelme eğilimidir." },
+        { "term": "Akran etkisi", "explanation": "Aynı yaştaki bireylerin varlığı, kararları ve davranışları belirgin biçimde değiştirebilir." },
+        { "term": "Geç olgunlaşma", "explanation": "Prefrontal korteks ergenlik sonrasına kadar gelişimini sürdürdüğü için yargı ve planlama kapasitesi zamanla artar." },
+        { "term": "Ödül-kontrol dengesi", "explanation": "Ödül sistemi ile kontrol sistemi arasındaki zamanlama farkı, ergenlikte riskli davranışların önemli bir açıklamasıdır." },
+        { "term": "Yetişkinliğe geçiş", "explanation": "Sorumluluk ve yargı kapasitesinin kazanılması, biyolojik ve toplumsal süreçlerin ortak ürünüdür." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Akran Etkisi Risk Simülasyonu",
+          "shows": "Bir karar anında akran varlığının ve ödül beklentisinin risk alma olasılığını nasıl değiştirdiğini gösterir.",
+          "inputs": ["Akran sayısı", "Ödül büyüklüğü", "Risk büyüklüğü", "Prefrontal kontrol olgunluğu"],
+          "outputs": ["Riskli seçim olasılığı", "Kararın zamanlaması", "Yaşa göre değişim eğrisi"]
+        }
+      ],
+      "links": [
+        { "to": "ch7", "why": "Ergenlik hormonları ve beyin yeniden yapılanması bu bölümün biyolojik öncülüdür." },
+        { "to": "ch14", "why": "Akran etkisi ve sosyal norm tartışması kültür bölümleriyle doğal bir bağ kurar." },
+        { "to": "ch2", "why": "Dürtü kontrolünün prefrontal korteksle ilişkisi bir önceki bölümde ayrıntılanmıştır." }
+      ],
+      "confidence": "düşük",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: akran etkisinin bu bölümde mi yoksa kültür bölümlerinde mi ağırlıklı işlendiği",
+        "kitaptan doğrulanmalı: geç olgunlaşma ve ödül-kontrol dengesi tartışmasının kitaptaki kapsamı",
+        "kitaptan doğrulanmalı: İngilizce başlık ve bölüm numarası"
+      ]
+    },
+    {
+      "id": "ch9",
+      "kind": "chapter",
+      "number": 9,
+      "titleEn": "Chapter 9 (title to verify)",
+      "titleTr": "Çocukluk: bakım, bağlanma ve erken öğrenme",
+      "timescale": "Çocukluk",
+      "timescaleSeconds": 700000000,
+      "summary": "Bölüm, çocukluk döneminde alınan bakımın kalitesinin stres yanıtını ve sosyal davranışı nasıl programladığını ele alır. Hayvan çalışmalarından elde edilen bulguların, anne bakımının yavrunun stres sisteminde kalıcı izler bıraktığını gösterdiği anlatılır. Bağlanmanın ve erken yaşam deneyimlerinin, öğrenme pencereleri içinde biyolojik sonuçlar doğurduğu vurgulanır. Bölüm, bu bulguların insan çocukluğuna nasıl aktarılabileceğini de tartışır.",
+      "keyConcepts": [
+        { "term": "Erken bakım", "explanation": "Yavrunun ilk dönemde aldığı ilgi ve dokunuş, stres sisteminin gelişimini etkileyebilir." },
+        { "term": "Bağlanma", "explanation": "Çocuk ile bakım veren arasındaki güvenli ilişki, sonraki sosyal ve duygusal davranışların zeminini oluşturur." },
+        { "term": "Stres sisteminin programlanması", "explanation": "Erken yaşam deneyimleri, stres ekseninin tepki eşiğini uzun süre belirleyebilir." },
+        { "term": "Erken yaşam stresi", "explanation": "Çocukluktaki kötü koşullar, yetişkinlikte stres ve hastalık riskiyle ilişkilendirilmiştir." },
+        { "term": "Öğrenme pencereleri", "explanation": "Bazı beceriler ve biyolojik ayarlar yalnızca belirli dönemlerde kolayca şekillenir." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Bakım Kalitesi ve Stres Yanıtı",
+          "shows": "Erken dönemdeki bakım kalitesinin yetişkinlikte stres tepkisinin büyüklüğünü ve süresini nasıl etkilediğini gösterir.",
+          "inputs": ["Bakım kalitesi", "Erken stres süresi", "Yetişkinlik stres olayı"],
+          "outputs": ["Stres yanıtı büyüklüğü", "Yanıtın toparlanma süresi", "Sosyal davranış eğilimi"]
+        }
+      ],
+      "links": [
+        { "to": "ch6", "why": "Kronik stresin birikimi, bu bölümde erken yaşam perspektifinden devam eder." },
+        { "to": "ch10", "why": "Bakım ortamının yanında sosyal sınıf ve yoksulluk bir sonraki bölümde ele alınır." },
+        { "to": "ch11", "why": "Erken yaşam programlamasının köklerinin doğum öncesi döneme uzandığı bir sonraki adımda incelenir." }
+      ],
+      "confidence": "orta",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: hangi hayvan çalışmalarının (ör. anne bakımı deneyleri) bu bölümde anıldığı",
+        "kitaptan doğrulanmalı: insan çocukluğuna ilişkin bulguların kapsamı",
+        "kitaptan doğrulanmalı: İngilizce başlık ve bölüm numarası"
+      ]
+    },
+    {
+      "id": "ch10",
+      "kind": "chapter",
+      "number": 10,
+      "titleEn": "Chapter 10 (title to verify)",
+      "titleTr": "Çocukluk: yoksulluk, sosyal sınıf ve biyoloji",
+      "timescale": "Çocukluk",
+      "timescaleSeconds": 700000000,
+      "summary": "Bölüm, sosyal sınıfın ve yoksulluğun çocukluk biyolojisine nasıl gömüldüğünü ele alır. Gelir eşitsizliğinin, beslenme, stres ve öğrenme ortamı üzerinden biyolojik sonuçlar doğurabildiği anlatılır. Eşitsizliğin tek bir etkenle değil, birbirine bağlı birçok etkenle işlediği vurgulanır. Bölüm, bu tabloya bakarak politika ve toplumsal müdahale tartışmasını açar.",
+      "keyConcepts": [
+        { "term": "Sosyoekonomik statü", "explanation": "Gelir, eğitim ve meslek gibi göstergelerle ölçülen toplumsal konum, sağlık ve davranışla ilişkilidir." },
+        { "term": "Biyolojik gömülme", "explanation": "Sosyal koşulların bedende fiziksel izler bırakarak uzun vadeli sonuçlar üretmesi fikridir." },
+        { "term": "Erken yaşam belirleyicileri", "explanation": "Çocukluk döneminin koşulları, sonraki yaşamın sağlık ve öğrenme sonuçlarını etkileyebilir." },
+        { "term": "Eşitsizliğin çok katmanlılığı", "explanation": "Yoksulluk, tek bir mekanizma yerine beslenme, stres ve çevresel etkenlerin birleşimiyle işler." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Sosyal Sınıf Birikim Simülasyonu",
+          "shows": "Farklı sosyal koşullarda büyüyen çocukların zamanla biriken stres ve sağlık yükünü karşılaştırır.",
+          "inputs": ["Gelir düzeyi", "Beslenme kalitesi", "Stres kaynakları", "Eğitim erişimi"],
+          "outputs": ["Biriken biyolojik yük", "Yetişkinlik sonuç tahmini", "Müdahale etkisi karşılaştırması"]
+        }
+      ],
+      "links": [
+        { "to": "ch9", "why": "Bakım kalitesi tartışması, bu bölümde sosyal sınıf etkenleriyle genişler." },
+        { "to": "ch13", "why": "Çevresel koşulların genetik ifadeyi nasıl değiştirdiği bir sonraki bölümde incelenir." }
+      ],
+      "confidence": "düşük",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: sosyal sınıf tartışmasının bu bölümde mi yoksa başka bir bölümde mi yer aldığı",
+        "kitaptan doğrulanmalı: yoksulluğun hangi biyolojik mekanizmalarla ilişkilendirildiği",
+        "kitaptan doğrulanmalı: İngilizce başlık ve bölüm numarası"
+      ]
+    },
+    {
+      "id": "ch11",
+      "kind": "chapter",
+      "number": 11,
+      "titleEn": "Chapter 11 (title to verify)",
+      "titleTr": "Rahim ortamı ve fetal programlama",
+      "timescale": "Rahim içi dönem",
+      "timescaleSeconds": 900000000,
+      "summary": "Bölüm, doğum öncesi dönemdeki ortamın, özellikle annenin stresinin ve beslenmesinin, gelişmekte olan beyin ve stres sistemi üzerindeki etkisini ele alır. Fetal programlama fikri, erken yaşamda oluşan biyolojik ayarların yetişkinlik dönemine taşınabileceğini öne sürer. Plasentanın bu süreçte bir filtre ve aracı görevi gördüğü tartışılır. Bölüm, bu bulguların yorumlanırken dikkat edilmesi gereken sınırlılıkları da hatırlatır.",
+      "keyConcepts": [
+        { "term": "Fetal programlama", "explanation": "Rahim içindeki koşulların, gelişmekte olan organizmada uzun vadeli biyolojik ayarlar oluşturması fikridir." },
+        { "term": "Anne stresi ve plasenta", "explanation": "Plasenta, anneden gelen bazı sinyalleri ve maddeleri düzenleyerek fetüsün ortamını şekillendirir." },
+        { "term": "Fetal beyin gelişimi", "explanation": "Beynin yapısı ve devreleri doğum öncesi dönemde büyük ölçüde şekillenmeye başlar." },
+        { "term": "Doğum öncesi besin ortamı", "explanation": "Annenin beslenme durumu, gelişmekte olan organizmanın metabolik ayarlarını etkileyebilir." },
+        { "term": "Uzun vadeli sonuçlar", "explanation": "Erken yaşam etkileri, yıllar sonra sağlık ve davranış farklılıklarına dönüşebilir." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Anne Stresi, Plasenta Filtresi",
+          "shows": "Annenin stres düzeyinin plasenta üzerinden fetüse ulaşan sinyali nasıl değiştirdiğini ve bunun gelişim eğrisine yansımasını gösterir.",
+          "inputs": ["Anne stres düzeyi", "Plasenta filtre etkinliği", "Beslenme durumu", "Gebelik haftası"],
+          "outputs": ["Fetal stres sinyali", "Gelişim eğrisi", "Doğum sonrası tepki eğilimi"]
+        }
+      ],
+      "links": [
+        { "to": "ch9", "why": "Doğum öncesi programlamanın etkileri çocukluk bakımıyla birlikte değerlendirilir." },
+        { "to": "ch12", "why": "Genetik temeller bir sonraki bölümde, rahim ortamıyla birlikte ele alınacak kalıtımın bir parçası olarak gelir." },
+        { "to": "ch13", "why": "Gen ifadesinin çevreyle değişimi, doğum öncesi programlamanın moleküler zeminini açıklar." }
+      ],
+      "confidence": "düşük",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: fetal programlama tartışmasının bu bölümde mi yoksa çocukluk bölümünde mi ağırlıklı olduğu",
+        "kitaptan doğrulanmalı: plasentanın rolüne ilişkin anlatımın kapsamı",
+        "kitaptan doğrulanmalı: rahim içi dönemin zaman ölçeği (timescaleSeconds yaklaşık değerdir)",
+        "kitaptan doğrulanmalı: İngilizce başlık ve bölüm numarası"
+      ]
+    },
+    {
+      "id": "ch12",
+      "kind": "chapter",
+      "number": 12,
+      "titleEn": "Chapter 12 (title to verify)",
+      "titleTr": "Genler: kalıtım ve davranışsal eğilimler",
+      "timescale": "Döllenme ve genler",
+      "timescaleSeconds": 950000000,
+      "summary": "Bölüm, genetik etkilerin davranış üzerindeki payını ve bu payın nasıl ölçüldüğünü ele alır. Kalıtım kavramının çoğu zaman yanlış anlaşıldığı, bir özelliğin kalıtım oranının bireysel bir gen etkisi anlamına gelmediği vurgulanır. Tek bir gen ile karmaşık davranış arasında kurulan basit bağlantıların tartışmalı olduğu ve birçok genin küçük etkilerinin birleşebildiği anlatılır. Bölüm, genetik bilginin toplumda yanlış kullanımına karşı dikkatli olunması gerektiğini de hatırlatır.",
+      "keyConcepts": [
+        { "term": "Gen ve allel", "explanation": "Gen, bir özelliği kodlayan DNA bölgesidir; allel ise aynı genin farklı biçimleridir." },
+        { "term": "Kalıtım oranı", "explanation": "Bir özellikteki bireyler arası farkın ne kadarının genetik farklılıklarla açıklandığını gösteren bir istatistiksel ölçüdür ve belirli bir popülasyon ve ortam için geçerlidir." },
+        { "term": "İkiz çalışmaları", "explanation": "Tek yumurta ve çift yumurta ikizlerinin karşılaştırılması, genetik ve çevresel etkilerin ayrıştırılmasında kullanılır." },
+        { "term": "Tek gen iddialarının sorunları", "explanation": "Bir geni 'bir davranış geni' olarak tanımlamak, genin ortama bağlı etkisini ve çok genli yapıyı gözden kaçırabilir." },
+        { "term": "Poligenik etki", "explanation": "Karmaşık davranışlar genellikle çok sayıda genin küçük katkılarının toplamıyla şekillenir." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Kalıtım Yüzdesi Yanılgısı",
+          "shows": "Kalıtım oranının popülasyona ve ortama bağlı olarak nasıl değiştiğini, bireysel bir kader anlamına gelmediğini gösterir.",
+          "inputs": ["Genetik varyans", "Çevresel varyans", "Ortam çeşitliliği"],
+          "outputs": ["Hesaplanan kalıtım oranı", "Ortam değiştiğinde oranın değişimi", "Bireysel tahmin ile popülasyon tahmini farkı"]
+        }
+      ],
+      "links": [
+        { "to": "app3", "why": "Genin proteine dönüşümü, bu bölümde tartışılan genetik etkilerin biyokimyasal zeminini açıklar." },
+        { "to": "ch13", "why": "Genlerin çevreyle nasıl etkileştiği, kalıtım tartışmasının sınırlarını genişletir." },
+        { "to": "ch16", "why": "Genetik değişimin evrimsel süreçteki rolü, bir sonraki büyük zaman basamağında ele alınır." }
+      ],
+      "confidence": "düşük",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: tek gen (ör. MAOA) tartışmasının bu bölümde yer alıp almadığı",
+        "kitaptan doğrulanmalı: kalıtım oranı tanımının kitaptaki anlatımıyla uyumu",
+        "kitaptan doğrulanmalı: İngilizce başlık ve bölüm numarası",
+        "kitaptan doğrulanmalı: 'döllenme' ve 'genler' zaman ölçeği etiketinin bölüm içeriğine uygunluğu"
+      ]
+    },
+    {
+      "id": "ch13",
+      "kind": "chapter",
+      "number": 13,
+      "titleEn": "Chapter 13 (title to verify)",
+      "titleTr": "Gen–çevre etkileşimi ve epigenetik",
+      "timescale": "Döllenme ve genler",
+      "timescaleSeconds": 950000000,
+      "summary": "Bölüm, genlerin çevreden bağımsız olarak değil, çevreyle etkileşerek işlediğini gösterir. Epigenetik mekanizmalar, DNA dizisi değişmeden gen ifadesinin nasıl değişebildiğini açıklar. Erken yaşam deneyimlerinin bu mekanizmalar yoluyla uzun vadeli izler bırakabileceği tartışılır. Bölüm, gen-çevre etkileşiminin hem umut verici hem de dikkatle yorumlanması gereken bir alan olduğunu vurgular.",
+      "keyConcepts": [
+        { "term": "Epigenetik", "explanation": "DNA dizisinde değişiklik olmadan gen ifadesinin değişmesini inceleyen alandır." },
+        { "term": "DNA metilasyonu", "explanation": "DNA'ya kimyasal grupların eklenmesi, genin ne kadar okunacağını etkileyebilen bir epigenetik işarettir." },
+        { "term": "Gen ifadesi", "explanation": "Bir genin proteine ne ölçüde çevrildiğini belirleyen süreçtir." },
+        { "term": "Gen-çevre etkileşimi", "explanation": "Aynı genetik yapının farklı çevrelerde farklı sonuçlar üretmesi durumudur." },
+        { "term": "Gen-çevre korelasyonu", "explanation": "Bireylerin hem genlerinin hem çevrelerinin birbiriyle ilişkili olabilmesi, nedenselliği karmaşıklaştırır." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Gen İfadesi Düğmeleri",
+          "shows": "Çevresel bir uyaranın gen ifadesi üzerindeki düğmeleri nasıl açıp kapattığını ve davranışsal sonucu gösterir.",
+          "inputs": ["Stres veya bakım düzeyi", "Gen varyantı", "Epigenetik işaret yoğunluğu"],
+          "outputs": ["Gen ifadesi düzeyi", "Davranış eğilimi", "İşaretin zaman içinde kalıcılığı"]
+        }
+      ],
+      "links": [
+        { "to": "ch9", "why": "Erken bakımın gen ifadesine etkisi bu bölümde moleküler düzeyde açıklanabilir." },
+        { "to": "ch12", "why": "Kalıtım tartışması, gen-çevre etkileşimiyle birlikte daha dengeli bir çerçeveye oturur." },
+        { "to": "app3", "why": "Transkripsiyon faktörleri ve protein işleyişi gen ifadesinin temel mekanizmasını oluşturur." }
+      ],
+      "confidence": "düşük",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: epigenetik tartışmasının bu bölümde mi yoksa çocukluk/rahim bölümlerinde mi ağırlıklı olduğu",
+        "kitaptan doğrulanmalı: DNA metilasyonu ile ilgili örnek çalışmaların kitaptaki yeri",
+        "kitaptan doğrulanmalı: İngilizce başlık ve bölüm numarası"
+      ]
+    },
+    {
+      "id": "ch14",
+      "kind": "chapter",
+      "number": 14,
+      "titleEn": "Chapter 14 (title to verify)",
+      "titleTr": "Kültür: normlar, ahlak ve grup kimliği",
+      "timescale": "Yüzyıllar-binyıllar (kültür)",
+      "timescaleSeconds": 3000000000,
+      "summary": "Bölüm, kültürün sosyal normlar ve ahlaki sezgiler aracılığıyla davranışı nasıl şekillendirdiğini ele alır. İnsanların gruplara ayrılma ve içgrup-dışgrup ayrımı yapma eğiliminin nasıl ortaya çıktığı tartışılır. Ahlaki yargının çoğu zaman duygusal sezgilerle başladığı ve sonradan gerekçelendirildiği fikri öne çıkar. Bölüm, kültürel öğrenmenin hem iş birliğini hem de dışlamayı besleyebildiğini gösterir.",
+      "keyConcepts": [
+        { "term": "Sosyal norm", "explanation": "Bir grupta beklenen ve uygun görülen davranış kurallarıdır; uyulmadığında sosyal bedel doğurur." },
+        { "term": "Ahlaki sezgi", "explanation": "Ahlaki yargıların çoğu zaman düşünceden önce duygusal bir tepkiyle oluşmasıdır." },
+        { "term": "İçgrup ve dışgrup", "explanation": "İnsanların kendi gruplarını kayırma ve diğer grupları ayırma eğilimi, kültürel kimliğin önemli bir yönüdür." },
+        { "term": "Kültürel öğrenme", "explanation": "Davranışların gözlem ve taklit yoluyla kuşaklar boyunca aktarılmasıdır." },
+        { "term": "Ahlakın duygusal zemini", "explanation": "Ahlaki karar verme, akıl yürütmeden önce gelen duygusal değerlendirmelerle şekillenir." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Norm Yayılım Simülasyonu",
+          "shows": "Bir sosyal normun bir topluluk içinde nasıl yayıldığını ve yaygınlaşmasını hangi etkenlerin hızlandırdığını gösterir.",
+          "inputs": ["Başlangıç norm sahipleri oranı", "Sosyal bedel", "Bağlantı yoğunluğu", "İçgrup kayırma düzeyi"],
+          "outputs": ["Norm yayılım eğrisi", "Dışlanan grup oranı", "Denge durumu"]
+        }
+      ],
+      "links": [
+        { "to": "ch8", "why": "Akran etkisi, bu bölümde sosyal normların geniş ölçekteki karşılığıyla birlikte değerlendirilir." },
+        { "to": "ch15", "why": "Grup kimliği ve inanç tartışması, kültür bölümünün devamında ayrıntılanır." },
+        { "to": "ch16", "why": "Kültürel davranışların evrimsel kökenleri bir sonraki bölümde ele alınır." }
+      ],
+      "confidence": "düşük",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: bu bölümün hangi kültür ve norm çalışmalarına dayandığı",
+        "kitaptan doğrulanmalı: ahlaki sezgi tartışmasının bu bölüme mi ait olduğu",
+        "kitaptan doğrulanmalı: İngilizce başlık ve bölüm numarası",
+        "kitaptan doğrulanmalı: kültür için kullanılan zaman ölçeği (yaklaşık değerdir)"
+      ]
+    },
+    {
+      "id": "ch15",
+      "kind": "chapter",
+      "number": 15,
+      "titleEn": "Chapter 15 (title to verify)",
+      "titleTr": "İnanç, din ve grup davranışı",
+      "timescale": "Yüzyıllar-binyıllar (kültür)",
+      "timescaleSeconds": 3000000000,
+      "summary": "Bölüm, din ve inanç sistemlerinin sosyal bağ ve grup dayanışması üzerindeki etkisini inceler. İnançların hem iş birliğini ve yardımlaşmayı güçlendirebildiği hem de dışgruplara karşı düşmanlığı besleyebildiği tartışılır. Dogmatizmin ve grup içi kimliğin empati sınırlarını nasıl belirlediği üzerinde durulur. Bölüm, kültürel farklılıklar karşısında insanların nasıl tepki verdiğini ve bunun bilimsel olarak nasıl anlaşılabileceğini ele alır.",
+      "keyConcepts": [
+        { "term": "Din ve sosyal bağ", "explanation": "Ortak inançlar ve ritüeller, grup üyeleri arasında güven ve dayanışma oluşturabilir." },
+        { "term": "Kültürel farklılıklar", "explanation": "Farklı toplumların aynı duruma farklı tepkiler vermesi, kültürel öğrenmenin sonucudur." },
+        { "term": "Dogmatizm", "explanation": "Değişmeyen inanç yapısı, farklı görüşlere karşı kapalılığı artırabilir." },
+        { "term": "Grup içi düşmanlık", "explanation": "Grup kimliği güçlendikçe dışgruba yönelik olumsuz tutumlar artabilir." },
+        { "term": "Empati sınırları", "explanation": "İnsanların empatisi çoğunlukla kendi grubuyla sınırlı kalma eğilimindedir." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Grup Kimliği ve Empati Ölçeği",
+          "shows": "Grup kimliğinin güçlenmesinin empatik tepkiyi nasıl daralttığını ve dayanışmayı nasıl artırdığını gösterir.",
+          "inputs": ["Grup kimliği güçlülüğü", "Ortak ritüel sıklığı", "Dışgrup temas düzeyi"],
+          "outputs": ["Empati skoru", "Dayanışma eğilimi", "Dışgruba yönelik tutum"]
+        }
+      ],
+      "links": [
+        { "to": "ch14", "why": "Sosyal normlar ve ahlak tartışması, bu bölümde inanç sistemleri üzerinden genişler." },
+        { "to": "ch16", "why": "Grup dayanışmasının evrimsel kökenleri bir sonraki bölümde ele alınır." }
+      ],
+      "confidence": "düşük",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: din tartışmasının bu bölümde mi yoksa ayrı bir bölümde mi ağırlıklı olduğu",
+        "kitaptan doğrulanmalı: grup içi düşmanlık ve empati sınırları örneklerinin kitaptaki yeri",
+        "kitaptan doğrulanmalı: İngilizce başlık ve bölüm numarası"
+      ]
+    },
+    {
+      "id": "ch16",
+      "kind": "chapter",
+      "number": 16,
+      "titleEn": "Chapter 16 (title to verify)",
+      "titleTr": "Evrimsel açıklamalar: akrabalık ve iş birliği",
+      "timescale": "Evrim",
+      "timescaleSeconds": 100000000000,
+      "summary": "Bölüm, iş birliği ve yardımlaşma gibi davranışların evrimsel açıklamalarını ele alır. Akraba seçilimi ile karşılıklı fayda ilkesinin, bireylerin neden başkalarına yardım ettiğini nasıl açıklayabildiği anlatılır. Uyarlamacı davranışın her zaman yararlı sonuçlar doğurmadığı ve evrimsel açıklamanın nihai nedenleri aydınlattığı ancak bugünkü davranışı tek başına belirlemediği vurgulanır. Bölüm, evrimsel açıklamaların sınırlarını da tartışır.",
+      "keyConcepts": [
+        { "term": "Doğal seçilim", "explanation": "Belirli özellikler taşıyan bireylerin daha fazla üremesi sonucu bu özelliklerin popülasyonda yaygınlaşmasıdır." },
+        { "term": "Akraba seçilimi", "explanation": "Yakın akrabalara yardım, paylaşılan genlerin yayılmasına katkı sağlayabileceği için evrimsel olarak avantajlı olabilir." },
+        { "term": "Karşılıklı fayda", "explanation": "İki bireyin birbirine yardım edip ilerleyen dönemde karşılık görmesi, iş birliğinin bir açıklamasıdır." },
+        { "term": "Uyarlamacı davranış", "explanation": "Bir davranışın geçmişte üreme başarısını artırmış olması, bugünkü her durumda yararlı olduğu anlamına gelmez." },
+        { "term": "Nihai neden ve sınırları", "explanation": "Evrimsel açıklama, bir davranışın neden var olduğunu açıklar; ama bugün nasıl işlediğini tek başına belirlemez." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Akraba Seçilimi Oyunu",
+          "shows": "Yardım davranışının akrabalık oranına ve karşılıklılığa bağlı olarak popülasyonda nasıl yayıldığını gösterir.",
+          "inputs": ["Akrabalık oranı", "Yardım maliyeti", "Karşılık olasılığı", "Nüfus büyüklüğü"],
+          "outputs": ["Yardım davranışının yayılım eğrisi", "Denge noktası", "Kazanç dağılımı"]
+        }
+      ],
+      "links": [
+        { "to": "intro", "why": "Nihai ve yakın neden ayrımı, girişte kurulan çerçevenin evrimsel uzantısıdır." },
+        { "to": "ch12", "why": "Genetik değişkenlik ve doğal seçilim arasındaki ilişki bu bölümde evrimsel düzeyde ele alınır." },
+        { "to": "ch17", "why": "Evrimsel açıklamanın sınırları bir sonraki bölümde insan doğası tartışmasıyla genişler." }
+      ],
+      "confidence": "düşük",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: akraba seçilimi ve karşılıklı fayda tartışmasının bu bölümde yer alıp almadığı",
+        "kitaptan doğrulanmalı: bölümün zaman ölçeği etiketi (evrim, yaklaşık değerdir)",
+        "kitaptan doğrulanmalı: İngilizce başlık ve bölüm numarası"
+      ]
+    },
+    {
+      "id": "ch17",
+      "kind": "chapter",
+      "number": 17,
+      "titleEn": "Chapter 17 (title to verify)",
+      "titleTr": "İnsan doğasının evrimsel kökenleri ve sınırları",
+      "timescale": "Evrim",
+      "timescaleSeconds": 100000000000,
+      "summary": "Bölüm, insan davranışının evrimsel kökenlerini bütünleştiren bir değerlendirme sunar. Doğal seçilim ile kültürel seçilimin birlikte nasıl çalıştığı ve bazı davranışların uyarlama değil yan ürün olabileceği tartışılır. Evrimsel psikolojinin bazen yaptığı aşırı basitleştirmelerin eleştirisi de bu bölümün bir parçasıdır. Tarihsel kısıtların insan davranışını nasıl sınırladığı ve bugünkü ahlaki sorunların bu geçmişle nasıl ilişkili olduğu üzerinde durulur.",
+      "keyConcepts": [
+        { "term": "Evrimsel psikoloji eleştirisi", "explanation": "Her davranışa evrimsel bir hikâye uydurmanın bilimsel olarak sorunlu olabileceği uyarısıdır." },
+        { "term": "Yan ürün", "explanation": "Bir özelliğin doğrudan uyarlama olmayıp başka bir özelliğin kaçınılmaz sonucu olarak ortaya çıkmasıdır." },
+        { "term": "Kültürel ve doğal seçilim", "explanation": "Genetik seçilim ile kültürel öğrenmenin birbirini etkileyerek ilerlemesidir." },
+        { "term": "Tarihsel kısıtlar", "explanation": "Evrimin mevcut yapıları sıfırdan tasarlamaması, davranışın bazı sınırlarını açıklar." },
+        { "term": "Evrim ve ahlak", "explanation": "Ahlaki sezgilerin evrimsel kökenleri, bu sezgilerin her zaman doğru olduğu anlamına gelmez." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Uyarlama mı, Yan Ürün mü?",
+          "shows": "Bir davranışın uyarlama mı yoksa yan ürün mü olduğunu ayırt etmek için kullanılan karşılaştırmalı mantığı gösterir.",
+          "inputs": ["Davranışın üreme katkısı", "Başka özelliklerle ilişkisi", "Kültürel öğrenme düzeyi"],
+          "outputs": ["Açıklama olasılıkları", "Hangi kanıtın hangi açıklamayı desteklediği", "Belirsizlik düzeyi"]
+        }
+      ],
+      "links": [
+        { "to": "ch16", "why": "Akraba seçilimi ve iş birliği açıklamaları, bu bölümde insan doğası çerçevesinde değerlendirilir." },
+        { "to": "epilogue", "why": "Evrimsel kökenlerin sorumluluk tartışmasına etkisi sonsözde toparlanır." },
+        { "to": "intro", "why": "Girişteki zaman merdiveninin en uç basamağı bu bölümde kapanır." }
+      ],
+      "confidence": "düşük",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: evrimsel psikoloji eleştirisinin bu bölümde mi yoksa başka bir bölümde mi yer aldığı",
+        "kitaptan doğrulanmalı: yan ürün ve tarihsel kısıt kavramlarının kitaptaki kullanımı",
+        "kitaptan doğrulanmalı: İngilizce başlık ve bölüm numarası"
+      ]
+    },
+    {
+      "id": "epilogue",
+      "kind": "epilogue",
+      "number": null,
+      "titleEn": "Epilogue",
+      "titleTr": "Sonsöz",
+      "timescale": null,
+      "timescaleSeconds": null,
+      "summary": "Sonsöz, kitabın boyunca kurulan katmanlı nedensellik çerçevesini toparlar. Bir davranışın birçok zaman ölçeğinde şekillendiği bilindiğinde özgür irade ve sorumluluk kavramlarının nasıl yeniden düşünülebileceği tartışılır. Nedenleri anlamanın yargıyı tamamen ortadan kaldırmadığı, ama anlayış ve merhamet için bir zemin oluşturabileceği vurgulanır. Bilimsel alçakgönüllülüğün ve toplumsal politikaya yansımalarının önemi son söz olarak öne çıkar.",
+      "keyConcepts": [
+        { "term": "Özgür irade tartışması", "explanation": "Davranışın birçok biyolojik ve çevresel nedene bağlı olması, özgür iradenin doğasına dair sorular açar." },
+        { "term": "Sorumluluk ve adalet", "explanation": "Nedenlerin karmaşıklığı, sorumluluğun tamamen ortadan kalkması anlamına gelmeyebilir ama ölçüsünü değiştirebilir." },
+        { "term": "Anlayış ve yargı", "explanation": "Bir davranışın nedenlerini anlamak, onu yargılamayı ya da engellemeyi bırakmak anlamına gelmez." },
+        { "term": "Biyoloji ve toplum politikası", "explanation": "Biyolojik bulguların toplumsal eşitlik ve müdahale politikalarına yansıması dikkatli bir değerlendirme gerektirir." },
+        { "term": "Bilimsel alçakgönüllülük", "explanation": "Karmaşık davranışları tek bir açıklamaya indirgememek, bilimin doğal bir tutumudur." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Nedensellik Katmanları Haritası",
+          "shows": "Bir davranışın farklı zaman ölçeklerindeki nedenlerinin, sorumluluk ve anlayış açısından nasıl farklı ağırlıklar taşıyabileceğini gösterir.",
+          "inputs": ["Davranış seçimi", "Her katmanın ağırlığı", "Sorumluluk çerçevesi"],
+          "outputs": ["Katman bazlı açıklama haritası", "Sorumluluk ağırlığı değişimi"]
+        }
+      ],
+      "links": [
+        { "to": "intro", "why": "Sonsöz, girişte kurulan zaman merdiveninin son değerlendirmesi olarak okunabilir." },
+        { "to": "ch2", "why": "Bir saniye önceki karar devreleri, özgür irade tartışmasının en somut örneğini sunar." },
+        { "to": "app1", "why": "Nörobilimsel temeller, sonsözdeki tartışmanın biyolojik zeminini hatırlatır." }
+      ],
+      "confidence": "orta",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: sonsözdeki özgür irade ve sorumluluk argümanlarının kitaptaki tam anlatımı",
+        "kitaptan doğrulanmalı: sonsözün kapsadığı son örnekler"
+      ]
+    },
+    {
+      "id": "app1",
+      "kind": "appendix",
+      "number": 1,
+      "titleEn": "Neuroscience 101",
+      "titleTr": "Nörobilim 101",
+      "timescale": null,
+      "timescaleSeconds": null,
+      "summary": "Ek, kitabın okunmasına zemin hazırlayan temel nörobilim kavramlarını özetler. Nöronların elektriksel sinyal üretme biçimi, sinapslar üzerinden iletim ve nörotransmitterlerin rolü temel başlıklardır. Beyin bölgelerinin genel işlevleri de kısaca tanıtılır. Bu ek, ana metindeki devre tartışmalarını izlemek için bir başvuru kaynağı işlevi görür.",
+      "keyConcepts": [
+        { "term": "Nöron ve aksiyon potansiyeli", "explanation": "Nöronlar, zarlarındaki iyon hareketleriyle oluşan elektriksel sinyali bir uçtan diğerine iletir." },
+        { "term": "Sinaps", "explanation": "Nöronlar arasındaki bağlantı noktası olup sinyalin kimyasal olarak aktarıldığı yerdir." },
+        { "term": "Nörotransmitter", "explanation": "Sinaptik aralıkta salınan ve karşı nörondaki reseptörlere bağlanarak sinyali ileten kimyasal haberci maddelerdir." },
+        { "term": "Reseptör", "explanation": "Hücre yüzeyinde ya da içinde bulunan ve belirli bir moleküle bağlanarak tepkiyi başlatan yapılardır." },
+        { "term": "Beyin bölgeleri", "explanation": "Amigdala, hipokampüs ve prefrontal korteks gibi bölgeler, farklı işlevleri üstlenen ağların parçalarıdır." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Sinaptik İletim Simülatörü",
+          "shows": "Nörotransmitter miktarı ve reseptör sayısının sinyal şiddetini nasıl belirlediğini gösterir.",
+          "inputs": ["Nörotransmitter miktarı", "Reseptör sayısı", "Geri alım hızı"],
+          "outputs": ["Sonsuz sinyal şiddeti grafiği", "Sinaptik yanıt süresi"]
+        }
+      ],
+      "links": [
+        { "to": "ch2", "why": "Amigdala, prefrontal korteks ve dopamin devrelerinin temel iletim mantığı bu ekte açıklanır." },
+        { "to": "app3", "why": "Reseptörlerin protein yapısı, proteinler ekinde ayrıntılanır." }
+      ],
+      "confidence": "orta",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: Ek 1'de hangi beyin bölgelerinin ve nörotransmitterlerin ele alındığı",
+        "kitaptan doğrulanmalı: Türkçe ek başlığının çeviride kullanılan karşılığı"
+      ]
+    },
+    {
+      "id": "app2",
+      "kind": "appendix",
+      "number": 2,
+      "titleEn": "Endocrinology 101",
+      "titleTr": "Endokrinoloji 101",
+      "timescale": null,
+      "timescaleSeconds": null,
+      "summary": "Ek, hormonların üretildiği bezleri ve bunları birbirine bağlayan eksenleri anlatır. HPA ekseni ile stres hormonlarının, HPG ekseni ile üreme hormonlarının işleyişi temel alınır. Reseptörlerin hormon etkisini nasıl belirlediği ve hormonların ne kadar süre etkili kaldığı üzerinde durulur. Geri bildirim döngüleri, ana metindeki hormonal tartışmaların anlaşılması için merkezi bir çerçeve sunar.",
+      "keyConcepts": [
+        { "term": "HPA ekseni", "explanation": "Hipotalamus, hipofiz ve böbrek üstü bezi arasındaki zincir olup stres hormonlarının salınımını düzenler." },
+        { "term": "HPG ekseni", "explanation": "Hipotalamus, hipofiz ve gonadlar arasındaki zincir olup üreme hormonlarını yönetir." },
+        { "term": "Reseptör duyarlılığı", "explanation": "Hormonun etkisi, hedef hücredeki reseptörlerin sayısına ve duyarlılığına bağlıdır." },
+        { "term": "Hormon süresi", "explanation": "Bir hormonun kanda ve hedef dokuda ne kadar kalacağı, etkisinin süresini belirler." },
+        { "term": "Geri bildirim döngüsü", "explanation": "Hormonun kendi üretimini artırabilir ya da azaltabilir; bu döngüler sistemin dengesini sağlar." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Endokrin Eksen",
+          "shows": "HPA ve HPG eksenlerinin, reseptör duyarlılığının ve hormon süresinin birlikte nasıl işlediğini gösterir. Bu simülasyon kullanıcının mevcut uygulamasıdır.",
+          "inputs": ["Uyaran şiddeti", "Reseptör duyarlılığı", "Hormon yarılanma süresi", "Geri bildirim gücü"],
+          "outputs": ["Hormon düzeyleri zaman çizelgesi", "Reseptör doygunluk eğrisi", "Dengeye dönüş süresi"]
+        },
+        {
+          "title": "Geri Bildirim Döngüsü Uygulaması",
+          "shows": "Negatif ve pozitif geri bildirimin hormon düzeyini nasıl dengelediğini ya da uçlara taşıdığını karşılaştırır.",
+          "inputs": ["Geri bildirim tipi", "Gecikme süresi", "Başlangıç hormon düzeyi"],
+          "outputs": ["Salınım grafiği", "Denge veya kontrolsüz artış durumu"]
+        }
+      ],
+      "links": [
+        { "to": "ch3", "why": "Stres yanıtının hormonal ayağı, HPA ekseni bu ekte açıklanır." },
+        { "to": "ch4", "why": "Testosteron ve oksitosin gibi hormonların etkisini anlamak için bu ek gerekli bir arka plan sunar." },
+        { "to": "ch6", "why": "Kronik stres tartışması, HPA ekseninin uzun süreli çalışmasına dayanır." }
+      ],
+      "confidence": "orta",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: Ek 2'nin kapsadığı bezlerin ve hormonların tam listesi",
+        "kitaptan doğrulanmalı: ikinci simülasyon fikrinin kitapla uyumu (kullanıcı uygulamasının kapsamına göre güncellenebilir)"
+      ]
+    },
+    {
+      "id": "app3",
+      "kind": "appendix",
+      "number": 3,
+      "titleEn": "Proteins 101",
+      "titleTr": "Proteinler 101",
+      "timescale": null,
+      "timescaleSeconds": null,
+      "summary": "Ek, proteinlerin yapısını, katlanmasını ve işlevlerini temel düzeyde anlatır. Amino asit dizisinin üç boyutlu yapıyı nasıl belirlediği ve bu yapının işlevle nasıl bağlantılı olduğu açıklanır. Enzimler, reseptörler ve transkripsiyon faktörleri gibi davranışla ilgili proteinlerin rolleri tanıtılır. Bu ek, gen-çevre ve hormon-reseptör tartışmalarının moleküler arka planını sağlar.",
+      "keyConcepts": [
+        { "term": "Amino asit dizisi", "explanation": "Proteinin yapı taşlarının sırası, katlanma biçimini ve dolayısıyla işlevini belirler." },
+        { "term": "Protein katlanması", "explanation": "Protein zincirinin belirli bir üç boyutlu şekil alması, işlevsel olabilmesinin ön koşuludur." },
+        { "term": "Reseptör bağlanması", "explanation": "Bir molekülün reseptöre uyması, hücre içinde bir tepki zinciri başlatabilir." },
+        { "term": "Transkripsiyon faktörü", "explanation": "DNA'ya bağlanarak belirli genlerin okunma hızını artıran ya da azaltan proteinlerdir." },
+        { "term": "Enzim", "explanation": "Kimyasal tepkimeleri hızlandıran proteinlerdir; nörotransmitter üretimi ve yıkımında da rol oynarlar." }
+      ],
+      "simulationIdeas": [
+        {
+          "title": "Ligand-Reseptör Bağlanma",
+          "shows": "Bir hormon ya da nörotransmitter molekülünün reseptöre bağlanma olasılığını ve hücresel yanıtı gösterir.",
+          "inputs": ["Ligand konsantrasyonu", "Bağlanma afinitesi", "Reseptör sayısı"],
+          "outputs": ["Bağlanmış reseptör oranı", "Hücresel yanıt şiddeti"]
+        },
+        {
+          "title": "Gen İfadesi Adımları",
+          "shows": "Bir genin DNA'dan proteine ilerleyen adımlarını ve transkripsiyon faktörünün hızı nasıl etkilediğini gösterir.",
+          "inputs": ["Transkripsiyon faktörü düzeyi", "Gen dizisi uzunluğu"],
+          "outputs": ["Üretilen protein miktarı zaman çizelgesi"]
+        }
+      ],
+      "links": [
+        { "to": "app1", "why": "Nörotransmitter reseptörlerinin protein yapısı, nörobilim eki ile birlikte okunmalıdır." },
+        { "to": "app2", "why": "Hormon reseptörleri ve bağlanma mantığı endokrin ekinde kullanılan kavramlarla örtüşür." },
+        { "to": "ch13", "why": "Transkripsiyon faktörlerinin rolü, gen-çevre etkileşimi bölümünde gen ifadesini açıklamak için gereklidir." }
+      ],
+      "confidence": "orta",
+      "verifyNotes": [
+        "kitaptan doğrulanmalı: Ek 3'te hangi protein ailelerinin ve hangi örneklerin ele alındığı",
+        "kitaptan doğrulanmalı: Türkçe ek başlığının çeviride kullanılan karşılığı"
+      ]
+    }
+  ]
+}

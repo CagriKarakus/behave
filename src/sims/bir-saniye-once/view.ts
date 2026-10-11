@@ -1,0 +1,353 @@
+import '../sim.css';
+import './view.css';
+import { Scope, hideBarWhenAway, pct, ref, svg, svgText, uid } from '../kit';
+import {
+  EDGES, NODES, REST, controlOf, describe, netInput, settle, step,
+  type Activity, type Inputs, type Lesion, type RegionId,
+} from './model';
+
+const R = 25;
+const byId = Object.fromEntries(NODES.map((n) => [n.id, n])) as Record<RegionId, (typeof NODES)[number]>;
+
+const INFO: Record<RegionId, [string, string]> = {
+  bla: ['Bazolateral amigdala (BLA)', 'Duyusal bilgiyi alır ve uyaranın önemini etiketler. Korku ve ödül öğrenmesinde rol oynar; ödülün ya da cezanın miktarı değişince de tepki verir. Çıktısını merkezi amigdalaya hem doğrudan hem ITC kapısı üzerinden gönderir.'],
+  itc: ['Ardışık hücreler (ITC)', 'BLA ile merkezi amigdala arasındaki küçük engelleyici hücreler. Bir kapı gibi çalışır: vmPFC bu hücreleri uyardığında merkezi amigdala susar. Korkunun söndürülmesi bu yoldan geçer.'],
+  cea: ['Merkezi amigdala (CeA)', 'Amigdalanın çıkış kapısı. BLA\'dan gelen alarmı hipotalamusa ve beyin sapına ileterek korku, saldırganlık ve otonom uyarılma tepkisini başlatır.'],
+  dlpfc: ['Dorsolateral prefrontal korteks (dlPFC)', 'Planlama, çalışma belleği ve ertelenmiş ödülün bölgesi. Mantıksal "soğuk" kontrol burada yapılır ve dürtüsel isteği (NAcc) yatıştırır. En geç olgunlaşan bölgelerdendir.'],
+  vmpfc: ['Ventromedial prefrontal korteks (vmPFC)', 'Duygu ile mantığın kesiştiği yer. Amigdalayı hem doğrudan hem ITC kapısı üzerinden yatıştırır. Bir şeyin artık korkutucu olmadığını öğrenmek burada gerçekleşir.'],
+  ofc: ['Orbitofrontal korteks (OFC)', 'Davranışı sosyal bağlama uydurur ve ödülün değerini taşır; hasar görünce kişi uygunsuz davranabilir. Amigdaladan gelen bilgiyi vmPFC\'ye aktarır.'],
+  acc: ['Ön singulat korteks (ACC)', 'Çatışmayı ve çabayı izler, empati ve başkasının acısıyla da ilgilidir. Çaba arttığında devreye girer ve dlPFC\'yi çağırır.'],
+  vta: ['Ventral tegmental alan (VTA)', 'Dopamin nöronlarının kaynağı. Dopamin zevkten çok beklenti ve peşinden gitmeyle ilgilidir; ödül belirsizken (%50 olasılık) en yüksek düzeye çıkar. Nükleus akumbense (mezolimbik) ve frontal kortekse (mezokortikal) uzanır.'],
+  nacc: ['Nükleus akumbens (NAcc)', 'Ödül devresinin merkezi. VTA\'dan dopamin alır ve "isteme" ile motivasyonu taşır; hoşlanmanın tadından çok peşinden koşmayla ilgilidir. dlPFC onu dizginler.'],
+};
+
+interface Scenario { id: string; name: string; u: Partial<Inputs>; lesion?: RegionId[] }
+const SCEN: Scenario[] = [
+  { id: 'rest',   name: 'Dinlenme',               u: {} },
+  { id: 'threat', name: 'Ani tehdit',             u: { threat: 0.9 } },
+  { id: 'calm',   name: 'Tehdit · güçlü frontal', u: { threat: 0.5 } },
+  { id: 'weak',   name: 'Tehdit · zayıf frontal', u: { threat: 0.5, frontal: 0.3 } },
+  { id: 'look',   name: 'Pasif bakış',            u: { cue: 0.8, prob: 0.5 } },
+  { id: 'press',  name: 'Düğmeye bas',            u: { cue: 0.8, prob: 0.5, effort: 0.9 } },
+  { id: 'sure',   name: 'Kesin ödül',             u: { cue: 0.8, prob: 1 } },
+  { id: 'stress', name: 'Stres + yorgunluk',      u: { threat: 0.4, stress: 0.9, frontal: 0.5 } },
+  { id: 'teen',   name: 'Ergen beyni',            u: { threat: 0.3, cue: 0.8, prob: 0.5, frontal: 0.4 } },
+  { id: 'amyL',   name: 'Amigdala lezyonu',       u: { threat: 0.9 }, lesion: ['bla', 'cea'] },
+  { id: 'vmL',    name: 'vmPFC lezyonu',          u: { threat: 0.5 }, lesion: ['vmpfc'] },
+];
+
+const SLIDERS: { key: keyof Inputs; name: string; hint: string; cls: string }[] = [
+  { key: 'threat',  name: 'Tehdit',         hint: 'Yılan, karanlık sokak, öfkeli bir yüz', cls: 'sl-amy' },
+  { key: 'cue',     name: 'Ödül ipucu',     hint: 'Çekici bir fotoğraf ya da bildirim sesi', cls: 'sl-dop' },
+  { key: 'prob',    name: 'Ödül olasılığı', hint: 'Dopamin en çok %50 civarında tepe yapar', cls: 'sl-dop' },
+  { key: 'effort',  name: 'Çaba',           hint: 'Ödülü görmek için sürekli düğmeye basmak', cls: 'sl-dop' },
+  { key: 'frontal', name: 'Frontal güç',    hint: '100 sağlıklı yetişkin; ergen ya da yorgun beyinde daha düşük', cls: 'sl-pfc' },
+  { key: 'stress',  name: 'Stres',          hint: 'Amigdalayı güçlendirir, frontal gücü düşürür', cls: 'sl-amy' },
+];
+
+const TEMPLATE = (id: string) => `
+<div class="sim sim-bso">
+  <p class="lede">Amigdala, frontal korteks ve dopamin devresinin basitleştirilmiş modeli. Bir senaryo seç, bölgelere dokun, kaydırıcılarla oyna.</p>
+  <div class="chips" data-ref="chips" role="group" aria-label="Senaryolar"></div>
+
+  <section aria-label="Beyin devresi">
+    <div class="stage">
+      <svg viewBox="0 0 360 475" role="group" aria-label="Dokunulabilir beyin devresi diyagramı" data-ref="net">
+        <defs>
+          <marker id="${id}-mx" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto"><path class="mk" d="M0,1 L10,5 L0,9 z"/></marker>
+          <marker id="${id}-mi" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk-bar" d="M5,0 L5,10"/></marker>
+        </defs>
+        <g data-ref="edges"></g>
+        <g data-ref="nodes"></g>
+      </svg>
+      <div class="legend">
+        <span><i style="background:var(--pfc)"></i>Frontal korteks</span>
+        <span><i style="background:var(--amy)"></i>Amigdala</span>
+        <span><i style="background:var(--dop)"></i>Dopamin</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="20" y2="5" stroke="var(--edge)" stroke-width="2"/><path d="M17,1 L25,5 L17,9 z" fill="var(--edge)"/></svg>uyarır</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="22" y2="5" stroke="var(--edge)" stroke-width="2" stroke-dasharray="5 3"/><line x1="23" y1="0" x2="23" y2="10" stroke="var(--edge)" stroke-width="2.4"/></svg>engeller</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="detail" data-ref="detail"></section>
+
+  <div class="row">
+    <button class="btn" data-ref="pulse" type="button">Ani tehdit ver (1 sn)</button>
+    <button class="btn" data-ref="pause" type="button" aria-pressed="false">Duraklat</button>
+    <button class="btn" data-ref="reset" type="button">Sıfırla</button>
+  </div>
+
+  <section class="chart" aria-label="Zaman grafiği">
+    <h3 class="sim-h">Son 12 saniye</h3>
+    <svg viewBox="0 0 360 140" role="img" aria-label="Korku tepkisi, isteme ve frontal kontrolün zaman içindeki değişimi" data-ref="chart"></svg>
+  </section>
+
+  <section aria-label="Girdiler">
+    <h3 class="sim-h">Girdiler</h3>
+    <div class="sliders" data-ref="sliders"></div>
+  </section>
+
+  <p class="foot">Nitel bir model: ağırlıklar ve sayılar ölçüm değildir, Bölüm 2'de anlatılan ilişkilerin yönünü ve zamanlamasını gösterir. Stres ve frontal güç ayarları, frontal korteksin enerji ve yorgunlukla zayıfladığı fikrinin sadeleştirmesidir. Gerçek beyin bundan çok daha karmaşıktır.</p>
+
+  <div class="sim-bar" role="group" aria-label="Anlık çıktılar" data-ref="bar">
+    <div class="sim-bar-in">
+      <p class="say" data-ref="say"></p>
+      <div class="meters">
+        <div class="m" style="--c: var(--amy)"><div class="m-top"><span>Korku · CeA</span><b data-ref="m-cea">0%</b></div><div class="track"><b data-ref="b-cea"></b></div></div>
+        <div class="m" style="--c: var(--dop)"><div class="m-top"><span>İsteme · NAcc</span><b data-ref="m-nacc">0%</b></div><div class="track"><b data-ref="b-nacc"></b></div></div>
+        <div class="m" style="--c: var(--pfc)"><div class="m-top"><span>Kontrol · PFC</span><b data-ref="m-ctl">0%</b></div><div class="track"><b data-ref="b-ctl"></b></div></div>
+      </div>
+    </div>
+  </div>
+</div>`;
+
+export function mount(container: HTMLElement): () => void {
+  const scope = new Scope();
+  const id = uid('bso');
+  container.innerHTML = TEMPLATE(id);
+  const root = container.firstElementChild as HTMLElement;
+  const $ = <T extends Element = HTMLElement>(name: string) => ref<T>(root, name);
+
+  interface State {
+    u: Inputs; lesion: Lesion; x: Activity; t: number; pulseUntil: number; paused: boolean;
+    sel: RegionId | null; scen: string | null; hist: Array<Record<string, number>>; lastSample: number;
+  }
+  const S: State = { u: { ...REST }, lesion: {}, x: settle(REST, {}, 12), t: 0, pulseUntil: -1, paused: false, sel: null, scen: 'rest', hist: [], lastSample: 0 };
+  const eff = (): Inputs => (S.t < S.pulseUntil ? { ...S.u, threat: Math.min(1, S.u.threat + 0.8) } : S.u);
+
+  // ---- Ağ diyagramı ----
+  function edgePath(e: (typeof EDGES)[number]): string {
+    const a = byId[e.from], b = byId[e.to];
+    const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy);
+    const cx = (a.x + b.x) / 2 + (-dy / len) * e.bend;
+    const cy = (a.y + b.y) / 2 + (dx / len) * e.bend;
+    const unit = (x1: number, y1: number, x2: number, y2: number) => { const l = Math.hypot(x2 - x1, y2 - y1); return [(x2 - x1) / l, (y2 - y1) / l]; };
+    const [sx, sy] = unit(a.x, a.y, cx, cy);
+    const [ex, ey] = unit(b.x, b.y, cx, cy);
+    const f = (n: number) => n.toFixed(1);
+    return `M${f(a.x + sx * (R + 2))},${f(a.y + sy * (R + 2))} Q${f(cx)},${f(cy)} ${f(b.x + ex * (R + 3))},${f(b.y + ey * (R + 3))}`;
+  }
+
+  const edgesG = $('edges'), nodesG = $('nodes');
+  const edgeEls = EDGES.map((e) => ({
+    e,
+    p: svg('path', { class: 'edge' + (e.w < 0 ? ' inh' : ''), d: edgePath(e), 'marker-end': e.w < 0 ? `url(#${id}-mi)` : `url(#${id}-mx)` }, edgesG),
+  }));
+
+  const nodeEls = {} as Record<RegionId, { g: SVGElement; fill: SVGElement; slash: SVGElement; pc: SVGElement }>;
+  for (const n of NODES) {
+    const g = svg('g', { class: 'node grp-' + n.grp, tabindex: '0', role: 'button', 'aria-pressed': 'false', 'aria-label': INFO[n.id][0], transform: `translate(${n.x},${n.y})` }, nodesG);
+    svg('circle', { r: R + 10, fill: 'transparent' }, g);
+    svg('circle', { class: 'ring', r: R + 5 }, g);
+    svg('circle', { class: 'base', r: R }, g);
+    const fill = svg('circle', { class: 'fill', r: R - 0.8, 'fill-opacity': 0 }, g);
+    const slash = svg('line', { class: 'slash', x1: -R * 0.7, y1: R * 0.7, x2: R * 0.7, y2: -R * 0.7, opacity: 0 }, g);
+    svgText(g, { class: 'ab', y: -2 }, n.ab);
+    const pc = svgText(g, { class: 'pct', y: 10 }, '');
+    svgText(g, { class: 'cap', y: R + 14 }, n.cap);
+    scope.on(g as unknown as HTMLElement, 'click', () => select(n.id));
+    scope.on(g as unknown as HTMLElement, 'keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); select(n.id); } });
+    nodeEls[n.id] = { g, fill, slash, pc };
+  }
+
+  function drawNet(): void {
+    for (const { e, p } of edgeEls) {
+      const mag = Math.min(1, (S.x[e.from] * Math.abs(e.w)) / 0.8);
+      p.style.strokeWidth = (1 + 2.2 * mag).toFixed(2);
+      p.style.opacity = (0.12 + 0.78 * mag).toFixed(2);
+    }
+    for (const n of NODES) {
+      const o = nodeEls[n.id];
+      const les = !!S.lesion[n.id];
+      o.fill.setAttribute('fill-opacity', les ? '0' : (0.08 + 0.92 * S.x[n.id]).toFixed(2));
+      o.slash.setAttribute('opacity', les ? '1' : '0');
+      o.g.classList.toggle('les', les);
+      o.g.classList.toggle('sel', S.sel === n.id);
+      o.pc.textContent = les ? '' : pct(S.x[n.id]) + '%';
+    }
+  }
+
+  // ---- Ayrıntı paneli ----
+  const detail = $('detail');
+  function buildDetail(): void {
+    if (!S.sel) {
+      detail.innerHTML = '<p class="hint">Bir bölgeye dokun: rolünü, kimden ne kadar etkilendiğini ve lezyon seçeneğini gör. Dolgusu koyulaştıkça bölge daha aktif, çizgiler kalınlaştıkça etki daha güçlü.</p>';
+      return;
+    }
+    const n = byId[S.sel];
+    detail.innerHTML =
+      `<div class="d-head grp-${n.grp}"><span class="d-name">${INFO[n.id][0]}</span><span class="d-pct" data-ref="dPct">0%</span></div>` +
+      `<div class="track grp-${n.grp}"><b data-ref="dFill"></b></div>` +
+      `<p>${INFO[n.id][1]}</p>` +
+      `<ul class="d-list" data-ref="dList"></ul>` +
+      `<div class="row"><button class="btn" data-ref="dLes" type="button" aria-pressed="${!!S.lesion[n.id]}">${S.lesion[n.id] ? 'Lezyonu kaldır' : 'Lezyon oluştur'}</button></div>`;
+    updateDetail();
+  }
+  // Ayrıntı paneli sık yeniden kurulduğu için tıklama kapsayıcıda dinlenir.
+  scope.on(detail, 'click', (ev) => {
+    if (!S.sel || !(ev.target as Element).closest('[data-ref="dLes"]')) return;
+    const k = S.sel;
+    S.lesion[k] = !S.lesion[k];
+    if (!S.lesion[k]) delete S.lesion[k];
+    setScenario(null);
+    buildDetail();
+  });
+  function updateDetail(): void {
+    if (!S.sel) return;
+    const n = byId[S.sel];
+    const les = !!S.lesion[n.id];
+    ref(detail, 'dPct').textContent = les ? 'lezyon' : pct(S.x[n.id]) + '%';
+    ref(detail, 'dFill').style.width = (les ? 0 : pct(S.x[n.id])) + '%';
+    const { parts } = netInput(n.id, S.x, eff(), S.lesion);
+    const rows = parts
+      .filter((p) => Math.abs(p.v) >= 0.02)
+      .sort((a, b) => Math.abs(b.v) - Math.abs(a.v))
+      .slice(0, 5)
+      .map((p) => {
+        const nm = p.from === 'dış girdi' ? 'Dış girdi (kaydırıcılar)' : byId[p.from].ab;
+        return `<li><span>${nm} ${p.v < 0 ? 'engelliyor' : 'uyarıyor'}</span><span class="v">${p.v < 0 ? '−' : '+'}${Math.abs(p.v).toFixed(2)}</span></li>`;
+      });
+    ref(detail, 'dList').innerHTML = les ? '<li><span>Bölge devre dışı</span></li>' : (rows.join('') || '<li><span>Belirgin bir girdi yok</span></li>');
+  }
+  function select(rid: RegionId): void {
+    S.sel = S.sel === rid ? null : rid;
+    for (const n of NODES) nodeEls[n.id].g.setAttribute('aria-pressed', String(S.sel === n.id));
+    buildDetail();
+  }
+
+  // ---- Senaryolar ve kaydırıcılar ----
+  const chips = $('chips');
+  for (const sc of SCEN) {
+    const b = document.createElement('button');
+    b.className = 'chip'; b.type = 'button'; b.textContent = sc.name; b.dataset.id = sc.id; b.setAttribute('aria-pressed', 'false');
+    scope.on(b, 'click', () => applyScenario(sc));
+    chips.appendChild(b);
+  }
+  function setScenario(sid: string | null): void {
+    S.scen = sid;
+    for (const b of Array.from(chips.children)) b.setAttribute('aria-pressed', String((b as HTMLElement).dataset.id === sid));
+  }
+
+  const sliderEls = {} as Record<keyof Inputs, HTMLInputElement>;
+  const valEls = {} as Record<keyof Inputs, HTMLElement>;
+  for (const s of SLIDERS) {
+    const w = document.createElement('div');
+    w.className = s.cls;
+    w.innerHTML = `<div class="sl-top"><label class="sl-name" for="${id}-s-${s.key}">${s.name}</label><span class="sl-val" data-ref="v"></span></div>` +
+      `<input type="range" id="${id}-s-${s.key}" min="0" max="100" step="1"><p class="sl-hint">${s.hint}</p>`;
+    $('sliders').appendChild(w);
+    const inp = w.querySelector('input') as HTMLInputElement;
+    valEls[s.key] = w.querySelector('[data-ref="v"]') as HTMLElement;
+    scope.on(inp, 'input', () => { S.u[s.key] = Number(inp.value) / 100; setScenario(null); syncSliders(); });
+    sliderEls[s.key] = inp;
+  }
+  function syncSliders(): void {
+    for (const s of SLIDERS) {
+      sliderEls[s.key].value = String(Math.round(S.u[s.key] * 100));
+      sliderEls[s.key].setAttribute('aria-valuetext', pct(S.u[s.key]) + '%');
+      valEls[s.key].textContent = pct(S.u[s.key]) + '%';
+    }
+  }
+  function applyScenario(sc: Scenario): void {
+    S.u = { ...REST, ...sc.u };
+    S.lesion = Object.fromEntries((sc.lesion || []).map((k) => [k, true]));
+    S.pulseUntil = -1;
+    setScenario(sc.id);
+    syncSliders();
+    buildDetail();
+  }
+
+  const pauseBtn = $('pause');
+  scope.on($('pulse'), 'click', () => { S.pulseUntil = S.t + 1; });
+  scope.on(pauseBtn, 'click', () => {
+    S.paused = !S.paused;
+    pauseBtn.setAttribute('aria-pressed', String(S.paused));
+    pauseBtn.textContent = S.paused ? 'Devam et' : 'Duraklat';
+  });
+  scope.on($('reset'), 'click', () => applyScenario(SCEN[0]));
+
+  // ---- Zaman grafiği ----
+  const CH = { x0: 36, x1: 348, top: 10, bot: 100, span: 12 };
+  const chart = $<SVGElement>('chart');
+  const yOf = (v: number) => CH.bot - (CH.bot - CH.top) * v;
+  for (const v of [0, 0.5, 1]) {
+    svg('line', { class: 'grid', x1: CH.x0, x2: CH.x1, y1: yOf(v), y2: yOf(v) }, chart);
+    svgText(chart, { x: CH.x0 - 6, y: yOf(v) + 3.5, 'text-anchor': 'end' }, String(pct(v)));
+  }
+  svgText(chart, { x: CH.x0, y: 116 }, '−12 sn');
+  svgText(chart, { x: CH.x1, y: 116, 'text-anchor': 'end' }, 'şimdi');
+  const SERIES: { key: string; color: string; name: string; get: (x: Activity) => number; line?: SVGElement; dot?: SVGElement }[] = [
+    { key: 'cea', color: 'var(--amy)', name: 'Korku (CeA)', get: (x) => x.cea },
+    { key: 'nacc', color: 'var(--dop)', name: 'İsteme (NAcc)', get: (x) => x.nacc },
+    { key: 'ctl', color: 'var(--pfc)', name: 'Frontal kontrol', get: (x) => controlOf(x) },
+  ];
+  let lx = CH.x0;
+  for (const s of SERIES) {
+    svg('rect', { x: lx, y: 126, width: 9, height: 9, rx: 2, fill: s.color }, chart);
+    svgText(chart, { x: lx + 14, y: 134 }, s.name);
+    lx += 14 + s.name.length * 6.2 + 12;
+    s.line = svg('polyline', { class: 'ln', stroke: s.color, points: '' }, chart);
+    s.dot = svg('circle', { r: 3.5, fill: s.color, cx: CH.x1, cy: CH.bot }, chart);
+  }
+  function drawChart(): void {
+    for (const s of SERIES) {
+      const pts = S.hist.map((h) => `${(CH.x1 - ((S.t - h.t) / CH.span) * (CH.x1 - CH.x0)).toFixed(1)},${yOf(h[s.key]).toFixed(1)}`);
+      s.line!.setAttribute('points', pts.join(' '));
+      const last = S.hist[S.hist.length - 1];
+      if (last) { s.dot!.setAttribute('cx', String(CH.x1)); s.dot!.setAttribute('cy', yOf(last[s.key]).toFixed(1)); }
+    }
+  }
+  function sample(): void {
+    const h: Record<string, number> = { t: S.t };
+    for (const s of SERIES) h[s.key] = s.get(S.x);
+    S.hist.push(h);
+    while (S.hist.length && S.t - S.hist[0].t > CH.span) S.hist.shift();
+  }
+
+  // ---- Alt çubuk ----
+  let sayText = '';
+  const meter = (k: string, v: number) => { $(`m-${k}`).textContent = pct(v) + '%'; $(`b-${k}`).style.width = pct(v) + '%'; };
+  function drawBar(): void {
+    meter('cea', S.x.cea); meter('nacc', S.x.nacc); meter('ctl', controlOf(S.x));
+  }
+  const sayEl = $('say');
+  function drawSay(): void {
+    const t = describe(S.x, eff(), S.lesion);
+    if (t !== sayText) { sayText = t; sayEl.textContent = t; }
+  }
+
+  // ---- Döngü ----
+  const DT = 0.02;
+  let last = performance.now(), acc = 0, tSay = 0, tDet = 0;
+  function frame(now: number): void {
+    const dt = Math.min(0.1, (now - last) / 1000);
+    last = now;
+    if (!S.paused) {
+      acc += dt;
+      while (acc >= DT) {
+        S.x = step(S.x, eff(), S.lesion, DT);
+        S.t += DT; acc -= DT;
+        if (S.t - S.lastSample >= 0.1) { S.lastSample = S.t; sample(); }
+      }
+    }
+    drawNet(); drawBar(); drawChart();
+    tSay += dt; tDet += dt;
+    if (tSay > 0.25) { tSay = 0; drawSay(); }
+    if (tDet > 0.15) { tDet = 0; updateDetail(); }
+  }
+
+  syncSliders();
+  setScenario('rest');
+  buildDetail();
+  sample();
+  drawSay();
+  hideBarWhenAway(root, $('bar'), scope);
+  scope.loop(frame);
+
+  return () => {
+    scope.dispose();
+    container.innerHTML = '';
+  };
+}
+

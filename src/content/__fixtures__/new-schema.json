@@ -1,0 +1,16 @@
+{
+  "book": { "titleEn": "Behave", "titleTr": "Davranış", "author": "Robert M. Sapolsky", "year": 2017 },
+  "chapters": [
+    { "id": "intro", "kind": "intro", "number": null, "titleEn": "Introduction", "titleTr": "Giriş", "timescale": null, "timescaleSeconds": null, "summary": "Özet.\n\nİkinci paragraf <b>kaçışlanmalı</b>.", "keyConcepts": [], "keyStudies": [], "simulationIdeas": [], "links": [{ "to": "ch02", "why": "Sıradaki." }], "confidence": "yüksek", "verifyNotes": [] },
+    { "id": "ch02", "kind": "chapter", "number": 2, "titleEn": "Twelve Seconds", "titleTr": "Bir Saniye Önce", "timescale": "Bir saniye önce", "timescaleSeconds": 1, "summary": "S", "keyConcepts": [{ "term": "Amigdala", "explanation": "Korku." }], "keyStudies": [{ "name": "Eski çalışma", "finding": "bulgu" }], "simulationIdeas": [], "links": [{ "to": "ch99", "why": "yok" }], "confidence": "orta", "verifyNotes": ["not"],
+      "experiments": [
+        { "id": "ch02-e1", "name": "Amigdala uyarımı", "researchers": "Ada & Bob", "year": 1999, "question": "Q", "method": "M", "finding": "F", "roleInChapter": "R",
+          "sources": [{ "citation": "Ada 1999", "journal": "J", "year": 1999, "doi": "10.1000/xyz", "url": null }, { "citation": "Web", "journal": null, "year": null, "doi": null, "url": "javascript:alert(1)" }],
+          "caveats": "Küçük örneklem", "replication": { "status": "karışık", "note": "Kısmen", "refs": ["Cem 2010"] }, "simulatable": true },
+        { "id": "ch02-e2", "name": "İkinci", "researchers": "X", "year": null, "question": "", "method": "", "finding": "ikinci bulgu", "roleInChapter": "", "sources": [], "caveats": null, "replication": null, "simulatable": false }
+      ] },
+    { "id": "ch03", "kind": "chapter", "number": 3, "titleEn": "t", "titleTr": "Üç", "timescale": "Saniyeler", "timescaleSeconds": 60, "summary": "S", "keyConcepts": [], "simulationIdeas": [{ "title": "Fikir", "shows": "s", "inputs": ["a"], "outputs": ["b"] }], "links": [], "confidence": "düşük", "verifyNotes": [] },
+    { "id": "ch12", "kind": "chapter", "number": 12, "titleEn": "t", "titleTr": "On iki", "timescale": null, "timescaleSeconds": null, "summary": "S", "keyConcepts": [], "simulationIdeas": [], "links": [], "confidence": "orta", "verifyNotes": [] },
+    { "id": "app2", "kind": "appendix", "number": 2, "titleEn": "t", "titleTr": "Ek iki", "timescale": null, "timescaleSeconds": null, "summary": "S", "keyConcepts": [], "simulationIdeas": [], "links": [], "confidence": "yüksek", "verifyNotes": [] }
+  ]
+}
