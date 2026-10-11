@@ -1,0 +1,14 @@
+{
+  "name": "behave-simulasyonlar",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Sapolsky'nin \"Behave\" kitabı için interaktif simülasyonlar (Türkçe)",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  }
+}
