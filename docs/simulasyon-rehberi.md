@@ -39,3 +39,10 @@ Yukarıdan aşağıya bu sırayla:
 ## 5. Doğrulama (bitirmeden önce)
 - `npm run typecheck && npm test && npm run build` temiz.
 - Playwright (`/opt/node-tools/node_modules/playwright`, `scripts/verify.mjs`'e bak; `playwright install` ÇALIŞTIRMA): `npm run build && npx vite preview --port <benzersiz port>` ile ilgili bölümü 390 ve 1280 px'te aç; turu baştan sona tıkla, kaydırıcıları oynat, başka bölüme geçip döngünün durduğunu kontrol et; konsol hatası yok. Ekran görüntüsünü `docs/screenshots/sims/<isim>-390.png` ve `-1280.png` olarak kaydet (küçük tut). Preview sürecini kapat.
+
+## 6. Hassas içerik (ırk, cinsiyet, sınıf)
+Kitabın ele aldığı çalışmalar (ör. ırk ipucu ve amigdala, Correll ateş etme görevi, Kurzban yeniden kategorileştirme) aslına uygun modellenebilir. Kurallar:
+- Çalışmanın kendi kategorilerini nötr, akademik dille kullan ("Siyah ve Beyaz yüzler", "kendi grubundan / başka gruptan").
+- Figürler şematik, karikatürsüz ve saygılı olsun; ten tonu dışında stereotip özellik çizme.
+- Bulgunun ne gösterdiğini ve ne göstermediğini açıkça yaz: otomatik, öğrenilmiş, bağlama duyarlı bir tepki; bilinçli tutum ya da doğuştan bir özellik değil. Kitabın vurguladığı gibi kategori yeniden çizilebilir.
+- Replikasyon durumunu `content/chapters.json`'dan dürüstçe ver.
