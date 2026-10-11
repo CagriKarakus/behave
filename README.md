@@ -26,7 +26,7 @@ Yollar: `#/`, `#/bolum/ch02`, `#/deneyler`, `#/bolum/ch12?deney=ch12-e3`.
 ## Yeni simülasyon ekleme
 1. `src/sims/<isim>/model.ts` içine saf modeli yaz ve test et (varsa orijinal HTML ile eşdeğerlik testi ekle).
 2. `view.ts` içinde `mount(container: HTMLElement): () => void` yaz. `Scope` (`src/sims/kit.ts`) ile dinleyici ve `requestAnimationFrame` döngüsünü kaydet, dönen fonksiyonda `scope.dispose()` çağır. Kimlikler için `uid()` önekini, sorgular için `data-ref` kullan; global id kullanma. Stil: `.sim` taban sınıfı (`../sim.css`) + kendi `view.css` (kapsamlı sınıf).
-3. `src/sims/registry.ts` içine bölüm id'siyle (`ch05`, `app1` ...) ekle; görünüm dinamik import edilir: `load: () => import('./<isim>/view').then((m) => m.mount)`. Böylece simülasyon JS/CSS'i yalnızca o bölüm açılınca iner. `Scope.loop(frame, { root, onResume })` kullan: sim ekran dışına çıkınca döngü durur. Çıktı çubuğu (`.sim-bar`) şablonda çiplerin hemen altına konur (CSS mobilde sona alıp yapıştırır). Ekran okuyucu için `scope.announcer` ile gizli bir canlı bölge besle.
+3. `src/sims/<isim>/meta.ts` içinde `export const meta: SimMeta = { id, chapter, title, blurb, order }` yaz; kayıt otomatiktir (`registry.ts` `meta.ts` dosyalarını bulur, `view.ts` dinamik import edilir). Tasarım ve pedagoji kuralları: `docs/simulasyon-rehberi.md`; adım adım anlatım için `src/sims/tour.ts`. `Scope.loop(frame, { root, onResume })` kullan: sim ekran dışına çıkınca döngü durur. Çıktı çubuğu (`.sim-bar`) şablonda çiplerin hemen altına konur (CSS mobilde sona alıp yapıştırır). Ekran okuyucu için `scope.announcer` ile gizli bir canlı bölge besle.
 4. `npm test && npm run build`.
 
 ## Yayın

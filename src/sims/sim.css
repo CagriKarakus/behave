@@ -62,3 +62,17 @@
 
 /* Yalnızca ekran okuyucuya: kullanıcı eyleminden sonra güncellenen canlı bölge. */
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+/* Rehberli tur (tour.ts) */
+.sim .tour { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--ink); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.sim .tour.is-closed { border-left-width: 1px; padding-block: 8px; }
+.sim .tour-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.sim .tour-k { font: 600 11px/1.3 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.sim .tour-n { font: 500 12px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.sim .tour-title { font: 600 16px/1.3 var(--f-display); }
+.sim .tour-text { font-size: 14px; }
+.sim .tour-look { font-size: 13px; color: var(--muted); }
+.sim .tour-nav { display: flex; gap: 8px; flex-wrap: wrap; }
+.sim .tour-next { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sim .tour-exit { margin-left: auto; }
+.sim .tour button:disabled { opacity: .45; cursor: default; }

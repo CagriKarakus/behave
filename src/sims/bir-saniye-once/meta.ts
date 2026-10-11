@@ -1,0 +1,9 @@
+import type { SimMeta } from '../registry';
+
+export const meta: SimMeta = {
+  id: 'bir-saniye-once',
+  chapter: 'ch02',
+  title: 'Bir Saniye Önce devresi',
+  blurb: 'Amigdala, frontal korteks ve dopamin ağı',
+  order: 1,
+};
