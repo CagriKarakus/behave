@@ -4,6 +4,9 @@ import newSchema from './content/__fixtures__/new-schema.json';
 import { normalizeContent } from './content/normalize';
 import { sourceFromContent } from './content';
 import { createApp } from './app';
+import { simsFor } from './sims/registry';
+
+const CH02_SIMS = simsFor('ch02').length;
 
 const flush = async () => { for (let i = 0; i < 10; i++) await new Promise((r) => setTimeout(r, 10)); };
 const until = async (fn: () => boolean) => { for (let i = 0; i < 200 && !fn(); i++) await new Promise((r) => setTimeout(r, 10)); };
@@ -26,8 +29,8 @@ describe('uygulama kabuğu ve yönlendirme', () => {
   it('rota değişince önceki sayfa (simülasyon dahil) temizlenir', async () => {
     dispose = createApp(host, sourceFromContent(normalizeContent(newSchema)));
     await go('#/bolum/ch02');
-    await until(() => host.querySelectorAll('.sim').length === 1);
-    expect(host.querySelectorAll('.sim').length).toBe(1);
+    await until(() => host.querySelectorAll('.sim').length === CH02_SIMS);
+    expect(host.querySelectorAll('.sim').length).toBe(CH02_SIMS);
     await go('#/');
     expect(host.querySelectorAll('.sim').length).toBe(0);
     expect(host.querySelector('.ch-card')).not.toBeNull();
@@ -35,9 +38,9 @@ describe('uygulama kabuğu ve yönlendirme', () => {
   it('#main (atlama bağlantısı) rota değiştirmez; tıklama odağı <main>e taşır, hash değişmez', async () => {
     dispose = createApp(host, sourceFromContent(normalizeContent(newSchema)));
     await go('#/bolum/ch02');
-    await until(() => host.querySelectorAll('.sim').length === 1);
+    await until(() => host.querySelectorAll('.sim').length === CH02_SIMS);
     await go('#main');
-    expect(host.querySelectorAll('.sim').length).toBe(1);
+    expect(host.querySelectorAll('.sim').length).toBe(CH02_SIMS);
     expect(host.querySelector('h1')?.textContent).toBe('Bir Saniye Önce');
     location.hash = '#/bolum/ch02';
     const skip = host.querySelector('.skip') as HTMLAnchorElement;

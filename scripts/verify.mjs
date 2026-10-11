@@ -95,7 +95,7 @@ for (const w of [390, 1280]) {
   await page.keyboard.press('Enter');
   await page.waitForTimeout(200);
   const sk = await page.evaluate(() => ({ hash: location.hash, sims: document.querySelectorAll('.sim').length, active: document.activeElement?.id }));
-  check(sk.hash === '#/bolum/ch02' && sk.sims === 1 && sk.active === 'main', `atlama sonrası: ${JSON.stringify(sk)}`);
+  check(sk.hash === '#/bolum/ch02' && sk.sims >= 1 && sk.active === 'main', `atlama sonrası: ${JSON.stringify(sk)}`);
 
   // 4) Alt çubuk
   await open('#/bolum/ch02', 900);
