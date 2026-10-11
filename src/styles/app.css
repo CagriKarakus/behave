@@ -13,6 +13,7 @@
 .eyebrow { font: 500 11px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 h1 { margin: 6px 0 4px; font-weight: 700; font-size: clamp(28px, 6vw, 44px); letter-spacing: -.01em; }
 .hero-en { color: var(--muted); font-style: italic; }
+.hero-note { color: var(--muted); font-size: 0.85rem; margin-top: 2px; }
 .lede { margin-top: 12px; color: var(--muted); font-size: 17px; max-width: 62ch; }
 .muted { color: var(--muted); }
 .sec-h { margin: 0 0 10px; font: 600 12px var(--f-body); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }

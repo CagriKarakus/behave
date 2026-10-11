@@ -35,6 +35,7 @@ export function renderHome(el: HTMLElement, content: Content): () => void {
       <p class="eyebrow">${content.book.author}${content.book.year ? ` · ${content.book.year}` : ''}</p>
       <h1 id="page-title" tabindex="-1">${content.book.titleTr}</h1>
       <p class="hero-en" lang="en">${content.book.titleEn}</p>
+      <p class="hero-note">Türkçe ad önerilen çeviridir (resmî baskı adı doğrulanmadı).</p>
       <p class="lede">Sapolsky bir davranışı tek bir nedene bağlamaz: bir saniye öncesinden evrimsel geçmişe kadar geriye giden bir zaman merdiveni kurar. Aşağıdaki şerit bu merdiveni logaritmik ölçekte gösterir. Bir bölüme gir, özetini oku, varsa simülasyonla oyna.</p>
       <p><a class="btn-link" href="#/deneyler">Kitaptaki deneylerin listesi →</a></p>
     </header>

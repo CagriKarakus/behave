@@ -14,7 +14,7 @@
       "titleTr": "Giriş",
       "timescale": null,
       "timescaleSeconds": null,
-      "summary": "Giriş, insanın şiddete karşı çelişkili tutumunu bir açılış sahnesiyle anlatır: nefret ettiğimiz şiddet ile bağlam içinde övdüğümüz şiddet farklıdır. Yazar, bu kitabın biyolojik bakışla şiddeti, saldırganlığı ve rekabeti; aynı zamanda iş birliğini, empatiyi ve özveriyi de incelediğini söyler. Üç temel ilke öne çıkar: davranışı anlamak için biyoloji gerekir ama yalnız biyoloji yetmez ve biyolojik, psikolojik, kültürel açıklamalar birbirinden ayrılamaz. Kategorik düşünmenin tehlikesi, Watson, Moniz ve Lorenz gibi bilim insanlarının tek bir kutuya sıkışmış örnekleriyle gösterilir. Son olarak insanın hem diğer hayvanlara benzeyen hem de onlardan ayrılan yönleri ele alınır.",
+      "summary": "Giriş, insanın şiddete karşı çelişkili tutumunu yazarın Hitler'i yakalayıp cezalandırma fantezisiyle anlatır: nefret ettiğimiz şiddet ile bağlam içinde övdüğümüz şiddet farklıdır. Yazar, bu kitabın biyolojik bakışla şiddeti, saldırganlığı ve rekabeti; aynı zamanda iş birliğini, empatiyi ve özveriyi de incelediğini söyler. Üç temel ilke öne çıkar: davranışı anlamak için biyoloji gerekir ama yalnız biyoloji yetmez ve biyolojik, psikolojik, kültürel açıklamalar birbirinden ayrılamaz. Kategorik düşünmenin tehlikesi, Watson, Moniz ve Lorenz gibi bilim insanlarının tek bir kutuya sıkışmış örnekleriyle gösterilir. Kitabın yöntemi de burada kurulur: bir davranışın nedenleri, bir saniye önceki beyin olaylarından hormonlara, çocukluğa, genlere, kültüre ve evrime uzanan bir zaman merdiveninde aranır; yazara göre kitabın en önemli fikri, bu basamakların ayrı kutular olmadığı, her açıklamanın kendinden öncekilerin hepsini içerdiğidir. Son olarak insanın hem diğer hayvanlara benzeyen hem de onlardan ayrılan yönleri ele alınır.",
       "keyConcepts": [
         {
           "term": "Kategorik düşünme (categorical thinking)",
@@ -48,7 +48,7 @@
         },
         {
           "name": "Watson, Moniz ve Lorenz'in tarihsel iddiaları",
-          "finding": "Davranışçı Watson çevrenin her çocuğu istenen meslek ya da türe dönüştürebileceğini savunmuş, Moniz sinaptik ayarlamayla zihinsel bozuklukların tedavi edilebileceğini öne sürmüş, Lorenz ise Nazi propagandası yapmış ve ırk politikasına katılmış bir etologdur. Yazar bu üç örneği, tek bir kutuya sıkışmış bilimin tehlikesini göstermek için kullanır."
+          "finding": "Davranışçı Watson çevrenin her çocuğu istenen meslek ya da türe dönüştürebileceğini savunmuş, Moniz zihinsel bozuklukları 'sinaptik ayarlamaları' değiştirerek düzeltme iddiasıyla frontal lökotomiyi (sonradan lobotomi) geliştirip 1949'da Nobel almış, Lorenz ise Nazi propagandası yapmış ve ırk politikasına katılmış bir etologdur. Yazar bu üç örneği, tek bir kutuya sıkışmış bilimin tehlikesini göstermek için kullanır."
         },
         {
           "name": "Naipaul'ün Endonezya'daki katliam anlatısı",
@@ -136,7 +136,7 @@
         },
         {
           "name": "Yer değiştirme saldırganlığı gözlemleri",
-          "finding": "Şoka maruz kalan bir sıçan yakındaki daha küçük bir sıçana saldırır, düşük sıradaki bir babun üstünlerinden kaçar ve işsizlik arttığında aile içi şiddet oranları yükselir. Bu eğilim, saldırganın stres hormonlarını düşürebilir."
+          "finding": "Şoka maruz kalan bir sıçan yakındaki daha küçük bir sıçana saldırır, alfa erkeğe yenilen beta erkek babun, en alttaki (omega) erkeği kovalar ve işsizlik arttığında aile içi şiddet oranları yükselir. Bu eğilim, saldırganın stres hormonlarını düşürebilir."
         },
         {
           "name": "Organ bağışçıları üzerine gazete incelemesi (MacFarquhar, 2009)",
@@ -185,9 +185,7 @@
         }
       ],
       "confidence": "yüksek",
-      "verifyNotes": [
-        "Yer değiştirme saldırganlığının stres hormonlarını düşürdüğü iddiası dördüncü bölümde açıklanacak; ch04 okunmadığı için bu bağlantı teyit edilmedi."
-      ]
+      "verifyNotes": []
     },
     {
       "id": "ch02",
@@ -197,7 +195,7 @@
       "titleTr": "Bir Saniye Önce",
       "timescale": "Bir saniye önce",
       "timescaleSeconds": 1,
-      "summary": "Bölüm, bir davranıştan hemen önce beyinde neler olduğunu inceler ve beyni üç işlevsel katmanda düşünen bir çerçeve kurar; yazar bu katmanların kesin sınırları olmadığını da vurgular. Amigdala, tehdit ve korkuya ilişkin devreler aracılığıyla hem korkuda hem öfkeli saldırganlıkta merkezi rol oynar; ancak korku ile saldırganlık her zaman birbirine bağlı değildir. Prefrontal korteks, dürtüleri frenleyip uzun vadeli hedeflere uygun seçim yapmayı sağlar ve duygusal sinyallerle sürekli etkileşir. Dopamin ise ödülün gerçekleşmesinden çok beklentisiyle ilgilidir; beklenen ile gerçekleşen arasındaki fark ve belirsizlik onun en güçlü tetikleyicileridir. Bu devrelerin birbirini dengelemesi, bir eylemin seçilmesinden önceki kısa hesaplamanın özünü oluşturur.",
+      "summary": "Bölüm, bir davranıştan hemen önce beyinde neler olduğunu inceler ve beyni üç işlevsel katmanda düşünen bir çerçeve kurar; yazar bu katmanların kesin sınırları olmadığını da vurgular. Amigdala, tehdit ve korkuya ilişkin devreler aracılığıyla hem korkuda hem öfkeli saldırganlıkta merkezi rol oynar; ancak korku ile saldırganlık her zaman birbirine bağlı değildir. Prefrontal korteks, dürtüleri frenleyip uzun vadeli hedeflere uygun seçim yapmayı sağlar ve duygusal sinyallerle sürekli etkileşir. Dopamin ise ödülün gerçekleşmesinden çok beklentisiyle ilgilidir; beklenen ile gerçekleşen arasındaki fark ve belirsizlik onun en güçlü tetikleyicileridir. Yazarın frontal korteks için formülü şudur: doğru olan daha zor olduğunda, o zor şeyi yaptırır. Bu devrelerin birbirini dengelemesi, bir eylemin seçilmesinden önceki kısa hesaplamanın özünü oluşturur.",
       "keyConcepts": [
         {
           "term": "Amigdala (amygdala)",
@@ -285,12 +283,12 @@
           "finding": "Bir sesin şokla eşleştirilmesi, bazolateral amigdaladaki nöronların merkez çekirdeğe bağlanmasını sağlar; tekrarlanan eşleşmeyle sesin tek başına korku tepkisi üretmesi öğrenilir. Sonradan korku söner ve bu, amigdalanın kendiliğinden unutmasından değil, prefrontal korteksin devreye girip bastırmasından kaynaklanır."
         },
         {
-          "name": "Bazolateral amigdala hasarlı bireylerle Ultimatum Oyunu",
-          "finding": "Bu bireyler adaletsiz tekliflere alışılmadık derecede cömert yanıt verir ve adaletsiz teklifler aldıklarında red oranları artmaz. Amigdala, sosyal karar almaya öğrenilmiş bir kuşku ve tetikte olma eğilimi kattığı için, hasar olmadığında insanlar bu tür tekliflere daha sert karşılık verir."
+          "name": "Amigdala hasarlı bireylerle Ultimatum Oyunu",
+          "finding": "Bu bireyler adaletsiz tekliflere alışılmadık derecede cömert yanıt verir ve adaletsiz teklifler aldıklarında red oranları artmaz. Amigdala, sosyal karar almaya öğrenilmiş bir kuşku ve tetikte olma eğilimi kattığı için, hasar olmadığında insanlar bu tür tekliflere daha sert karşılık verir. Bazolateral amigdala hasarlı bireylerin güven oyunundaki cömertliğini yazarlar 'patolojik özgecilik' olarak niteler."
         },
         {
           "name": "Ernst Fehr'in TMS ile dlPFC susturma çalışması",
-          "finding": "dlPFC geçici olarak kapatıldığında katılımcılar, ileride daha iyi teklif gelir umuduyla kötü teklifleri de dürtüsel biçimde kabul eder. Bu etki yalnız karşıdaki oyuncu bir insan olduğunda ortaya çıkar; bilgisayara karşı oynandığında değişmez."
+          "finding": "dlPFC geçici olarak susturulduğunda katılımcılar, normalde ileride daha iyi teklif almak umuduyla reddedecekleri kötü teklifleri dürtüsel biçimde kabul etti. Bu etki yalnız karşıdaki oyuncu bir insan olduğunda ortaya çıkar; bilgisayara karşı oynandığında değişmez. Kötü teklifleri kontrol grubu kadar adaletsiz bulmaya devam ettiler; sorun adalet yargısında değil, bu yargıyı uygulamadaydı."
         },
         {
           "name": "Greene ve Cohen'in tramvay problemi taramaları",
@@ -301,8 +299,8 @@
           "finding": "Dopamin nöronları ödülün mutlak miktarından çok beklentiyle farkına tepki verir. Beklenenden fazla ödül bir artış, eksik ödül ise bir düşüş yaratır ve bu ölçek, on katlık bir ödül aralığında bile değişmez."
         },
         {
-          "name": "Ödül olasılığı deneyleri (Schultz grubu ve Knutson)",
-          "finding": "Ödül her seferinde gelmek yerine yalnızca %50 olasılıkla geldiğinde, ödül öncesi dopamin artışı belirgin biçimde büyür. Olasılık %25 ya da %75'e çıkarıldığında belirsizlik azaldığı için bu artış küçülür; en güçlü dopamin tepkisi en büyük belirsizlikte görülür."
+          "name": "Schultz grubunun ödül olasılığı deneyleri",
+          "finding": "Ödül her seferinde gelmek yerine yalnızca %50 olasılıkla geldiğinde, ödül öncesi dopamin artışı belirgin biçimde büyür. Olasılık %25 ya da %75'e çıkarıldığında belirsizlik azaldığı için bu artış küçülür; en güçlü dopamin tepkisi en büyük belirsizlikte görülür. Knutson'ın grubu ise ödül olasılığı arttıkça medial PFC etkinliğinin arttığını gösterdi."
         }
       ],
       "links": [
@@ -353,24 +351,24 @@
         {
           "to": "app1",
           "why": "Nörotransmitterler ve sinaps işleyişi, bu bölümdeki devrelerin kimyasal temelini açıklar."
+        },
+        {
+          "to": "ch13",
+          "why": "Ahlaki yargının soruluş biçimine göre değişmesi ve sezgi ile akıl yürütmenin dengesi ch13'te ele alınır."
         }
       ],
       "confidence": "yüksek",
-      "verifyNotes": [
-        "Metin ergenlik bölümünü numarasız anar; ch06 eşlemesi zaman ölçeği listesine dayanır, kitabın bölüm numarası metinden doğrulanamadı.",
-        "Ödül olasılığı deneyinde %50 senaryosunun hangi araştırma grubuna ait olduğu metinde Schultz grubu olarak açıkça belirtilmemiştir; keyStudies alanında iki grup birlikte anılmıştır.",
-        "Metnin ikinci bölümde bahsettiği bit.ly grafik bağlantıları metin dosyasında yoktur; grafiklere dayanan ifadeler kullanılmadı."
-      ]
+      "verifyNotes": []
     },
     {
       "id": "ch03",
       "kind": "chapter",
       "number": 3,
       "titleEn": "Seconds to Minutes Before",
-      "titleTr": "Saniyelerden dakikalar öncesine",
+      "titleTr": "Saniyeler ila Dakikalar Önce",
       "timescale": "Saniyeler-dakikalar",
       "timescaleSeconds": 60,
-      "summary": "Bölüm, bir davranıştan birkaç saniye ila birkaç dakika önce beyne ulaşan uyaranları inceler. Görme, işitme ve koku gibi duyusal ipuçlarının yanı sıra bedenin iç durumu, bilinçaltı kelimeler ve sosyal-fiziksel ortam çoğu zaman fark edilmeden davranışı kaydırır. Bu etkilerin bir kısmı, ırk ve statü ipuçlarında olduğu gibi, amigdala ile hızlı ama düşük doğruluklu bir yoldan işler ve önden gelen korteks yavaş kaldığında kararı belirler. Beyin ayrıca duyu organlarının hassasiyetini de ayarlayabildiği için dış dünyanın etkisi değişkendir. Genel sonuç, en önemli ve en sonuçlu davranışlardan hemen önce insanların sanıldığından çok daha az rasyonel ve özerk karar verdiğidir.",
+      "summary": "Bölüm, bir davranıştan birkaç saniye ila birkaç dakika önce beyne ulaşan uyaranları inceler. Görme, işitme ve koku gibi duyusal ipuçlarının yanı sıra bedenin iç durumu, bilinçaltı kelimeler ve sosyal-fiziksel ortam çoğu zaman fark edilmeden davranışı kaydırır. Bu etkilerin bir kısmı, ırk ve statü ipuçlarında olduğu gibi, amigdala ile hızlı ama düşük doğruluklu bir yoldan işler ve frontal korteks yavaş kaldığında kararı belirler. Beyin ayrıca duyu organlarının hassasiyetini de ayarlayabildiği için dış dünyanın etkisi değişkendir. Genel sonuç, en önemli ve en sonuçlu davranışlardan hemen önce insanların sanıldığından çok daha az rasyonel ve özerk karar verdiğidir.",
       "keyConcepts": [
         {
           "term": "Bilinçaltı ipuçları (subliminal cuing)",
@@ -412,7 +410,7 @@
       "keyStudies": [
         {
           "name": "Correll ve ateş etme görevi",
-          "finding": "Silah taşıyan ya da telefon tutan insanların gösterildiği bir görevde, ırka göre değişen erken ERP yanıtlarının oranı, silahsız bir siyahi kişiye ateş etme eğilimiyle ilişkiliydi."
+          "finding": "Silah ya da cep telefonu tutan kişilerin hızla gösterildiği ve yalnızca silahlılara ateş edilmesinin istendiği görevde, beyaz katılımcılarda siyah yüzler daha güçlü bir P200 (tehdit) ve daha zayıf bir N200 (frontal 'dur, bir düşün') dalgası üretti; P200/N200 oranı büyüdükçe silahsız bir siyah kişiyi vurma olasılığı arttı."
         },
         {
           "name": "Yüz gösterimi ve ırk tepkisi",
@@ -428,21 +426,21 @@
         },
         {
           "name": "Kitty Genovese olayı üzerine yeniden değerlendirme",
-          "finding": "Tanık sayısı ve olayın tümü görülmediği için efsanevi 'kalabalık, yardım yok' yorumu gerçeği yansıtmıyor; tehlikeli durumlarda kalabalık daha çok yardıma yol açma eğiliminde."
+          "finding": "1964'teki 'otuz sekiz tanık hiçbir şey yapmadı' anlatısı gerçeği yansıtmıyor: tanıklar daha azdı, kimse olayın tamamını görmedi ve pencereler kapalıydı. Seyirci etkisi tehlikesiz durumlarda görülür; tehlikeli acil durumlarda kalabalık büyüdükçe müdahale olasılığı artar."
         },
         {
-          "name": "Boston'da İspanyolca konuşma deneyi",
-          "finding": "Kısa süre İspanyolca konuşan ve muhafazakâr giyinmiş çiftlerin varlığında beyaz yolcular göçmenlere karşı daha dışlayıcı tutumlar bildirdi."
+          "name": "Tren istasyonu deneyi (Boston banliyöleri)",
+          "finding": "Beyazların çoğunlukta olduğu Boston banliyölerinde, muhafazakâr giyimli Hispanik çiftlerin günlerce tren istasyonlarında sessizce İspanyolca konuşması, beyaz yolcuların Hispanik (diğer gruplara değil) göçmenlere karşı daha dışlayıcı tutumlar bildirmesine yol açtı."
         }
       ],
       "simulationIdeas": [
         {
-          "title": "Hızlı yol ile düşünce yarışı",
-          "shows": "Bir yüzün ya da işaretin gösterim süresi arttıkça amigdala tepkisinin önden gelen korteks tarafından nasıl frenlenebildiğini gösterir.",
+          "title": "Hızlı Yol ile Düşünce Yarışı",
+          "shows": "Bir yüzün ya da işaretin gösterim süresi arttıkça amigdala tepkisinin frontal korteks tarafından nasıl frenlenebildiğini gösterir.",
           "inputs": [
             "Gösterim süresi (milisaniye)",
             "Uyaranın tehdit düzeyi",
-            "Önden gelen korteksin dikkat kapasitesi"
+            "Frontal korteksin dikkat kapasitesi"
           ],
           "outputs": [
             "Hızlı tepki olasılığı",
@@ -451,7 +449,7 @@
           ]
         },
         {
-          "title": "Oyunun adı ve iş birliği",
+          "title": "Oyunun Adı ve İş Birliği",
           "shows": "Aynı mahkûm ikilemi oyununun etiketi, kelime listesi ya da grup çerçevesi değiştiğinde iş birliği eğiliminin nasıl kaydığını gösterir.",
           "inputs": [
             "Oyun etiketi (rekabetçi ya da topluluk)",
@@ -465,7 +463,7 @@
           ]
         },
         {
-          "title": "Norm ihlallerinin yayılımı",
+          "title": "Norm İhlallerinin Yayılımı",
           "shows": "Bir alandaki küçük norm ihlallerinin (çöp, graffiti, bisiklet) başka ihlallerin olasılığını nasıl artırdığını bir ızgara üzerinde gösterir.",
           "inputs": [
             "Çöp ve graffiti yoğunluğu",
@@ -513,7 +511,7 @@
       "kind": "chapter",
       "number": 4,
       "titleEn": "Hours to Days Before",
-      "titleTr": "Saatlerden günler öncesine",
+      "titleTr": "Saatler ila Günler Önce",
       "timescale": "Saatler-günler",
       "timescaleSeconds": 86400,
       "summary": "Bölüm, davranıştan saatler ve günler önce etkili olan hormonları ele alır. Testosteronun saldırganlığın doğrudan nedeni olmadığı, normal aralıktaki bireysel düzeylerin saldırganlığı tahmin etmediği ve etkisinin statü mücadelesi gibi bağlama bağlı olarak güçlendirici olduğu savunulur. Oksitosin ve vazopressin için de benzer bir tablo çizilir: bağ kurmayı ve güveni artırırlar, ama bu etki çoğunlukla 'biz' kapsamıyla sınırlıdır ve dışarıdakilere karşı önyargıyı büyütebilir. Kadınlarda saldırganlık, doğurganlık döngüsü ve yaygın PMS iddiaları da bu bağlamsal çerçevede değerlendirilir. Kronik stres ise empatiyi, karar almayı ve duygu düzenlemesini zayıflatır; alkol de tek başına saldırganlık yaratmaz.",
@@ -558,7 +556,7 @@
         },
         {
           "name": "Testosteron inancı deneyi",
-          "finding": "Gerçekte hangi maddeyi aldıklarından bağımsız olarak, testosteron aldığına inanan katılımcılar daha az cömert teklif verdi; inanç, davranışı gerçek hormondan daha güçlü biçimde etkiledi."
+          "finding": "Gerçekte hangi maddeyi aldıklarından bağımsız olarak, testosteron aldığına inanan katılımcılar daha az cömert teklif verdi; yani bencil davranışı hormonun kendisi değil, hormonun etkisine dair inanç doğurdu."
         },
         {
           "name": "Talapoin maymunları (1977)",
@@ -566,7 +564,7 @@
         },
         {
           "name": "De Dreu'nun oksitosin çalışmaları",
-          "finding": "Oksitosin takım içindeki cömertliği artırdı, ama dış gruba karşı ihanete ve önyargıya yol açtı; dilemmada kurban seçimi de isme göre kişinin 'biz'den olup olmadığına bağlı kaldı."
+          "finding": "Oksitosin takım içi cömertliği artırdı; ancak finansal risk yüksekken karşı takımdan oyuncuya Mahkûm İkilemi'nde önleyici ihanet olasılığını da artırdı. İkinci çalışmada oksitosin Orta Doğulu ve Alman dış gruplara karşı örtük önyargıyı büyüttü ve katılımcıları Hollandalı isimli kişiyi (Dirk, Peter) feda etmeye daha isteksiz yaptı."
         },
         {
           "name": "Stres ve yabancıya empati (Mogil ile birlikte yapılan çalışma)",
@@ -579,7 +577,7 @@
       ],
       "simulationIdeas": [
         {
-          "title": "Statü meydan okuması",
+          "title": "Statü Meydan Okuması",
           "shows": "Testosteron yükselmesinin, bir meydan okuma olduğunda saldırganlığı mı yoksa statüyü koruyan başka davranışları mı artırdığını gösterir.",
           "inputs": [
             "Testosteron düzeyi",
@@ -594,7 +592,7 @@
           ]
         },
         {
-          "title": "Stres eğrisi ve karar kalitesi",
+          "title": "Stres Eğrisi ve Karar Kalitesi",
           "shows": "Stres şiddeti ve süresi arttıkça performansın önce yükselip sonra düşmesini, aynı zamanda risk alma ve empati tepkilerinin değişmesini gösterir.",
           "inputs": [
             "Stres şiddeti",
@@ -608,7 +606,7 @@
           ]
         },
         {
-          "title": "Biz ve onlar oksitosin oyunu",
+          "title": "Biz ve Onlar Oksitosin Oyunu",
           "shows": "Oksitosinin cömertliği ve güveni iç grup için artırıp dış grup için nasıl önyargıya çevirebildiğini gösterir.",
           "inputs": [
             "Grup üyeliği",
@@ -625,7 +623,7 @@
       "links": [
         {
           "to": "ch02",
-          "why": "Kitap, bu bölümde geçen önden gelen korteks, amigdala ve ön singulat ile ilgili fikirleri önceki bölümden hatırlatır."
+          "why": "Kitap, bu bölümde geçen frontal korteks, amigdala ve ön singulat ile ilgili fikirleri önceki bölümden hatırlatır."
         },
         {
           "to": "ch05",
@@ -636,8 +634,8 @@
           "why": "Oksitosin ve vazopressinle ilişkili genlerin düzenlenmesi ilerideki bir bölümde açıklanır."
         },
         {
-          "to": "ch09",
-          "why": "Oksitosinin sosyal davranışı kültüre göre nasıl değiştirdiği sonraki bölümlerde ele alınır."
+          "to": "ch11",
+          "why": "Oksitosinin iç grubu kayırıp dış gruba karşı önyargıyı büyütmesi, ch11'de Biz/Onlar ayrımının biyolojisi olarak yeniden ele alınır."
         },
         {
           "to": "app2",
@@ -652,10 +650,10 @@
       "kind": "chapter",
       "number": 5,
       "titleEn": "Days to Months Before",
-      "titleTr": "Günlerden aylar öncesine",
+      "titleTr": "Günler ila Aylar Önce",
       "timescale": "Günler-aylar",
       "timescaleSeconds": 7800000,
-      "summary": "Bölüm, bir davranıştan günler ya da aylar önce yaşanan deneyimlerin beyni nasıl değiştirdiğini anlatır. Öğrenmenin temelinde, birlikte ateşlenen sinapsların güçlenmesi ve glutamat aracılı uzun süreli potansiyelleşme (LTP) bulunur; uzun süreli depresyon (LTD) ise sinyali keskinleştirir. Bunun ötesinde, deneyim yeni dendrit dikenleri ve sinapslar oluşturabilir, aksonlar yeni hedeflere uzanabilir (remapping) ve yetişkin hipokampusunda yeni nöronlar doğabilir. Stres bu süreçleri ters U biçiminde etkiler: orta stres hipokampusu güçlendirirken, kronik stres amigdalayı güçlendirip önden gelen korteks bağlantılarını zayıflatır. Bölümün sonucu, nöroplastisitenin değer yüklü olmadığı, hem iyileştirici hem zararlı sonuçlar doğurabileceğidir.",
+      "summary": "Bölüm, bir davranıştan günler ya da aylar önce yaşanan deneyimlerin beyni nasıl değiştirdiğini anlatır. Öğrenmenin temelinde, birlikte ateşlenen sinapsların güçlenmesi ve glutamat aracılı uzun süreli potansiyelleşme (LTP) bulunur; uzun süreli depresyon (LTD) ise sinyali keskinleştirir. Bunun ötesinde, deneyim yeni dendrit dikenleri ve sinapslar oluşturabilir, aksonlar yeni hedeflere uzanabilir (remapping) ve yetişkin hipokampusunda yeni nöronlar doğabilir. Stres bu süreçleri ters U biçiminde etkiler: orta stres hipokampusu güçlendirirken, kronik stres amigdalayı güçlendirip frontal korteks bağlantılarını zayıflatır. Bölümün sonucu, nöroplastisitenin değer yüklü olmadığı, hem iyileştirici hem zararlı sonuçlar doğurabileceğidir.",
       "keyConcepts": [
         {
           "term": "Hebb ilkesi",
@@ -709,7 +707,7 @@
         },
         {
           "name": "Zenginleştirilmiş çevre ve sıçanlar",
-          "finding": "Uyarıcı bir ortamda yaşatılan sıçanların hipokampüsündeki sinaps sayısı arttı; bu, eski bir fikrin yeniden canlanmasına yol açtı."
+          "finding": "Uyarıcı bir ortamda yaşatılan sıçanların hipokampüsündeki sinaps sayısı arttı; bu, Hebb'den sonra terk edilen 'bellek yeni sinaps gerektirir' fikrini yeniden canlandırdı."
         },
         {
           "name": "Jonglörlük çalışması",
@@ -718,7 +716,7 @@
       ],
       "simulationIdeas": [
         {
-          "title": "Sinaps gücünün zamanla değişimi",
+          "title": "Sinaps Gücünün Zamanla Değişimi",
           "shows": "Tekrarlanan glutamat sinyalinin, kalsiyum eşiğini aşarak LTP ya da LTD'ye nasıl yol açtığını ve bu değişimin zamanla nasıl kalıcı ya da geçici olduğunu gösterir.",
           "inputs": [
             "Uyarım sıklığı",
@@ -732,7 +730,7 @@
           ]
         },
         {
-          "title": "Kortikal harita genişlemesi",
+          "title": "Kortikal Harita Genişlemesi",
           "shows": "Pratik süresi ve sıklığı arttıkça, ya da hayal ederek pratik yapıldığında, motor ya da duyusal haritanın nasıl genişleyip ne kadar kaldığını gösterir.",
           "inputs": [
             "Pratik süresi (gün)",
@@ -746,7 +744,7 @@
           ]
         },
         {
-          "title": "Stresin plastisite üzerindeki etkisi",
+          "title": "Stresin Plastisite Üzerindeki Etkisi",
           "shows": "Aynı glukokortikoid düzeyinin, korku ile mi yoksa kontrollü egzersizle mi birlikte geldiğine göre hipokampus dikenlerini ve amigdala bağlantılarını farklı yönlere nasıl çektiğini gösterir.",
           "inputs": [
             "Stres süresi ve şiddeti",
@@ -755,7 +753,7 @@
           ],
           "outputs": [
             "Hipokampus dikenleri",
-            "Amigdala ve önden gelen korteks bağlantı gücü",
+            "Amigdala ve frontal korteks bağlantı gücü",
             "Korku öğrenme ve söndürme hızı"
           ]
         }
@@ -763,7 +761,7 @@
       "links": [
         {
           "to": "ch02",
-          "why": "Bu bölüm, önceki bölümde tanıtılan nöron plastisitesini ve korku söndürmede önden gelen korteksin rolünü genişletir."
+          "why": "Bu bölüm, önceki bölümde tanıtılan nöron plastisitesini ve korku söndürmede frontal korteksin rolünü genişletir."
         },
         {
           "to": "ch04",
@@ -782,14 +780,14 @@
       "kind": "chapter",
       "number": 6,
       "titleEn": "Adolescence; or, Dude, Where's My Frontal Cortex?",
-      "titleTr": "Ergenlik; ya da, Dostum, Ön Korteksim Nerede?",
+      "titleTr": "Ergenlik ya da Dostum, Frontal Korteksim Nerede?",
       "timescale": "Ergenlik dönemi (yaklaşık on yıl önce)",
       "timescaleSeconds": 300000000,
-      "summary": "Bölüm, ergenliğin kültürel bir icat olmadığını, nörobiyolojik olarak gerçek ve yetişkinlikten ayrışan bir dönem olduğunu savunur. Bunun merkezinde, sinaps, miyelinizasyon ve metabolizma bakımından en geç olgunlaşan bölge olan ön korteksin yirmili yaşların ortasına kadar gelişmeye devam etmesi vardır. Ergenlikte gri madde budanarak daha verimli bir yapı oluşur; ancak limbik sistem, otonom sinir sistemi ve gonadal hormonlar bu sırada öne geçer. Sonuçta ergenler risk değerlendirmesinde, olumsuz geri bildirimi işlemede ve duygu düzenlemede yetişkin düzeyinde olmaz; yeni deneyime, ödüle ve akran onayına aşırı duyarlı olurlar. Bölüm bu tabloyu şiddet, empati ve ahlaki akıl yürütme üzerinden de izler ve ön korteksin büyük ölçüde deneyimle şekillendiği sonucuna varır.",
+      "summary": "Bölüm, ergenliğin kültürel bir icat olmadığını, nörobiyolojik olarak gerçek ve yetişkinlikten ayrışan bir dönem olduğunu savunur. Bunun merkezinde, sinaps, miyelinizasyon ve metabolizma bakımından en geç olgunlaşan bölge olan frontal korteksin yirmili yaşların ortasına kadar gelişmeye devam etmesi vardır. Ergenlikte gri madde budanarak daha verimli bir yapı oluşur; ancak limbik sistem, otonom sinir sistemi ve gonadal hormonlar bu sırada öne geçer. Sonuçta ergenler risk değerlendirmesinde, olumsuz geri bildirimi işlemede ve duygu düzenlemede yetişkin düzeyinde olmaz; yeni deneyime, ödüle ve akran onayına aşırı duyarlı olurlar. Bölüm bu tabloyu şiddet, empati ve ahlaki akıl yürütme üzerinden de izler ve frontal korteksin büyük ölçüde deneyimle şekillendiği sonucuna varır.",
       "keyConcepts": [
         {
-          "term": "Ön korteksin geç olgunlaşması (delayed frontal cortical maturation)",
-          "explanation": "Ön korteks, beynin sinaps, miyelinizasyon ve metabolizma açısından en son olgunlaşan bölgesidir ve gelişimi yirmili yaşların ortasında tamamlanır."
+          "term": "Frontal korteksin geç olgunlaşması (delayed frontal cortical maturation)",
+          "explanation": "Frontal korteks, beynin sinaps, miyelinizasyon ve metabolizma açısından en son olgunlaşan bölgesidir ve gelişimi yirmili yaşların ortasında tamamlanır."
         },
         {
           "term": "Budama (synaptic pruning)",
@@ -797,7 +795,7 @@
         },
         {
           "term": "Miyelinizasyon ve bağlantısallık (myelination and connectivity)",
-          "explanation": "Aksonların yalıtılması iletişimi hızlandırır ve ön korteks bölgelerinin daha koordineli bir birim gibi çalışmasını sağlar."
+          "explanation": "Aksonların yalıtılması iletişimi hızlandırır ve frontal korteks bölgelerinin daha koordineli bir birim gibi çalışmasını sağlar."
         },
         {
           "term": "Ödül duyarlılığı ve ventral striatum (reward sensitivity)",
@@ -848,7 +846,7 @@
       ],
       "simulationIdeas": [
         {
-          "title": "Ön Korteks Olgunlaşma Zaman Çizelgesi",
+          "title": "Frontal Korteks Olgunlaşma Zaman Çizelgesi",
           "shows": "Yaş ilerledikçe gri madde budanmasının, miyelinizasyonun ve bölgeler arası bağlantısallığın birbirine göre nasıl değiştiğini gösterir. Çıktılar illüstratiftir, kesin klinik değer değildir.",
           "inputs": [
             "Yaş (10-30 arası)",
@@ -891,7 +889,7 @@
       "links": [
         {
           "to": "ch02",
-          "why": "Bölüm, ön korteksin duygu ve dürtü düzenlemesindeki rolünü ikinci bölümde tanıtılan yeniden değerlendirme (reappraisal) kavramıyla birlikte ele alır."
+          "why": "Bölüm, frontal korteksin duygu ve dürtü düzenlemesindeki rolünü ikinci bölümde tanıtılan yeniden değerlendirme (reappraisal) kavramıyla birlikte ele alır."
         },
         {
           "to": "ch04",
@@ -899,7 +897,7 @@
         },
         {
           "to": "ch05",
-          "why": "Bu bölüm, önceki bölümdeki nöral plastisite fikrinin en güçlü örneklerinden biri olarak ön korteksin deneyimle şekillenmesine odaklanır."
+          "why": "Bu bölüm, önceki bölümdeki nöral plastisite fikrinin en güçlü örneklerinden biri olarak frontal korteksin deneyimle şekillenmesine odaklanır."
         },
         {
           "to": "ch07",
@@ -907,7 +905,7 @@
         },
         {
           "to": "ch08",
-          "why": "Genlerin beyin gelişimindeki rolü ve ön korteksin genlerden çok deneyimle şekillenmesi sekizinci bölümde daha ayrıntılı açılır."
+          "why": "Genlerin beyin gelişimindeki rolü ve frontal korteksin genlerden çok deneyimle şekillenmesi sekizinci bölümde daha ayrıntılı açılır."
         },
         {
           "to": "ch10",
@@ -949,11 +947,11 @@
         },
         {
           "term": "Empatinin gelişimi (development of empathy)",
-          "explanation": "Empati, bedensel olarak acıyı paylaşmaktan karşıdakinin duygusunu anlamaya doğru evrilir; ön korteksin ve zihin kuramı bölgelerinin devreye girmesiyle olgunlaşır."
+          "explanation": "Empati, bedensel olarak acıyı paylaşmaktan karşıdakinin duygusunu anlamaya doğru evrilir; frontal korteksin ve zihin kuramı bölgelerinin devreye girmesiyle olgunlaşır."
         },
         {
           "term": "Ahlaki gelişim aşamaları (Kohlberg stages)",
-          "explanation": "Ahlaki akıl yürütme ceza ve ödül odaklı başlangıçtan ilişkisel ve ilkesel düzeye uzanır; çoğu insan ilişkisel düzeyde kalır."
+          "explanation": "Ahlaki akıl yürütme ceza ve ödül odaklı başlangıçtan ilişkisel ve ilkesel düzeye uzanır; çoğu ergen ve yetişkin, ilişkisel nitelikteki 'geleneksel' düzeydedir."
         },
         {
           "term": "Gecikmiş doyum (delayed gratification)",
@@ -965,7 +963,7 @@
         },
         {
           "term": "Stres hiporesponsif dönemi (stress hyporesponsive period)",
-          "explanation": "Yeni doğan sıçanlarda glukokortikoid tepkisinin geçici olarak baskılanmasıdır; bu dönemde yavru, anneye bağlanmayı her uyarana karşı güçlendirir."
+          "explanation": "Yeni doğan sıçanlarda böbreküstü bezlerinin glukokortikoid salgısının birkaç hafta boyunca geçici olarak baskılandığı dönemdir. Bu dönemde anne yanındaki yavru, itici bir uyarana bile kaçınma yerine bağlanma geliştirir; bağlanma, bakımın kalitesinden bağımsız kurulur."
         },
         {
           "term": "Epigenetik programlama (epigenetic programming)",
@@ -979,7 +977,7 @@
       "keyStudies": [
         {
           "name": "Mischel'in marshmallow testi",
-          "finding": "Üç-altı yaşındaki çocukların yaklaşık üçte biri on beş dakika boyunca beklemeyi başardı; beş yaşta daha sabırlı olanların yıllar sonra daha yüksek SAT puanları, daha iyi sosyal uyum ve kırk yaş civarında daha güçlü ön korteks işlevi olduğu görüldü."
+          "finding": "Üç-altı yaşındaki çocukların yaklaşık üçte biri on beş dakika boyunca beklemeyi başardı; beş yaşta daha sabırlı olanların yıllar sonra daha yüksek SAT puanları, daha iyi sosyal uyum ve kırk yaş civarında daha güçlü frontal korteks işlevi olduğu görüldü."
         },
         {
           "name": "Harlow'un vekil anne deneyleri",
@@ -991,11 +989,11 @@
         },
         {
           "name": "Farah ve Boyce'un sosyoekonomik statü çalışmaları",
-          "finding": "Beş yaşında düşük sosyoekonomik statüdeki çocukların glukokortikoid düzeyi daha yüksek, ön korteksi daha ince ve yürütücü işlevleri daha zayıf çıktı; aynı görevi yapmak için daha fazla ön korteks etkinliğine ihtiyaç duydular."
+          "finding": "Beş yaşında düşük sosyoekonomik statüdeki çocukların glukokortikoid düzeyi daha yüksek, frontal korteksi daha ince ve yürütücü işlevleri daha zayıf çıktı; aynı görevi yapmak için daha fazla frontal korteks etkinliğine ihtiyaç duydular."
         },
         {
           "name": "Charles Nelson'ın Romanya kurumu çalışması",
-          "finding": "Erken dönemde kurumda büyüyen çocuklarda yetişkinlikte düşük IQ, bağlanma sorunları ve beyin hacminde, bağlantısallıkta ve ön korteks metabolizmasında azalma görüldü; buna karşılık amigdala büyümüştü."
+          "finding": "Erken dönemde kurumda büyüyen çocuklarda yetişkinlikte düşük IQ, bağlanma sorunları ve beyin hacminde, bağlantısallıkta ve frontal korteks metabolizmasında azalma görüldü; buna karşılık amigdala büyümüştü."
         },
         {
           "name": "Meaney ve ekibinin epigenetik çalışması",
@@ -1047,7 +1045,7 @@
       "links": [
         {
           "to": "ch02",
-          "why": "Empati devreleri ve ön korteksin dürtü kontrolündeki rolü ikinci bölümde tanıtılmıştı; çocukluk gelişimi bu devrelerin nasıl oluştuğunu anlatır."
+          "why": "Empati devreleri ve frontal korteksin dürtü kontrolündeki rolü ikinci bölümde tanıtılmıştı; çocukluk gelişimi bu devrelerin nasıl oluştuğunu anlatır."
         },
         {
           "to": "ch04",
@@ -1086,7 +1084,7 @@
       "kind": "chapter",
       "number": 8,
       "titleEn": "Back to When You Were Just a Fertilized Egg",
-      "titleTr": "Döllenme anına geri dönüş: Genler, çevre ve davranış",
+      "titleTr": "Henüz Döllenmiş Bir Yumurta Olduğun Zamana Dönüş",
       "timescale": "Döllenme anı: genomun oluştuğu an",
       "timescaleSeconds": 900000000,
       "summary": "Bölüm, davranışın genetik kökenlerine bakarken genlerin tek başına belirleyici olmadığını savunur. Bir genin ne zaman ve ne kadar ifade edileceği transkripsiyon faktörleri, epigenetik işaretler ve çevresel sinyallerle düzenlenir; DNA'nın büyük bölümü de bu düzenleyici işleve ayrılmıştır. Davranış genetiğinde ikiz ve evlat edinme çalışmaları kalıtılabilirlik tahminleri üretir, ancak bu tahminler çalışılan ortama bağlıdır ve çoğu zaman olduğundan fazla gösterilir. Moleküler çalışmalar serotonin, dopamin, oksitosin ve steroid hormon genlerinin davranışla ilişkisinin küçük ve bağlama bağlı olduğunu, 'savaşçı gen' gibi basit determinist yorumların ise desteklenmediğini gösterir. Sonuçta genler eğilim, duyarlılık ve kırılganlık sunar; bunların ne anlama geldiği çevreye bağlıdır.",
@@ -1160,7 +1158,7 @@
       ],
       "simulationIdeas": [
         {
-          "title": "Gen-çevre tablosu ve kalıtılabilirlik",
+          "title": "Gen-Çevre Tablosu ve Kalıtılabilirlik",
           "shows": "Aynı üç gen varyantının iki farklı ortamda nasıl farklı sonuç verdiğini ve toplam varyansın ne kadarının genetik olduğunun ortama göre nasıl değiştiğini gösterir. Ortam A ve B değerleri birbirine yakınken kalıtılabilirlik yüksek, zıt yönlü olduğunda anlamsız hale gelir.",
           "inputs": [
             "Ortam A'da üç varyantın etkisi",
@@ -1174,7 +1172,7 @@
           ]
         },
         {
-          "title": "Ortam sayısı arttıkça kalıtılabilirlik düşer",
+          "title": "Ortam Sayısı Arttıkça Kalıtılabilirlik Düşer",
           "shows": "Bir özelliğin tek bir ortamda ölçüldüğünde yüksek görünen kalıtılabilirliğinin, ortam sayısı ve çeşitliliği arttıkça nasıl düştüğünü gösterir. Kitaptaki bitki örneğinin ve yüksek-düşük SES karşılaştırmasının genel mantığını taşır.",
           "inputs": [
             "Çalışılan ortam sayısı",
@@ -1188,7 +1186,7 @@
           ]
         },
         {
-          "title": "Gen ifadesinde kombinasyon sayacı",
+          "title": "Gen İfadesinde Kombinasyon Sayacı",
           "shows": "Genom büyüdükçe olası ifade profillerinin ve gereken transkripsiyon faktörlerinin neden üssel arttığını gösterir. Bir genden üç gene, dört gene ve beş gene geçişteki profil sayılarını (1, 3, 7, 15, 31 gibi) somutlaştırır.",
           "inputs": [
             "Gen sayısı",
@@ -1231,7 +1229,7 @@
       "kind": "chapter",
       "number": 9,
       "titleEn": "Centuries to Millennia Before",
-      "titleTr": "Yüzyıllar ila binyıllar önce: Kültür, ekoloji ve iyi-kötü davranışın kökleri",
+      "titleTr": "Yüzyıllar ila Binyıllar Önce",
       "timescale": "Yüzyıllar ila binyıllar önce",
       "timescaleSeconds": 30000000000,
       "summary": "Bölüm, kültürün davranış üzerindeki etkisini kültürler arası farklılıklar üzerinden inceler: bireyci ve kollektivist kültürler, eşitlikçi ve tabakalı toplumlar, nüfus yoğunluğu ve etnik heterojenlik. Bu farklılıkların ekoloji ve geçim biçimleriyle (pirinç tarımı, buğday tarımı, göçebe çobanlık) bağlantılı olduğu, hatta DRD4 geninin 7R varyantının dağılımıyla bir arada görüldüğü gösterilir. Eşitsizliğin sosyal sermayeyi ve sağlığı zayıflattığı, kalabalığın ise tek başına şiddet üretmediği, mevcut eğilimleri büyüttüğü savunulur. Bölümün ikinci yarısı Hobbes ile Rousseau arasındaki tartışmayı arkeolojik ve etnografik kanıtlarla ele alır; avcı-toplayıcı toplumların savaşı nadir yaşadığı, tarımın ise çok sayıda sorunun kaynağı olduğu sonucuna varılır.",
@@ -1305,7 +1303,7 @@
       ],
       "simulationIdeas": [
         {
-          "title": "Gelir eşitsizliği ve karşılıklı iş birliği",
+          "title": "Gelir Eşitsizliği ve Karşılıklı İş Birliği",
           "shows": "Gelir eşitsizliği arttıkça ekonomik oyunlarda karşılıklı yardım ve iş birliğinin nasıl azaldığını, buna karşılık cezalandırıcı davranışın nasıl arttığını gösterir. Eşitsizlik ile sosyal sermaye arasındaki bağı görünür kılar.",
           "inputs": [
             "Gelir eşitsizliği düzeyi",
@@ -1319,7 +1317,7 @@
           ]
         },
         {
-          "title": "Parça büyüklüğü ve çatışma sınırları",
+          "title": "Parça Büyüklüğü ve Çatışma Sınırları",
           "shows": "İki grubun ızgarada karıştığı, kendi kendine benzerlik eğilimi ve hareketlilik ile çalışan bir model. Ortalama parça büyüklüğü değiştikçe izole ada ve yarımada sayısının ve grup sınırının uzunluğunun nasıl değiştiğini, en çok çatışma riski taşıyan karışım düzeyini gösterir.",
           "inputs": [
             "Kendini ayırma (self-assortment) eğilimi",
@@ -1333,7 +1331,7 @@
           ]
         },
         {
-          "title": "7R varyantının göç mesafesine göre dağılımı",
+          "title": "7R Varyantının Göç Mesafesine Göre Dağılımı",
           "shows": "İnsanların Afrika'dan dünyaya yayılması sırasında yol boyunca 7R varyantının frekansının nasıl değiştiğini ve Doğu Asya'daki seçilim baskısının bu dağılımı nasıl kestirdiğini gösterir. Kitaptaki Kidd dağılım grafiğinin mantığını taşır.",
           "inputs": [
             "Göç mesafesi (Afrika'dan itibaren)",
@@ -1377,17 +1375,15 @@
         }
       ],
       "confidence": "yüksek",
-      "verifyNotes": [
-        "Kitapta 'final chapter' olarak anılan bölümün ch17 olduğu varsayıldı; ch17 metni bu çalışmada okunmadı."
-      ]
+      "verifyNotes": []
     },
     {
       "id": "ch10",
       "kind": "chapter",
       "number": 10,
       "titleEn": "The Evolution of Behavior",
-      "titleTr": "Davranışın evrimi",
-      "timescale": "Evrim zaman ölçeği (milyonlarca yıl ve üzeri)",
+      "titleTr": "Davranışın Evrimi",
+      "timescale": "Evrimsel zaman (yaklaşık bir milyon yıl önce ve öncesi)",
       "timescaleSeconds": 30000000000000.0,
       "summary": "Bölüm, davranışın evrimini üç temel ilke üzerinden kurar: bireysel seçilim, akraba seçilimi ve karşılıklı özgecilik. Grup seçilimi fikrinin, hayvanların türün iyiliği için davrandığı varsayımının, langur maymunlarındaki yavru öldürme gözlemleri ve Hamilton ile Williams'ın çalışmalarıyla çürütüldüğünü anlatır. Akrabasız bireyler arasında işbirliğinin nasıl başlayıp sürdüğü, oyun kuramı ve Tit for Tat stratejisi üzerinden tartışılır. Bölüm ayrıca insan davranışının bu modellerden sapan yönlerini ve evrim hızı ile uyarlanmacılık tartışmalarını ele alır; birinci kısmın kapanışı olarak bağlamın ve geri bildirim döngülerinin önemini vurgular.",
       "keyConcepts": [
@@ -1425,7 +1421,7 @@
         },
         {
           "term": "Noktalı denge (punctuated equilibrium)",
-          "explanation": "Evrimin uzun durağan dönemler ve kısa, ani sıçramalarla ilerlediği paleontolojik öneri. Gradualist görüşün karşısında durur ve birçok davranışsal değişimin çok daha az önemli olabileceğini ima eder."
+          "explanation": "Evrimin uzun durağan dönemler ve kısa, ani sıçramalarla ilerlediği paleontolojik öneri. Gradualist sosyobiyolojinin karşısında durur: evrim çoğunlukla durağansa, bireyler arasındaki her küçük uyum farkının evrimsel sonuç doğurduğu varsayımı ve bölümdeki pek çok optimizasyon açıklaması sanıldığından daha az önemli olabilir."
         },
         {
           "term": "Uyarlanmacılık ve spandrel (adaptationism, spandrel)",
@@ -1460,7 +1456,7 @@
       ],
       "simulationIdeas": [
         {
-          "title": "Tit for Tat turnuvası ve sinyal hatası",
+          "title": "Tit for Tat Turnuvası ve Sinyal Hatası",
           "shows": "Farklı stratejilerin tekrarlı tutsak ikilemi oyununda nasıl yayıldığını, sinyal hatası olduğunda intikam döngülerinin nasıl oluştuğunu ve affedici stratejilerin bunu nasıl kırdığını gösterir.",
           "inputs": [
             "Strateji kümesi (her zaman işbirliği, her zaman ihanet, Tit for Tat, affedici Tit for Tat)",
@@ -1475,7 +1471,7 @@
           ]
         },
         {
-          "title": "Akraba seçilimi hesaplayıcısı",
+          "title": "Akraba Seçilimi Hesaplayıcısı",
           "shows": "Bir özgecil davranışın, akrabalık derecesine ve fayda-maliyet oranına göre gen aktarımını artırıp artırmadığını gösterir; kardeş, yarı kardeş ve kuzen gibi farklı akrabalık düzeylerini karşılaştırır.",
           "inputs": [
             "Akrabalık derecesi (kardeş, yarı kardeş, kuzen, yabancı)",
@@ -1489,7 +1485,7 @@
           ]
         },
         {
-          "title": "Eşleşmeli bağ mı, turnuva mı?",
+          "title": "Eşleşmeli Bağ mı, Turnuva mı?",
           "shows": "Cinsiyetler arası boyut farkı ve babalık yatırımı gibi birkaç girdiden, bir türün sosyal sistemini ve birlikte kümelenen özelliklerini tahmin eder; bölümdeki karşılaştırma tablosunun etkileşimli hali gibidir.",
           "inputs": [
             "Cinsiyetler arası vücut boyutu farkı",
@@ -1534,10 +1530,7 @@
         }
       ],
       "confidence": "yüksek",
-      "verifyNotes": [
-        "'Son bölüm' ifadesinin ch17'ye denk geldiği varsayıldı; metinde bölüm numarası açıkça yazılmıyor.",
-        "Metin, bölüm sonunda 'ikinci kısma geçiş' dediği için bu bölümün birinci kısmın son bölümü olduğu anlaşılıyor; ikinci kısmın hangi dosyada başladığı bu bölüm metninden doğrulanamaz."
-      ]
+      "verifyNotes": []
     },
     {
       "id": "ch11",
@@ -1579,7 +1572,7 @@
         },
         {
           "term": "Yeniden kategorileştirme (recategorization)",
-          "explanation": "Bir dışgrup bireyine başka bir ortak kimlik üzerinden bakılması; örneğin aynı localığa ait olmak ya da aynı yemeği sevmek gibi. Bu, Biz ile Onlar sınırını kaydırabilir."
+          "explanation": "Bir dışgrup bireyine başka bir ortak kimlik üzerinden bakılması; örneğin aynı takımı tutmak ya da kişinin hangi yemeği seveceğini düşünmek gibi. Bu, Biz ile Onlar sınırını kaydırabilir."
         },
         {
           "term": "Temas teorisi (contact theory)",
@@ -1604,8 +1597,8 @@
           "finding": "Ovülasyon döneminde olan beyaz kadınların, Afrikalı Amerikalı erkeklere karşı daha olumsuz tutum sergilediği bulundu. Hormonların Biz/Onlar tepkisini ince biçimde ayarlayabileceğini gösterir."
         },
         {
-          "name": "Clark ve Clark'ın bebek bezi (doll) çalışmaları (1940'lar)",
-          "finding": "Afrikalı Amerikalı çocuklar, beyaz bebekleri daha olumlu özelliklerle nitelendirdi ve tercih etti. Bu bulgu, ayrımcılığın zararlarının kanıtı olarak Brown v. Board of Education davasında kullanıldı."
+          "name": "Clark ve Clark'ın oyuncak bebek çalışmaları (1940'lar)",
+          "finding": "Afrikalı Amerikalı çocuklar, beyaz bebekleri daha olumlu özelliklerle nitelendirdi ve tercih etti. Etki en çok ayrı okullardaki siyah çocuklarda belirgindi. Bu bulgu, ayrımcılığın zararlarının kanıtı olarak Brown v. Board of Education davasında kullanıldı."
         },
         {
           "name": "Fiske'nin 37 ülke karşılaştırması",
@@ -1614,7 +1607,7 @@
       ],
       "simulationIdeas": [
         {
-          "title": "Kategori önceliği değiştirme",
+          "title": "Kategori Önceliği Değiştirme",
           "shows": "Aynı kişilerin hangi kimlik işaretinin öne çıkarıldığına göre nasıl ayrıştırıldığını ve dışgrup algısının nasıl değiştiğini gösterir; ırk, cinsiyet ve gömlek rengi gibi kategoriler arasında geçişi canlandırır.",
           "inputs": [
             "Öne çıkarılan kategori (ırk, cinsiyet, yaş, gömlek rengi, ortak hedef)",
@@ -1628,7 +1621,7 @@
           ]
         },
         {
-          "title": "Sıcaklık-yetkinlik haritası",
+          "title": "Sıcaklık-Yetkinlik Haritası",
           "shows": "Bir grubun iki eksende hangi konuma düştüğüne ve konum değişimi yönüne göre hangi duygunun (gurur, kıskançlık, acıma, tiksinti) ve hangi davranış eğiliminin (yardım, dışlama, ilişki kurma, saldırı) ortaya çıktığını gösterir.",
           "inputs": [
             "Sıcaklık puanı",
@@ -1643,7 +1636,7 @@
           ]
         },
         {
-          "title": "Temas koşulları simülasyonu",
+          "title": "Temas Koşulları Simülasyonu",
           "shows": "Gruplar arası temasın hangi koşullarda önyargıyı azalttığını, hangi koşullarda ise ters tepki yarattığını gösterir; bireyselleştirme ve hiyerarşi farkının etkisini ayrıca görünür kılar.",
           "inputs": [
             "Grup sayılarının dengesi",
@@ -1662,7 +1655,7 @@
       "links": [
         {
           "to": "ch02",
-          "why": "Bilişsel yük kavramı, dışgrup etkileşimlerinde ön lob performansının neden düştüğünü açıklamada bu bölümde kullanılır."
+          "why": "Bilişsel yük kavramı, dışgrup etkileşimlerinde frontal korteks performansının neden düştüğünü açıklamada bu bölümde kullanılır."
         },
         {
           "to": "ch03",
@@ -1699,8 +1692,7 @@
       ],
       "confidence": "yüksek",
       "verifyNotes": [
-        "'Bir sonraki bölüm' ch12'ye, 'son iki bölüm' ch16 ve ch17'ye denk geldiği varsayıldı; metinde bölüm numaraları açıkça yazılmıyor.",
-        "'Son bölüm' olarak anılan Noel ateşkesinin ch17 olduğu varsayıldı."
+        "'Son iki bölüm' ifadesi ch16–ch17 olarak yorumlandı."
       ]
     },
     {
@@ -1708,7 +1700,7 @@
       "kind": "chapter",
       "number": 12,
       "titleEn": "Hierarchy, Obedience, and Resistance",
-      "titleTr": "Hiyerarşi, itaat ve direniş",
+      "titleTr": "Hiyerarşi, İtaat ve Direniş",
       "timescale": null,
       "timescaleSeconds": null,
       "summary": "Bölüm, insan dışı türlerdeki statü hiyerarşilerinin işleyişinden yola çıkıp insanın çoklu hiyerarşilerine, liderlik seçimine ve politik yönelimlere uzanır. Statünün önemi kadar, o statünün ne anlama geldiği de sağlık ve stres üzerinde belirleyicidir; yoksulluğun ve eşitsizliğin etkisi bu yüzden insanlarda özellikle yıkıcıdır. Bölümün ikinci yarısı konformizm ve itaati ele alır: insanlar grubun kararına, otoriteye ve kalabalığa, çoğu zaman düşünmeden uyabilir. Asch, Milgram ve Zimbardo'nun deneyleri bu eğilimin ne kadar güçlü olduğunu gösterir, ama aynı deneylerin tartışmalı yönleri ve direnen insanlar da anlatılır. Sonuçta durumsal baskıların güçlü olduğu, ama direnişin de mümkün olduğu vurgulanır.",
@@ -1756,7 +1748,7 @@
       ],
       "keyStudies": [
         {
-          "name": "Captive macaque group size ve beyin yapısı (neuroimaging)",
+          "name": "Esir makaklarda grup büyüklüğü ve beyin yapısı (nörogörüntüleme)",
           "finding": "Daha büyük gruplarda yaşayan makaklerde prefrontal korteks ile üst temporal girusun (Zihin Kuramı ile ilişkili bölge) kalınlaştığı ve iki bölge arasındaki aktivite bağlantısının arttığı görülmüştür. Ayrıca grubun içinde yüksek statüye sahip olanlarda bu genişleme daha belirgindir."
         },
         {
@@ -1773,7 +1765,7 @@
         },
         {
           "name": "Milgram itaat deneyleri (1960'lar)",
-          "finding": "Katılımcıların yaklaşık yüzde 65'i, sahte da olsa, 450 volta kadar şok vermeyi sürdürdü. Otorite farklı bir odadaysa, deney sıradan bir binada yapıldıysa ya da öğrenenle yakın temas varsa uyum belirgin biçimde düştü."
+          "finding": "Katılımcıların yaklaşık yüzde 65'i, sahte da olsa, 450 volta kadar şok vermeyi sürdürdü. Otorite farklı bir odadaysa, deney sıradan bir binada yapıldıysa ya da öğrenenle yakın temas varsa uyum belirgin biçimde düştü. Gina Perry'nin arşiv incelemesi bazı verilerin şişirilmiş olabileceğini gösterir; şişirme ayıklandığında bile uyum oranı yaklaşık yüzde 60'tır."
         },
         {
           "name": "Stanford Hapishane Deneyi (Zimbardo, 1971) ve 2001 BBC tekrarı",
@@ -1782,7 +1774,7 @@
       ],
       "simulationIdeas": [
         {
-          "title": "Statünün anlamı: aynı sıra, farklı hayat",
+          "title": "Statünün Anlamı: Aynı Sıra, Farklı Hayat",
           "shows": "Aynı hiyerarşik sırada olan iki bireyin stres düzeyinin, sosyal bağların (tımar ve destek) ve ezilme riskinin değişkenliğe göre nasıl ayrıştığını gösterir. Sıra sabit kalırken anlamın nasıl değiştiği somutlaşır.",
           "inputs": [
             "Statü sırası (1 ile 10 arası)",
@@ -1797,7 +1789,7 @@
           ]
         },
         {
-          "title": "Asch çizgi deneyi: kaç kişi uyumu zorlar?",
+          "title": "Asch Çizgi Deneyi: Kaç Kişi Uyumu Zorlar?",
           "shows": "Grup büyüklüğü ve oybirliği ile konformizm oranı arasındaki eğriyi gösterir; üç kişi ile belirginleşen uyumun altı kişiyle doyuma ulaştığı görülür. Bir muhalifin varlığının bu eğriyi nasıl kırdığı da test edilebilir.",
           "inputs": [
             "Karşı çıkan kişi sayısı (0 ile 10 arası)",
@@ -1811,7 +1803,7 @@
           ]
         },
         {
-          "title": "Otorite ve sorumluluk: itaat olasılığı",
+          "title": "Otorite ve Sorumluluk: İtaat Olasılığı",
           "shows": "Milgram türü bir ortamda otoritenin yakınlığı, mekanın prestiji, öğrenenin mesafesi ve sorumluluğun dağılımının itaat olasılığını nasıl değiştirdiğini gösterir. Model bir tahmin aracı değil, kitabın bulgularını görselleştiren bir öğretim aracı olarak kullanılmalıdır.",
           "inputs": [
             "Otoritenin fiziksel uzaklığı",
@@ -1842,7 +1834,7 @@
         },
         {
           "to": "ch02",
-          "why": "Amigdala, ön korteks ve belirsizliğe tepki gibi beyin mekanizmaları ch2'deki temel kavramlara dayanır."
+          "why": "Amigdala, frontal korteks ve belirsizliğe tepki gibi beyin mekanizmaları ch2'deki temel kavramlara dayanır."
         },
         {
           "to": "ch04",
@@ -1866,31 +1858,24 @@
         }
       ],
       "confidence": "yüksek",
-      "verifyNotes": [
-        "Bölümün zaman kurgusu tek bir ölçeğe oturmuyor (evrimsel kökenler, çocukluk, yetişkin statüsü ve anlık tepkiler iç içe); bu nedenle timescale ve timescaleSeconds bilerek null bırakıldı.",
-        "keyStudies içindeki 'Dört ülkede ve on yılı aşkın' ifadesi metinde açıkça verilmemiş bir ayrıntı olabilir; metin sosyoekonomik gradyanın 'birçok ülke ve çalışma' üzerinden anlatıldığını söyler. Doğrulanmalı.",
-        "Milgram'ın yaklaşık yüzde 65 oranı orijinal deney için verilmiştir; metin replikasyonlarda yaklaşık yüzde 60 civarında uyum bulunduğunu da belirtir. Ayrıca Milgram'ın verilerinin bazı bölümlerinin abartılmış olabileceği eleştirisi (Gina Perry) metinde yer alır.",
-        "Bölümde sosyoekonomik sağlık gradyanı ve yönetici stresi tartışmaları anlatılsa da, bu bulgular için ayrı bir tek deney adı verilmemiştir; keyStudies'e alınmadı.",
-        "Asch'ın üç kişiden itibaren başlayan ve altı kişide doyan konformizm eğrisi metinde 'ilk belirme' ve 'en yüksek' olarak tarif edilmiştir; kesin sayılar kaynakta doğrulanmalı.",
-        "Simülasyon fikirleri öğretim amaçlı modellerdir; kitap bunları ölçülebilir kesin tahminler olarak sunmaz."
-      ]
+      "verifyNotes": []
     },
     {
       "id": "ch13",
       "kind": "chapter",
       "number": 13,
       "titleEn": "Morality and Doing the Right Thing, Once You've Figured Out What That Is",
-      "titleTr": "Ahlak: doğrunun ne olduğu bulunduktan sonra doğruyu yapmak",
+      "titleTr": "Ahlak ve Doğru Olanı Yapmak (Ne Olduğunu Anladıktan Sonra)",
       "timescale": null,
       "timescaleSeconds": null,
-      "summary": "Bölüm, ahlaki kararların akıl yürütmeyle mi yoksa sezgiyle mi verildiğini sorar. Metin, önce akıl yürütmenin ahlaki kararlardaki payını gösterir, sonra sosyal sezgiciliğin (Haidt) kanıtlarını sunarak çoğu ahlaki kararın önce duygusal olarak verilip sonradan gerekçelendirildiğini savunur. Bebekler, kapuçin maymunları ve şempanzelerde adalet ve karşılıklılığa dair ilkel izler, kültürler arasında ise adalet ve cezalandırma anlayışının market entegrasyonu, topluluk büyüklüğü ve dinle nasıl değiştiği anlatılır. Son bölümde, sezgiyle akıl yürütmenin hangi bağlamda birbirinin yerine geçtiği, özellikle trolley problemi ve yalan söyleme deneyleri üzerinden tartışılır. Sonuçta uzun vadeli stratejik düşünmenin hem sezgiyi hem akıl yürütmeyi birlikte gerektirdiği, en dürüst davranışın ise çoğu zaman bir mücadele değil bir alışkanlık olduğu savunulur.",
+      "summary": "Bölüm, ahlaki kararların akıl yürütmeyle mi yoksa sezgiyle mi verildiğini sorar. Metin, önce akıl yürütmenin ahlaki kararlardaki payını gösterir, sonra sosyal sezgiciliğin (Haidt) kanıtlarını sunarak çoğu ahlaki kararın önce duygusal olarak verilip sonradan gerekçelendirildiğini savunur. Bebekler, kapuçin maymunları ve şempanzelerde adalet ve karşılıklılığa dair ilkel izler, kültürler arasında ise adalet ve cezalandırma anlayışının market entegrasyonu, topluluk büyüklüğü ve dinle nasıl değiştiği anlatılır. Son bölümde, sezgiyle akıl yürütmenin hangi bağlamda birbirinin yerine geçtiği, özellikle trolley problemi ve yalan söyleme deneyleri üzerinden tartışılır. Bölüm Greene'in ayrımıyla kapanır: 'Ben mi, Biz mi' sorunlarında (ortak malın trajedisi) hızlı ahlaki sezgiler iyi işler; farklı grupların sezgilerinin çatıştığı 'Biz mi, Onlar mı' sorunlarında (sağduyu ahlakının trajedisi) ise yavaş, bilinçli akıl yürütme gerekir. En dürüst davranışın çoğu zaman bir irade mücadelesi değil, otomatikleşmiş bir alışkanlık olduğu da savunulur.",
       "keyConcepts": [
         {
           "term": "Sosyal sezgicilik (social intuitionism)",
           "explanation": "Ahlaki kararların önce hızlı ve duygusal sezgilerle verilip, akıl yürütmenin sonradan bu kararı gerekçelendirdiğini öne süren görüştür; Jonathan Haidt bu okulun başlıca savunucusudur."
         },
         {
-          "term": "Ahlaki dehşet / ahlaki şaşkınlık (moral dumbfounding)",
+          "term": "Ahlaki şaşkınlık (moral dumbfounding)",
           "explanation": "İnsanların ahlaki bir yargıya güçlü biçimde inandığı halde nedenini açıklayamaması ve ardından gerekçe uydurmasıdır."
         },
         {
@@ -1937,11 +1922,11 @@
         },
         {
           "name": "Capuchin maymunları: 'eşitsiz ödeme' deneyi (Brosnan ve de Waal, 2003)",
-          "finding": "Kapuçinler, arkadaşı üzüm alırken kendisi salatalık aldığında işbirliğini reddetti. Tepki, arkadaşın ödülüne bağlı olarak ortaya çıktı; ikisi de salatalık aldığında ya da tek başına denendiğinde görülmedi. Yazarlar bunu tam bir adalet duygusundan çok, eşitsizliğe karşı benlik çıkarına dayalı bir tepki olarak yorumlar."
+          "finding": "Kapuçinler, arkadaşı üzüm alırken kendisi salatalık aldığında işbirliğini reddetti. Tepki, arkadaşın ödülüne bağlı olarak ortaya çıktı; ikisi de salatalık aldığında ya da tek başına denendiğinde görülmedi. Sapolsky bunu tam bir adalet duygusundan çok, eşitsizliğe karşı benlik çıkarına dayalı bir tepki olarak yorumlar."
         },
         {
           "name": "Henrich ve arkadaşlarının 25 küçük ölçekli kültürde oyun çalışması",
-          "finding": "Pazar entegrasyonu ve topluluk büyüklüğü arttıkça adil teklifler ve cezalandırma istekliliği yükseldi. Avcı-toplayıcı Hadza, oyunda yaklaşık yüzde 73 pay aldı ve küçük topluluklarında teklifi reddetmek neredeyse hiç görülmedi. Dünya dinlerine mensubiyet arttıkça üçüncü taraf cezalandırması da arttı."
+          "finding": "Pazar entegrasyonu ve topluluk büyüklüğü arttıkça adil teklifler ve cezalandırma istekliliği yükseldi. Avcı-toplayıcı Hadza, Diktatör Oyunu'nda paranın ortalama yüzde 73'ünü kendine ayırdı ve Ultimatum Oyunu'nda sıfırın üzerindeki hemen her teklifi kabul etti. Dünya dinlerine mensubiyet arttıkça üçüncü taraf cezalandırması da arttı."
         },
         {
           "name": "Herrmann ve arkadaşlarının kamu malı oyunu (2008)",
@@ -1954,7 +1939,7 @@
       ],
       "simulationIdeas": [
         {
-          "title": "Trolley senaryoları: hangi devre devreye girer?",
+          "title": "Trolley Senaryoları: Hangi Devre Devreye Girer?",
           "shows": "Aynı sonucu doğuran üç senaryoda (anahtar, doğrudan itme, döngü) kişisel gücün, kasıtlılığın ve fiziksel yakınlığın kararı nasıl değiştirdiğini gösterir. Modelde, kullanıcı senaryoyu değiştirdiğinde dlPFC-duygu ağırlığının kayması izlenebilir.",
           "inputs": [
             "Kişiye fiziksel temas (evet/hayır)",
@@ -1969,7 +1954,7 @@
           ]
         },
         {
-          "title": "Adil teklif oyunu: pazar, topluluk ve cezalandırma",
+          "title": "Adil Teklif Oyunu: Pazar, Topluluk ve Cezalandırma",
           "shows": "Bir topluluğun büyüklüğü ve pazar entegrasyonu değiştikçe teklif, kabul ve cezalandırma davranışlarının nasıl kaydığını gösterir. Adaletin evrensel bir sabit olmadığı, yapıya bağlı olarak değiştiği görülür.",
           "inputs": [
             "Pazar entegrasyonu yüzdesi (kalorinin pazardan gelme oranı)",
@@ -1984,7 +1969,7 @@
           ]
         },
         {
-          "title": "Zar atma ve dürüstlük: en yüksek sonucu bildirmek",
+          "title": "Zar Atma ve Dürüstlük: En Yüksek Sonucu Bildirmek",
           "shows": "İki kez atılıp yalnızca ilk sonucun ödüllendirildiği bir zar düzeninde, bildirilen sonuçların dağılımının nasıl çarpıldığını gösterir. Dürüst bildirimde her sayı altıda bir olurken, yalnızca 'daha yüksek olanı bildirme' davranışının dağılımı sağ tarafa nasıl kaydırdığı görülür.",
           "inputs": [
             "Atış sayısı",
@@ -2014,7 +1999,7 @@
         },
         {
           "to": "ch10",
-          "why": "İşbirliği, dünya ahlakı ve vmPFC hasarının kin kişilere zarar verme kararı üzerindeki etkisi ch10'da anlatılmış konulardır."
+          "why": "vmPFC hasarlı kişilerin beş yabancıyı kurtarmak için bir akrabayı feda etmeyi kolayca savunması ch10'da anlatılır; işbirliğinin nasıl başlatılıp sürdürüleceği sorusu da ch10'a dayanır."
         },
         {
           "to": "ch11",
@@ -2026,25 +2011,18 @@
         },
         {
           "to": "ch17",
-          "why": "Metin, işbirliğinin nasıl sağlanabileceğine dair yanıtların kitabın son bölümünde ele alınacağını belirtir; bu bölüm için 'final chapter' ifadesinin ch17 mi yoksa epilog mu olduğu doğrulanmalıdır."
+          "why": "Metin, işbirliğinin nasıl sağlanabileceğine dair yanıtları son bölüme (ch17: açık defter oyunu, üçüncü taraf cezası) bırakır."
         }
       ],
       "confidence": "yüksek",
-      "verifyNotes": [
-        "Bölümün zaman kurgusu tek bir ölçeğe oturmuyor (bebeklik, çocukluk, evrimsel kökenler, anlık sezgiler ve kültürel karşılaştırmalar iç içe); bu nedenle timescale ve timescaleSeconds bilerek null bırakıldı.",
-        "Metin ch13 içinde 'final chapter' diye bahseder; ch17 ile eşleştirmek varsayımdır, ayrıca epilogda olabilir. links içindeki ch17 kaydı doğrulanmalı.",
-        "Henrich çalışmasındaki 'Hadza yaklaşık yüzde 73' ayrıntısı metinden alınmıştır; kaynakta teyit edilmelidir. Umman ve Yunanistan bulgusu ise Herrmann ve arkadaşlarının çalışmasına aittir.",
-        "Capuchin deneyinin yorumu metinde açıkça 'benlik çıkarı' olarak verilir; bu nedenle adalet duygusu yerine eşitsizlik tepkisi terimi kullanıldı.",
-        "Trolley deneyindeki yüzde değerleri metinde yaklaşık aralık olarak verilir (60-70, yüzde 30, yüzde 80); keyStudies'de bu aralıklar korunmuştur.",
-        "Simülasyon fikirleri öğretim amaçlı modellerdir; kitap bunları ölçülebilir kesin tahminler olarak sunmaz."
-      ]
+      "verifyNotes": []
     },
     {
       "id": "ch14",
       "kind": "chapter",
       "number": 14,
       "titleEn": "Feeling Someone's Pain, Understanding Someone's Pain, Alleviating Someone's Pain",
-      "titleTr": "Birinin acısını hissetmek, anlamak ve hafifletmek",
+      "titleTr": "Birinin Acısını Hissetmek, Anlamak ve Hafifletmek",
       "timescale": null,
       "timescaleSeconds": null,
       "summary": "Bölüm, empatinin tek bir duygu olmadığını; duygusal bulaşmadan başlayıp bilişsel perspektif almaya uzanan bir spektrum olduğunu gösterir. Fareler, şempanzeler, sıçanlar ve prairie vole'lerde teselli ve yardım davranışları görülür, ama bu yardım çoğu zaman yakın akrabaya ya da aynı gruba yöneliktir. Beyinde ön singulat korteks, acının yalnızca yerini değil anlamını da işlediği için empatinin merkezinde yer alır. Empatik bir duygu her zaman eyleme dönüşmez: kişisel sıkıntı, bilişsel yük ve dışgruba karşı önyargı yardımı engeller, duygusal bir mesafe ise daha etkili yardıma açılır. Bölüm son olarak aynalama nöronları iddiasının abartıldığını ve gerçek fedakârlığın çoğu zaman öz-çıkar unsurları taşıdığını tartışır.",
@@ -2067,7 +2045,7 @@
         },
         {
           "term": "Bilişsel yük ve empati yorgunluğu (cognitive load, empathy fatigue)",
-          "explanation": "Yabancı ya da sevilmeyen birinin perspektifini almak ön korteksi zorlar. Bu zorlamanın tekrarı yardımseverliği azaltır."
+          "explanation": "Yabancı ya da sevilmeyen birinin perspektifini almak frontal korteksi zorlar. Bu zorlamanın tekrarı yardımseverliği azaltır."
         },
         {
           "term": "Teselli davranışı (consolation)",
@@ -2084,7 +2062,7 @@
       ],
       "simulationIdeas": [
         {
-          "title": "Empati-yardım eşiği",
+          "title": "Empati-Yardım Eşiği",
           "shows": "Bir gözlemcinin, acı çeken kişiye yakınlığa, grup kimliğine ve kendi sıkıntı düzeyine bağlı olarak yardım edip etmediğini gösterir.",
           "inputs": [
             "Acının yakınlığı (akraba, tanıdık, yabancı)",
@@ -2099,7 +2077,7 @@
           ]
         },
         {
-          "title": "Perspektif değişimi ve duygusal bulaşma",
+          "title": "Perspektif Değişimi ve Duygusal Bulaşma",
           "shows": "Gözlemlenen acının gözlemcinin sıkıntı düzeyine nasıl geçtiğini ve benlik yerine karşı tarafa odaklanmanın bu sıkıntıyı nasıl düşürdüğünü gösterir.",
           "inputs": [
             "Gözlemlenen acının şiddeti",
@@ -2113,7 +2091,7 @@
           ]
         },
         {
-          "title": "Yardımın hedefi: biz ve onlar",
+          "title": "Yardımın Hedefi: Biz ve Onlar",
           "shows": "Sıçan deneyindeki gibi, bir bireyin kimin için harekete geçtiğini; kimlik etiketinin ve birlikte yaşama süresinin bu seçimi nasıl değiştirdiğini gösterir.",
           "inputs": [
             "Kimlik etiketi (aynı grup / farklı grup)",
@@ -2145,7 +2123,7 @@
           "finding": "Sıkıntıdaki bir sıçanı askıdan indirmek ya da kafesteki arkadaşını kısıtlayıcıdan çıkarmak için sıçanlar çaba harcadı ve çikolatayı paylaştı. Genetik olarak yakın ama yabancı sıçanlara da yardım ettiler; farklı bir suşun annesi tarafından büyütülen sıçan, büyüttüğü grubu 'biz' saydı."
         },
         {
-          "name": "Empati eğitimi ile şefkat eğitimi (Ricard ve benzeri çalışmalar)",
+          "name": "Empati eğitimi ile şefkat eğitimi karşılaştırması",
           "finding": "Acıyı doğrudan hissetmeye yönelik eğitim amigdalayı yoğun biçimde etkinleştirdi ve olumsuz, yorucu bir durum yarattı. Sıcaklık ve bakım duygusuna odaklanan şefkat eğitimi ise dlPFC ve dopamin sistemini etkinleştirdi, daha olumlu bir ruh hali ve daha fazla sosyal davranış getirdi."
         },
         {
@@ -2156,7 +2134,7 @@
       "links": [
         {
           "to": "ch02",
-          "why": "Kitap ön singulat korteksin rolünü ve somatik işaretleyici hipotezini ilk bu bölümde tanıtır."
+          "why": "Ön singulat korteks (ACC) ve somatik işaretleyici kavramları ch2'de tanıtılır; bu bölüm onları empati bağlamında kullanır."
         },
         {
           "to": "ch03",
@@ -2200,16 +2178,14 @@
         }
       ],
       "confidence": "yüksek",
-      "verifyNotes": [
-        "Bölümün zaman ölçeği çocukluk, türler arası karşılaştırma ve evrim arasında kaldığı için tek bir değere oturmuyor; timescale ve timescaleSeconds null bırakıldı."
-      ]
+      "verifyNotes": []
     },
     {
       "id": "ch15",
       "kind": "chapter",
       "number": 15,
       "titleEn": "Metaphors We Kill By",
-      "titleTr": "Öldüren metaforlar",
+      "titleTr": "Uğruna Öldürdüğümüz Metaforlar",
       "timescale": null,
       "timescaleSeconds": null,
       "summary": "Bölüm, sembol ve metafor üretme yeteneğinin beyinde yeni bir devre olarak değil, eski sistemlerin yeniden kullanılmasıyla ortaya çıktığını savunur. Sonuç olarak beyin metaforla gerçeği sık sık karıştırır: acı, temizlik, sıcaklık ve ağırlık gibi fiziksel duyumlar soyut yargıları etkiler. Ahlaki iğrenme ön adayla ilişkilendiği için, bir grubu 'böcek' ya da 'hastalık' gibi tanımlayan dil o grubun insan sayılmamasına zemin hazırlayabilir; Ruanda soykırımı bu mekanizmanın trajik örneği olarak ele alınır. Öte yandan kutsal değerlere saygı gösteren sembolik jestler, maddi tekliflerin tek başına yetmediği uzlaşmalarda kapı açabilir; Mandela ve Kuzey İrlanda örnekleri bunu gösterir.",
@@ -2249,7 +2225,7 @@
       ],
       "simulationIdeas": [
         {
-          "title": "Metafor-duyum karışıklığı",
+          "title": "Metafor-Duyum Karışıklığı",
           "shows": "Fiziksel bir duyumun (sıcaklık, ağırlık, sertlik) bir kişiye dair yargıyı nasıl kaydırdığını gösterir.",
           "inputs": [
             "Nesnenin sıcaklığı (sıcak / soğuk)",
@@ -2263,7 +2239,7 @@
           ]
         },
         {
-          "title": "Kutsal değer ve sembolik uzlaşma",
+          "title": "Kutsal Değer ve Sembolik Uzlaşma",
           "shows": "Maddi tekliflerin tek başına neden yetmediğini, sembolik tanımanın ise uzlaşma olasılığını nasıl artırabildiğini gösterir.",
           "inputs": [
             "Maddi teklifin büyüklüğü",
@@ -2277,7 +2253,7 @@
           ]
         },
         {
-          "title": "Psikolojik mesafe ve analiz düzeyi",
+          "title": "Psikolojik Mesafe ve Analiz Düzeyi",
           "shows": "Bir veri serisindeki son düşüşün, verinin yakın ya da uzak olmasına göre nasıl farklı yorumlandığını gösterir.",
           "inputs": [
             "Verinin mesafesi (yakın / uzak)",
@@ -2301,8 +2277,8 @@
           "finding": "Kişinin kendisine verilen hafif şokta hem acı ölçer bölgeler hem ACC etkinleşti. Sevdiği birinin aynı şoku aldığını izlediğinde acı ölçer bölgeler sessiz kalırken ACC etkinleşmeye devam etti."
         },
         {
-          "name": "Ahlaki ihlal ve Macbeth etkisi (Zhong ve Liljenquist)",
-          "finding": "Ahlaki bir ihlalini hatırlayanlar, hediye olarak bir kalem ile antiseptik mendil arasında seçim yaptığında mendili daha sık tercih etti. Yalan söyleyenler üzerine yapılan ayrı bir çalışmada (Schaefer ve ark.) ise yazarak yalan söyleyenler el sabununu, sözle yalan söyleyenler gargarayı seçti. Bu, beynin ilgili beden bölgesini de etkinleştirdi."
+          "name": "Ahlaki ihlal ve Macbeth etkisi (Zhong ve Liljenquist ve izleyen çalışmalar)",
+          "finding": "Zhong ve Liljenquist'in çalışmasında kendi ahlaki ihlalini hatırlayanlar, hediye olarak kalem yerine antiseptik mendili daha sık seçti. Başka bir çalışmada sözlü yalan söyleyenler gargarayı, yazılı yalan söyleyenler el sabununu tercih etti; görüntülemede sözlü yalancılarda ağızla, yazılı yalancılarda elle ilgili duyusal-motor korteks bölgeleri etkinleşti."
         },
         {
           "name": "El yıkama ve yardımseverlik",
@@ -2314,7 +2290,7 @@
         },
         {
           "name": "Kutsal değerler ve Orta Doğu çatışması (Atran ve ark., 2007)",
-          "finding": "Görüşmelerde taraflar maddi konuların yanında özür, tanınma ve kimlik gibi sembolik talepleri de öne çıkardı. Yazarlar, sembolik ve maddi bir fayda sağlamayan jestlerin çatışmanın çözümünde kilit olabileceğini savundu."
+          "finding": "Görüşmelerde taraflar maddi konuların yanında özür, tanınma ve kimlik gibi sembolik talepleri de öne çıkardı. Yazarlar, maddi karşılığı olmayan sembolik jestlerin (özür, tanınma) kalıcı barış için kilit olduğunu, kutsal değerler karşısında maddi tekliflerin ise ters tepebileceğini savundu."
         }
       ],
       "links": [
@@ -2340,7 +2316,7 @@
         },
         {
           "to": "ch13",
-          "why": "Muhafazakâr ve liberal ayrımının iğrenmeyle bağlantısı, bu bölümdeki ahlaki iğrenme tartışmasıyla birleşir."
+          "why": "Kutsal değerler, ch13'te Greene'in ortak meraya farklı ahlaki vizyonlarla bakan çoban toplulukları örneğinin ('sağduyu ahlakının trajedisi') doğrudan devamıdır."
         },
         {
           "to": "ch14",
@@ -2352,18 +2328,15 @@
         }
       ],
       "confidence": "yüksek",
-      "verifyNotes": [
-        "Bölüm asıl olarak bugünkü beyin işleyişini anlatıyor; sembolik yeteneğin evrimsel zamanlaması (yaklaşık 50 bin yıl ve öncesi) bir bağlam olarak geçiyor. Tek bir zaman ölçeği oturmadığı için timescale ve timescaleSeconds null bırakıldı.",
-        "Ruanda soykırımına ilişkin sayılar kitabın verdiği tahminlerdir; bağımsız olarak doğrulanmadı."
-      ]
+      "verifyNotes": []
     },
     {
       "id": "ch16",
       "kind": "chapter",
       "number": 16,
       "titleEn": "Biology, the Criminal Justice System, and (Oh, Why Not?) Free Will",
-      "titleTr": "Biyoloji, ceza adaleti ve (neden olmasın?) özgür irade",
-      "timescale": "Bugün: hukuk ve sorumluluk tartışması",
+      "titleTr": "Biyoloji, Ceza Adaleti Sistemi ve (Ah, Neden Olmasın?) Özgür İrade",
+      "timescale": null,
       "timescaleSeconds": null,
       "summary": "Bölüm, davranışın biyolojik nedenlerinin ceza adaletine nasıl yansıdığını ve 'orta düzey özgür irade' anlayışının neden tutarsız olduğunu tartışır. Yazar, beyin biyolojisinden ayrı işleyen ve kararları veren bir 'homunkülüs' fikrinin, ergenlik, beyin hasarı, zihinsel hastalık ve ahlaki övgü gibi alanlarda sınırları sürekli kaydırdığını gösterir. Libet deneyi ve 'özgür olmama' tartışması bu sınırın nerede çizileceğinin açık bir soru olduğunu ortaya koyar. Yazar, davranışın çok etkenli biyolojisinin henüz tam anlaşılmadığını, ama bilgi arttıkça bugünkü suçluluk ve ceza anlayışının değişeceğini savunur. Bunun pratik sonucu, cezanın hak edildiği ya da erdemli olduğu fikrinden vazgeçip, tehlikeli kişilerden korunmaya odaklanan bir sistemdir.",
       "keyConcepts": [
@@ -2393,7 +2366,7 @@
         },
         {
           "term": "Cezanın duygusal temeli (limbic punishment)",
-          "explanation": "Suçu cezalandırma isteğinin ön korteks yerine limbik sistemde, özellikle vmPFC, amigdala ve ön adada, şekillendiği ve cezalandırmanın dopaminle ödüllendirildiği fikridir."
+          "explanation": "Suçun sorumluluğuna karar vermenin bilişsel dlPFC ile, uygun cezaya karar vermenin ise duygusal vmPFC, amigdala ve insula ile ilişkili olduğu ve cezalandırmanın dopaminerjik ödül sistemini etkinleştirdiği fikridir."
         },
         {
           "term": "Açıklamak ama öngörememek (explaining lots, predicting little)",
@@ -2402,7 +2375,7 @@
       ],
       "simulationIdeas": [
         {
-          "title": "Çok etkenli davranış tahmini",
+          "title": "Çok Etkenli Davranış Tahmini",
           "shows": "Biyolojik ve yaşamsal etkenler eklendikçe bir sonucun öngörülebilirliğinin nasıl arttığını, ama her zaman kesinliğe ulaşmadığını gösterir.",
           "inputs": [
             "Serotonin taşıyıcı gen durumu",
@@ -2418,7 +2391,7 @@
           ]
         },
         {
-          "title": "Hazırlık sinyali ve veto penceresi",
+          "title": "Hazırlık Sinyali ve Veto Penceresi",
           "shows": "Libet deneyinde ölçülen zamanlamanın, dikkat gecikmesi ve veto penceresi ile nasıl değiştiğini gösterir.",
           "inputs": [
             "Hazırlık sinyalinin zamanı",
@@ -2432,7 +2405,7 @@
           ]
         },
         {
-          "title": "Cezanın maliyeti ve ödül",
+          "title": "Cezanın Maliyeti ve Ödül",
           "shows": "Adaletsiz teklifi cezalandırmanın, maliyeti üstlenmeye ne ölçüde değer olduğunu; ücretsiz cezanın ise hazzın ne kadar etkili olduğunu gösterir.",
           "inputs": [
             "Cezanın maliyeti",
@@ -2478,8 +2451,8 @@
           "why": "Ergenlerin frontal olgunlaşmasının dürtü kontrolünü nasıl etkilediği, bu bölümdeki Roper kararı tartışmasının arka planıdır."
         },
         {
-          "to": "ch07",
-          "why": "Ergen beyninin gelişimi ve Steinberg'in çalışmaları, bu bölümde ceza yaşının tartışılmasında doğrudan kullanılır."
+          "to": "ch02",
+          "why": "Frontal korteks hasarı ile suç davranışı ve nörohukuk tartışması ch2'de açılır; kitap ayrıntıyı bu bölüme bırakır."
         },
         {
           "to": "ch08",
@@ -2508,11 +2481,11 @@
       "titleTr": "Savaş ve Barış",
       "timescale": null,
       "timescaleSeconds": null,
-      "summary": "Bölüm, şiddetin tarihsel olarak azaldığı iddiasıyla açılır ve bu iyimserliği hem Pinker’ın argümanı hem de ona yöneltilen eleştiriler üzerinden tartışır. Ardından din, gruplar arası temas, bağışlama, uzlaşma ve işbirliği gibi insanın en iyi ve en kötü davranışlarını aynı anda besleyen mekanizmalar ele alınır. Öldürmeye karşı doğal bir engel olduğu ve bu engelin mesafe ve bireyselleşmeyle nasıl değiştiği, askerlerin ateş etme oranları ve dron pilotlarının travması üzerinden anlatılır. Bölüm, Us/Them sınırlarının bağlama göre kayabildiğini; Abe, Thompson ve Newton gibi bireysel örneklerin ve savaş siperlerindeki kendiliğinden ateşkeslerin bu olasılığı gösterdiğini savunarak kapanır.",
+      "summary": "Bölüm, şiddetin tarihsel olarak azaldığı iddiasıyla açılır ve bu iyimserliği hem Pinker'ın argümanı hem de ona yöneltilen eleştiriler üzerinden tartışır. Ardından din, gruplar arası temas, bağışlama, uzlaşma ve işbirliği gibi insanın en iyi ve en kötü davranışlarını aynı anda besleyen mekanizmalar ele alınır. Öldürmeye karşı doğal bir engel olduğu ve bu engelin mesafe ve bireyselleşmeyle nasıl değiştiği, askerlerin ateş etme oranları ve dron pilotlarının travması üzerinden anlatılır. Bölüm, Us/Them sınırlarının bağlama göre kayabildiğini; Abe, Thompson ve Newton gibi bireysel örneklerin ve savaş siperlerindeki kendiliğinden ateşkeslerin bu olasılığı gösterdiğini savunarak kapanır.",
       "keyConcepts": [
         {
           "term": "Oranlara göre düzeltme (rate correction)",
-          "explanation": "Ölüm sayılarını toplam nüfusa ve olayın sürüsüne bölerek karşılaştırmak, büyük ama kısa olaylarla küçük ama uzun olayları daha adil sıralamaya yarar. Bu düzeltmeyle İkinci Dünya Savaşı en üst sıraya yerleşir."
+          "explanation": "Ölüm sayılarını toplam nüfusa ve olayın süresine bölerek karşılaştırmak, büyük ama kısa olaylarla küçük ama uzun olayları daha adil sıralamaya yarar. Bu düzeltmeyle İkinci Dünya Savaşı en üst sıraya yerleşir."
         },
         {
           "term": "Gruplar arası temas (intergroup contact)",
@@ -2550,23 +2523,23 @@
       "keyStudies": [
         {
           "name": "Pinker, The Better Angels of Our Nature (şiddetin azalması)",
-          "finding": "Pinker, tarihsel olarak şiddet oranlarında uzun vadeli bir düşüş olduğunu ve Avrupa’da 1945’ten beri uzun bir barış yaşandığını savunur. Sapolsky, Pinker’ın nüfus düzeltmesine olay süresinin düzeltmesini de eklediğinde sıralamanın değiştiğini, İkinci Dünya Savaşı’nın birinci, Ruanda soykırımının yedinci sıraya çıktığını gösterir."
+          "finding": "Pinker, tarihsel olarak şiddet oranlarında uzun vadeli bir düşüş olduğunu ve Avrupa'da 1945'ten beri uzun bir barış yaşandığını savunur. Sapolsky, Pinker'ın nüfus düzeltmesine olay süresinin düzeltmesini de eklediğinde sıralamanın değiştiğini, İkinci Dünya Savaşı'nın birinci, Ruanda soykırımının yedinci sıraya çıktığını gösterir."
         },
         {
           "name": "Dini ve laik kelime ile cümle düzenleme (priming) çalışmaları",
           "finding": "Dini kelimelerle cümle düzenleyen katılımcılar sonrasında daha cömert davrandı. Jüri, polis ve sözleşme gibi laik gözetim kelimeleri de aynı etkiyi yarattı; bu da etkinin büyük ölçüde gözetilme hissiyle ilgili olabileceğini düşündürür."
         },
         {
-          "name": "Etiyopya’daki kömür ormanları oyunu",
-          "finding": "Köylerinde maliyetli cezalandırmaya istekli insanların oranı yüksek olan topluluklar, ormanın aşırı kesilmesini önlemek için daha fazla devriye tutuyor ve ormanları daha sağlıklı oluyordu."
+          "name": "Etiyopya'da orman ortak malı ve maliyetli cezalandırma",
+          "finding": "Yerel ormandan odun kesip kömür satan Etiyopya köylerinde, ekonomik oyunda maliyetli cezalandırmaya ortalama istekliliği yüksek olan köyler aşırı kesime karşı daha çok devriye tutuyor ve ormanları daha sağlıklı oluyordu."
         },
         {
           "name": "Kutsal onay ve ses cezası deneyi",
-          "finding": "Tanrının şiddeti onayladığı bir metni okuyan katılımcılar, rakiplerine uyguladıkları gürültü cezasını artırdı. Etki, dindar Mormon öğrencilerde de liberal bir Hollanda üniversitesinin öğrencilerinde de benzer güçteydi ve Kutsal Kitap’a inanmayanlarda da daha az olsa da görüldü."
+          "finding": "Tanrının şiddeti onayladığı bir metni okuyan katılımcılar, rakiplerine uyguladıkları gürültü cezasını artırdı. Etki, dindar Mormon öğrencilerde de liberal bir Hollanda üniversitesinin öğrencilerinde de benzer güçteydi ve Kutsal Kitap'a inanmayanlarda da daha az olsa da görüldü."
         },
         {
           "name": "Grossman ve öldürme direnci (Gettysburg ve drone pilotları)",
-          "finding": "Gettysburg’da bulunan tüfeklerin çoğu doldurulmuş ama ateşlenmemişti; İkinci Dünya Savaşı’nda tüfekli erlerin yalnızca yüzde 15-20’si ateş etti. Uzaktan drone kullanan pilotlarda travma oranı, savaş alanındaki askerlerle benzer çıktı."
+          "finding": "Gettysburg'da bulunan tüfeklerin çoğu doldurulmuş ama ateşlenmemişti; İkinci Dünya Savaşı'nda tüfekli erlerin yalnızca yüzde 15-20'si ateş etti. Uzaktan drone kullanan pilotlarda travma oranı, savaş alanındaki askerlerle benzer çıktı."
         },
         {
           "name": "Garbage Dump babun sürüsü",
@@ -2575,18 +2548,18 @@
       ],
       "simulationIdeas": [
         {
-          "title": "Temas Koşulları Simülatörü",
-          "shows": "Gruplar arası temasın hangi koşullarda önyargıyı azalttığını, hangi koşullarda düşmanlığı artırdığını karşılaştırır. Eşitlik, ortak hedef ve kurumsal denetim değişkenlerinin etkisini birlikte gösterir.",
+          "title": "Yaşa ve Yaşat Siperleri",
+          "shows": "Birinci Dünya Savaşı siperlerinde karşılıklı kısıtlamanın yemek saatlerinde ateş kesmekten ritüelleşmiş keskin nişancı işaretlerine nasıl evrildiğini; kaza atışlarına 'iki mermiyle karşılık' kuralının ateşkesi nasıl ayakta tuttuğunu ve komuta müdahalelerinin (birlik rotasyonu, baskın emri) onu nasıl çökerttiğini gösterir.",
           "inputs": [
-            "Gruplar arası statü eşitliği",
-            "Grup büyüklüğü dengesi",
-            "Ortak hedefin varlığı ve başarısı",
-            "Kurumsal denetimin düzeyi"
+            "Aynı birliklerin karşı karşıya kalma süresi (hafta)",
+            "Ritüel işaretin düzenliliği",
+            "Kaza atışı olasılığı",
+            "Komuta müdahalesi sıklığı (rotasyon, baskın emri)"
           ],
           "outputs": [
-            "Önyargı düzeyinin zamanla değişimi",
-            "Gruplar arası düşmanlık göstergesi",
-            "Kalıcı ve yaygın azalma olasılığı"
+            "Ateşkesin sürme olasılığı",
+            "İntikam döngüsüne geçiş anı",
+            "Günlük karşılıklı atış sayısı"
           ]
         },
         {
@@ -2606,7 +2579,7 @@
         },
         {
           "title": "Öldürme Mesafesi Simülatörü",
-          "shows": "Hedefin bireyselleşme düzeyi, mesafe ve sorumluluğun bireysel mi grupsal mı olduğu değiştikçe ateş etme eğiliminin nasıl değiştiğini gösterir.",
+          "shows": "Hedefin bireyselleşme düzeyi, mesafe ve sorumluluğun bireysel mi grupsal mı olduğu değiştikçe ateş etme eğiliminin nasıl değiştiğini gösterir. Drone pilotlarında olduğu gibi fiziksel mesafe büyük olsa da hedef bireyselleştikçe öldürmenin psikolojik bedeli yüksek kalır.",
           "inputs": [
             "Hedefin bireyselleşme düzeyi",
             "Mesafe",
@@ -2623,39 +2596,39 @@
       "links": [
         {
           "to": "ch16",
-          "why": "Metin ‘önceki bölüm’ ve ‘son bölüm’ diyerek amigdala ve insula ile cezalandırma arasındaki ilişkiyi ch16’ya bağlar."
+          "why": "Metin 'önceki bölüm' ve 'son bölüm' diyerek amigdala ve insula ile cezalandırma arasındaki ilişkiyi ch16'ya bağlar."
         },
         {
           "to": "ch09",
-          "why": "Pinker tartışması, din ve ‘Biz ve Onlar’ ayrımı bu bölümde ch9’a açıkça atıfla yeniden ele alınır."
+          "why": "Pinker tartışması, din ve 'Biz ve Onlar' ayrımı bu bölümde ch9'a açıkça atıfla yeniden ele alınır."
         },
         {
           "to": "ch10",
-          "why": "İşbirliğinin evrimi ve tekrarlı oyunlar ch10’a atıfla genişletilir."
+          "why": "İşbirliğinin evrimi ve tekrarlı oyunlar ch10'a atıfla genişletilir."
         },
         {
           "to": "ch11",
-          "why": "Sahte türleştirme ve gruplar arası temas ch11’de tanıtılan kavramlar üzerinden anlatılır."
+          "why": "Sahte türleştirme ve gruplar arası temas ch11'de tanıtılan kavramlar üzerinden anlatılır."
         },
         {
           "to": "ch14",
-          "why": "Merhametin öz-çıkar içerdiği fikri, bağışlama tartışmasında ch14’e atıfla yapılır."
+          "why": "Merhametin öz-çıkar içerdiği fikri, bağışlama tartışmasında ch14'e atıfla yapılır."
         },
         {
           "to": "ch15",
-          "why": "Demagog retoriği, kutsal değerler ve düşmanın hayvanlaştırılması ch15’e atıfla tekrar edilir."
+          "why": "Demagog retoriği, kutsal değerler ve düşmanın hayvanlaştırılması ch15'e atıfla tekrar edilir."
         },
         {
           "to": "ch05",
-          "why": "Newton örneğinde beklenen sinirsel plastisite, ch5’teki plastisite tartışmasına bağlanır."
+          "why": "Newton örneğinde beklenen sinirsel plastisite, ch5'teki plastisite tartışmasına bağlanır."
         },
         {
           "to": "ch03",
-          "why": "Göz resimlerinin toplumsal davranışı etkilemesi, ch3’teki bulguya atıfla anılır."
+          "why": "Göz resimlerinin toplumsal davranışı etkilemesi, ch3'teki bulguya atıfla anılır."
         },
         {
           "to": "intro",
-          "why": "Girişteki ‘hayal’ bu bölümde karşıt bir düşünce deneyiyle yeniden ele alınır."
+          "why": "Girişteki 'hayal' bu bölümde karşıt bir düşünce deneyiyle yeniden ele alınır."
         },
         {
           "to": "epilogue",
@@ -2695,7 +2668,7 @@
         },
         {
           "term": "Rasyonalizasyon (rationalization)",
-          "explanation": "Kötü bir davranışa karşı çıkan insanların bile kendilerine özel istisnalar bularak eylemden kaçmasıdır; dünyadaki pek çok acının kaynağı olarak gösterilir."
+          "explanation": "Dünyadaki acının büyük kısmı, korkunç bir eylemin serbest olduğuna inananlardan değil; o eyleme ilke olarak karşı çıkıp kendi durumlarını istisna sayan insanlardan kaynaklanır."
         },
         {
           "term": "Biliş ve duygu etkileşimi (cognition and affect)",
@@ -2703,11 +2676,11 @@
         },
         {
           "term": "Sosyoekonomik statü ve hiyerarşi",
-          "explanation": "Metin, insanların sosyoekonomik statüyü icat etmesiyle hiyerarşik primatlarda görülmemiş bir alt ediş biçimi yarattığını belirtir."
+          "explanation": "Metin, insanların sosyoekonomik statüyü icat etmesiyle hiyerarşik primatlarda eşi görülmemiş bir boyun eğdirme biçimi yarattığını belirtir."
         },
         {
           "term": "Beyin ve kültürün birlikte evrimi (co-evolution)",
-          "explanation": "Beyin yapısı ile kültürel normlar birbirini etkileyerek değişir; bugün doğal görünen bazı ahlaki sezgiler geçmişte ilk kez karşıt akıl yürütmelerle ortaya çıkmıştır."
+          "explanation": "Beyin yapısı ile kültürel normlar birbirini etkileyerek değişir; bugün doğal görünen bazı ahlaki sezgiler geçmişte ilk kez kalıba uymayan (nonkonformist) akıl yürütmelerle ortaya çıkmıştır."
         }
       ],
       "keyStudies": [],
@@ -2728,7 +2701,7 @@
         },
         {
           "title": "Biz/Onlar Kaydırıcısı",
-          "shows": "Ortak bir hedef ya da etiket değiştikçe kişilerin kimi ‘bizden’ saydığının nasıl kayabildiğini gösterir. Sonsözdeki kolay yönlendirilebilirlik fikrini somutlaştırır.",
+          "shows": "Ortak bir hedef ya da etiket değiştikçe kişilerin kimi 'bizden' saydığının nasıl kayabildiğini gösterir. Sonsözdeki kolay yönlendirilebilirlik fikrini somutlaştırır.",
           "inputs": [
             "Ortak hedefin varlığı",
             "Etiketin değişimi",
@@ -2737,21 +2710,30 @@
           ],
           "outputs": [
             "Grup içi ve grup dışı yakınlık skorları",
-            "Kimin ‘biz’ sayıldığının zaman çizelgesi"
+            "Kimin 'biz' sayıldığının zaman çizelgesi"
           ]
         }
       ],
       "links": [
         {
           "to": "ch17",
-          "why": "Sonsöz, ch17’deki ‘Savaş ve Barış’ tartışmasının doğrudan devamıdır; sonsözün ilk satırları ch17’nin sonuna bağlanır."
+          "why": "Sonsöz, ch17'deki 'Savaş ve Barış' tartışmasının doğrudan devamıdır; sonsözün ilk satırları ch17'nin sonuna bağlanır."
+        },
+        {
+          "to": "intro",
+          "why": "Kategorik kutulardan kaçınma ve 'karmaşık' çok etkenli açıklama, girişte kurulan yaklaşımın vardığı sonuçtur."
+        },
+        {
+          "to": "ch11",
+          "why": "Biz/Onlar ayrımının bilinçaltında ve saniyeler içinde yönlendirilebilmesi ch11'in ana bulgusudur."
+        },
+        {
+          "to": "ch16",
+          "why": "'Homunkülüsün üstünde elbise yok' maddesi ch16'daki özgür irade tartışmasını özetler."
         }
       ],
       "confidence": "yüksek",
-      "verifyNotes": [
-        "Sonsözde yeni bir çalışma sunulmuyor; maddeler önceki bölümlerin özetidir, bu yüzden keyStudies boş bırakıldı.",
-        "Sonsözdeki maddelerin hangi bölümden geldiği metinde belirtilmiyor; kavramlar genel tema olarak yazıldı."
-      ]
+      "verifyNotes": []
     },
     {
       "id": "app1",
@@ -2780,7 +2762,7 @@
           "explanation": "Aksonun ucundaki veziküllerden salınan kimyasal habercilerin sinaptik aralıktan geçip postsinaptik reseptöre bağlanmasıyla sinyal iletilir. Bağlanma anahtar-kilit benzetmesiyle açıklanır."
         },
         {
-          "term": "Dale ilkesi (Dale’s principle)",
+          "term": "Dale ilkesi (Dale's principle)",
           "explanation": "Bir nöronun tüm uç noktalarında aynı tür nörotransmitterin salındığı kuralıdır. Böylece bir nöronun kimyasal kimliğinden söz edilebilir."
         },
         {
@@ -2802,8 +2784,8 @@
           "finding": "Ağrının keskin ve sürekli iki türünün hızlı ve yavaş liflerin farklı devrelerinden geldiğini öne sürdü. Devrede bir ara nöronun ağrı sinyalini engellediği bu model önce kuramsal olarak önerildi, sonra sinir sisteminde bu bağlantının var olduğu gösterildi."
         },
         {
-          "name": "Golgi boyası ve Cajal’ın tek nöron gözlemleri",
-          "finding": "Golgi’nin boyama tekniğiyle nöronlar tek tek boyanabildi ve boya bir nörondan diğerine yayılmadı. Bu bulgu, sinir hücrelerinin birbirine kaynaşmış tek bir ağ değil ayrı birimler olduğu görüşünü destekledi; sinapslar ise 1950’lerde elektron mikroskobuyla görülebildi."
+          "name": "Golgi boyası ve Cajal'ın tek nöron gözlemleri",
+          "finding": "Golgi'nin boyama tekniğiyle nöronlar tek tek boyanabildi ve boya bir nörondan diğerine yayılmadı. Bu bulgu, sinir hücrelerinin birbirine kaynaşmış tek bir ağ değil ayrı birimler olduğu görüşünü destekledi; sinapslar ise 1950'lerde elektron mikroskobuyla görülebildi."
         }
       ],
       "simulationIdeas": [
@@ -2851,15 +2833,15 @@
       "links": [
         {
           "to": "ch02",
-          "why": "Ek 1, ana metindeki ‘sinir sistemi’ çerçevesini ve nörotransmitter tanımını ch2’ye atıfla hatırlatır."
+          "why": "Ek 1, ana metindeki 'sinir sistemi' çerçevesini ve nörotransmitter tanımını ch2'ye atıfla hatırlatır."
         },
         {
           "to": "app2",
-          "why": "Ek 2’nin girişi bu ekin ‘Brain 101’ temel bilgisinin devamıdır."
+          "why": "Ek 2'nin girişi bu ekin 'Brain 101' temel bilgisinin devamıdır."
         },
         {
           "to": "app3",
-          "why": "Ek 3 anahtar-kilit benzetmesini ‘appendix 1’e atıfla yeniden kullanır; reseptör ve mesajcı ilişkisi iki ekte ortaktır."
+          "why": "Ek 3 anahtar-kilit benzetmesini 'appendix 1'e atıfla yeniden kullanır; reseptör ve mesajcı ilişkisi iki ekte ortaktır."
         }
       ],
       "confidence": "yüksek",
@@ -2912,7 +2894,7 @@
       "simulationIdeas": [
         {
           "title": "Endokrin Eksen",
-          "shows": "HPA ve HPG eksenlerinin ile pankreasın glukoz-insülin ilişkisinin geri bildirimle nasıl dengelendiğini gösterir. Reseptör sayısı, bağlanma isteği ve titizliğin hormon etkisini nasıl değiştirdiğini; nörotransmitter ile hormonun etki sürelerini ve organizasyonel ile aktivasyonel etkilerin farkını karşılaştırır. Bu simülasyon kullanıcının mevcut uygulamasıdır.",
+          "shows": "HPA ve HPG eksenlerinin ve pankreastaki glukoz-insülin ilişkisinin geri bildirimle nasıl dengelendiğini gösterir. Reseptör sayısı, bağlanma isteği ve titizliğin hormon etkisini nasıl değiştirdiğini; nörotransmitter ile hormonun etki sürelerini ve organizasyonel ile aktivasyonel etkilerin farkını karşılaştırır.",
           "inputs": [
             "Uyarıcı şiddeti (stres ya da açlık)",
             "Eksen seçimi (HPA, HPG, pankreas)",
@@ -2960,29 +2942,27 @@
       "links": [
         {
           "to": "ch02",
-          "why": "Ek 2, ana metindeki nörotransmitter tanımına ve ch2’deki sinaptik iletişime atıfla başlar."
+          "why": "Ek 2, ana metindeki nörotransmitter tanımına ve ch2'deki sinaptik iletişime atıfla başlar."
         },
         {
           "to": "app1",
-          "why": "Ek 2, Ek 1’deki temel sinir bilgisinin tamamlandığını belirterek başlar; ‘Brain 101’ akışının devamıdır."
+          "why": "Ek 2, Ek 1'deki temel sinir bilgisinin tamamlandığını belirterek başlar; 'Brain 101' akışının devamıdır."
         },
         {
           "to": "ch07",
-          "why": "Hormonların çocukluk ve fetal yaşamdaki organizasyonel etkileri ch7’de ele alınmış ve bu ek onu hatırlatır."
+          "why": "Hormonların çocukluk ve fetal yaşamdaki organizasyonel etkileri ch7'de ele alınmış ve bu ek onu hatırlatır."
         },
         {
           "to": "ch04",
-          "why": "Hipofiz bezinin ve CRH-ACTH eksenine giriş ana metinde ch4’te yapılır; bu bağlantı ch17’deki atıftan çıkarıldı."
+          "why": "Glukokortikoidler, testosteron ve oksitosin gibi hormonların davranış üzerindeki etkileri ch4'te ele alınır; bu ek, o bölümün endokrin temelini açıklar."
         },
         {
           "to": "app3",
-          "why": "Hormonların öncülleri ve reseptörleri protein yapısına dayanır; ek 3’teki protein şekli ve bağlanma kavramlarıyla ilişkilidir."
+          "why": "Hormonların öncülleri ve reseptörleri protein yapısına dayanır; ek 3'teki protein şekli ve bağlanma kavramlarıyla ilişkilidir."
         }
       ],
       "confidence": "yüksek",
-      "verifyNotes": [
-        "ch04 bağlantısı yalnızca ch17’deki bir atıftan çıkarıldı; ch04 metni bu görevde okunmadı."
-      ]
+      "verifyNotes": []
     },
     {
       "id": "app3",
@@ -2992,7 +2972,7 @@
       "titleTr": "Protein Temelleri",
       "timescale": null,
       "timescaleSeconds": null,
-      "summary": "Ek 3, proteinlerin hormonlar, nörotransmitter reseptörleri ve enzimler dahil sinir ve hormon sistemlerinin yapı taşı olduğunu anlatır. Bir proteinin işlevinin üç boyutlu şekline bağlı olduğu, bu şeklin ise amino asit dizisinden ve çevresel koşullardan etkilendiği açıklanır. DNA’dan RNA’ya, oradan proteine uzanan akış ile genetik kodun üçlü yapısı ve kodon fazlalığı özetlenir. Nokta, silme ve ekleme mutasyonlarının proteine etkisi ve alel çeşitliliği ele alınır. Son olarak insan ile şempanze arasındaki genetik benzerlik ile kardeşler arasındaki paylaşımın farklı düzeylerde ölçüldüğü açıklığa kavuşturulur.",
+      "summary": "Ek 3, proteinlerin hormonlar, nörotransmitter reseptörleri ve enzimler dahil sinir ve hormon sistemlerinin yapı taşı olduğunu anlatır. Bir proteinin işlevinin üç boyutlu şekline bağlı olduğu, bu şeklin ise amino asit dizisinden ve çevresel koşullardan etkilendiği açıklanır. DNA'dan RNA'ya, oradan proteine uzanan akış ile genetik kodun üçlü yapısı ve kodon fazlalığı özetlenir. Nokta, silme ve ekleme mutasyonlarının proteine etkisi ve alel çeşitliliği ele alınır. Son olarak insan ile şempanze arasındaki genetik benzerlik ile kardeşler arasındaki paylaşımın farklı düzeylerde ölçüldüğü açıklığa kavuşturulur.",
       "keyConcepts": [
         {
           "term": "Protein şekli ve işlevi (protein shape and function)",
@@ -3004,11 +2984,11 @@
         },
         {
           "term": "Merkezi dogma (central dogma)",
-          "explanation": "DNA’daki gen RNA’ya kopyalanır, RNA da proteine çevrilir; bu akışta bir gen bir protein tipini belirler."
+          "explanation": "DNA'daki gen RNA'ya kopyalanır, RNA da proteine çevrilir; bu akışta bir gen bir protein tipini belirler."
         },
         {
           "term": "Kodon ve kodon fazlalığı (codon and redundancy)",
-          "explanation": "Üç nükleotidlik bir kodon bir amino asidi belirler; 64 kodonun 61’i amino asit kodlar ve çoğu amino asidin birden fazla kodonu vardır. Bu fazlalık, bazı mutasyonların etkisiz kalmasını sağlar."
+          "explanation": "Üç nükleotidlik bir kodon bir amino asidi belirler; 64 kodonun 61'i amino asit kodlar ve çoğu amino asidin birden fazla kodonu vardır. Bu fazlalık, bazı mutasyonların etkisiz kalmasını sağlar."
         },
         {
           "term": "Nokta, silme ve ekleme mutasyonları (point, deletion, insertion mutations)",
@@ -3069,21 +3049,19 @@
       "links": [
         {
           "to": "app1",
-          "why": "Ek 3, ana metindeki anahtar-kilit benzetmesini ‘appendix 1’e atıfla hatırlatır."
+          "why": "Ek 3, ana metindeki anahtar-kilit benzetmesini 'appendix 1'e atıfla hatırlatır."
         },
         {
           "to": "ch08",
-          "why": "Genetik çeşitlilik ve alel ayrıntıları ek metninde ch8’de daha karmaşık biçimde ele alındığı belirtilerek atfedilir."
+          "why": "Genetik çeşitlilik ve alel ayrıntıları ek metninde ch8'de daha karmaşık biçimde ele alındığı belirtilerek atfedilir."
         },
         {
           "to": "app2",
-          "why": "Hormonların bir kısmı protein yapısındadır ve Ek 2’deki hormon üretimi ile bu ek birbirine bağlanır."
+          "why": "Hormonların bir kısmı protein yapısındadır ve Ek 2'deki hormon üretimi ile bu ek birbirine bağlanır."
         }
       ],
       "confidence": "yüksek",
-      "verifyNotes": [
-        "ch08 bağlantısı yalnızca ek metnindeki atıftan çıkarıldı; ch08 bu görevde okunmadı."
-      ]
+      "verifyNotes": []
     }
   ]
 }
