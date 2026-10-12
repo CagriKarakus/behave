@@ -1,0 +1,70 @@
+.sim-ad .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.sim-ad .card .sim-h { margin: 0; }
+.sim-ad .card .sys-h { margin-top: 4px; }
+.sim-ad .chips { margin-inline: 0; padding-inline: 0; flex-wrap: wrap; overflow: visible; }
+@media (max-width: 959px) { .sim-ad .chips { margin-inline: 0; padding-inline: 0; } }
+.sim-ad .stage text, .sim-ad .chart text { font: 400 10px var(--f-mono); fill: var(--muted); }
+.sim-ad .stage .ax-t { font: 500 11px var(--f-body); fill: var(--muted); }
+.sim-ad .legend svg { width: 26px; }
+.sim-ad .sliders > div { min-width: 0; }
+.sim-ad .row .btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+/* Gösterge satırları */
+.sim-ad .sys { display: flex; flex-direction: column; gap: 8px; }
+.sim-ad .bar-r { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) 40px; gap: 10px; align-items: center; font-size: 12.5px; }
+.sim-ad .bar-l { line-height: 1.3; }
+.sim-ad .bar-l a { color: var(--ink); font: 500 11px var(--f-mono); white-space: nowrap; margin-left: 4px; }
+.sim-ad .bar-r em { font: 500 12px var(--f-mono); font-style: normal; text-align: right; font-variant-numeric: tabular-nums; }
+.sim-ad .card a { color: var(--ink); text-underline-offset: 2px; }
+
+/* Harita */
+.sim-ad .trk { stroke: var(--edge); stroke-width: 2; stroke-linecap: round; }
+.sim-ad .tick { stroke: var(--edge); stroke-width: 1.2; }
+.sim-ad .dot circle { fill: var(--panel); stroke: var(--edge); stroke-width: 1.4; }
+.sim-ad .dot text { font: 600 10px var(--f-mono); fill: var(--ink); }
+.sim-ad .dot.on circle { fill: var(--ink); stroke: var(--ink); }
+.sim-ad .dot.on text { fill: var(--bg); stroke: var(--ink); stroke-width: 2px; paint-order: stroke; }
+.sim-ad .prof { stroke: var(--ink); stroke-width: 1.4; stroke-dasharray: 4 3; }
+.sim-ad .stage svg[data-ref="map"] { cursor: pointer; touch-action: pan-y; }
+
+/* Bağlam kapısı */
+.sim-ad .bx { fill: var(--panel); stroke: var(--edge); stroke-width: 1.4; }
+.sim-ad .bx.out.good { stroke: var(--pfc); stroke-width: 2.4; }
+.sim-ad .bx.out.mid { stroke: var(--dop); stroke-width: 2.4; }
+.sim-ad .bx.out.bad { stroke: var(--amy); stroke-width: 2.4; }
+.sim-ad .frame { fill: none; stroke: var(--edge); stroke-width: 1.4; stroke-dasharray: 3 3; }
+.sim-ad .shut { fill: var(--edge); }
+.sim-ad .arr { fill: none; stroke: var(--edge); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.sim-ad .stage text.cap { font: 600 10px var(--f-mono); letter-spacing: .06em; fill: var(--muted); }
+.sim-ad .stage text.cap2 { font: 400 10px var(--f-body); fill: var(--muted); }
+.sim-ad .stage text.mt { font: 500 11.5px var(--f-body); fill: var(--ink); }
+.sim-ad .stage text.mn { font: 600 12px var(--f-body); fill: var(--ink); }
+.sim-ad .stage text.vd { font: 600 11px var(--f-mono); fill: var(--ink); }
+.sim-ad .shut, .sim-ad .bx.out { transition: fill .2s, stroke .2s; }
+@media (prefers-reduced-motion: reduce) { .sim-ad .shut, .sim-ad .bx.out { transition: none; } }
+
+.sim-ad .tbl { width: 100%; border-collapse: separate; border-spacing: 6px; font-size: 12.5px; }
+.sim-ad .tbl th { font-weight: 600; text-align: left; padding: 2px 4px; color: var(--ink); }
+.sim-ad .tbl td { padding: 0; }
+.sim-ad .cellb { width: 100%; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 6px 4px; font: 400 12px var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--control-border); border-radius: 10px; cursor: pointer; }
+.sim-ad .cellb b { font-weight: 600; }
+.sim-ad .cellb span { font: 400 11px var(--f-mono); color: var(--muted); }
+.sim-ad .cellb[data-v="good"] { border-left: 5px solid var(--pfc); }
+.sim-ad .cellb[data-v="mid"] { border-left: 5px solid var(--dop); }
+.sim-ad .cellb[data-v="bad"] { border-left: 5px solid var(--amy); }
+.sim-ad .cellb[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sim-ad .cellb[aria-pressed="true"] span { color: var(--bg); }
+
+/* Yer değiştirme */
+.sim-ad .base { stroke: var(--edge); stroke-width: 1.4; }
+.sim-ad .ag { fill: var(--panel); stroke: var(--ink); stroke-width: 1.6; }
+.sim-ad .stage text.agn { font: 600 11px var(--f-mono); fill: var(--ink); }
+.sim-ad .sbar { fill: var(--gld); }
+.sim-ad .tick2 { stroke: var(--ink); stroke-width: 2; }
+.sim-ad .arc path { stroke-width: 2; }
+.sim-ad .arc.defeat path { stroke: var(--edge); stroke-dasharray: 4 3; }
+.sim-ad .arc.defeat circle { fill: var(--edge); }
+.sim-ad .arc.displace path { stroke: var(--amy); stroke-width: 2.8; }
+.sim-ad .arc.displace circle { fill: var(--amy); }
+.sim-ad .chart { width: 100%; height: auto; }
+.sim-ad .chart .ln { stroke-width: 2.4; }
