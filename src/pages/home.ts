@@ -30,6 +30,32 @@ export function chapterCard(c: ChapterMeta): Safe {
   </li>`;
 }
 
+
+const SEG = 160;
+const clamp01 = (n: number): number => Math.min(1, Math.max(0, n));
+
+/** Kenar dalı: dalgalı bir gövde, dönüşümlü sağ/sol dalcıklar ve uçlarında çiçekler. Yüksekliğe göre üretilir. */
+function branchSvg(h: number): string {
+  const n = Math.ceil(h / SEG) + 1;
+  let stem = `M40,0 Q58,${SEG / 2} 40,${SEG}`;
+  for (let i = 2; i <= n; i++) stem += ` T40,${SEG * i}`;
+  let twigs = '';
+  for (let k = 1; k < n; k++) {
+    const y = SEG * k;
+    const right = k % 2 === 1;
+    const L = right ? 62 + ((k * 37) % 40) : 22 + ((k * 13) % 14);
+    const dy = 28 + (k % 3) * 8;
+    const ex = right ? 40 + L : 40 - L;
+    const ey = y + dy;
+    const c1 = right ? 62 : 28;
+    const c2 = right ? 40 + L * 0.7 : 40 - L * 0.6;
+    const r = right ? 7 : 5;
+    twigs += `<path class="br-twig" data-y="${y}" pathLength="1" d="M40,${y} C${c1},${y + 6} ${c2},${y + 20} ${ex},${ey}"/>`
+      + `<g transform="translate(${ex} ${ey})"><g class="br-bl" data-y="${y}"><circle class="br-p" r="${r}"/><circle class="br-p" cx="${-r * 0.8}" cy="${-r * 0.7}" r="${r * 0.7}"/><circle class="br-p" cx="${r * 0.8}" cy="${-r * 0.8}" r="${r * 0.7}"/><circle class="br-c" r="${r * 0.35}"/></g></g>`;
+  }
+  return `<svg viewBox="0 0 150 ${h}" width="150" height="${h}" focusable="false"><path class="br-stem" pathLength="1" d="${stem}"/>${twigs}<circle class="br-tip" r="5"/></svg>`;
+}
+
 export function renderHome(el: HTMLElement, content: ContentIndex): Page {
   const tl = buildTimeline(content.chapters);
   const ticks = tl.ticks;
@@ -55,6 +81,8 @@ export function renderHome(el: HTMLElement, content: ContentIndex): Page {
 
     ${tl.stops.length ? html`
     <section class="timeline" aria-labelledby="tl-h">
+      <div class="branch branch-l" data-branch aria-hidden="true"></div>
+      <div class="branch branch-r" data-branch aria-hidden="true"></div>
       <h2 id="tl-h" class="sec-h">Zaman merdiveni: davranıştan geriye</h2>
       <div class="axis" aria-hidden="true">
         <div class="axis-line"></div>
@@ -108,11 +136,40 @@ export function renderHome(el: HTMLElement, content: ContentIndex): Page {
   // Kenar meridyenleri: zaman merdiveni bölümünde ne kadar ilerlendiğini gösterir.
   const meridians = [...el.querySelectorAll<HTMLElement>('[data-meridian]')];
   const section = el.querySelector<HTMLElement>('.timeline');
+  const branches = [...el.querySelectorAll<HTMLElement>('[data-branch]')];
+  let builtH = 0;
+  /** Dallar: uç, ekranın ortasındaki konuma kadar uzar; bölüm geçilince tam boyda kalır, yukarı çıkınca geri çekilir. */
+  const growBranches = (p: number, h: number): void => {
+    if (!branches.length || h < 1) return;
+    if (Math.abs(h - builtH) > 1) {
+      builtH = h;
+      for (const b of branches) b.innerHTML = branchSvg(Math.round(h));
+    }
+    const tipY = p * h;
+    for (const b of branches) {
+      const stem = b.querySelector<SVGPathElement>('.br-stem');
+      const tip = b.querySelector<SVGCircleElement>('.br-tip');
+      if (stem) stem.style.strokeDashoffset = String(1 - p);
+      if (tip) {
+        let pt: { x: number; y: number } | null = null;
+        try { pt = stem && typeof stem.getPointAtLength === 'function' ? stem.getPointAtLength(stem.getTotalLength() * p) : null; } catch { pt = null; }
+        tip.style.opacity = p > 0 && p < 1 && pt ? '1' : '0';
+        if (pt) { tip.setAttribute('cx', String(pt.x)); tip.setAttribute('cy', String(pt.y)); }
+      }
+      b.querySelectorAll<SVGPathElement>('.br-twig').forEach((t) => { t.style.strokeDashoffset = String(1 - clamp01((tipY - Number(t.dataset.y)) / 90)); });
+      b.querySelectorAll<SVGGElement>('.br-bl').forEach((g) => {
+        const k = clamp01((tipY - Number(g.dataset.y) - 70) / 50);
+        g.style.opacity = String(k);
+        g.style.transform = `scale(${0.2 + 0.8 * k})`;
+      });
+    }
+  };
   let raf = 0;
   const sync = () => {
     raf = 0;
     if (!section) return;
     const r = section.getBoundingClientRect();
+    growBranches(Math.min(1, Math.max(0, (innerHeight * 0.5 - r.top) / Math.max(1, r.height))), r.height);
     const p = Math.min(1, Math.max(0, (innerHeight * 0.5 - r.top) / Math.max(1, r.height)));
     // Yalnızca zaman merdiveni bölümü ekranın ortasındayken görünür.
     const shown = r.top < innerHeight * 0.55 && r.bottom > innerHeight * 0.45;

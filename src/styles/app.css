@@ -241,3 +241,21 @@ h1 { margin: 8px 0 6px; font-weight: 600; font-size: clamp(38px, 5.2vw, 84px); l
   .meridian-l .mer-pin { left: auto; right: 0; transform: translate(50%, -50%) rotate(45deg); }
   .meridian-r .mer-pin { left: 0; transform: translate(-50%, -50%) rotate(45deg); }
 }
+
+/* ---- Kenar dalları: zaman merdiveniyle birlikte aşağı uzar ---- */
+.timeline { position: relative; }
+.timeline > :not(.branch) { position: relative; z-index: 1; }
+.branch { display: none; }
+@media (min-width: 1280px) {
+  .branch { display: block; position: absolute; top: 0; width: 150px; pointer-events: none; z-index: 0; }
+  .branch-l { left: -8px; }
+  .branch-r { right: -8px; transform: scaleX(-1); }
+  .branch svg { display: block; overflow: visible; }
+  .br-stem, .br-twig { fill: none; stroke: var(--accent-2); stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .br-stem { stroke-width: 3; }
+  .br-twig { stroke-width: 2; }
+  .br-bl { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(.2); }
+  .br-p { fill: var(--accent); }
+  .br-c { fill: var(--bg); }
+  .br-tip { fill: var(--accent); opacity: 0; }
+}
