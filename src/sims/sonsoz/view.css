@@ -1,0 +1,41 @@
+.sim-so { gap: 20px; }
+.sim-so .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.sim-so .card .sim-h { margin: 0; }
+.sim-so .card .stage { background: transparent; border: 0; padding: 0; }
+.sim-so .chips { margin-inline: 0; padding-inline: 0; flex-wrap: wrap; overflow: visible; }
+.sim-so .grid { stroke: var(--line); stroke-width: 1; }
+.sim-so .stage text, .sim-so .chart text { font: 400 10px var(--f-mono); fill: var(--muted); }
+.sim-so text.pt { font: 600 11px var(--f-body); fill: var(--ink); }
+.sim-so text.gl { font: 600 11px var(--f-body); fill: var(--muted); }
+.sim-so text.tag { font: 600 10px var(--f-body); fill: var(--ink); }
+.sim-so .legend { padding: 8px 2px 0; }
+.sim-so .legend svg { width: 26px; height: 20px; }
+
+/* Biz/Onlar ağı */
+.sim-so .tie { stroke: var(--edge); stroke-width: 1.4; stroke-opacity: .35; }
+.sim-so .pp { cursor: pointer; }
+.sim-so .pp:focus-visible { outline: none; }
+.sim-so .pp:focus-visible .ring2 { stroke: var(--ink); stroke-width: 1.6; stroke-dasharray: 2 3; }
+.sim-so .pp .ring, .sim-so .pp .ring2 { stroke: none; transition: stroke-opacity .2s; }
+.sim-so .pp .sh { transition: opacity .2s; }
+.sim-so .t-biz .ring { stroke: var(--ink); stroke-width: 2.8; }
+.sim-so .t-ara .ring { stroke: var(--edge); stroke-width: 2; stroke-dasharray: 3 3; }
+.sim-so .t-onlar .sh { opacity: .4; }
+.sim-so .t-ego .ring { stroke: var(--ink); stroke-width: 3.2; }
+.sim-so .t-ego .ring2 { stroke: var(--ink); stroke-width: 1.2; }
+@media (prefers-reduced-motion: reduce) { .sim-so .pp .ring, .sim-so .pp .ring2, .sim-so .pp .sh { transition: none; } }
+
+/* Kitabın haritası */
+.sim-so .mp-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.sim-so .mp-row { padding: 10px 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; }
+.sim-so .mp-row:first-child { border-top: 0; padding-top: 0; }
+.sim-so .mp-row[hidden] { display: none; }
+.sim-so .mp-h { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.sim-so .mp-n { font: 500 11px var(--f-mono); color: var(--muted); min-width: 54px; }
+.sim-so .mp-t { font: 600 15px/1.3 var(--f-display); color: var(--ink); text-underline-offset: 2px; }
+.sim-so .mp-l { font-size: 13px; color: var(--muted); max-width: 52ch; }
+.sim-so .mp-sims { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.sim-so .mp-sim, .sim-so .mp-here { display: inline-flex; align-items: center; min-height: 40px; padding: 8px 12px; font: 500 13px/1.2 var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--control-border); border-radius: 999px; text-decoration: none; cursor: pointer; }
+.sim-so .mp-sim:hover, .sim-so .mp-here:hover { border-color: var(--ink); }
+.sim-so .mp-sim:focus-visible, .sim-so .mp-t:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.sim-so .mp-here { border-radius: 999px; }
