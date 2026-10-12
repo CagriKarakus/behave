@@ -1,7 +1,8 @@
+import { mulberry32 } from '../rng';
 import { describe, expect, it } from 'vitest';
 import {
   CASPI_RATIO, CRABBE_TABLE, DEFAULT_PARAMS, GWAS_N, M_STEPS, PRESETS, SES_TABLE, decompose, describeGwas, describeMao, describeTable,
-  discovery, genCells, h2Curve, maoInteraction, maoPopulationRisk, maoRisk, mulberry32, rankFlips, simulateGwas, simulatePop, tableFromParams,
+  discovery, genCells, h2Curve, maoInteraction, maoPopulationRisk, maoRisk, rankFlips, simulateGwas, simulatePop, tableFromParams,
   variantShares,
 } from './model';
 

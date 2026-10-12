@@ -1,7 +1,8 @@
+import { mulberry32 } from '../rng';
 import { describe, expect, it } from 'vitest';
 import {
   ASCH, ASCH_DEFAULT, MIL_DEFAULT, aschCurve, aschProb, aschTrial, describeAsch, describeMilgram, milExpected,
-  mulberry32, simulateAsch, simulateMilgram, stillGoing, strain, LEVELS, phi,
+  simulateAsch, simulateMilgram, stillGoing, strain, LEVELS, phi,
 } from './model';
 
 describe('Asch', () => {

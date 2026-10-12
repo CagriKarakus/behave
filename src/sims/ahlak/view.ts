@@ -1,3 +1,4 @@
+import { mulberry32 } from '../rng';
 import '../sim.css';
 import './view.css';
 import { Scope, ref, svg, svgText, uid } from '../kit';
@@ -5,7 +6,7 @@ import { createTour } from '../tour';
 import {
   BIG_MARKET, BOOK, FACES, HADZA, MIXES, PG, PROFILES, SCENARIOS, N_AGENTS, antiFraction, avgContribution, avgPay, bestOf,
   bestOffer, clamp, describeDice, describePG, describeTrolley, dictatorOffer, dimsOf, expectedDist, expectedPay, honestShare,
-  deviation, mulberry32, normMix, pReject, payOf, profile, rejectThreshold, sampleByType, scenarioP, simulate,
+  deviation, normMix, pReject, payOf, profile, rejectThreshold, sampleByType, scenarioP, simulate,
   systems, type Answers, type Dims, type Intent, type Market, type Mix, type Round, type ScenarioId, type Society,
 } from './model';
 

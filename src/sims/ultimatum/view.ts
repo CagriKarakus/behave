@@ -6,7 +6,7 @@ import {
   BASE, DECK, FAIR, POT, curve, describe, evaluate, threshold, trpActive,
   type Activity, type Conditions, type RegionId,
 } from './model';
-import { mulberry32, shuffle } from './rng';
+import { mulberry32, shuffle } from '../rng';
 
 type NodeId = RegionId | 'tek' | 'dec';
 interface NodeDef { id: NodeId; ab: string; cap: string; grp: string; x: number; y: number }

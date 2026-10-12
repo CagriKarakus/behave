@@ -1,10 +1,11 @@
+import { mulberry32 } from '../rng';
 import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, svg, svgText, uid } from '../kit';
 import { createTour } from '../tour';
 import {
   INFO, KINS, MIXES, NICE, STRATS, criticalR, describeEvolution, describeKin, describeMatch, expectedKin, finitePopulation,
-  matchStats, mulberry32, normalize, payoffMatrix, playMatch, replicateKin, type Kin, type Match, type Matrix, type StratId,
+  matchStats, normalize, payoffMatrix, playMatch, replicateKin, type Kin, type Match, type Matrix, type StratId,
 } from './model';
 
 type Tab = 'tour' | 'kin';

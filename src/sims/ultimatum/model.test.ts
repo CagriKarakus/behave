@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { BASE, DECK, FAIR, POT, curve, describe as say, evaluate, threshold, trpActive, type Conditions } from './model';
-import { mulberry32, shuffle } from './rng';
+import { mulberry32, shuffle } from '../rng';
 
 const C = (c: Partial<Conditions> = {}): Conditions => ({ ...BASE, ...c });
 const p = (o: number, c: Partial<Conditions> = {}) => evaluate(o, C(c)).pReject;

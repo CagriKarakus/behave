@@ -1,3 +1,4 @@
+import { mulberry32 } from '../rng';
 import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, svg, svgText, uid } from '../kit';
@@ -5,7 +6,7 @@ import { createTour } from '../tour';
 import {
   CHANCE, COLS, EMOTIONS, EMO_NAME, GINI_MAX, GINI_MIN, KURZBAN_DEFAULT, MATRICES, TAJFEL_DEFAULT, TARGETS,
   behaviors, classify, col, confusion, corr, describeKurzban, describePos, describeTajfel, dominant, emotions,
-  mixedShare, simulateMemory, simulateTajfel, society, strategyCols, userProfile, mulberry32,
+  mixedShare, simulateMemory, simulateTajfel, society, strategyCols, userProfile,
   type KurzbanInputs, type Pos, type TajfelInputs,
 } from './model';
 

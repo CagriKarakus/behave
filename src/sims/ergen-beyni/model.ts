@@ -1,20 +1,9 @@
 // Ergen beyni: saf model çekirdeği (DOM yok). Sayılar illüstratiftir; yönleri Bölüm 6'daki bulgulardan gelir.
+import { mulberry32 } from '../rng';
 
 export const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 export const sigmoid = (x: number): number => 1 / (1 + Math.exp(-x));
 export const lerp = (a: number, b: number, t: number): number => a + (b - a) * t;
-
-/** Tohumlu rastgele sayı üreteci (testler deterministik olsun). */
-export function mulberry32(seed: number): () => number {
-  let a = seed >>> 0;
-  return () => {
-    a = (a + 0x6d2b79f5) >>> 0;
-    let t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 
 // ---------------------------------------------------------------------------------------------
 // Sekme 1: olgunlaşma eğrileri (yaş 5-30)

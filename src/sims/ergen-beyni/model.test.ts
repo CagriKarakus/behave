@@ -1,7 +1,8 @@
+import { mulberry32 } from '../rng';
 import { describe, expect, it } from 'vitest';
 import {
   AGE_MAX, AGE_MIN, GROUPS, PROFILES, accumbens, asymmetry, badRate, dopamine, forcedActual, frontal, gap, goodRate, greyMatter,
-  groupAge, mulberry32, myelin, newsFor, peerSensitivity, riskRate, runBatch, updateFraction, updatedEstimate, describeAge, describeDrive,
+  groupAge, myelin, newsFor, peerSensitivity, riskRate, runBatch, updateFraction, updatedEstimate, describeAge, describeDrive,
   describeNews, rewardSignal, control, goProbability, remainingFromRisk, riskFromRemaining,
 } from './model';
 

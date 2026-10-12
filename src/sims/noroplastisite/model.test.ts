@@ -3,7 +3,7 @@ import {
   calcium, caPos, depolarization, lateShare, mgUnblock, minutesOfSlider, practiceAt, simulatePractice,
   simulateStress, stressAt, synapse, synDelta, synWeight, zoneOf, SYN,
 } from './model';
-import { mulberry32 } from './rng';
+import { mulberry32 } from '../rng';
 
 describe('sinaps: Mg2+ bloğu ve Ca2+ eşikleri', () => {
   it('depolarizasyon arttıkça Mg2+ bloğu kalkar', () => {

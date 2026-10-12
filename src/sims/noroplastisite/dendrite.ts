@@ -1,7 +1,7 @@
 // Basit dendrit ağaçları (SVG). Ağaç bir kez kurulur; uzunluk ve diken yoğunluğu değişince yalnızca
 // öznitelikler güncellenir. Dallanma tohumlu RNG ile belirlidir.
 import { svg } from '../kit';
-import { mulberry32 } from './rng';
+import { mulberry32 } from '../rng';
 
 interface Node {
   len: number;       // taban uzunluğu (px)

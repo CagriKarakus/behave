@@ -1,6 +1,6 @@
 // Çocukluk ve rahim (Bölüm 7): üç nitel model. DOM yok; tohumlu RNG.
 // Kitaptan (chapters.json ch07) gelen noktalar "KİTAP:", diğer sayılar "VARSAYIM:" ile işaretlidir.
-import { mulberry32 } from './rng';
+import { mulberry32 } from '../rng';
 
 const clamp = (v: number, a: number, b: number): number => Math.max(a, Math.min(b, v));
 /** Standart normal dağılım fonksiyonu (Abramowitz-Stegun). */

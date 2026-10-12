@@ -1,7 +1,7 @@
 // Saniyeler ila dakikalar önce: (1) hızlı amigdala yolu ile yavaş frontal fren, (2) norm ihlallerinin yayılması.
 // Saf model: DOM yok. Zamanlar ms. "Kitap" etiketli değerler chapters.json'daki bulgulardan gelir; diğer tüm
 // sabitler (gecikmeler, zaman sabitleri, taban oranlar) modelin varsayımıdır ve ilişkilerin yönünü gösterir.
-import { mulberry32 } from './rng';
+import { mulberry32 } from '../rng';
 
 const clamp = (v: number, lo = 0, hi = 1): number => Math.min(hi, Math.max(lo, v));
 

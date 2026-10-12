@@ -1,7 +1,8 @@
+import { mulberry32 } from '../rng';
 import { describe, expect, it } from 'vitest';
 import {
   GENEROSITY, INFO, KINS, MIXES, NICE, PAY, STRATS, clamp, criticalR, describeEvolution, describeKin, describeMatch,
-  expectedKin, expectedPlay, finitePopulation, hamilton, leader, matchStats, mulberry32, normalize, payoff, payoffMatrix,
+  expectedKin, expectedPlay, finitePopulation, hamilton, leader, matchStats, normalize, payoff, payoffMatrix,
   playMatch, pCoop, replicateKin, replicator, roundRobin, simulateKin, type StratId,
 } from './model';
 

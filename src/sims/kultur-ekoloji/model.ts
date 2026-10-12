@@ -2,9 +2,8 @@
 // 1) Schelling benzeri ızgara: parça büyüklüğü, sınırlar ve çatışma riski (Lim ve ark. 2007; Rutherford ve ark. 2014)
 // 2) Ekoloji -> kültür eğilimleri (Talhelm, Masuda ve Nisbett, onur kültürü)
 // 3) Koridor hakaret deneyi ve kamu malı oyununda antisosyal ceza (Nisbett ve Cohen; Herrmann ve ark.)
-import { mulberry32, normal } from './rng';
+import { mulberry32, normal } from '../rng';
 
-export { mulberry32 };
 const clamp = (v: number, lo = 0, hi = 1) => Math.max(lo, Math.min(hi, v));
 
 // ===================== 1. Parçalar ve sınırlar =====================

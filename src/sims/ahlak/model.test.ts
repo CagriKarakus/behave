@@ -1,7 +1,8 @@
+import { mulberry32 } from '../rng';
 import { describe, expect, it } from 'vitest';
 import {
   BIG_MARKET, BOOK, FACES, HADZA, MIXES, PG, PROFILES, SCENARIOS, antiFraction, antiShare, avgContribution, bestOffer, bestOf,
-  deviation, dictatorOffer, dimsOf, expectedDist, expectedPay, honestDist, justifiedDist, liarDist, makeAgents, mulberry32, normMix,
+  deviation, dictatorOffer, dimsOf, expectedDist, expectedPay, honestDist, justifiedDist, liarDist, makeAgents, normMix,
   pReject, profile, rejectThreshold, sampleByType, sampleReports, scenarioP, simulate, systems, totals, type Society,
 } from './model';
 

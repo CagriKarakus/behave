@@ -9,7 +9,7 @@ import {
   transfer, vole, mean,
   type Belief, type Evidence, type OIn, type Partner, type Route, type SIn, type TIn, type VoleIn,
 } from './model';
-import { mulberry32 } from './rng';
+import { mulberry32 } from '../rng';
 
 type Tab = 't' | 'o' | 's';
 const f1 = (x: number): string => x.toFixed(1).replace('.', ',');

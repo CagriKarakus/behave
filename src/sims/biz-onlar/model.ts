@@ -3,8 +3,7 @@
 //  2) Kurzban: "kim ne dedi" karışmaları, işaretlerin koalisyon bilgisine göre ağırlıklanması.
 //  3) Sıcaklık-yetkinlik (Fiske): konumdan duygu ve davranış eğilimi; Durante: eşitsizlik ve karışık stereotip.
 // Kitaptan gelen yönler testlerde kalibrasyon noktasıdır; büyüklükler modelin varsayımıdır.
-import { mulberry32 } from './rng';
-export { mulberry32 };
+import { mulberry32 } from '../rng';
 
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const gauss = (r: () => number) => Math.sqrt(-2 * Math.log(1 - r())) * Math.cos(2 * Math.PI * r());

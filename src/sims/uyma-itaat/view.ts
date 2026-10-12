@@ -1,10 +1,11 @@
+import { mulberry32 } from '../rng';
 import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, svg, svgText, uid } from '../kit';
 import { createTour } from '../tour';
 import {
   ASCH_DEFAULT, LEVELS, MIL, MIL_DEFAULT, aschCurve, aschTrial, describeAsch, describeMilgram,
-  mulberry32, simulateAsch, simulateMilgram, volts,
+  simulateAsch, simulateMilgram, volts,
   type AschInputs, type AschTrial, type Learner, type MilgramInputs,
 } from './model';
 

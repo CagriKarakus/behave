@@ -3,9 +3,8 @@
 //  2) Kamu malı oyunu + ceza (Herrmann) ve adalet eğrisi (Henrich).
 //  3) Zar ve dürüstlük (Gächter ve Schulz).
 // Kitaptan gelen sayılar BOOK nesnesinde; modelin kendi varsayımları "ASSUME" ile işaretli.
-import { mulberry32 } from './rng';
+import { mulberry32 } from '../rng';
 
-export { mulberry32 };
 export const clamp = (x: number, lo = 0, hi = 1): number => Math.min(hi, Math.max(lo, x));
 const sigmoid = (z: number): number => 1 / (1 + Math.exp(-z));
 

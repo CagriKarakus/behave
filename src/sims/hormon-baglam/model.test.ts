@@ -4,7 +4,7 @@ import {
   meanOffer, minutesOf, offerProbs, perf, perfAcute, popOffers, prejudice, risk, sampleOffers, sliderOf, statusKept,
   transfer, vole,
 } from './model';
-import { mulberry32 } from './rng';
+import { mulberry32 } from '../rng';
 
 const sum = (a: number[]) => a.reduce((x, y) => x + y, 0);
 

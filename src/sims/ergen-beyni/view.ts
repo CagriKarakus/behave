@@ -1,10 +1,11 @@
+import { mulberry32 } from '../rng';
 import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, svg, svgText, uid } from '../kit';
 import { createTour, type Tour } from '../tour';
 import {
   AGE_MAX, AGE_MIN, GROUPS, LOSS, MAX_PEERS, PROFILES, accumbens, agentRound, ageCurves, asymmetry, badRate, control, describeAge,
-  describeDrive, describeNews, dopamine, forcedActual, frontal, gap, goodRate, greyMatter, groupAge, lerp, mulberry32, myelin, newsFor,
+  describeDrive, describeNews, dopamine, forcedActual, frontal, gap, goodRate, greyMatter, groupAge, lerp, myelin, newsFor,
   pointsFor, remainingFromRisk, rewardSignal, riskRate, updateFraction, updatedEstimate, RISK_MAX, RISK_MIN,
   type GroupId, type News, type NewsKind, type ProfileId,
 } from './model';
