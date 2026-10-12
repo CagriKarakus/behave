@@ -1,4 +1,7 @@
 import type { ChapterMeta } from '../content/types';
+import { decimalSep } from '../i18n/locale';
+import { t } from '../i18n/t';
+import type { MsgKey } from '../i18n/messages';
 
 export interface TimelineStop {
   seconds: number;
@@ -8,7 +11,8 @@ export interface TimelineStop {
   lane: number;           // 0..2: yan yana düşen noktaları dikeyde birkaç px kaydırmak için
 }
 export interface ThematicGroup { id: string; title: string; blurb: string; chapters: ChapterMeta[] }
-export interface Timeline { stops: TimelineStop[]; groups: ThematicGroup[]; ticks: { s: number; label: string }[]; minLog: number; maxLog: number }
+export interface Tick { id: string; s: number; label: string }
+export interface Timeline { stops: TimelineStop[]; groups: ThematicGroup[]; ticks: Tick[]; minLog: number; maxLog: number }
 
 /** log10(saniye) -> 0..1; eksenin dışında kalanlar uca oturur. */
 export function logPosition(seconds: number, minLog: number, maxLog: number): number {
@@ -21,31 +25,30 @@ const YEAR = 365.25 * 86400;
 const TICK_SLACK = 0.05;
 /** Komşu durakların konumu bu farktan yakınsa (eksenin 0..1'inde) noktalar dikeyde kaydırılır. */
 const CLOSE = 0.03;
-const fmtNum = (n: number) => (n >= 10 ? Math.round(n) : Math.round(n * 10) / 10).toString().replace('.', ',');
+const fmtNum = (n: number) => (n >= 10 ? Math.round(n) : Math.round(n * 10) / 10).toString().replace('.', decimalSep());
 
-/** Saniyeyi okunur Türkçe süreye çevirir (yaklaşık). */
+/** Saniyeyi okunur süreye (geçerli dilde, yaklaşık) çevirir. */
 export function formatDuration(s: number): string {
-  if (s < 60) return `${fmtNum(s)} sn`;
-  if (s < 3600) return `${fmtNum(s / 60)} dk`;
-  if (s < 86400) return `${fmtNum(s / 3600)} sa`;
-  if (s < 60 * 86400) return `${fmtNum(s / 86400)} gün`;
-  if (s < YEAR) return `${fmtNum(s / (30.44 * 86400))} ay`;
-  if (s < 1000 * YEAR) return `${fmtNum(s / YEAR)} yıl`;
-  if (s < 1e6 * YEAR) return `${fmtNum(s / (1000 * YEAR))} bin yıl`;
-  return `${fmtNum(s / (1e6 * YEAR))} milyon yıl`;
+  if (s < 60) return `${fmtNum(s)} ${t('unit.s')}`;
+  if (s < 3600) return `${fmtNum(s / 60)} ${t('unit.min')}`;
+  if (s < 86400) return `${fmtNum(s / 3600)} ${t('unit.h')}`;
+  if (s < 60 * 86400) return `${fmtNum(s / 86400)} ${t('unit.d')}`;
+  if (s < YEAR) return `${fmtNum(s / (30.44 * 86400))} ${t('unit.mo')}`;
+  if (s < 1000 * YEAR) return `${fmtNum(s / YEAR)} ${t('unit.yr')}`;
+  if (s < 1e6 * YEAR) return `${fmtNum(s / (1000 * YEAR))} ${t('unit.kyr')}`;
+  return `${fmtNum(s / (1e6 * YEAR))} ${t('unit.myr')}`;
 }
 
-interface GroupDef { id: string; title: string; blurb: string; test: (c: ChapterMeta) => boolean }
+interface GroupDef { id: string; test: (c: ChapterMeta) => boolean }
 
 // Ölçeği olmayan bölümler tematik gruplara ayrılır. Sıra önemlidir; ilk eşleşen kazanır.
 const GROUP_DEFS: GroupDef[] = [
-  { id: 'cerceve', title: 'Giriş ve çerçeve', blurb: 'Zaman ölçeği fikrini kuran açılış bölümleri.',
-    test: (c) => c.kind === 'intro' || (c.kind === 'chapter' && c.number === 1) },
-  { id: 'toplum', title: 'Toplum, ahlak ve sorumluluk', blurb: 'Zaman merdiveninin bulgularının insan topluluklarına ve topluma uygulandığı bölümler.',
-    test: (c) => c.kind === 'chapter' && c.number != null && c.number >= 11 },
-  { id: 'sonsoz', title: 'Sonsöz', blurb: 'Kitabın kapanışı.', test: (c) => c.kind === 'epilogue' },
-  { id: 'ekler', title: 'Ekler', blurb: 'Nörobilim, endokrinoloji ve beyin hasarı için kısa başvuru bölümleri.', test: (c) => c.kind === 'appendix' },
+  { id: 'cerceve', test: (c) => c.kind === 'intro' || (c.kind === 'chapter' && c.number === 1) },
+  { id: 'toplum', test: (c) => c.kind === 'chapter' && c.number != null && c.number >= 11 },
+  { id: 'sonsoz', test: (c) => c.kind === 'epilogue' },
+  { id: 'ekler', test: (c) => c.kind === 'appendix' },
 ];
+const groupText = (id: string): { title: string; blurb: string } => ({ title: t(`group.${id}.title` as MsgKey), blurb: t(`group.${id}.blurb` as MsgKey) });
 
 export function buildTimeline(chapters: ChapterMeta[]): Timeline {
   const scaled = chapters.filter((c) => c.timescaleSeconds != null);
@@ -59,8 +62,8 @@ export function buildTimeline(chapters: ChapterMeta[]): Timeline {
   let minLog = secs.length ? Math.min(0, Math.log10(secs[0])) : 0;
   let maxLog = secs.length ? Math.max(1, Math.log10(secs[secs.length - 1])) : 1;
   // Verinin ucuna çok yakın (±0,05 log) işaretler ("1 milyon yıl") eksene girer ve ekseni kendine kadar uzatır.
-  const ticks = AXIS_TICKS.filter((t) => { const l = Math.log10(t.s); return l >= minLog - TICK_SLACK && l <= maxLog + TICK_SLACK; });
-  for (const t of ticks) { const l = Math.log10(t.s); minLog = Math.min(minLog, l); maxLog = Math.max(maxLog, l); }
+  const ticks = axisTicks().filter((k) => { const l = Math.log10(k.s); return l >= minLog - TICK_SLACK && l <= maxLog + TICK_SLACK; });
+  for (const k of ticks) { const l = Math.log10(k.s); minLog = Math.min(minLog, l); maxLog = Math.max(maxLog, l); }
   let prev = -1, lane = 0;
   const stops: TimelineStop[] = secs.map((seconds) => {
     const list = (bySec.get(seconds) as ChapterMeta[]).slice().sort((a, b) => (a.number ?? 0) - (b.number ?? 0));
@@ -76,16 +79,17 @@ export function buildTimeline(chapters: ChapterMeta[]): Timeline {
   for (const def of GROUP_DEFS) {
     const list = rest.filter((c) => !used.has(c.id) && def.test(c));
     list.forEach((c) => used.add(c.id));
-    if (list.length) groups.push({ id: def.id, title: def.title, blurb: def.blurb, chapters: list });
+    if (list.length) groups.push({ id: def.id, ...groupText(def.id), chapters: list });
   }
   const other = rest.filter((c) => !used.has(c.id));
-  if (other.length) groups.push({ id: 'diger', title: 'Diğer bölümler', blurb: 'Zaman ölçeği belirtilmemiş bölümler.', chapters: other });
+  if (other.length) groups.push({ id: 'diger', ...groupText('diger'), chapters: other });
   return { stops, groups, ticks, minLog, maxLog };
 }
 
-/** Eksen üzerindeki işaretler (log ölçek). */
-export const AXIS_TICKS: { s: number; label: string }[] = [
-  { s: 0.001, label: '1 ms' }, { s: 1, label: '1 sn' }, { s: 60, label: '1 dk' }, { s: 3600, label: '1 sa' }, { s: 86400, label: '1 gün' },
-  { s: 30.44 * 86400, label: '1 ay' }, { s: YEAR, label: '1 yıl' }, { s: 100 * YEAR, label: '100 yıl' },
-  { s: 1e6 * YEAR, label: '1 milyon yıl' },
+/** Eksen üzerindeki işaretler (log ölçek). Etiketler geçerli dilde üretilir. */
+const TICK_DEFS: { id: string; s: number; n: number; unit: MsgKey }[] = [
+  { id: 'ms', s: 0.001, n: 1, unit: 'unit.ms' }, { id: 's', s: 1, n: 1, unit: 'unit.s' }, { id: 'min', s: 60, n: 1, unit: 'unit.min' },
+  { id: 'h', s: 3600, n: 1, unit: 'unit.h' }, { id: 'd', s: 86400, n: 1, unit: 'unit.d' }, { id: 'mo', s: 30.44 * 86400, n: 1, unit: 'unit.mo' },
+  { id: 'yr', s: YEAR, n: 1, unit: 'unit.yr' }, { id: '100yr', s: 100 * YEAR, n: 100, unit: 'unit.yr' }, { id: 'myr', s: 1e6 * YEAR, n: 1, unit: 'unit.myr' },
 ];
+export const axisTicks = (): Tick[] => TICK_DEFS.map((d) => ({ id: d.id, s: d.s, label: `${d.n} ${t(d.unit)}` }));

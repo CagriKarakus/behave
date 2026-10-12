@@ -1,5 +1,7 @@
 import rawIndex from 'virtual:behave-index';
 import loaders from 'virtual:behave-chapters';
+import rawIndexEn from 'virtual:behave-index/en';
+import loadersEn from 'virtual:behave-chapters/en';
 import { normalizeDetail, normalizeIndex } from './normalize';
 import type { ChapterDetail, Content, ContentIndex } from './types';
 
@@ -7,11 +9,20 @@ import type { ChapterDetail, Content, ContentIndex } from './types';
 export interface ContentSource {
   index: ContentIndex;
   detail(id: string): Promise<ChapterDetail>;
+  /** İngilizce karşılığı (yoksa uygulama aynı kaynağı kullanır). */
+  en?: ContentSource;
 }
+
+/** Seçilen dil için kaynak; İngilizce yoksa Türkçe'ye düşer. */
+export const sourceFor = (src: ContentSource, lang: 'tr' | 'en'): ContentSource => (lang === 'en' && src.en ? src.en : src);
 
 /** content/chapters.json (derleme sırasında bölünür). Ayrıntı yalnızca istenince indirilir. */
 export function createContentSource(): ContentSource {
-  const index = normalizeIndex(rawIndex);
+  return { ...build(rawIndex, loaders), en: build(rawIndexEn, loadersEn) };
+}
+
+function build(rawIdx: { book: unknown; chapters: unknown[] }, loaders: Record<string, () => Promise<{ default: unknown }>>): ContentSource {
+  const index = normalizeIndex(rawIdx);
   const cache = new Map<string, Promise<ChapterDetail>>();
   return {
     index,

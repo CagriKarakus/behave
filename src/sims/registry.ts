@@ -5,6 +5,8 @@
 // görünüm aynı klasördeki `view.ts` dosyasından tembel yüklenir. Yeni simülasyon için
 // bu dosyaya dokunmak gerekmez.
 
+import { getLocale } from '../i18n/locale';
+
 export type Unmount = () => void;
 export type Mount = (container: HTMLElement) => Unmount;
 
@@ -14,6 +16,8 @@ export interface SimMeta {
   chapter: string;
   title: string;
   blurb: string;
+  /** İngilizce başlık ve kısa açıklama (kitaptaki/yayındaki standart terimlerle). */
+  en?: { title: string; blurb: string };
   /** Aynı bölümde sıralama (küçük önce). */
   order?: number;
 }
@@ -41,4 +45,7 @@ function build(): Record<string, SimDef[]> {
 /** Bölüm id (normalleştirilmiş) -> simülasyonlar. */
 export const SIMS: Record<string, SimDef[]> = build();
 
-export const simsFor = (chapterId: string): SimDef[] => SIMS[chapterId] ?? [];
+/** Geçerli dile göre başlık/açıklaması çözülmüş kopya (Türkçe'de nesne aynen döner). */
+const localized = (d: SimDef): SimDef => (getLocale() === 'en' && d.en ? { ...d, title: d.en.title, blurb: d.en.blurb } : d);
+
+export const simsFor = (chapterId: string): SimDef[] => (SIMS[chapterId] ?? []).map(localized);

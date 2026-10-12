@@ -2,6 +2,7 @@ import type {
   Experiment, ExperimentSource, Replication, ReplicationStatus,
   Chapter, ChapterDetail, ChapterKind, ChapterLink, ChapterMeta, Confidence, Content, ContentIndex, KeyConcept, KeyStudy, SimulationIdea,
 } from './types.ts';
+import { t } from '../i18n/t.ts';
 
 type Obj = Record<string, unknown>;
 const isObj = (v: unknown): v is Obj => typeof v === 'object' && v !== null && !Array.isArray(v);
@@ -178,10 +179,10 @@ export function normalizeContent(raw: unknown): Content {
 
 export const chapterLabel = (c: Pick<Chapter, 'kind' | 'number'>): string => {
   switch (c.kind) {
-    case 'intro': return 'Giriş';
-    case 'epilogue': return 'Sonsöz';
-    case 'appendix': return c.number != null ? `Ek ${c.number}` : 'Ek';
-    default: return c.number != null ? `Bölüm ${c.number}` : 'Bölüm';
+    case 'intro': return t('label.intro');
+    case 'epilogue': return t('label.epilogue');
+    case 'appendix': return c.number != null ? t('label.appendixN', { n: c.number }) : t('label.appendix');
+    default: return c.number != null ? t('label.chapterN', { n: c.number }) : t('label.chapter');
   }
 };
 

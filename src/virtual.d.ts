@@ -7,3 +7,11 @@ declare module 'virtual:behave-chapters' {
   const loaders: Record<string, () => Promise<{ default: unknown }>>;
   export default loaders;
 }
+declare module 'virtual:behave-index/en' {
+  const index: { book: unknown; chapters: unknown[] };
+  export default index;
+}
+declare module 'virtual:behave-chapters/en' {
+  const loaders: Record<string, () => Promise<{ default: unknown }>>;
+  export default loaders;
+}

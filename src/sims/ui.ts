@@ -1,5 +1,8 @@
 // Simülasyonlar için ortak arayüz yardımcıları: kaydırıcı, çip sırası, "Kitapta" kutusu ve replikasyon rozeti.
 // Bunlar yalnızca DOM kurar; durum ve çizim her simülasyonun kendi görünümünde kalır.
+import { num, pct as fmtPct, pct1 as fmtPct1 } from '../i18n/fmt';
+import { t } from '../i18n/t';
+import type { MsgKey } from '../i18n/messages';
 import type { Scope } from './kit';
 
 /** Çıktı çubuğundaki bir gösterge. */
@@ -95,7 +98,7 @@ export function chipRow(parent: HTMLElement, ctx: Ctx, items: Array<{ key: strin
 export type RepStatus = 'sağlam' | 'karışık' | 'tartışmalı' | 'bilinmiyor';
 
 /** Replikasyon rozeti: durum her zaman metinle de verilir (renge bağlı değil). */
-export const repBadge = (status: RepStatus): string => `<span class="rep">Replikasyon: ${status}</span>`;
+export const repBadge = (status: RepStatus): string => `<span class="rep">${t('repl.badge', { s: t(`repl.${status}` as MsgKey) })}</span>`;
 
 export interface BookItem {
   /** `content/chapters.json` deney kimliği (ör. "ch07-e4"); bölüm bu kimlikten çıkarılır. */
@@ -112,7 +115,7 @@ export interface BookItem {
 export function bookBox(items: BookItem[], extra = ''): string {
   const li = (i: BookItem): string =>
     `<li><a href="#/bolum/${i.id.split('-')[0]}?deney=${i.id}">${i.text}</a>${i.rep ? ' ' + repBadge(i.rep) : ''}${i.note ? ` <span class="book-note">${i.note}</span>` : ''}</li>`;
-  return `<aside class="book" aria-label="Kitapta"><h3 class="sim-h">Kitapta</h3><ul>${items.map(li).join('')}</ul>${extra}</aside>`;
+  return `<aside class="book" aria-label="${t('sim.book')}"><h3 class="sim-h">${t('sim.book')}</h3><ul>${items.map(li).join('')}</ul>${extra}</aside>`;
 }
 
 /* ---------- Tembel yüklenen sayfa altı notları ---------- */
@@ -134,10 +137,10 @@ export function lazyNotes<K extends string>(scope: Scope, root: ParentNode, load
 }
 
 /* ---------- Biçimleyiciler ve küçük yardımcılar ---------- */
-export const pc = (v: number): string => `%${Math.round(v * 100)}`;
-export const pc1 = (v: number): string => `%${(v * 100).toFixed(v < 0.01 ? 2 : 1).replace('.', ',')}`;
-export const f1 = (v: number): string => v.toFixed(1).replace('.', ',');
-export const f2 = (v: number): string => v.toFixed(2).replace('.', ',');
+export const pc = (v: number): string => fmtPct(v);
+export const pc1 = (v: number): string => fmtPct1(v);
+export const f1 = (v: number): string => num(v, 1);
+export const f2 = (v: number): string => num(v, 2);
 
 export function el<K extends keyof HTMLElementTagNameMap>(parent: Element, tag: K, cls = '', html = ''): HTMLElementTagNameMap[K] {
   const e = document.createElement(tag);
