@@ -212,8 +212,24 @@ export function describeMao(level: number, ratio: number, share: number): string
    ===================================================== */
 /** Etkili varyant sayıları (kaydırıcı basamakları). */
 export const M_STEPS = [1, 3, 10, 30, 100, 300, 1000, 3000, 10000, 30000, 100000, 300000];
-/** Etki büyüklüğü dağılımı: log-normal σ. Değer, 2010 GWAS bulgusuna (yüzlerce varyant, en güçlü ≈%0,4, toplam ≈%10) uydurulmuştur. */
-export const SIGMA_LN = 2.0;
+/**
+ * Etki büyüklüğü dağılımı: log-normal σ. SIGMA_LN ve COMMON_SHARE birlikte iki kitap noktasına uydurulmuştur:
+ * 2010 (183.727 kişi): yüzlerce varyant, en güçlü ≈%0,4, hepsi ≈%10; 2022 (5,4 milyon kişi, ch08-e10 replikasyon notu):
+ * >12.000 varyant, hepsi birlikte ≈%40-45. (Yalnızca log-normal ile 2010 doğru olunca 2022 ≈%59 çıkıyordu.)
+ */
+export const SIGMA_LN = 2.05;
+/**
+ * Referans varyant sayısında (REF_M) bulunabilir sayılan varyantların oranı. Geri kalanı nadir varyantlarda ya da
+ * dizilemeyen etkilerde saklıdır: hâlâ kalıtsaldır ama GWAS tek tek bulamaz (kitap da nadir varyantların kaçtığını
+ * belirtir; "eksik kalıtılabilirlik"). Varyant sayısı azaldıkça bu kayıp sıfıra iner (bkz. foundFraction).
+ */
+export const COMMON_SHARE = 0.72;
+export const REF_M = 300000;
+/** M varyanttan GWAS'ın bulabilecek biçimde görülebilir olanlarının oranı: 1 varyantta 1, REF_M ve üstünde COMMON_SHARE. */
+export function foundFraction(M: number): number {
+  const t = Math.min(1, Math.log10(Math.max(1, M)) / Math.log10(REF_M));
+  return 1 - (1 - COMMON_SHARE) * t;
+}
 export const GWAS_THRESHOLD = 29.7; // genom çapında anlamlılık (p<5e-8) için ≈ ki-kare eşiği
 export const GWAS_N = { y2010: 183727, y2022: 5400000 };
 export const HEIGHT_MEAN = 170;
@@ -264,6 +280,9 @@ export function discovery(M: number, h2: number, N: number): Discovery {
     count++; sum += v;
   }
   const top = sh[0] * h2;
+  const fr = foundFraction(M);
+  count = count > 0 ? Math.max(1, Math.round(count * fr)) : 0;
+  sum *= fr;
   // kopya başına etki (standart sapma birimi): β = sqrt(v / (2 f (1−f))), f=0,5 varsayımı
   return { count, top, sum, topCm: Math.sqrt(top / 0.5) * HEIGHT_SD };
 }

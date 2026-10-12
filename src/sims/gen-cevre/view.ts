@@ -6,7 +6,7 @@ import { createGwasPanel } from './gwas-panel';
 import { createMaoPanel } from './mao-panel';
 import { createTablePanel } from './table-panel';
 import { M_STEPS } from './model';
-import type { Ctx, Meter, Panel } from './ui';
+import type { Ctx, Meter, Panel } from '../ui';
 
 type Tab = 'table' | 'mao' | 'gwas';
 const TABS: Array<{ key: Tab; label: string }> = [

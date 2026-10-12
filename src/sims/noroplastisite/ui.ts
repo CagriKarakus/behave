@@ -1,12 +1,9 @@
 // Nöroplastisite görünümü için küçük arayüz yardımcıları: kaydırıcı, biçimleyiciler, sayaçlar.
 import type { Scope } from '../kit';
+import { slider, type SliderHandle as SharedSliderHandle } from '../ui';
 
-export interface SliderHandle {
-  inp: HTMLInputElement;
-  /** Kaydırıcı konumunu (ve isteğe bağlı metni) ayarlar; geri çağrıyı tetiklemez. */
-  set: (v: number, text?: string) => void;
+export interface SliderHandle extends SharedSliderHandle {
   setDisabled: (d: boolean) => void;
-  wrap: HTMLElement;
 }
 
 export interface SliderOpts {
@@ -20,24 +17,10 @@ export interface SliderOpts {
   color?: string;
 }
 
+/** Ortak kaydırıcıya, pasifleştirme eklenmiş sürüm (pratik oynatılırken zaman kaydırıcısı kilitlenir). */
 export function makeSlider(scope: Scope, parent: HTMLElement, sid: string, o: SliderOpts, cb: (v: number) => void): SliderHandle {
-  const w = document.createElement('div');
-  w.innerHTML =
-    `<div class="sl-top"><label class="sl-name" for="${sid}">${o.name}</label><span class="sl-val"></span></div>` +
-    `<input type="range" id="${sid}" min="${o.min}" max="${o.max}" step="${o.step}" value="${o.value}">` +
-    `<p class="sl-hint">${o.hint}</p>`;
-  if (o.color) w.style.setProperty('--c', o.color);
-  parent.appendChild(w);
-  const inp = w.querySelector('input') as HTMLInputElement;
-  const out = w.querySelector('.sl-val') as HTMLElement;
-  const show = (text: string) => { out.textContent = text; inp.setAttribute('aria-valuetext', text); };
-  scope.on(inp, 'input', () => { show(o.fmt(+inp.value)); cb(+inp.value); });
-  show(o.fmt(o.value));
-  return {
-    inp, wrap: w,
-    set: (v, text) => { inp.value = String(v); show(text ?? o.fmt(+inp.value)); },
-    setDisabled: (d) => { inp.disabled = d; w.classList.toggle('is-off', d); },
-  };
+  const h = slider(scope, parent, { id: sid, name: o.name, hint: o.hint, min: o.min, max: o.max, step: o.step, value: o.value, fmt: o.fmt, color: o.color, onInput: cb });
+  return { ...h, setDisabled: (d) => { h.inp.disabled = d; h.wrap.classList.toggle('is-off', d); } };
 }
 
 /* ---------- Biçimleyiciler ---------- */

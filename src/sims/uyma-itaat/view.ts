@@ -1,4 +1,5 @@
 import { mulberry32 } from '../rng';
+import { slider } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, svg, svgText, uid } from '../kit';
@@ -51,8 +52,8 @@ const TEMPLATE = (id: string) => `
     <div class="stage">
       <svg viewBox="0 0 360 250" role="img" aria-label="Asch çizgi deneyi: bir referans çizgi, üç seçenek ve sırayla cevap veren katılımcılar" data-ref="a-stage"></svg>
       <div class="legend">
-        <span><i style="background:var(--amy)"></i>Yanlış cevap</span>
-        <span><i style="background:var(--pfc)"></i>Doğru cevap</span>
+        <span><i style="background:color-mix(in srgb, var(--amy) 24%, var(--panel));border:2px solid var(--amy);box-sizing:border-box"></i>Yanlış cevap</span>
+        <span><i style="background:color-mix(in srgb, var(--pfc) 24%, var(--panel));border:2px solid var(--pfc);box-sizing:border-box"></i>Doğru cevap</span>
         <span><svg viewBox="0 0 26 10" aria-hidden="true"><circle cx="13" cy="5" r="4" fill="none" stroke="var(--ink)" stroke-width="2"/></svg>Gerçek denek (en son konuşur)</span>
         <span><svg viewBox="0 0 26 10" aria-hidden="true"><circle cx="13" cy="5" r="4" fill="none" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="2 2"/></svg>Müttefik</span>
       </div>
@@ -175,16 +176,8 @@ export function mount(container: HTMLElement): () => void {
   // ---- Küçük arayüz yardımcıları ----
   function addSlider(parent: HTMLElement, key: string, name: string, hint: string, min: number, max: number, step: number,
     fmt: (v: number) => string, onInput: (v: number) => void, cls: string): (v: number) => void {
-    const w = document.createElement('div');
-    w.className = cls;
-    w.innerHTML = `<div class="sl-top"><label class="sl-name" for="${id}-s-${key}">${name}</label><span class="sl-val"></span></div>` +
-      `<input type="range" id="${id}-s-${key}" min="${min}" max="${max}" step="${step}"><p class="sl-hint">${hint}</p>`;
-    parent.appendChild(w);
-    const inp = w.querySelector('input') as HTMLInputElement;
-    const val = w.querySelector('.sl-val') as HTMLElement;
-    const set = (v: number) => { inp.value = String(v); val.textContent = fmt(v); inp.setAttribute('aria-valuetext', fmt(v)); };
-    scope.on(inp, 'input', () => { const v = Number(inp.value); set(v); onInput(v); });
-    return set;
+    const h = slider(scope, parent, { id: `${id}-s-${key}`, name, hint, min, max, step, fmt, cls, onInput });
+    return (v) => h.set(v);
   }
   function addToggle(parent: HTMLElement, name: string, hint: string, onToggle: () => void): (on: boolean) => void {
     const w = document.createElement('div');
@@ -558,7 +551,7 @@ export function mount(container: HTMLElement): () => void {
   // =================================================================== Başlangıç ve döngü
   let last = performance.now();
   function frame(now: number): void {
-    const dt = Math.min(0.1, (now - last) / 1000);
+    const dt = Math.max(0, Math.min(0.1, (now - last) / 1000));
     last = now;
     if (anim) drawSeats(now);
     if (S.playing) {

@@ -3,7 +3,7 @@ import { svg, svgText } from '../kit';
 import {
   BINS, GWAS_N, HEIGHT_MEAN, HEIGHT_SD, M_STEPS, N_PEOPLE, Z_RANGE, describeGwas, discovery, simulateGwas, type Discovery, type GwasSim,
 } from './model';
-import { bookBox, chipRow, makeSlider, pc, pc1, type Ctx, type Meter, type Panel, type SliderHandle } from './ui';
+import { bookBox, chipRow, makeSlider, pc, pc1, type Ctx, type Meter, type Panel, type SliderHandle } from '../ui';
 
 const fmtN = (n: number): string => n.toLocaleString('tr-TR');
 const REF_M = M_STEPS.length - 1;
@@ -34,6 +34,7 @@ const TEMPLATE = () => `
   <p>Her varyantın farkın ne kadarını açıkladığı log-normal bir dağılımdan gelir: çoğu çok küçük, birkaçı görece büyük. Tüm varyantların payı toplamı, genetik payı (1 − çevre payı) verir. Çevre, genlerden bağımsız rastlantısal bir terimdir.</p>
   <p>Histogram ${fmtN(N_PEOPLE)} sanal kişiden çıkar. En güçlü 200 varyant kişi başına tek tek çekilir (her kişi her varyantın 0, 1 ya da 2 kopyasını taşır); kalan çok sayıda küçük varyantın toplamı merkezi limit teoremiyle bir normal terim olarak eklenir. Varyant sayısı 1 iken yalnızca üç boy kümesi çıkması, Mendel tarzı tek genin sonucudur.</p>
   <p>GWAS'ın bir varyantı "bulması" için etkisinin örneklem büyüklüğüyle çarpımı bir eşiği aşmalıdır (genom çapında anlamlılık, p &lt; 5×10⁻⁸). Bu yüzden küçük örneklemde yalnızca büyük etkililer bulunur.</p>
+  <p>Genetik farkın bir kısmı (burada, en çok varyantta, %28) nadir varyantlarda ya da çok küçük etkilerde saklıdır ve en büyük örneklemde bile tek tek bulunamaz. Bu yüzden bulunanların toplamı kalıtılabilirliğin altında kalır ("eksik kalıtılabilirlik").</p>
 </details>
 
 ${bookBox([
@@ -41,7 +42,7 @@ ${bookBox([
     { id: 'ch08-e11', text: 'Beden kitle indeksi için GWAS (2010): en iyi varyant farkın %0,3\'ü' },
     { id: 'ch08-e12', text: 'Eğitim düzeyi için GWAS (2013): en iyi varyant farkın %0,02\'si' },
   ], '<p class="note">Kitaba göre 183.727 kişinin genomu tarandı; yüzlerce varyant boyla ilişkili bulundu, yalnızca bir avucu bilinen iskelet büyümesi genlerindeydi. En güçlü tek varyant boy farklılığının yalnızca %0,4\'ünü, hepsi birlikte yaklaşık %10\'unu açıkladı. Sonraki çalışma (5,4 milyon kişi, 2022) 12.000\'den fazla varyant buldu; bunlar Avrupa kökenlilerde boy farkının yaklaşık %40-45\'ini açıklıyor. Eğitim düzeyinde poligenik skorların bir kısmı aile ortamı gibi dolaylı etkileri de yansıtıyor.</p>')}
-<p class="foot">Nitel model. Kitaptan gelen sayılar: 183.727 kişilik tarama, en güçlü varyant ≈%0,4, hepsi ≈%10, "yüzlerce" varyant ve 2022'de &gt;12.000 varyant, ≈%40-45. Kitap gerçek etkili varyant sayısını vermez: 300.000 ve etki dağılımı 2010 bulgusuna uydurmak için seçilmiş varsayımdır, 2022 sonucunda model kitaptan yüksek çıkar. Boy ölçeği (ortalama ${HEIGHT_MEAN}, standart sapma ${HEIGHT_SD} cm) ve genetik pay (%80) örnek amaçlı. Modelde gen × çevre etkileşimi yok.</p>`;
+<p class="foot">Nitel model. Kitaptan gelen sayılar: 183.727 kişilik tarama, en güçlü varyant ≈%0,4, hepsi ≈%10, "yüzlerce" varyant ve 2022'de &gt;12.000 varyant, ≈%40-45. Kitap gerçek etkili varyant sayısını vermez: 300.000 varyant, etki dağılımı ve "yaygın varyantların taşıdığı pay" (%75) iki noktaya (2010 ve 2022) birlikte uydurulmuş varsayımlardır. Boy ölçeği (ortalama ${HEIGHT_MEAN}, standart sapma ${HEIGHT_SD} cm) ve genetik pay (%80) örnek amaçlı. Modelde gen × çevre etkileşimi yok.</p>`;
 
 export interface GwasPanel extends Panel {
   set(p: { mIdx?: number; env?: number; sample?: 'y2010' | 'y2022' }): void;
@@ -95,7 +96,7 @@ export function createGwasPanel(ctx: Ctx, host: HTMLElement): GwasPanel {
       cell('En güçlü tek varyant', pc1(d.top), ref ? 'kitap: ≈%0,4' : `kopya başına ≈${d.topCm.toFixed(1).replace('.', ',')} cm`) +
       cell('Bulunanların toplamı', pc1(d.sum), ref ? 'kitap: ≈%10' : 'kitap: ≈%40-45');
     $('cmp').textContent = M() === M_STEPS[REF_M] && Math.abs(S.env - 0.2) < 0.001
-      ? (ref ? 'Kitaptaki ayar: model kitabın sayılarına yakın çıkar.' : 'Kitaptaki ayar: daha büyük örneklem çok daha fazla varyant ve çok daha yüksek bir pay bulur. Model bu pay için kitaptan yüksek çıkar (varsayım).')
+      ? (ref ? 'Kitaptaki ayar: model kitabın sayılarına yakın çıkar.' : 'Kitaptaki ayar: daha büyük örneklem çok daha fazla varyant ve çok daha yüksek bir pay bulur; model bu payı %40-45 civarında tutacak biçimde ayarlı.')
       : 'Kitap karşılaştırması, "Kitaptaki ayar" düğmesindeki değerler (300.000 varyant, çevre %20) için anlamlıdır.';
   }
 

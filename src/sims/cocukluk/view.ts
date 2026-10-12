@@ -5,7 +5,7 @@ import { createTour } from '../tour';
 import { createAcePanel } from './ace-panel';
 import { createMarshPanel } from './marsh-panel';
 import { createMoralPanel } from './moral-panel';
-import type { Ctx, Meter, Panel } from './ui';
+import type { Ctx, Meter, Panel } from '../ui';
 
 type Tab = 'marsh' | 'ace' | 'moral';
 const TABS: Array<{ key: Tab; label: string }> = [

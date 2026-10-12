@@ -1,7 +1,7 @@
 // Sekme 1: Marshmallow testi. Tek çocuk sahnesi + sanal grup dağılımı + sonraki yaşamla ilişki (Watts 2018).
 import { svg as svgEl, svgText } from '../kit';
 import { DEFAULT_MARSH, MAX_WAIT, STRATEGIES, histogram, lateLife, makeCohort, summarize, waitOf, waits, type Late, type MarshInput, type Strategy } from './model';
-import { bookBox, chipRow, el, f1, f2, makeSlider, pc, type Ctx, type Meter, type Panel } from './ui';
+import { bookBox, chipRow, el, f1, f2, makeSlider, pc, type Ctx, type Meter, type Panel } from '../ui';
 
 const N = 400, SHOWN = 160, SPEED = 60;
 type Mode = 'raw' | 'ctrl';

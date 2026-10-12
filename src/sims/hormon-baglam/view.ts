@@ -1,3 +1,4 @@
+import { slider as baseSlider } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, ref, svg, svgText, uid } from '../kit';
@@ -174,16 +175,8 @@ export function mount(container: HTMLElement): () => void {
   /* ---------- Ortak yardımcılar ---------- */
   function slider(host: HTMLElement, key: string, name: string, hint: string, min: number, max: number,
     get: () => number, set: (v: number) => void, fmt: (v: number) => string, color: string): void {
-    const sid = `${id}-${key}`;
-    const w = document.createElement('div');
-    w.style.setProperty('--c', color);
-    w.innerHTML = `<div class="sl-top"><label class="sl-name" for="${sid}">${name}</label><span class="sl-val"></span></div><input type="range" id="${sid}" min="${min}" max="${max}" step="1"><p class="sl-hint">${hint}</p>`;
-    host.appendChild(w);
-    const inp = w.querySelector('input')!;
-    const out = w.querySelector('.sl-val')!;
-    const upd = () => { inp.value = String(get()); out.textContent = fmt(get()); };
-    scope.on(inp, 'input', () => { set(+inp.value); refresh(true); });
-    syncers.push(upd);
+    const h = baseSlider(scope, host, { id: `${id}-${key}`, name, hint, min, max, fmt, color, onInput: (v) => { set(v); refresh(true); } });
+    syncers.push(() => h.set(get(), fmt(get())));
   }
   function chipGroup<V extends string>(host: HTMLElement, label: string, items: Array<[V, string]>, get: () => V, set: (v: V) => void): void {
     const w = document.createElement('div');

@@ -328,7 +328,7 @@ export function mount(container: HTMLElement): () => void {
   const DT = 0.02;
   let last = performance.now(), acc = 0, tSay = 0, tDet = 0;
   function frame(now: number): void {
-    const dt = Math.min(0.1, (now - last) / 1000);
+    const dt = Math.max(0, Math.min(0.1, (now - last) / 1000));
     last = now;
     if (!S.paused) {
       acc += dt;

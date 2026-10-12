@@ -464,7 +464,7 @@ export function mount(container: HTMLElement): () => void {
   // ---- Döngü: yalnızca etkinlikler hedefe doğru kayarken ve girdi değişince çizer ----
   let last = performance.now();
   function frame(now: number): void {
-    const dt = Math.min(0.1, (now - last) / 1000);
+    const dt = Math.max(0, Math.min(0.1, (now - last) / 1000));
     last = now;
     const tg = target();
     const k = reduce ? 1 : 1 - Math.exp(-dt * 9);

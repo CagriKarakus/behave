@@ -111,4 +111,23 @@ describe('cocukluk görünümü', () => {
     un();
     expect(host.innerHTML).toBe('');
   });
+
+  it('eleştiri sekmeleri arasında geçiş dinleyici biriktirmez', () => {
+    raf();
+    let live = 0;
+    const add = EventTarget.prototype.addEventListener, rem = EventTarget.prototype.removeEventListener;
+    vi.spyOn(EventTarget.prototype, 'addEventListener').mockImplementation(function (this: EventTarget, ...a: Parameters<typeof add>) { live++; return add.apply(this, a); });
+    vi.spyOn(EventTarget.prototype, 'removeEventListener').mockImplementation(function (this: EventTarget, ...a: Parameters<typeof rem>) { live--; return rem.apply(this, a); });
+    const host = document.createElement('div');
+    document.body.append(host);
+    const un = mount(host);
+    const keys = ['culture', 'gender', 'action'];
+    const cycle = () => { for (const k of keys) click(host.querySelector(`.pane[data-pane="moral"] .chip[data-k="${k}"]`)!); };
+    cycle();
+    const base = live;
+    for (let i = 0; i < 10; i++) cycle();
+    expect(live).toBe(base);
+    un();
+    expect(live).toBe(0);
+  });
 });

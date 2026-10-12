@@ -4,7 +4,7 @@ import {
   DEFAULT_PARAMS, MAX_ENV, PRESETS, VARIANTS, decompose, describeTable, h2Curve, rankFlips, simulatePop, tableFromParams,
   type Decomp, type Pop, type Table, type TableParams,
 } from './model';
-import { bookBox, chipRow, makeSlider, pc, type Ctx, type Meter, type Panel, type SliderHandle } from './ui';
+import { bookBox, chipRow, makeSlider, pc, type Ctx, type Meter, type Panel, type SliderHandle } from '../ui';
 
 const VAR_COL = ['var(--hyp)', 'var(--pit)', 'var(--eff)'];
 

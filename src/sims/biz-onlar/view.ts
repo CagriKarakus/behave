@@ -1,4 +1,5 @@
 import { mulberry32 } from '../rng';
+import { slider } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, svg, svgText, uid } from '../kit';
@@ -183,14 +184,8 @@ export function mount(container: HTMLElement): () => void {
   // ---- Arayüz yardımcıları ----
   function addSlider(parent: HTMLElement, key: string, name: string, hint: string, min: number, max: number, step: number,
     fmt: (v: number) => string, onInput: (v: number) => void): (v: number) => void {
-    const w = document.createElement('div');
-    w.innerHTML = `<div class="sl-top"><label class="sl-name" for="${id}-s-${key}">${name}</label><span class="sl-val"></span></div>` +
-      `<input type="range" id="${id}-s-${key}" min="${min}" max="${max}" step="${step}"><p class="sl-hint">${hint}</p>`;
-    parent.appendChild(w);
-    const inp = w.querySelector('input') as HTMLInputElement, val = w.querySelector('.sl-val') as HTMLElement;
-    const set = (v: number) => { inp.value = String(v); val.textContent = fmt(v); inp.setAttribute('aria-valuetext', fmt(v)); };
-    scope.on(inp, 'input', () => { const v = Number(inp.value); set(v); onInput(v); });
-    return set;
+    const h = slider(scope, parent, { id: `${id}-s-${key}`, name, hint, min, max, step, fmt, onInput });
+    return (v) => h.set(v);
   }
   function addToggle(parent: HTMLElement, name: string, hint: string, onToggle: () => void): (on: boolean) => void {
     const w = document.createElement('div');

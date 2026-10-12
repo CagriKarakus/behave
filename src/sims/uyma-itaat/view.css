@@ -19,11 +19,11 @@
 .sim-uyma .seat { fill: var(--panel); stroke: var(--edge); stroke-width: 1.2; }
 .sim-uyma .seat.subj { stroke: var(--ink); stroke-width: 2.4; }
 .sim-uyma .seat.ally { stroke: var(--ink); stroke-width: 1.6; stroke-dasharray: 2.5 2; }
-.sim-uyma .seat.bad { fill: var(--amy); stroke: var(--amy); }
-.sim-uyma .seat.good { fill: var(--pfc); stroke: var(--pfc); }
+/* Dolgu açık bir ton: harf her iki temada --ink ile ≥ 4,5:1 kalır. Anlam rengi halkada ve dolgunun tonunda. */
+.sim-uyma .seat.bad { fill: color-mix(in srgb, var(--amy) 24%, var(--panel)); stroke: var(--amy); stroke-width: 2.6; }
+.sim-uyma .seat.good { fill: color-mix(in srgb, var(--pfc) 24%, var(--panel)); stroke: var(--pfc); stroke-width: 2.6; }
 .sim-uyma .seat.subj.bad, .sim-uyma .seat.subj.good { stroke: var(--ink); }
 .sim-uyma .stage .seat-t { font: 600 11px var(--f-mono); fill: var(--ink); pointer-events: none; }
-.sim-uyma .seat.bad + .seat-t, .sim-uyma .seat.good + .seat-t { fill: var(--bg); }
 .sim-uyma .tally { font-size: 12px; color: var(--muted); min-height: 1.4em; }
 
 .sim-uyma .rung { fill: var(--amy); fill-opacity: 0; stroke: var(--line); stroke-width: 1; }

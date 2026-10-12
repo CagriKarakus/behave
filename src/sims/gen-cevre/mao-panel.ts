@@ -1,7 +1,7 @@
 // Sekme 2: MAO-A varyantı × çocuklukta kötü muamele (Caspi tarzı etkileşim). Fikri öğretir; kesin risk hesabı değildir.
 import { svg, svgText } from '../kit';
 import { CASPI_RATIO, describeMao, maoPopulationRisk, maoRisk } from './model';
-import { bookBox, chipRow, makeSlider, pc, type Ctx, type Meter, type Panel, type SliderHandle } from './ui';
+import { bookBox, chipRow, makeSlider, pc, type Ctx, type Meter, type Panel, type SliderHandle } from '../ui';
 
 const SCEN = [
   { key: 'caspi', label: 'İlk bulgu (Caspi 2002): ≈3 kat', ratio: CASPI_RATIO },

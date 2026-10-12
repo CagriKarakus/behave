@@ -743,7 +743,7 @@ export function mount(container: HTMLElement): () => void {
   /* ---------- Döngü ---------- */
   let last = performance.now(), tSay = 0, drawnSyn = false;
   function frame(now: number): void {
-    const dt = Math.min(0.1, (now - last) / 1000);
+    const dt = Math.max(0, Math.min(0.1, (now - last) / 1000));
     last = now;
     if (tab === 'syn') {
       frameSyn(dt);

@@ -1,6 +1,6 @@
 // Sekme 2: Çocukluk adversitesi birikimi, koruyucu etkenler ve yetişkinlik riski (doz-yanıt).
 import { ACES, DEFAULT_ACE, OUTCOMES, THRESHOLD, buffer, instLoad, levelWord, mechanisms, pHigh, pRef, pdf, shift, type AceInput, type Outcome } from './model';
-import { bookBox, chipRow, el, f1, makeSlider, type Ctx, type Meter, type Panel } from './ui';
+import { bookBox, chipRow, el, f1, makeSlider, type Ctx, type Meter, type Panel } from '../ui';
 
 const OUTS = Object.keys(OUTCOMES) as Outcome[];
 const wordOf3 = (v: number): string => (v < 0.35 ? 'düşük' : v < 0.6 ? 'orta' : 'yüksek');

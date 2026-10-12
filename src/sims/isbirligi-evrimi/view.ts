@@ -1,4 +1,5 @@
 import { mulberry32 } from '../rng';
+import { slider, type SliderHandle } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, svg, svgText, uid } from '../kit';
@@ -176,20 +177,9 @@ export function mount(container: HTMLElement): () => void {
   }
 
   /* ---------- Kaydırıcı ---------- */
-  interface SliderHandle { inp: HTMLInputElement; set: (v: number) => void }
   function makeSlider(parent: HTMLElement, key: string, name: string, hint: string, min: number, max: number, val: number,
     cb: (v: number) => void, fmt: (v: number) => string, color: string): SliderHandle {
-    const sid = `${id}-sl-${key}`;
-    const w = document.createElement('div');
-    w.innerHTML = `<div class="sl-top"><label class="sl-name" for="${sid}">${name}</label><span class="sl-val"></span></div><input type="range" id="${sid}" min="${min}" max="${max}" step="1" value="${val}">` + (hint ? `<p class="sl-hint">${hint}</p>` : '');
-    if (color) w.style.setProperty('--c', color);
-    parent.appendChild(w);
-    const inp = w.querySelector('input') as HTMLInputElement;
-    const out = w.querySelector('.sl-val') as HTMLElement;
-    const upd = () => { out.textContent = fmt(+inp.value); inp.setAttribute('aria-valuetext', out.textContent); };
-    scope.on(inp, 'input', () => { upd(); cb(+inp.value); });
-    upd();
-    return { inp, set: (v) => { inp.value = String(v); upd(); } };
+    return slider(scope, parent, { id: `${id}-sl-${key}`, name, hint, min, max, value: val, fmt, color, onInput: cb });
   }
 
   /* =====================================================

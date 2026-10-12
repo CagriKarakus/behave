@@ -1,3 +1,4 @@
+import { slider, type SliderHandle } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, svg, svgText, uid } from '../kit';
@@ -188,20 +189,9 @@ export function mount(container: HTMLElement): () => void {
   function say(): void { const t = SAY[tab]?.() || ''; if (t !== lastSay) { lastSay = t; sayEl.textContent = t; } }
 
   /* ---------- Ortak kaydırıcı ---------- */
-  interface SliderHandle { inp: HTMLInputElement; set: (v: number) => void; wrap: HTMLElement }
   function makeSlider(parent: HTMLElement, key: string, name: string, hint: string, min: number, max: number, val: number,
     cb: (v: number) => void, valFmt: ((v: number) => string) | null, color: string, sc: Scope = scope): SliderHandle {
-    const sid = `${id}-sl-${key}`;
-    const w = document.createElement('div');
-    w.innerHTML = `<div class="sl-top"><label class="sl-name" for="${sid}">${name}</label><span class="sl-val"></span></div><input type="range" id="${sid}" min="${min}" max="${max}" step="1" value="${val}">` + (hint ? `<p class="sl-hint">${hint}</p>` : '');
-    if (color) w.style.setProperty('--c', color);
-    parent.appendChild(w);
-    const inp = w.querySelector('input') as HTMLInputElement;
-    const out = w.querySelector('.sl-val') as HTMLElement;
-    const upd = () => { out.textContent = valFmt ? valFmt(+inp.value) : inp.value + '%'; };
-    sc.on(inp, 'input', () => { upd(); cb(+inp.value); });
-    upd();
-    return { inp, set: (v) => { inp.value = String(v); upd(); }, wrap: w };
+    return slider(sc, parent, { id: `${id}-sl-${key}`, name, hint, min, max, value: val, fmt: valFmt ?? ((v) => `${v}%`), color, onInput: cb });
   }
 
   /* =====================================================
@@ -515,7 +505,7 @@ export function mount(container: HTMLElement): () => void {
   /* ---------- Döngü ---------- */
   let last = performance.now(), acc = 0, tSay = 0;
   function frame(now: number): void {
-    const dt = Math.min(0.1, (now - last) / 1000);
+    const dt = Math.max(0, Math.min(0.1, (now - last) / 1000));
     last = now;
     if (tab === 'axis' && !A.paused) {
       acc += dt * 6 * A.speed; // 1 sn gerçek = 6 dk sim (×1)

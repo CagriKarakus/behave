@@ -1,6 +1,7 @@
 // Sekme 3: Ahlaki gelişim (Kohlberg): Heinz ikilemi, yaşa göre aşama dağılımı, eleştiriler ve Blake'in adalet çalışması.
+import { Scope } from '../kit';
 import { LEVEL_NAMES, actProb, fairness, levelOf, levelShares, stageDist } from './model';
-import { bookBox, chipRow, el, makeSlider, pc, type Ctx, type Meter, type Panel } from './ui';
+import { bookBox, chipRow, el, makeSlider, pc, type Ctx, type Meter, type Panel } from '../ui';
 
 type Stance = 'yes' | 'no';
 type Crit = 'culture' | 'gender' | 'action';
@@ -59,17 +60,23 @@ export function createMoralPanel(ctx: Ctx, host: HTMLElement) {
   /* ---- Eleştiri paneli ---- */
   const cbody = q('cbody');
   let fairSvg: SVGSVGElement | null = null, actEls: Array<{ b: HTMLElement; v: HTMLElement }> = [];
+  // Eleştiri sekmesi her değişimde yeniden kurulur; dinleyiciler ana kapsama birikmesin diye kendi kapsamı var.
+  let critScope: Scope | null = null;
+  ctx.scope.onDispose(() => critScope?.dispose());
   function buildCrit(): void {
+    critScope?.dispose();
+    critScope = new Scope();
+    const cctx: Ctx = { ...ctx, scope: critScope };
     fairSvg = null; actEls = [];
     cbody.innerHTML = '';
     if (crit === 'culture') {
       el(cbody, 'p', '', 'Blake ve arkadaşları yedi toplumda 4-15 yaş çocukları haksız paylaşımlar karşısında izledi. Kendi aleyhine eşitsizliğe tepki 4-6 yaştan itibaren her toplumda vardı. Kendi lehine, öbür çocuğun aleyhine eşitsizliğe tepki ise ancak 8-10 yaşlarında ve yalnızca bazı toplumlarda ortaya çıktı.');
       const row = el(cbody, 'div', 'chips');
-      const setSoc = chipRow(row, ctx, [{ key: 'late', label: 'Geç gelişen toplum' }, { key: 'none', label: 'Hiç gelişmeyen toplum' }], (k) => { society = k as Society; setSoc(society); dirty = true; }, 'Toplum tipi');
+      const setSoc = chipRow(row, cctx, [{ key: 'late', label: 'Geç gelişen toplum' }, { key: 'none', label: 'Hiç gelişmeyen toplum' }], (k) => { society = k as Society; setSoc(society); dirty = true; }, 'Toplum tipi');
       setSoc(society);
       const ch = el(cbody, 'div', 'chart', '<svg viewBox="0 0 320 150" role="img" aria-label="Yaşa göre adalet tepkisi"></svg>');
       fairSvg = ch.firstChild as SVGSVGElement;
-      const age2 = makeSlider(ctx, cbody, 'fage', 'İşaretli yaş', 'Çizgilerin o yaştaki değerini okumak için.', 4, 15, fAge, (v) => { fAge = v; dirty = true; }, (v) => `${v} yaş`, 'var(--dop)');
+      const age2 = makeSlider(cctx, cbody, 'fage', 'İşaretli yaş', 'Çizgilerin o yaştaki değerini okumak için.', 4, 15, fAge, (v) => { fAge = v; dirty = true; }, (v) => `${v} yaş`, 'var(--dop)');
       void age2;
       el(cbody, 'p', 'note', 'Eğriler nitel: biçimleri modelin varsayımıdır, yaşlar ve "bazı toplumlar" ayrımı kitaptandır. Kohlberg aşamalarının sırası kültürlerarası çalışmalarda büyük ölçüde desteklenmiş; üst aşamaların evrenselliği ise eleştirilmiştir.');
     } else if (crit === 'gender') {
@@ -79,7 +86,7 @@ export function createMoralPanel(ctx: Ctx, host: HTMLElement) {
       el(cbody, 'p', 'note', 'Yalnızca adalet ölçütüyle bakan bir sınıflama bakım odaklı gerekçeleri ilişkisel (3. aşama) görünümüne iterek geride bırakabilir. Kitap ayrıca aşama modellerinin katı alınmaması gerektiğini, geçişlerin keskin olmadığını ve aşamanın bağlama göre değişebildiğini söyler.');
     } else {
       el(cbody, 'p', '', 'Ahlaki akıl yürütme düzeyi, ahlaki eylemi nadiren öngörür. Aşağıda her aşama için "ikilemin gerçek hayat karşılığında yardım etme" olasılığı (illüstratif) var: aşamanın eğimi küçük, durumun baskısı büyük.');
-      makeSlider(ctx, cbody, 'press', 'Durumun baskısı', 'Kalabalık, acele, risk, çıkar çatışması: eylemi bastırır.', 0, 100, Math.round(pressure * 100), (v) => { pressure = v / 100; dirty = true; }, (v) => (v < 30 ? 'düşük' : v > 70 ? 'yüksek' : 'orta'), 'var(--red)');
+      makeSlider(cctx, cbody, 'press', 'Durumun baskısı', 'Kalabalık, acele, risk, çıkar çatışması: eylemi bastırır.', 0, 100, Math.round(pressure * 100), (v) => { pressure = v / 100; dirty = true; }, (v) => (v < 30 ? 'düşük' : v > 70 ? 'yüksek' : 'orta'), 'var(--red)');
       const lst = el(cbody, 'div', 'actlist');
       actEls = [1, 2, 3, 4, 5, 6].map((n) => {
         const row = el(lst, 'div', 'arow', `<span>${n}. aşama</span><div class="track"><b></b></div><b class="av"></b>`);

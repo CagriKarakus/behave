@@ -2,7 +2,7 @@ import { mulberry32 } from '../rng';
 import { describe, expect, it } from 'vitest';
 import {
   CASPI_RATIO, CRABBE_TABLE, DEFAULT_PARAMS, GWAS_N, M_STEPS, PRESETS, SES_TABLE, decompose, describeGwas, describeMao, describeTable,
-  discovery, genCells, h2Curve, maoInteraction, maoPopulationRisk, maoRisk, rankFlips, simulateGwas, simulatePop, tableFromParams,
+  COMMON_SHARE, REF_M, discovery, foundFraction, genCells, h2Curve, maoInteraction, maoPopulationRisk, maoRisk, rankFlips, simulateGwas, simulatePop, tableFromParams,
   variantShares,
 } from './model';
 
@@ -153,11 +153,19 @@ describe('boy ve GWAS', () => {
     expect(d.sum).toBeLessThan(0.16);
   });
 
-  it('kalibrasyon (ch08-e10, 2022): daha büyük örneklem >12.000 varyant bulur, açıklanan pay ~2010\'dan çok yüksek', () => {
+  it('kalibrasyon (ch08-e10, 2022 replikasyon notu): >12.000 varyant, hepsi birlikte %40-45', () => {
     const a = discovery(300000, 0.8, GWAS_N.y2010), b = discovery(300000, 0.8, GWAS_N.y2022);
     expect(b.count).toBeGreaterThan(12000);
+    expect(b.sum).toBeGreaterThanOrEqual(0.4);
+    expect(b.sum).toBeLessThanOrEqual(0.46);
     expect(b.sum).toBeGreaterThan(a.sum * 3);
-    expect(b.sum).toBeLessThan(0.8);
+    expect(b.sum).toBeLessThan(0.7 * 0.8); // kalıtılabilirliğin (%80) çok altında: eksik kalıtılabilirlik
+  });
+
+  it('bulunabilir oran: tek varyantta 1, referans M\'de COMMON_SHARE; bulunan pay en güçlü varyanttan küçük olamaz', () => {
+    expect(foundFraction(1)).toBe(1);
+    expect(foundFraction(REF_M)).toBeCloseTo(COMMON_SHARE, 10);
+    for (const M of M_STEPS) { const d = discovery(M, 0.8, GWAS_N.y2022); expect(d.sum).toBeGreaterThanOrEqual(d.top - 1e-9); }
   });
 
   it('M basamakları artan; açıklama metni üretilir', () => {

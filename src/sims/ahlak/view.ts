@@ -1,4 +1,5 @@
 import { mulberry32 } from '../rng';
+import { slider } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, ref, svg, svgText, uid } from '../kit';
@@ -234,17 +235,8 @@ export function mount(container: HTMLElement): () => void {
 
   /* ---------- Yardımcılar ---------- */
   function makeSlider(parent: HTMLElement, o: { name: string; hint: string; min: number; max: number; step: number; val: number; fmt: (v: number) => string; cb: (v: number) => void; color?: string }): SliderHandle {
-    const sid = `${id}-s${++slN}`;
-    const wrap = document.createElement('div');
-    wrap.className = 'sl';
-    if (o.color) wrap.style.setProperty('--c', o.color);
-    wrap.innerHTML = `<div class="sl-top"><label class="sl-name" for="${sid}">${o.name}</label><span class="sl-val"></span></div><input type="range" id="${sid}" min="${o.min}" max="${o.max}" step="${o.step}"><p class="sl-hint">${o.hint}</p>`;
-    parent.appendChild(wrap);
-    const inp = wrap.querySelector('input')!, val = wrap.querySelector<HTMLElement>('.sl-val')!;
-    const set = (v: number) => { inp.value = String(v); val.textContent = o.fmt(v); inp.setAttribute('aria-valuetext', o.fmt(v)); };
-    set(o.val);
-    scope.on(inp, 'input', () => { const v = Number(inp.value); set(v); o.cb(v); });
-    return { inp, set };
+    const h = slider(scope, parent, { id: `${id}-s${++slN}`, name: o.name, hint: o.hint, min: o.min, max: o.max, step: o.step, value: o.val, fmt: o.fmt, color: o.color, cls: 'sl', onInput: o.cb });
+    return { inp: h.inp, set: (v) => h.set(v) };
   }
   function toggles<T extends string>(parent: HTMLElement, items: { k: T; name: string }[], get: () => T | null, pick: (k: T) => void): () => void {
     const btns = items.map((it) => {

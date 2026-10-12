@@ -3,6 +3,7 @@ import type { ContentSource } from '../content';
 import { CONF_DOTS, chapterLabel } from '../content/normalize';
 import { html, raw, type Safe } from '../lib/html';
 import { chapterHref, withSim } from '../lib/router';
+import { enhanceSimBar } from '../sims/bar';
 import { simsFor } from '../sims/registry';
 import { experimentCard } from './experiment';
 import { staticPage, type Page } from './page';
@@ -151,7 +152,9 @@ export function renderChapter(el: HTMLElement, src: ContentSource, id: string, f
     try {
       const mount = await sims[i].load();
       if (disposed || my !== seq) return;
-      unmountSim = mount(host);
+      const unmount = mount(host);
+      const offBar = enhanceSimBar(host);
+      unmountSim = () => { offBar(); unmount(); };
     } catch (e) {
       console.error(e);
       if (!disposed && my === seq) host.textContent = 'Simülasyon yüklenemedi.';
