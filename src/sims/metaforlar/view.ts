@@ -1,4 +1,5 @@
 import { mulberry32 } from '../rng';
+import { slider } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, ref, svg, svgText, uid } from '../kit';
@@ -72,9 +73,9 @@ const TEMPLATE = (id: string) => `
       </div>
     </details>
 
-    <section class="book" aria-label="Kitapta">
+    <aside class="book" aria-label="Kitapta">
       <h3 class="sim-h">Kitapta</h3>
-      <ul class="book-list">
+      <ul>
         <li><a href="#/bolum/ch15?deney=ch15-e1">Cyberball (Eisenberger 2003)</a>: dışlanınca ACC etkinleşti, arıza denince etkinleşmedi. Replikasyon: karışık; duygu sağlam, ortak dACC iddiası sorgulandı.</li>
         <li><a href="#/bolum/ch15?deney=ch15-e6">Adaletsiz teklif ve insula (Sanfey 2003)</a>. Replikasyon: sağlam; insulanın ne yansıttığı tartışmalı.</li>
         <li><a href="#/bolum/ch15?deney=ch15-e4">Ahlaki ihlal ve tat</a>. Replikasyon: tartışmalı (Ghelfi 2020 başarısız).</li>
@@ -82,7 +83,7 @@ const TEMPLATE = (id: string) => `
         <li><a href="#/bolum/ch15?deney=ch15-e7">Macbeth etkisi</a>, <a href="#/bolum/ch15?deney=ch15-e8">ağız ve el</a>, <a href="#/bolum/ch15?deney=ch15-e9">el yıkama ve yardım</a>. Replikasyon: tartışmalı ya da karışık.</li>
         <li><a href="#/bolum/ch15?deney=ch15-e5">Bakteri uyarısı ve göç (Landau 2009)</a>. Replikasyon: bilinmiyor.</li>
       </ul>
-    </section>
+    </aside>
   </section>
 
   <!-- ============ 2 · Kutsal değerler ============ -->
@@ -119,12 +120,12 @@ const TEMPLATE = (id: string) => `
       </div>
     </details>
 
-    <section class="book" aria-label="Kitapta">
+    <aside class="book" aria-label="Kitapta">
       <h3 class="sim-h">Kitapta</h3>
-      <ul class="book-list">
+      <ul>
         <li><a href="#/bolum/ch15?deney=ch15-e12">Atran, Axelrod ve Davis (2007)</a>: İsrail-Filistin çatışmasında her düzeyde kutsal değerler belirleyiciydi; taraflar özür ve karşı tarafın haklarını tanımayı maddi tavizin yanında barışın koşulu saydı. Replikasyon: bilinmiyor (görüşme ve vaka çalışması); maddi teklifin tepkiyi artırdığı bulgusu anket deneylerinde (Ginges 2007) desteklendi.</li>
       </ul>
-    </section>
+    </aside>
   </section>
 
   <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan (chapters.json ch15): her kartın yönü, replikasyon durumları, arıza koşulunda ACC'nin etkinleşmemesi, kutsal değerlerde maddi tekliflerin ters tepmesi ve sembolik jestlerin kapı açması. Etki büyüklükleri, replikasyon çarpanları ve kutsallık katsayıları modelin varsayımıdır; kitapta bu sayılar yoktur.</p>
@@ -190,17 +191,8 @@ export function mount(container: HTMLElement): () => void {
 
   /* ---------- Yardımcılar ---------- */
   function makeSlider(parent: HTMLElement, o: { name: string; hint: string; min: number; max: number; step: number; val: number; fmt: (v: number) => string; cb: (v: number) => void; color?: string }): SliderHandle {
-    const sid = `${id}-s${++slN}`;
-    const wrap = document.createElement('div');
-    wrap.className = 'sl';
-    if (o.color) wrap.style.setProperty('--c', o.color);
-    wrap.innerHTML = `<div class="sl-top"><label class="sl-name" for="${sid}">${o.name}</label><span class="sl-val"></span></div><input type="range" id="${sid}" min="${o.min}" max="${o.max}" step="${o.step}"><p class="sl-hint">${o.hint}</p>`;
-    parent.appendChild(wrap);
-    const inp = wrap.querySelector('input')!, val = wrap.querySelector<HTMLElement>('.sl-val')!;
-    const set = (v: number) => { inp.value = String(v); val.textContent = o.fmt(v); inp.setAttribute('aria-valuetext', o.fmt(v)); };
-    set(o.val);
-    scope.on(inp, 'input', () => { const v = Number(inp.value); set(v); o.cb(v); });
-    return { inp, set };
+    const h = slider(scope, parent, { id: `${id}-s${++slN}`, name: o.name, hint: o.hint, min: o.min, max: o.max, step: o.step, value: o.val, fmt: o.fmt, color: o.color, cls: 'sl', onInput: (v) => { o.cb(v); } });
+    return { inp: h.inp, set: (v) => h.set(v) };
   }
   function chipGroup<T extends string>(parent: HTMLElement, items: Array<{ k: T; name: string }>, pick: (k: T) => void): (cur: T) => void {
     const btns = items.map((it) => {
@@ -496,7 +488,7 @@ export function mount(container: HTMLElement): () => void {
   scope.on($('rerun'), 'click', () => { S.seed++; dirty = true; });
 
   const chart = $<SVGElement>('chart');
-  const CP = { x0: 38, x1: 344, y0: 168, y1: 16 };
+  const CP = { x0: 38, x1: 344, y0: 168, y1: 28 };
   const cx = (z: number): number => CP.x0 + (CP.x1 - CP.x0) * z;
   const cy = (v: number): number => CP.y0 - (CP.y0 - CP.y1) * v;
   function curve(S0: number, kind: OfferKind): string {

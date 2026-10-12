@@ -272,7 +272,7 @@ for (const w of [390, 1280]) {
 
   // 6) Gezinme: sim döngüsü durur
   await open('#/bolum/ch02', 500);
-  await page.evaluate(() => { location.hash = `#/bolum/${NOSIM}`; });
+  await page.evaluate((c) => { location.hash = `#/bolum/${c}`; }, NOSIM);
   await page.waitForTimeout(500);
   const stopped = await raf();
   const gone = await page.evaluate(() => document.querySelectorAll('.sim').length);

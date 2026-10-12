@@ -1,20 +1,10 @@
 .sim-sb { gap: 20px; }
-.sim-sb .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
-.sim-sb .tab { min-height: 44px; font: 600 13px/1.2 var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 9px; padding: 6px 4px; cursor: pointer; }
-.sim-sb .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
-.sim-sb .pane { display: flex; flex-direction: column; gap: 18px; }
-.sim-sb .pane[hidden] { display: none; }
-.sim-sb .note { font-size: 13px; color: var(--muted); }
 .sim-sb .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
 .sim-sb .card .stage { background: transparent; border: 0; padding: 0; }
 .sim-sb .card .sim-h { margin: 0; }
 .sim-sb .hide { display: none; }
 
 /* Çıktı çubuğu */
-.sim-sb .meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.sim-sb .m-top { display: flex; justify-content: space-between; font: 400 10.5px var(--f-mono); color: var(--muted); margin-bottom: 3px; gap: 4px; }
-.sim-sb .m-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.sim-sb .track > b { transition: width .25s ease; }
 
 /* SVG ortak */
 .sim-sb svg text { font: 400 10px var(--f-mono); fill: var(--muted); }
@@ -77,18 +67,8 @@
 .sim-sb .ro { border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .sim-sb .ro span { font-size: 11.5px; color: var(--muted); }
 .sim-sb .ro b { font: 500 15px var(--f-mono); font-variant-numeric: tabular-nums; }
-.sim-sb .how { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px 14px; }
-.sim-sb .how summary { cursor: pointer; min-height: 40px; display: flex; align-items: center; font-weight: 600; }
-.sim-sb .how-in { display: flex; flex-direction: column; gap: 8px; padding-bottom: 12px; font-size: 13px; color: var(--muted); }
 .sim-sb .how-in a, .sim-sb .book-list a { color: var(--ink); font-weight: 600; text-underline-offset: 2px; }
-.sim-sb .book-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px; }
-.sim-sb .book-list li { border-left: 3px solid var(--line); padding-left: 10px; color: var(--muted); }
-.sim-sb .book-list a { display: inline-block; min-height: 24px; }
-.sim-sb .tour-next { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .sim-sb .sl { --c: var(--ink); }
 
 @media (max-width: 480px) {
-  .sim-sb .meters { gap: 8px; }
-  .sim-sb .m-top { font-size: 10px; flex-direction: column; gap: 0; }
-  .sim-sb .tab { font-size: 12px; }
 }

@@ -1,6 +1,6 @@
 // Sorumluluk ve özgür irade (ch16): saf model çekirdeği, DOM yok.
 // 1) Libet: hazırlık potansiyeli (RP), niyet anı (W), veto penceresi + Schurger'in rastgele birikim modeli
-// 2) Çok etkenli tahmin: etkenler eklendikçe öngörü gücü artar ama kesinliğin altında kalır
+// 2) Çok etkenli tahmin: etkenler eklendikçe öngörü gücü artar (kitaptaki altı etkenle ~%50'yi biraz aşar) ama kesinliğin altında kalır
 // 3) Ceza ve tatmin (de Quervain, Buckholtz) ve "suçlama" ile "tehlikelilik" ayrımı
 
 import { mulberry32 } from '../rng';
@@ -118,18 +118,21 @@ export function runSchurger(p: SchParams, seed: number, trials = 150): SchRun {
 
 export interface Factor { id: string; name: string; hint: string; share: number; prev: number }
 /**
- * Kitaptan (ch16-e5, kaba hesap): yalnızca gen ~%10; ebeveyn kaybıyla ~%25; yoksulluk ve yalnızlıkla ~%40;
- * kalan etkenlerle yüzde 50 dolaylarına yaklaşılır. `share`, o etkenin (birbirinden bağımsız varsayılan) açıkladığı
- * değişkenlik payıdır; ilk üçün toplamı bu basamaklara oturtuldu. Kalan üç pay, nadir etkenin yaygınlığı ve
- * yaygınlık değerleri modelin varsayımıdır.
+ * Kitaptan (ch16-e5, kaba hesap; kitapta "say", "maybe" ile verilir): yalnızca gen ~%10; ebeveyn kaybıyla ~%25; yoksulluk
+ * ve yalnız yaşamla ~%40; sonra sırayla glukokortikoid düzeyi ("biraz daha"), bireyci/toplulukçu kültür ("biraz daha") ve
+ * adet döngüsü ("biraz daha, belki şimdiye %50'nin üstü") eklenir. Kitap, yeterince etken eklenince öngörünün kırık kemik
+ * örneğindeki gibi %100'e yaklaşacağını da söyler (farklı miktarda değil, farklı türde nedensellik); bu simülasyon yalnızca
+ * kitabın saydığı altı etkeni modeller. `share`, o etkenin (birbirinden bağımsız varsayılan) açıkladığı değişkenlik payıdır:
+ * ilk üçün toplamı %10/%25/%40 basamaklarına, son üç pay (her biri %4) altıncıda %50'yi aşacak biçimde (%52) seçildi; tek tek
+ * değerler ve yaygınlıklar modelin varsayımıdır.
  */
 export const FACTORS: readonly Factor[] = [
   { id: 'gen', name: 'Gen varyantı', hint: 'serotonin taşıyıcı geni', share: 0.1, prev: 0.3 },
   { id: 'kayip', name: 'Çocuklukta kayıp ya da istismar', hint: 'ebeveyn kaybı, kötü muamele', share: 0.15, prev: 0.25 },
   { id: 'yoksul', name: 'Yoksulluk ve yalnız yaşam', hint: 'uzun süreli yoksunluk, destek yokluğu', share: 0.15, prev: 0.3 },
-  { id: 'kortizol', name: 'Kortizol düzeyi', hint: 'glukokortikoid, süregiden stres', share: 0.03, prev: 0.5 },
-  { id: 'kultur', name: 'Kültür', hint: 'bireyci ya da toplulukçu', share: 0.03, prev: 0.5 },
-  { id: 'frontal', name: 'Frontal korteks hasarı', hint: 'güçlü ama çok nadir', share: 0.02, prev: 0.03 },
+  { id: 'kortizol', name: 'Kortizol düzeyi', hint: 'glukokortikoid, süregiden stres', share: 0.04, prev: 0.5 },
+  { id: 'kultur', name: 'Kültür', hint: 'bireyci ya da toplulukçu', share: 0.04, prev: 0.5 },
+  { id: 'adet', name: 'Adet döngüsü', hint: 'depresyondaki kadında belirtileri şiddetlendirir', share: 0.04, prev: 0.2 },
 ];
 export const BASE_RATE = 0.2;
 const Z_BASE = 0.8416212; // normal dağılımda üst %20 eşiği (modelin varsayımı: davranış toplumun ~%20'sinde görülür)

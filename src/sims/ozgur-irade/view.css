@@ -1,23 +1,13 @@
 .sim-ozg { gap: 20px; }
 .sim-ozg [hidden] { display: none !important; }
-.sim-ozg .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
-.sim-ozg .tab { min-height: 44px; font: 600 13px/1.2 var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 9px; padding: 6px 4px; cursor: pointer; }
-.sim-ozg .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
-.sim-ozg .pane { display: flex; flex-direction: column; gap: 18px; }
-.sim-ozg .note { font-size: 13px; color: var(--muted); }
 .sim-ozg .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
 .sim-ozg .card .sim-h { margin: 0; }
 .sim-ozg .card .chart { background: transparent; }
 .sim-ozg .chart text { font: 400 10px var(--f-mono); fill: var(--muted); }
 .sim-ozg .btn:disabled { opacity: .45; cursor: default; }
 .sim-ozg .sl { --c: var(--ink); }
-.sim-ozg .tour-next { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 
 /* Çıktı çubuğu */
-.sim-ozg .meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.sim-ozg .m-top { display: flex; justify-content: space-between; font: 400 10.5px var(--f-mono); color: var(--muted); margin-bottom: 3px; gap: 4px; }
-.sim-ozg .m-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.sim-ozg .track > b { transition: width .25s ease; }
 
 /* Ortak grafik öğeleri */
 .sim-ozg .chart text.ax { font: 400 10px var(--f-mono); fill: var(--muted); }
@@ -83,16 +73,8 @@
 .sim-ozg .chart text.qn { font: 600 11px var(--f-mono); fill: var(--ink); }
 
 /* Ortak */
-.sim-ozg .how { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px 14px; }
-.sim-ozg .how summary { cursor: pointer; min-height: 40px; display: flex; align-items: center; font-weight: 600; }
-.sim-ozg .how-in { display: flex; flex-direction: column; gap: 8px; padding-bottom: 12px; font-size: 13px; color: var(--muted); }
-.sim-ozg .book-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px; }
-.sim-ozg .book-list li { border-left: 3px solid var(--line); padding-left: 10px; color: var(--muted); }
-.sim-ozg .book-list a { color: var(--ink); font-weight: 600; text-underline-offset: 2px; display: inline-block; min-height: 24px; }
 
 @media (max-width: 480px) {
-  .sim-ozg .meters { gap: 8px; }
-  .sim-ozg .m-top { font-size: 10px; flex-direction: column; gap: 0; }
   .sim-ozg .brow { grid-template-columns: minmax(0, 1fr) 44px; }
   .sim-ozg .brow .track { grid-column: 1 / -1; grid-row: 2; }
   .sim-ozg .brow .bl { grid-column: 1; grid-row: 1; }

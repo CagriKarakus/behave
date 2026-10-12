@@ -1,13 +1,6 @@
 .sim-nr { gap: 20px; }
-.sim-nr .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
-.sim-nr .tab { min-height: 48px; font: 600 12.5px/1.2 var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 9px; padding: 8px 6px; cursor: pointer; }
-.sim-nr .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
-.sim-nr .pane { display: flex; flex-direction: column; gap: 18px; }
-.sim-nr .pane[hidden], .sim-nr [hidden] { display: none; }
-.sim-nr .note { font-size: 13px; color: var(--muted); }
 .sim-nr .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
 .sim-nr .card .sim-h { margin: 0; }
-.sim-nr .say { min-height: 4em; }
 .sim-nr .chips { margin-inline: 0; padding-inline: 0; flex-wrap: wrap; overflow: visible; }
 .sim-nr .stage { padding: 8px 6px 6px; }
 .sim-nr .chart { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px 6px 6px; }
@@ -18,10 +11,7 @@
 
 /* Çıktı çubuğu */
 .sim-nr .nr-meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.sim-nr .m-top { display: flex; flex-direction: column; font-size: 11px; line-height: 1.25; color: var(--muted); margin-bottom: 3px; gap: 1px; min-height: 2.5em; justify-content: flex-end; }
-.sim-nr .m-top b { font: 500 13px var(--f-mono); color: var(--ink); font-variant-numeric: tabular-nums; }
 .sim-nr .track { height: 7px; border-radius: 4px; }
-.sim-nr .track > b { transition: width .2s; }
 @media (prefers-reduced-motion: reduce) { .sim-nr .track > b { transition: none; } }
 
 /* Ortak SVG */
@@ -90,17 +80,10 @@
 .sim-nr .tout { fill: none; stroke: var(--ink); stroke-width: 2.6; stroke-linejoin: round; }
 
 /* Ortak kutular */
-.sim-nr .more { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font-size: 13px; }
-.sim-nr .more summary { cursor: pointer; font-weight: 600; min-height: 28px; display: flex; align-items: center; }
-.sim-nr .more p { margin-top: 8px; color: var(--muted); }
-.sim-nr .book { border: 1px solid var(--line); border-left: 4px solid var(--hyp); border-radius: 12px; padding: 10px 14px 12px; font-size: 13px; display: flex; flex-direction: column; gap: 8px; }
-.sim-nr .book .sim-h { margin: 0; }
-.sim-nr .book-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
-.sim-nr .book-list li { border-left: 3px solid var(--line); padding-left: 10px; color: var(--muted); }
-.sim-nr .book a { color: var(--ink); text-underline-offset: 3px; font-weight: 600; }
 
 @media (max-width: 480px) {
   .sim-nr .nr-meters { gap: 8px; }
   .sim-nr .m-top { font-size: 10.5px; }
   .sim-nr .m-top b { font-size: 12.5px; }
 }
+.sim-nr [hidden] { display: none; }

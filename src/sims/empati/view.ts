@@ -27,7 +27,7 @@ const TEMPLATE = (id: string) => `
 <div class="sim sim-emp">
   <p class="lede">Başkasının acısını hissetmek bizi yardıma mı götürür, yoksa kendi sıkıntımıza mı kilitler?</p>
   <div class="tabs" role="tablist" aria-label="Bölümler">
-    ${TABS.map(([k, n]) => `<button type="button" role="tab" class="chip" id="${id}-t-${k}" aria-controls="${id}-p-${k}" data-tab="${k}">${n}</button>`).join('')}
+    ${TABS.map(([k, n]) => `<button type="button" role="tab" class="tab" id="${id}-t-${k}" aria-controls="${id}-p-${k}" data-tab="${k}">${n}</button>`).join('')}
   </div>
   <div class="sim-bar" role="group" aria-label="Anlık çıktılar">
     <div class="sim-bar-in">

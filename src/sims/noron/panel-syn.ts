@@ -2,6 +2,7 @@
 import { svg, svgText } from '../kit';
 import { SYN_DEFAULT, advanceSyn, clamp, createSyn, f1, f2, release, singleSpike, type Single, type Syn, type SynP, type SynType } from './model';
 import { mulberry32 } from '../rng';
+import type { TourStep } from '../tour';
 import { chipRow, el, gridY, linePath, makeSlider, toggleBtn, type Ctx, type Meter, type SliderHandle } from './ui';
 
 const SPEED = 40;   // gerçek 1 sn = 40 ms model zamanı
@@ -177,3 +178,45 @@ export function createSynPanel(ctx: Ctx, host: HTMLElement) {
     },
   };
 }
+
+type SynPanel = ReturnType<typeof createSynPanel>;
+
+/** Sinaps sekmesinin rehberli turu (sekmeyle birlikte tembel yüklenir). */
+export const synTour = (syn: SynPanel): TourStep[] => [
+  {
+    title: 'Bir impuls, bir salım',
+    text: 'Uca impuls gelir, veziküller boşalır, nörotransmitter reseptörlere bağlanır (anahtar-kilit). Sonra düzey düşer.',
+    look: 'Yeşil çizgi sıçrayıp iniyor; turuncu yanıt geç tepe yapıp geç sönüyor.',
+    apply: () => syn.scene({ rate: 0 }, true),
+  },
+  {
+    title: 'Üç çıkış yolu',
+    text: 'Nörotransmitter ya geri alım pompalarıyla toplanır ya da enzimle parçalanır (kitap); küçük bir pay dağılır. İlk ikisi sinyalin süresini belirler.',
+    look: '"Nereye gitti?" kartı: bu sinapsta çoğu pompaya gidiyor (varsayım).',
+    apply: () => syn.scene({ rate: 0 }, true),
+  },
+  {
+    title: 'Geri alımı engelle',
+    text: 'SSRI benzeri ilaç pompayı kapatır: nörotransmitter aralıkta kalır, sık ateşlemede birikir. Kitap: ilaçlar geri alımı engelleyerek sinyali güçlendirir.',
+    look: 'Yeşil çizginin tabanı yükseliyor; yarı ömür ve yanıt süresi uzuyor.',
+    apply: () => syn.scene({ blockRu: true }),
+  },
+  {
+    title: 'Enzimi engellemek burada az işe yarar',
+    text: 'Bu sinapsta ana yol pompa olduğu için enzimi kapatmak neredeyse hiçbir şeyi değiştirmez; etki baskın yola bağlı.',
+    look: 'Yarı ömür 6 ms civarında kalıyor.',
+    apply: () => syn.scene({ blockEn: true }),
+  },
+  {
+    title: 'Enzim baskın sinapsta',
+    text: 'Ana yol enzimse (varsayım), enzim engeli düzeyi ve süreyi belirgin uzatır; pompa küçük bir yedektir.',
+    look: 'Yarı ömür birkaç kat uzuyor.',
+    apply: () => syn.scene({ type: 'enzim', blockEn: true }),
+  },
+  {
+    title: 'Düzey yanıt demek değil',
+    text: 'Aynı düzey, yarı sayıda reseptörle yarı büyüklükte yanıt verir. Kitap: ilaç reseptörü taklit edebilir ya da bloke edebilir.',
+    look: 'Dolu çanak ve turuncu çizgi düşük, yeşil çizgi aynı.',
+    apply: () => syn.scene({ density: 0.5 }),
+  },
+];

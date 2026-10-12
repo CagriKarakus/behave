@@ -40,6 +40,20 @@ describe('noron kaydı', () => {
 });
 
 describe('noron görünümü', () => {
+  it('sinaps ve devre sekmeleri tembel yüklenir; erken unmount güvenlidir', async () => {
+    const { host, un } = setup();
+    expect(host.querySelector('.pane[data-pane="syn"]')!.children.length).toBe(0);
+    click(tab(host, 'syn'));
+    await vi.waitFor(() => expect(host.querySelector('.pane[data-pane="syn"] .tour')).not.toBeNull());
+    expect(host.querySelector('.pane[data-pane="circ"]')!.children.length).toBe(0);
+    un();
+    const early = setup();
+    click(tab(early.host, 'circ'));
+    early.un();
+    await new Promise((r) => setTimeout(r, 40));
+    expect(early.host.innerHTML).toBe('');
+  });
+
   it('bağlanır, id çakışmaz, unmount rAF ve DOM\'u temizler', () => {
     const { pending, tick } = stubRaf();
     const a = document.createElement('div'), b = document.createElement('div');
@@ -73,9 +87,11 @@ describe('noron görünümü', () => {
     un();
   });
 
-  it('turlar: üç tur da 1. adımda; son adımda Bitir ve kapanır; adım sayıları 4-6', () => {
+  it('turlar: üç tur da 1. adımda; son adımda Bitir ve kapanır; adım sayıları 4-6', async () => {
     const { host, un } = setup();
-    expect(host.querySelectorAll('.tour').length).toBe(3);
+    expect(host.querySelectorAll('.tour').length).toBe(1); // sinaps ve devre turları sekmeleriyle birlikte tembel gelir
+    click(tab(host, 'syn')); click(tab(host, 'circ'));
+    await vi.waitFor(() => expect(host.querySelectorAll('.tour').length).toBe(3));
     for (const k of ['sum', 'syn', 'circ']) {
       const root = pane(host, k);
       const next = root.querySelector<HTMLButtonElement>('[data-t="next"]')!;
@@ -126,9 +142,10 @@ describe('noron görünümü', () => {
     un();
   });
 
-  it('sinaps: geri alımı engellemek yarı ömrü ve yanıt süresini uzatır; enzim engeli geri alım baskın sinapsta azdır', () => {
+  it('sinaps: geri alımı engellemek yarı ömrü ve yanıt süresini uzatır; enzim engeli geri alım baskın sinapsta azdır', async () => {
     const { host, tick, un } = setup();
     click(tab(host, 'syn'));
+    await vi.waitFor(() => expect(host.querySelector('.pane[data-pane="syn"] [data-t="exit"]')).not.toBeNull());
     const root = pane(host, 'syn');
     click(root.querySelector<HTMLButtonElement>('[data-t="exit"]')!);
     click(btn(root, 'Sıfırla'));
@@ -162,9 +179,10 @@ describe('noron görünümü', () => {
     un();
   });
 
-  it('devre: devre ve desen çipleri, sürgüler ve çıktı çubuğu birlikte çalışır', () => {
+  it('devre: devre ve desen çipleri, sürgüler ve çıktı çubuğu birlikte çalışır', async () => {
     const { host, tick, un } = setup();
     click(tab(host, 'circ'));
+    await vi.waitFor(() => expect(host.querySelector('.pane[data-pane="circ"] [data-t="exit"]')).not.toBeNull());
     const root = pane(host, 'circ');
     click(root.querySelector<HTMLButtonElement>('[data-t="exit"]')!);
     const zit = () => Number(meters(host)[0].replace(',', '.').replace(/[^\d.]/g, ''));

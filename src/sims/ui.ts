@@ -115,6 +115,24 @@ export function bookBox(items: BookItem[], extra = ''): string {
   return `<aside class="book" aria-label="Kitapta"><h3 class="sim-h">Kitapta</h3><ul>${items.map(li).join('')}</ul>${extra}</aside>`;
 }
 
+/* ---------- Tembel yüklenen sayfa altı notları ---------- */
+/**
+ * "Model nasıl çalışıyor?", "Kitapta" ve dipnot gibi statik HTML'yi ayrı bir parçadan (dinamik import) yükler ve
+ * `root` içindeki `data-notes="anahtar"` yer tutucularına yazar. Etkileşimli parçanın ilk yükü küçük kalır; notlar
+ * açılıştan hemen sonra gelir. Simülasyon notlar gelmeden kapanırsa hiçbir şey yazılmaz.
+ */
+export function lazyNotes<K extends string>(scope: Scope, root: ParentNode, load: () => Promise<Record<K, string>>): void {
+  let gone = false;
+  scope.onDispose(() => { gone = true; });
+  void load().then((notes) => {
+    if (gone) return;
+    for (const k of Object.keys(notes) as K[]) {
+      const host = root.querySelector<HTMLElement>(`[data-notes="${k}"]`);
+      if (host) host.innerHTML = notes[k];
+    }
+  });
+}
+
 /* ---------- Biçimleyiciler ve küçük yardımcılar ---------- */
 export const pc = (v: number): string => `%${Math.round(v * 100)}`;
 export const pc1 = (v: number): string => `%${(v * 100).toFixed(v < 0.01 ? 2 : 1).replace('.', ',')}`;

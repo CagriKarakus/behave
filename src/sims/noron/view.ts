@@ -2,9 +2,7 @@ import '../sim.css';
 import './view.css';
 import { Scope, ref, uid } from '../kit';
 import { createTour, type TourStep } from '../tour';
-import { createCircPanel } from './panel-circ';
 import { createSumPanel } from './panel-sum';
-import { createSynPanel } from './panel-syn';
 import { relatedBox, type Ctx, type Meter, type Panel } from './ui';
 
 type Tab = 'sum' | 'syn' | 'circ';
@@ -50,9 +48,23 @@ export function mount(container: HTMLElement): () => void {
 
   const hostOf = (k: Tab) => root.querySelector<HTMLElement>(`.pane[data-pane="${k}"]`)!;
   const sum = createSumPanel(ctx, hostOf('sum'));
-  const syn = createSynPanel(ctx, hostOf('syn'));
-  const circ = createCircPanel(ctx, hostOf('circ'));
-  const panels: Record<Tab, Panel> = { sum, syn, circ };
+  // "Sinaps" ve "Devre" sekmeleri (panel + rehberli tur) ayrı parçalardan, ilk seçildiklerinde yüklenir.
+  const panels: Partial<Record<Tab, Panel>> = { sum };
+  const loading: Partial<Record<Tab, boolean>> = {};
+  let gone = false;
+  scope.onDispose(() => { gone = true; });
+  function loadPanel(t: 'syn' | 'circ'): void {
+    if (panels[t] || loading[t]) return;
+    loading[t] = true;
+    const made: Promise<Panel> = t === 'syn'
+      ? import('./panel-syn').then((m) => { const p = m.createSynPanel(ctx, hostOf('syn')); addTour('syn', m.synTour(p)); return p; })
+      : import('./panel-circ').then((m) => { const p = m.createCircPanel(ctx, hostOf('circ')); addTour('circ', m.circTour(p)); return p; });
+    void made.then((p) => {
+      if (gone) return;
+      panels[t] = p;
+      if (tab === t) { p.resume(); p.draw(performance.now()); updateBar(); poke(); }
+    });
+  }
 
   /* ---- Çıktı çubuğu ---- */
   metersEl.innerHTML = [0, 1, 2].map((i) => `<div class="nr-m"><div class="m-top"><span data-ref="ml${i}"></span><b data-ref="mv${i}"></b></div><div class="track"><b data-ref="mb${i}"></b></div></div>`).join('');
@@ -60,6 +72,7 @@ export function mount(container: HTMLElement): () => void {
   function updateBar(): void {
     barDirty = false;
     const p = panels[tab];
+    if (!p) return;
     const t = p.say();
     if (t !== lastSay) { lastSay = t; sayEl.textContent = t; }
     p.meters().forEach((m: Meter, i) => {
@@ -85,8 +98,9 @@ export function mount(container: HTMLElement): () => void {
       if (on && focus) b.focus();
     }
     for (const p of panes) p.hidden = p.dataset.pane !== t;
-    panels[t].resume();
-    panels[t].draw(performance.now());
+    if (t !== 'sum') loadPanel(t);
+    panels[t]?.resume();
+    panels[t]?.draw(performance.now());
     updateBar();
   }
   for (const b of tabBtns) {
@@ -147,90 +161,14 @@ export function mount(container: HTMLElement): () => void {
     },
   ]);
 
-  addTour('syn', [
-    {
-      title: 'Bir impuls, bir salım',
-      text: 'Uca impuls gelir, veziküller boşalır, nörotransmitter reseptörlere bağlanır (anahtar-kilit). Sonra düzey düşer.',
-      look: 'Yeşil çizgi sıçrayıp iniyor; turuncu yanıt geç tepe yapıp geç sönüyor.',
-      apply: () => syn.scene({ rate: 0 }, true),
-    },
-    {
-      title: 'Üç çıkış yolu',
-      text: 'Nörotransmitter ya geri alım pompalarıyla toplanır ya da enzimle parçalanır (kitap); küçük bir pay dağılır. İlk ikisi sinyalin süresini belirler.',
-      look: '"Nereye gitti?" kartı: bu sinapsta çoğu pompaya gidiyor (varsayım).',
-      apply: () => syn.scene({ rate: 0 }, true),
-    },
-    {
-      title: 'Geri alımı engelle',
-      text: 'SSRI benzeri ilaç pompayı kapatır: nörotransmitter aralıkta kalır, sık ateşlemede birikir. Kitap: ilaçlar geri alımı engelleyerek sinyali güçlendirir.',
-      look: 'Yeşil çizginin tabanı yükseliyor; yarı ömür ve yanıt süresi uzuyor.',
-      apply: () => syn.scene({ blockRu: true }),
-    },
-    {
-      title: 'Enzimi engellemek burada az işe yarar',
-      text: 'Bu sinapsta ana yol pompa olduğu için enzimi kapatmak neredeyse hiçbir şeyi değiştirmez; etki baskın yola bağlı.',
-      look: 'Yarı ömür 6 ms civarında kalıyor.',
-      apply: () => syn.scene({ blockEn: true }),
-    },
-    {
-      title: 'Enzim baskın sinapsta',
-      text: 'Ana yol enzimse (varsayım), enzim engeli düzeyi ve süreyi belirgin uzatır; pompa küçük bir yedektir.',
-      look: 'Yarı ömür birkaç kat uzuyor.',
-      apply: () => syn.scene({ type: 'enzim', blockEn: true }),
-    },
-    {
-      title: 'Düzey yanıt demek değil',
-      text: 'Aynı düzey, yarı sayıda reseptörle yarı büyüklükte yanıt verir. Kitap: ilaç reseptörü taklit edebilir ya da bloke edebilir.',
-      look: 'Dolu çanak ve turuncu çizgi düşük, yeşil çizgi aynı.',
-      apply: () => syn.scene({ density: 0.5 }),
-    },
-  ]);
 
-  addTour('circ', [
-    {
-      title: 'İnhibisyon yokken',
-      text: 'Her nöron girdisini olduğu gibi iletir; kenar iki düzey arasında düz bir basamaktır.',
-      look: 'Çıkış girişin kopyası, kenar zıtlığı 1 kat.',
-      apply: () => circ.scene({ motif: 'lat', sp: 'basamak', g: 0 }),
-    },
-    {
-      title: 'Yanal inhibisyon',
-      text: 'Her nöron komşularını bastırır. Kenarın parlak yanı daha az, karanlık yanı daha çok bastırıldığı için kenar belirginleşir.',
-      look: 'Parlak tarafta aşım, karanlık tarafta çukur.',
-      apply: () => circ.scene({ motif: 'lat', sp: 'basamak', g: 1, reach: 2 }),
-    },
-    {
-      title: 'Keskinliğin bedeli',
-      text: 'Daha güçlü ve geniş bastırmada kenar daha belirgin, ama düz bölgelerin düzeyi düşer. Gürültülü girişte de kenar seçilir.',
-      look: 'Düz bölge düzeyi çubuğu düşüyor.',
-      apply: () => circ.scene({ motif: 'lat', sp: 'gurultu', g: 1.5, reach: 3 }),
-    },
-    {
-      title: 'Negatif geri bildirim',
-      text: 'Çıkış ara nöronu uyarır, ara nöron çıkışı bastırır. Uzun girdi bile kısa bir patlamaya dönüşür: sinyal kısalır.',
-      look: 'Siyah çıkış zirve yapıp alçalıyor; kesikli girdi sürüyor.',
-      apply: () => circ.scene({ motif: 'fb', tp: 'uzun', g: 2 }),
-    },
-    {
-      title: 'İleri beslemeli inhibisyon',
-      text: 'Aynı girdi ara nöron aracılığıyla gecikmeli baskı da gönderir. Yanıt gecikme kadar sürer: sinyal zamanda keskinleşir.',
-      look: '~10 ms genişliğinde dar bir tepe.',
-      apply: () => circ.scene({ motif: 'ff', tp: 'uzun', g: 1, delay: 10 }),
-    },
-    {
-      title: 'Üçü üç ayrı iş yapar',
-      text: 'Yanal inhibisyon uzayda, ileri beslemeli zamanda keskinleştirir; geri bildirim sinyali kısaltır. İki vuru, iki ayrı kısa yanıt olur.',
-      look: 'İki dar tepe; gecikmeyi artırınca genişler.',
-      apply: () => circ.scene({ motif: 'ff', tp: 'iki', g: 1, delay: 10 }),
-    },
-  ]);
 
   /* ---- Döngü: yalnızca durum değiştiğinde ya da zaman akarken çizer; ekran dışında durur ---- */
   function frame(now: number): void {
-    const redrew = panels[tab].draw(now);
+    const redrew = panels[tab]?.draw(now) ?? false;
     if (redrew || barDirty) updateBar();
   }
-  scope.loop(frame, { root, onResume: () => { barDirty = true; panels[tab].resume(); } });
+  scope.loop(frame, { root, onResume: () => { barDirty = true; panels[tab]?.resume(); } });
   showTab('sum');
 
   return () => {

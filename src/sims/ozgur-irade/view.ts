@@ -1,3 +1,4 @@
+import { slider } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, ref, svg, svgText, uid } from '../kit';
@@ -73,12 +74,12 @@ const TEMPLATE = (id: string) => `
         <p>Kayma: bildirim gerçek niyetten geç ise gerçek niyet daha erkendir ve RP ile aradaki gerçek süre kısalır. Artefakt payı, kaymanın ölçülen aralığa oranıdır.</p>
       </div>
     </details>
-    <section class="book" aria-label="Kitapta">
+    <aside class="book" aria-label="Kitapta">
       <h3 class="sim-h">Kitapta</h3>
-      <ul class="book-list">
+      <ul>
         <li><a href="#/bolum/ch16?deney=ch16-e2">Libet ve ark. (1983)</a>: RP, bildirilen niyetten yaklaşık yarım saniye önce başladı; Libet, aradaki sürede vetoyu mümkün gördü. Eleştirmenler gecikmeyi saatin okunmasına ve dikkate bağlar. Replikasyon: tartışmalı. RP önce başlıyor bulgusu tekrarlandı; Schurger ve ark. (2012) RP'nin karar sinyali değil, rastgele dalgalanmaların birikimi olabileceğini gösterdi.</li>
       </ul>
-    </section>
+    </aside>
   </section>
 
   <!-- ============ 2 · Çok etkenli tahmin ============ -->
@@ -105,16 +106,16 @@ const TEMPLATE = (id: string) => `
       <summary>Model nasıl çalışıyor?</summary>
       <div class="how-in">
         <p>Her etkenin payı birbirinden bağımsız varsayılır; öngörü gücü, bilinen etkenlerin açıkladığı payların toplamıdır. Gizli bir eğilim, etkenlerin katkısı ile açıklanamayan rastlantının toplamından oluşur; üst %20'de olan kişi davranışı gösterir (oran modelin varsayımı).</p>
-        <p>İlk üç pay kitabın %10, %25 ve %40 basamaklarına oturtuldu. Kortizol, kültür ve frontal hasar payları ile etkenlerin yaygınlığı modelin varsayımıdır; toplam bilerek %50'nin hemen altında tutuldu. Kitap, diğer etkenlerle %50'nin üstüne çıkılabileceğini de söyler; ama davranış sonuçlarının çoğunda %50'nin altını vurgular. Kitaptaki tahminlerin kendisi kabadır.</p>
+        <p>İlk üç pay kitabın %10, %25 ve %40 basamaklarına oturtuldu. Kitap sırayla kortizolu, kültürü ve adet döngüsünü ekler ("biraz daha"; altıncıda "belki %50'nin üstü"); bu üç payın her birini %4 aldık, toplam %52 olur. Tek tek paylar ve etkenlerin yaygınlığı modelin varsayımıdır. Kitap ayrıca yeterince etken eklenince öngörünün %100'e (kırık kemik örneği) yaklaşacağını söyler: fark miktarda değil, nedensellik türünde. Burada yalnızca kitabın saydığı altı etken var; kitaptaki tahminlerin kendisi de kabadır.</p>
         <p>Rakamlar sabit tohumlu 4000 kişilik bir örneklemden gelir. Halkalar ise 100 kişilik örneklemdir ve "Başka örneklem" ile değişir; aynı örneklemde kişiler ve sonuçlar sabit kalır, yalnızca bilinen etkenler değişir.</p>
       </div>
     </details>
-    <section class="book" aria-label="Kitapta">
+    <aside class="book" aria-label="Kitapta">
       <h3 class="sim-h">Kitapta</h3>
-      <ul class="book-list">
-        <li><a href="#/bolum/ch16?deney=ch16-e5">Sapolsky'nin hesap örneği</a>: yalnızca gen ~%10, ebeveyn kaybıyla ~%25, yoksulluk ve yalnızlıkla ~%40; ağır frontal hasarda bile belirli davranış sonuçlarının öngörülebilirliği çoğunlukla %50'nin altında. Sayılar kitapta da kaba tahmindir; kitap diğer etkenlerle %50'nin üstüne çıkılabileceğini de belirtir, model toplamı %50'nin hemen altında tutar. Replikasyon: tartışmalı. Dayandığı gen × stres etkileşimi büyük ortak analizlerde tekrarlanamadı (38.000'den fazla kişi).</li>
+      <ul>
+        <li><a href="#/bolum/ch16?deney=ch16-e5">Sapolsky'nin hesap örneği</a>: yalnızca gen ~%10, ebeveyn kaybıyla ~%25, yoksulluk ve yalnızlıkla ~%40; kortizol, kültür ve adet döngüsü eklenince "belki %50'nin üstü"; yeterince etkenle kırık kemik örneğindeki gibi %100'e yaklaşılır. Belirli davranış sonuçlarının çoğunda ise öngörü %50'nin altında, çoğu zaman çok altında kalır (model bunu modellemez). Sayılar kitapta da kaba tahmindir. Replikasyon: tartışmalı. Dayandığı gen × stres etkileşimi büyük ortak analizlerde tekrarlanamadı (38.000'den fazla kişi).</li>
       </ul>
-    </section>
+    </aside>
   </section>
 
   <!-- ============ 3 · Ceza ve tatmin ============ -->
@@ -158,17 +159,17 @@ const TEMPLATE = (id: string) => `
         <p>Vakalar kurgudur ve kitapta bu adla yoktur. Önlemlerin güvenlik, neden giderme ve tatmin katsayıları modelin varsayımıdır; amaç, suçlama ile tehlikeliliğin ayrı sorular olduğunu göstermektir. Tehlikelilik önerisi yalnızca tehlikelilik puanına ve tedavi edilebilirliğe bakar.</p>
       </div>
     </details>
-    <section class="book" aria-label="Kitapta">
+    <aside class="book" aria-label="Kitapta">
       <h3 class="sim-h">Kitapta</h3>
-      <ul class="book-list">
+      <ul>
         <li><a href="#/bolum/ch16?deney=ch16-e7">de Quervain ve ark. (2004)</a>: bedelsiz cezalandırmada ödül sistemi ne kadar etkinse, katılımcı cezalandırmak için o kadar çok ödemeye razıydı. Replikasyon: karışık. Striatum etkinleşmesi desteklendi, ama bunun intikam hazzı mı yoksa hedef beklentisi mi olduğu tartışmalı; örneklem küçüktü.</li>
         <li><a href="#/bolum/ch16?deney=ch16-e6">Buckholtz ve ark. (2008)</a>: sorumluluk kararı dlPFC ile, ceza miktarı vmPFC, amigdala ve insulayla ilişkiliydi. Replikasyon: bilinmiyor; dlPFC rolü sonradan TMS ile küçük örneklemlerde sınandı.</li>
         <li><a href="#/bolum/ch16?deney=ch16-e1">Steinberg ve ark. (2009)</a>, ergen vakası: ergen frontal korteksinin olgunlaşmamışlığı saniyelik dürtü kontrolü için belirleyicidir. Replikasyon: sağlam. Modellenmedi: <a href="#/bolum/ch16?deney=ch16-e3">Dweck</a> (tartışmalı), <a href="#/bolum/ch16?deney=ch16-e4">TMS ile ahlaki karar</a> (bilinmiyor).</li>
       </ul>
-    </section>
+    </aside>
   </section>
 
-  <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan: RP'nin niyetten yaklaşık yarım saniye önce başlaması; öngörü basamakları ~%10, ~%25, ~%40 ve tüm etkenlerle bile %50 dolayında kalması (kaba tahmin); bedelsiz cezada ödül devresi etkinliğinin ödeme isteğini öngörmesi; sorumluluk için dlPFC, ceza miktarı için duygusal bölgeler. Saatin devri, geri dönüşsüz aralık, Schurger parametreleri, etken payları ve yaygınlıkları, oyuncu dağılımları, vakalar ve önlem katsayıları modelin varsayımıdır.</p>
+  <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan: RP'nin niyetten yaklaşık yarım saniye önce başlaması; öngörü basamakları ~%10, ~%25, ~%40 ve altı etkenle %50 dolayına (belki biraz üstüne) varılması (kaba tahmin); bedelsiz cezada ödül devresi etkinliğinin ödeme isteğini öngörmesi; sorumluluk için dlPFC, ceza miktarı için duygusal bölgeler. Saatin devri, geri dönüşsüz aralık, Schurger parametreleri, etken payları ve yaygınlıkları, oyuncu dağılımları, vakalar ve önlem katsayıları modelin varsayımıdır.</p>
 </div>`;
 
 interface SliderHandle { inp: HTMLInputElement; set: (v: number) => void }
@@ -199,17 +200,8 @@ export function mount(container: HTMLElement): () => void {
 
   /* ---------- Yardımcılar ---------- */
   function makeSlider(parent: HTMLElement, o: { name: string; hint: string; min: number; max: number; step: number; val: number; fmt: (v: number) => string; cb: (v: number) => void; color?: string }): SliderHandle {
-    const sid = `${id}-s${++slN}`;
-    const wrap = document.createElement('div');
-    wrap.className = 'sl';
-    if (o.color) wrap.style.setProperty('--c', o.color);
-    wrap.innerHTML = `<div class="sl-top"><label class="sl-name" for="${sid}">${o.name}</label><span class="sl-val"></span></div><input type="range" id="${sid}" min="${o.min}" max="${o.max}" step="${o.step}"><p class="sl-hint">${o.hint}</p>`;
-    parent.appendChild(wrap);
-    const inp = wrap.querySelector('input')!, val = wrap.querySelector<HTMLElement>('.sl-val')!;
-    const set = (v: number) => { inp.value = String(v); val.textContent = o.fmt(v); inp.setAttribute('aria-valuetext', o.fmt(v)); };
-    set(o.val);
-    scope.on(inp, 'input', () => { const v = Number(inp.value); set(v); o.cb(v); dirty = true; });
-    return { inp, set };
+    const h = slider(scope, parent, { id: `${id}-s${++slN}`, name: o.name, hint: o.hint, min: o.min, max: o.max, step: o.step, value: o.val, fmt: o.fmt, color: o.color, cls: 'sl', onInput: (v) => { o.cb(v); dirty = true; } });
+    return { inp: h.inp, set: (v) => h.set(v) };
   }
   function toggles<T extends string>(parent: HTMLElement, items: { k: T; name: string }[], get: () => T, pick: (k: T) => void, cls = 'btn'): () => void {
     const btns = items.map((it) => {
@@ -641,9 +633,9 @@ export function mount(container: HTMLElement): () => void {
       look: 'Çubukta mor dilim %10; üst satır biraz daha dolu.', apply: () => { setKnown(0); geneSl.set(0.1); S.gene = 0.1; dirty = true; } },
     { title: 'Yaşam etkenleri ekleniyor', text: 'Çocuklukta kayıp ya da istismar eklenince öngörü yaklaşık %25\'e, yoksulluk ve yalnız yaşam da eklenince yaklaşık %40\'a çıkıyor.',
       look: 'Çubuk uzuyor; üst ve alt satır arasındaki fark büyüyor.', apply: () => { setKnown(0, 1, 2); geneSl.set(0.1); S.gene = 0.1; dirty = true; } },
-    { title: 'Hepsi bilinse de kesinlik yok', text: 'Modelde altı etkenin hepsiyle bile öngörü %50\'nin altında kalıyor; kitaba göre davranış sonuçlarının çoğunda da böyle. En riskli satırda herkes davranışı göstermiyor, en güvenli satırda bazıları gösteriyor.',
+    { title: 'Altısı bilinse de kesin değil', text: 'Kitabın saydığı altı etkenin hepsi bilinince öngörü %50\'nin biraz üstüne çıkıyor (kitap: "belki %50\'nin üstü"). Yine de kesin değil: en riskli satırda herkes davranışı göstermiyor, en güvenli satırda bazıları gösteriyor. Kitaba göre yeterince etkenle %100\'e yaklaşılır; fark miktarda değil, nedensellik türünde.',
       look: 'Üst satırda boş halkalar, alt satırda dolu halkalar var.', apply: () => { setKnown(0, 1, 2, 3, 4, 5); geneSl.set(0.1); S.gene = 0.1; dirty = true; } },
-    { title: 'Gen katkısı çökerse', text: 'Gen × stres etkileşimi büyük analizlerde tekrarlanamadı. Gen katkısını sıfıra çekince toplam yaklaşık %38\'e iner; yaşam etkenleri payı taşır.',
+    { title: 'Gen katkısı çökerse', text: 'Gen × stres etkileşimi büyük analizlerde tekrarlanamadı. Gen katkısını sıfıra çekince toplam yaklaşık %42\'ye iner; yaşam etkenleri payı taşır.',
       look: 'Mor dilim kayboluyor, açıklanamayan pay büyüyor.', apply: () => { setKnown(0, 1, 2, 3, 4, 5); geneSl.set(0); S.gene = 0; dirty = true; } },
   ]);
   $('tour2').appendChild(tour2.el);

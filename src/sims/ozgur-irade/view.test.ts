@@ -38,7 +38,7 @@ describe('kayıt ve içerik bağları', () => {
   });
   it('"Kitapta" bağlantılarındaki deney kimlikleri chapters.json içinde var', () => {
     const { host, un } = setup();
-    const ids = Array.from(host.querySelectorAll<HTMLAnchorElement>('.book-list a')).map((a) => new URL(a.href, 'http://x/').hash.match(/deney=([\w-]+)/)![1]);
+    const ids = Array.from(host.querySelectorAll<HTMLAnchorElement>('.book a')).map((a) => new URL(a.href, 'http://x/').hash.match(/deney=([\w-]+)/)![1]);
     const ch = (chapters as unknown as { chapters: { id: string; experiments: { id: string }[] }[] }).chapters.find((c) => c.id === 'ch16')!;
     const have = new Set(ch.experiments.map((e) => e.id));
     expect(ids.length).toBeGreaterThanOrEqual(5);
@@ -164,7 +164,7 @@ describe('görünüm', () => {
     un();
   });
 
-  it('çok etkenli: etken eklendikçe öngörü %10, %25, %40 olur; hepsiyle %50 altında', () => {
+  it('çok etkenli: etken eklendikçe öngörü %10, %25, %40 olur; altısıyla %50\'nin biraz üstü', () => {
     const { host, un } = setup();
     tab(host, 'cok').click();
     host.querySelectorAll<HTMLButtonElement>('[data-t="exit"]')[1].click();
@@ -175,13 +175,13 @@ describe('görünüm', () => {
     btns[1].click(); expect(meter(host, 0)).toBe('%25');
     btns[2].click(); expect(meter(host, 0)).toBe('%40');
     btns[3].click(); btns[4].click(); btns[5].click();
-    expect(Number(meter(host, 0).slice(1))).toBeLessThan(50);
+    expect(Number(meter(host, 0).slice(1))).toBe(52);
     expect(btns[0].getAttribute('aria-pressed')).toBe('true');
     expect(q(host, 'grid').querySelectorAll('circle').length).toBe(100);
     expect(q(host, 'grid').querySelectorAll('circle.hit').length).toBeGreaterThan(5);
-    // gen katkısı sıfırlanınca toplam %38
+    // gen katkısı sıfırlanınca toplam %42
     input(sliders(host, 'geneSl')[0], 0);
-    expect(meter(host, 0)).toBe('%38');
+    expect(meter(host, 0)).toBe('%42');
     un();
   });
 
@@ -190,7 +190,7 @@ describe('görünüm', () => {
     tab(host, 'cok').click();
     const next = host.querySelectorAll<HTMLButtonElement>('[data-t="next"]')[1];
     for (let i = 0; i < 4; i++) next.click();
-    expect(meter(host, 0)).toBe('%38');
+    expect(meter(host, 0)).toBe('%42');
     const before = q(host, 'grid').innerHTML;
     q<HTMLButtonElement>(host, 'reseedC').click();
     expect(q(host, 'grid').innerHTML).not.toBe(before);

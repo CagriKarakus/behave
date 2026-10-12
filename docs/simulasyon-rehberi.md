@@ -36,13 +36,13 @@ Yukarıdan aşağıya bu sırayla:
 
 ## 4. Teknik kurallar
 - Klasör: `src/sims/<isim>/` içinde `meta.ts` (`export const meta: SimMeta = { id, chapter, title, blurb, order }`), `model.ts` (saf, DOM yok), `model.test.ts` (Vitest; kitap bulgularını kalibrasyon testi olarak da yaz), `view.ts` (`export function mount(container: HTMLElement): () => void`), `view.css` (yalnızca kendi kök sınıfı altında kapsamlı).
-- Kayıt otomatik (`registry.ts` `meta.ts` dosyalarını bulur). **Paylaşılan dosyalara dokunma**: `registry.ts`, `kit.ts`, `tour.ts`, `sim.css`, `bar.ts`, `rng.ts`, `ui.ts`, `src/styles/*`, sayfalar, `content/chapters.json`. Ortak bir yardımcıya ihtiyacın olursa kendi klasörüne koy ve son mesajında belirt. Hazır yardımcılar: `rng.ts` (tohumlu RNG), `ui.ts` (`slider`, `chips`, `bookBox`, `repBadge`, biçimleyiciler).
+- Kayıt otomatik (`registry.ts` `meta.ts` dosyalarını bulur). **Paylaşılan dosyalara dokunma**: `registry.ts`, `kit.ts`, `tour.ts`, `sim.css`, `bar.ts`, `rng.ts`, `ui.ts`, `src/styles/*`, sayfalar, `content/chapters.json`. Ortak bir yardımcıya ihtiyacın olursa kendi klasörüne koy ve son mesajında belirt. Hazır yardımcılar: `rng.ts` (tohumlu RNG), `ui.ts` (`slider`, `chips`, `bookBox`, `repBadge`, `lazyNotes`, biçimleyiciler).
 - `Scope` (`kit.ts`) ile tüm dinleyiciler/döngüler; `scope.loop(frame, { root, onResume })` (ekran dışında durur). Duraklatılmışken ya da durum değişmiyorken her karede DOM'u yeniden kurma.
 - Global id yok: `uid()` öneki, `data-ref` + `ref()`.
 - Renkler yalnızca `src/styles/tokens.css` jetonlarından (açık/koyu tema). Metin kontrastı ≥ 4.5:1 (renkli metin için `--*-text` jetonları). Rengin yanında her zaman metin/şekil ipucu.
 - Mobil öncelikli: 390 px'te yatay taşma yok, dokunma hedefleri ≥ 40 px; geniş ekranda simülasyon sağ panelde (≤ 560 px genişlik) gösterilir.
 - Erişilebilirlik: kontrollerde etiket, SVG'de `role`/`aria-label`, `scope.announcer` ile kullanıcı eyleminden sonra özet duyurusu.
-- Performans: JS parçası makul (≤ ~40 kB min; 45 kB'ı geçme), ajan sayısı mobilde akıcı kalacak düzeyde. Parça büyürse sayfa altı notlarını (`how` + `book`) tembel yüklenen ayrı bir modüle taşı (örnek: `ahlak/notes.ts`).
+- Performans: JS parçası makul (≤ ~40 kB min; 45 kB'ı geçme), ajan sayısı mobilde akıcı kalacak düzeyde. Parça büyürse önce sayfa altı notlarını (`how` + `book` + `foot`) `data-notes` yer tutucularına `lazyNotes` (`ui.ts`) ile tembel yükle (örnek: `ahlak/notes.ts`, `noroplastisite/notes.ts`); yetmezse ilk açılmayan sekmeleri (panel + kendi turu) ayrı modüllere böl ve sekme ilk seçilince `import()` et (örnek: `savas-baris/panel-*.ts`, `noron/panel-*.ts`; testlerde `vi.waitFor`, unmount sırasında yükleme biterse hiçbir şey yazma).
 
 ## 5. Doğrulama (bitirmeden önce)
 - `npm run typecheck && npm test && npm run build && npm run check:dist` temiz.

@@ -78,10 +78,14 @@ describe('çok etkenli tahmin (ch16-e5)', () => {
     expect(c[2]).toBeCloseTo(0.25, 9);
     expect(c[3]).toBeCloseTo(0.4, 9);
   });
-  it('tüm etkenlerle bile %50\'nin altında kalır', () => {
-    const all = FACTORS.map(() => true);
-    expect(explained(all)).toBeLessThan(0.5);
-    expect(explained(all)).toBeGreaterThan(0.4);
+  it('kitabın sırasıyla altı etken eklenince %50\'yi biraz aşar (belki %50\'nin üstü), ama kesinliğe yaklaşmaz', () => {
+    const c = cumulative();
+    expect(c[4]).toBeGreaterThan(c[3]);
+    expect(c[5]).toBeLessThan(0.5);
+    expect(c[6]).toBeGreaterThan(0.5);
+    expect(c[6]).toBeLessThan(0.6);
+    expect(explained(FACTORS.map(() => true))).toBeCloseTo(c[6], 12);
+    expect(FACTORS.map((f) => f.id)).toEqual(['gen', 'kayip', 'yoksul', 'kortizol', 'kultur', 'adet']);
   });
   it('etken ekledikçe öngörü gücü artar', () => {
     let prev = -1;
@@ -102,13 +106,15 @@ describe('çok etkenli tahmin (ch16-e5)', () => {
   });
   it('genin katkısı sıfırlanırsa (replikasyon) kalan etkenler öngörüyü taşır', () => {
     const noGene = defaultShares(0), all = FACTORS.map(() => true);
-    expect(explained(all, noGene)).toBeCloseTo(0.38, 9);
+    expect(explained(all, noGene)).toBeCloseTo(0.42, 9);
     expect(evaluate(only(0), noGene).top).toBeLessThan(0.25);
     expect(evaluate(all, noGene).top).toBeGreaterThan(0.45);
   });
-  it('nadir ama güçlü etken (frontal hasar) toplam öngörüye az katkı yapar', () => {
-    expect(FACTORS[5].share).toBeLessThan(0.05);
-    expect(evaluate(only(5)).top - evaluate(only(5)).bottom).toBeLessThan(0.1);
+  it('kortizol, kültür ve adet döngüsü tek başına toplam öngörüye az katkı yapar (kitap: "biraz daha")', () => {
+    for (const i of [3, 4, 5]) {
+      expect(FACTORS[i].share).toBeLessThan(0.05);
+      expect(evaluate(only(i)).top - evaluate(only(i)).bottom).toBeLessThan(0.2);
+    }
   });
   it('örneklem aynı tohumda aynı kişileri verir; yalnızca puan değişir', () => {
     const a = sample(none, defaultShares(), 9, 100), b = sample(FACTORS.map(() => true), defaultShares(), 9, 100);

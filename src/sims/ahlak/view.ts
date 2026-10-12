@@ -1,5 +1,5 @@
 import { mulberry32 } from '../rng';
-import { slider } from '../ui';
+import { lazyNotes, slider } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, ref, svg, svgText, uid } from '../kit';
@@ -98,7 +98,7 @@ const TEMPLATE = (id: string) => `
       <div class="kn" data-ref="kRes" hidden></div>
     </section>
 
-    <div class="notes" data-ref="notes-tro"></div>
+    <div class="notes" data-notes="tro"></div>
   </section>
 
   <!-- ============ 2 · Kamu malı ve ceza ============ -->
@@ -131,7 +131,7 @@ const TEMPLATE = (id: string) => `
     </section>
 
 
-    <div class="notes" data-ref="notes-pg"></div>
+    <div class="notes" data-notes="pg"></div>
   </section>
 
   <!-- ============ 3 · Zar ve dürüstlük ============ -->
@@ -156,7 +156,7 @@ const TEMPLATE = (id: string) => `
     </section>
 
 
-    <div class="notes" data-ref="notes-dice"></div>
+    <div class="notes" data-notes="dice"></div>
   </section>
 
   <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan: trolley oranları, Knobe %85 ve %23, Hadza %73, pazar ~%90, 50 ve 5000 kişi eşikleri, ceza ve sosyal sermaye yönü, zarın iki atış düzeni. Oyun parametreleri, ağırlıklar, hazır karışımlar ve eğri biçimleri modelin varsayımıdır.</p>
@@ -737,12 +737,7 @@ export function mount(container: HTMLElement): () => void {
   }
   render();
   // Sayfa altı notları (nasıl çalışıyor + Kitapta) ayrı parçadan gelir; etkileşimli kısım daha küçük açılır.
-  let gone = false;
-  scope.onDispose(() => { gone = true; });
-  void import('./notes').then(({ NOTES }) => {
-    if (gone) return;
-    for (const k of ['tro', 'pg', 'dice'] as const) $(`notes-${k}`).innerHTML = NOTES[k];
-  });
+  lazyNotes(scope, root, () => import('./notes').then((m) => m.NOTES));
   scope.loop(frame, { root, onResume: () => { last = performance.now(); dirty = true; } });
 
   return () => {

@@ -1,14 +1,9 @@
-.sim-emp .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
-.sim-emp .tabs .chip[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .sim-emp .panel { display: flex; flex-direction: column; gap: 18px; }
 .sim-emp .panel[hidden] { display: none; }
 .sim-emp .btn-go { background: var(--ink); color: var(--bg); border-color: var(--ink); min-width: 96px; }
 .sim-emp .tg { width: 100%; text-align: left; }
 .sim-emp .sliders > div > .tg { width: auto; }
 
-.sim-emp .meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.sim-emp .m-top { display: flex; justify-content: space-between; font: 400 10.5px var(--f-mono); color: var(--muted); margin-bottom: 3px; gap: 4px; }
-.sim-emp .m-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .sim-emp .tally { font-size: 12.5px; color: var(--muted); padding: 2px 4px 0; }
 .sim-emp .chart { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px 8px 8px; }
 .sim-emp .chart .sim-h { padding-inline: 4px; }
@@ -80,10 +75,7 @@
 .sim-emp .di { fill: var(--lesion); }
 
 .sim-emp .how, .sim-emp .more { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
-.sim-emp .more { margin-top: 10px; }
 .sim-emp .how summary, .sim-emp .more summary { cursor: pointer; font-weight: 600; min-height: 24px; }
 .sim-emp .how p, .sim-emp .more p { margin-top: 8px; font-size: 13px; }
-.sim-emp .book { border: 1px solid var(--line); border-left: 4px solid var(--dop); border-radius: 12px; padding: 12px 14px; }
-.sim-emp .book ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
-.sim-emp .book a { color: var(--ink); text-decoration: underline; }
 @media (prefers-reduced-motion: reduce) { .sim-emp * { transition: none !important; animation: none !important; } }
+.sim-emp .more { margin-top: 10px; }

@@ -1,6 +1,6 @@
 # Simülasyonlar: toplu gözden geçirme ve düzeltme günlüğü
 
-Kapsam: mevcut 14 simülasyon (`ahlak`, `bir-saniye-once`, `biz-onlar`, `cocukluk`, `endokrin-eksen`, `ergen-beyni`, `gen-cevre`, `hormon-baglam`, `isbirligi-evrimi`, `kultur-ekoloji`, `noroplastisite`, `saniyeler-once`, `ultimatum`, `uyma-itaat`). Aynı anda başka ajanların eklediği klasörlere (`empati`, `metaforlar`, `ozgur-irade`, `savas-baris`) ve `content/chapters.json`'a dokunulmadı.
+Kapsam: ilk 14 simülasyon (`ahlak`, `bir-saniye-once`, `biz-onlar`, `cocukluk`, `endokrin-eksen`, `ergen-beyni`, `gen-cevre`, `hormon-baglam`, `isbirligi-evrimi`, `kultur-ekoloji`, `noroplastisite`, `saniyeler-once`, `ultimatum`, `uyma-itaat`) ve çalışma sırasında birleştirilen 5 yeni simülasyon (`empati`, `metaforlar`, `ozgur-irade`, `savas-baris`, `noron`; bunlar için ek kapsam bölümüne bak). `content/chapters.json`'a dokunulmadı.
 
 Durum: **Yapıldı** / **Kısmen** / **Atlandı**.
 
@@ -20,9 +20,8 @@ Durum: **Yapıldı** / **Kısmen** / **Atlandı**.
 ## 3. Ortak tohumlu RNG — Yapıldı
 
 - `src/sims/rng.ts`: `mulberry32`, `shuffle`, `normal`, `Rng` türü. Eski kopyalarla birebir aynı algoritma; `rng.test.ts` eski kopyadan alınan ilk değerleri (seed 1, 12345; `shuffle(…, 7)`) sabitliyor, yani testler aynı sayıları üretiyor.
-- Silinen `rng.ts` kopyaları (8): ahlak, biz-onlar, cocukluk, hormon-baglam, kultur-ekoloji, noroplastisite, saniyeler-once, ultimatum. Model dosyalarına gömülü kopyalar (4): ergen-beyni, gen-cevre, isbirligi-evrimi, uyma-itaat. `export { mulberry32 }` yeniden dışa aktarmaları (ahlak, biz-onlar, kultur-ekoloji) kaldırıldı; tüm importlar `../rng`.
+- Silinen `rng.ts` kopyaları (13): ahlak, biz-onlar, cocukluk, hormon-baglam, kultur-ekoloji, noroplastisite, saniyeler-once, ultimatum ve sonradan birleşen empati, metaforlar, noron, ozgur-irade, savas-baris. Model dosyalarına gömülü kopyalar (4): ergen-beyni, gen-cevre, isbirligi-evrimi, uyma-itaat. `export { mulberry32 }` yeniden dışa aktarmaları (ahlak, biz-onlar, kultur-ekoloji, empati, metaforlar, savas-baris) kaldırıldı; tüm importlar `../rng`.
 - Bilerek bırakıldı: `gauss` varyantları (biz-onlar `1 - r` biçimi dizileri değiştirir; gen-cevre/uyma-itaat `1e-12` sınırı `normal`'ın `1e-9`'undan farklı). Sayıları değiştirmemek için dokunulmadı.
-- Kapsam dışı: yeni eklenen `empati`, `metaforlar`, `ozgur-irade`, `savas-baris` hâlâ kendi `rng.ts` kopyasını kullanıyor (talimat gereği dokunulmadı). Birleştirmek için tek satır: `./rng` → `../rng`, klasördeki `rng.ts` silinir (`normal`/`shuffle` zaten ortak modülde).
 
 ## 4. `gen-cevre`: GWAS kalibrasyonu — Yapıldı
 
@@ -43,7 +42,7 @@ Durum: **Yapıldı** / **Kısmen** / **Atlandı**.
 
 ## 7. `ahlak` JS parçası — Yapıldı
 
-49,25 kB → **44,28 kB** (`dist/assets/view-*.js`). Yöntem: üç sekmenin "Model nasıl çalışıyor?" + "Kitapta" blokları (~4,8 kB metin) `ahlak/notes.ts` olarak tembel yüklenen ayrı parçaya (4,3 kB) taşındı; her panelin sonunda `.notes` yer tutucusuna açılıştan hemen sonra yerleşiyor. Sekme başına bölme denendi/ölçülmedi: görünüm tek kapanış içinde ortak durum ve üç turu paylaştığı için çok daha riskliydi ve eşzamanlı testleri bozacaktı. "Kitapta" kayıtları ortak `bookBox` + `repBadge` ile yazıldı (replikasyon durumu artık rozet). Test: notlar gelir, erken unmount güvenli. Kalan not: `noroplastisite` 45,2 kB (istenmedi, dokunulmadı).
+49,25 kB → **44,15 kB** (`dist/assets/view-*.js`). Yöntem: üç sekmenin "Model nasıl çalışıyor?" + "Kitapta" blokları (~4,8 kB metin) `ahlak/notes.ts` olarak tembel yüklenen ayrı parçaya (4,3 kB) taşındı; her panelin sonundaki `data-notes` yer tutucusuna açılıştan hemen sonra yerleşiyor. Aynı kalıp ortak `lazyNotes` (`ui.ts`) olarak çıkarıldı ve `noroplastisite`'de de kullanıldı (aşağıda). "Kitapta" kayıtları ortak `bookBox` + `repBadge` ile yazıldı (replikasyon durumu artık rozet). Test: notlar gelir, erken unmount güvenli. Sekme başına bölme ahlak için denenmedi: görünüm tek kapanış içinde ortak durum ve turları paylaştığı için çok daha riskliydi; ağır olan `savas-baris` ve `noron`'da sekme başına bölme yapıldı (bkz. ek kapsam).
 
 ## 8. Tutarlılık ve ortak yardımcılar — Kısmen
 
@@ -76,7 +75,24 @@ Her simülasyon 390 px'te açıldı (üst ekran görüntüsü) ve `verify.mjs` h
 - Tüm simülasyonlar `src/sims/*/meta.ts`'ten otomatik taranır (yeni eklenenler dahil). Her biri 390 ve 1280 px'te, açık ve koyu temada, ilk durumda + her sekmede + her tur adımında kontrast (SVG'ye duyarlı), yatay taşma, SVG etiketi kırpılması/çakışması için gezilir; 390 px'te çıktı çubuğu denetimleri çalışır. `ONLY=sims` yalnızca bunu, `SIM=id,id` belirli simleri çalıştırır; `SHOTS=` ekran görüntüsü klasörü.
 - Eski bir hata düzeltildi: "simülasyonsuz sayfa" denetimi (rAF durması, `.sim` kalmaması) `ch11`'i kullanıyordu ama `ch11`'de çoktan `biz-onlar` vardı (denetim 1280 px'te başarısızdı). Artık simsiz bölüm otomatik seçiliyor (`NOSIM`: `ch01`, `epilogue`, `app1`, `app3`, `intro` içinden simülasyonu olmayan ilk bölüm).
 
-## Yeni simülasyonlarla ilgili notlar (dokunulmadı)
+## Ek kapsam: çalışma sırasında birleştirilen 5 simülasyon
 
-- `metaforlar` (ikinci sekme) ve `savas-baris` (tur 3 ve 6) SVG etiket çakışmaları: "100" tiki ile eksen başlığı ("destek %") ve "20"/"26" ile "tam karşılık" etiketleri. Yukarıdaki üst boşluk düzeltmesiyle aynı sınıf; kendi ajanlarının görevi.
-- Ortak `sim.css` değişikliklerinin (sekme/not/how/book/gösterge stilleri) yeni simülasyonları bozmadığı 390 px görüntülerle kontrol edildi.
+(a) **RNG**: `empati`, `metaforlar`, `noron`, `ozgur-irade`, `savas-baris` içindeki `rng.ts` kopyaları silindi, importlar `../rng`'e çevrildi (madde 3). Test sayıları değişmedi (tüm testler geçiyor).
+
+(b) **JS parçası ≤ 45 kB** (ölçüm: `dist/assets/view-*.js`):
+
+| Simülasyon | Önce | Sonra | Yöntem |
+|---|---|---|---|
+| `savas-baris` | 52,8 kB | **28,7 kB** | "Temas ve itibar" (15,9 kB) ve "Babunlar" (9,5 kB) sekmeleri ayrı parçalar: `panel-tem.ts`, `panel-bab.ts` (şablon + kod + kendi turu); ortak türler/yardımcılar `env.ts`. Sekme ilk seçilince `import()` ile gelir, gelene kadar "Yükleniyor…" notu görünür; `Env` nesnesi kabuğun kaydırıcı/geçiş/oynatıcı yardımcılarını verir. Kabuğun kaydırıcı gövdesi ortak `slider`'a bağlandı. |
+| `noron` | 45,6 kB | **23,7 kB** | "Sinaps" (11,2 kB) ve "Devre" (11,9 kB) panelleri ve **turları** (`synTour`, `circTour`) kendi dosyalarında tembel; ilk sekme ("Toplama ve eşik") eşzamanlı. |
+| `noroplastisite` | 45,2 kB | **41,1 kB** | "nasıl çalışıyor" + "Kitapta" + dipnot `notes.ts` (4,6 kB, `lazyNotes`). |
+| `ozgur-irade` | 44,5 kB | 44,4 kB | Zaten ≤ 45; yalnızca kaydırıcı gövdesi ortak `slider`'a geçti. |
+| `ahlak` | 49,3 kB | 44,1 kB | madde 7 |
+
+Testler tembel parçalara uyarlandı (`vi.waitFor`) ve her biri için "erken unmount güvenli" testi eklendi (`savas-baris`, `noron`, `ahlak`). Ek sorun çıkmadı; `noron`'un yerel `ui.ts`'i (kendi `makeSlider` varyantı, `relatedBox`) olduğu gibi bırakıldı.
+
+(c) **`verify.mjs` "simsiz sayfa" denetimi**: `ch11` (ve sonradan `ch14`) simli olduğundan başarısızdı; `NOSIM` ile simsiz ilk bölüme (şu an `ch01`) bağlandı (yukarıda).
+
+(d) **`ozgur-irade` ch16-e5 kalibrasyonu**: kitabın "çok şeyi açıklamak ama az şeyi öngörmek" bölümünde (`.book/chapters/ch16.txt`) örnek sırayla şöyle ilerler: yalnızca serotonin taşıyıcı geni ≈%10; ebeveyn kaybı eklenince ≈%25; yoksullukta yalnız yaşam eklenince ≈%40 ("belki"); sonra glukokortikoid düzeyi ("biraz daha"), bireyci/toplulukçu kültür ("biraz daha") ve adet döngüsü ("biraz daha"; bu noktada "belki %50'nin bile üstü") eklenir. Yeterince etken eklenince öngörünün kırık kemik örneğindeki gibi %100'e yaklaşacağını, farkın miktarda değil nedensellik türünde olduğunu söyler. `chapters.json` ch16-e5 de aynıdır ("yüzde 50'nin üstüne çıkılabilir"; ağır frontal hasarda belirli sonuçların öngörülebilirliğinin %50'nin altında kalması ise kitabın ayrı bir pasajıdır). Modelde toplam **%48** idi ve altıncı etken kitapta olmayan "frontal hasar"dı; toplam bilerek %50'nin altında tutuluyor, metin "%50'nin altında kalıyor" diyordu, yani kitabın söylediğinin tersiydi. Düzeltme: altıncı etken **adet döngüsü** oldu; kortizol/kültür/adet payları %4 (toplam **%52**: beşinci etkende %48, altıncıda %50'nin üstü, kitaptaki sıra); gen sıfırlanınca toplam %42. Tur adımı ("Altısı bilinse de kesin değil"), "nasıl çalışıyor", "Kitapta" ve dipnot metinleri kitaba göre yeniden yazıldı (kitap ayrıca belirli davranış sonuçlarında öngörünün %50'nin çoğu zaman çok altında kaldığını söyler; model bunu modellemez, bu da metinde belirtildi). Testler: toplam %50-60 aralığında, `c[5] < 0,5 < c[6]`, etken kimlikleri, gensiz %42.
+
+(e) **Mobil yapışkan çubuk, yeni 5 simde**: `bar.ts` düğmesi host tarafında olduğu için otomatik geldi; `verify.mjs` 390 px denetimi (altta yapışık, küçültme/büyütme, `scroll-padding-bottom`) artık 19 simülasyonun hepsini geziyor. Yeni simlerde ayrıca: tekrar eden CSS (`.tabs/.tab/.pane/.note/.how/.more/.book/.meters/.m-top`, ~70 satır) `sim.css`'e devredildi; `section.book > ul.book-list` → `aside.book > ul`; `empati` çip biçimli sekmeleri `.tab` oldu; `metaforlar` ve `ozgur-irade` kaydırıcı gövdeleri ortak `slider`'a bağlandı. Doğrulanan etiket çakışmaları düzeltildi: `metaforlar` ikinci sekme grafiğinde "100" tiki ile "destek %" başlığı (üst boşluk 16 → 28), `savas-baris` duyarlılık grafiğinde "tam karşılık"/"iki mermi" etiketlerinin eksen sayılarına binmesi (etiket y'si grafik alanına kıskaçlandı).

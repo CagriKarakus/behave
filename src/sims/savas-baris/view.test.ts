@@ -52,6 +52,22 @@ describe('savas-baris görünümü', () => {
     expect(pending.size).toBe(0);
   });
 
+  it('sekme parçaları tembel yüklenir: önce yalnızca siperler, sekme seçilince ilgili panel kurulur; erken unmount güvenlidir', async () => {
+    const { host, un } = setup();
+    expect(host.querySelector('[data-ref="ctChips"]')).toBeNull();
+    expect(host.querySelector('[data-ref="bbChips"]')).toBeNull();
+    expect(host.querySelector('[data-ref="load-tem"]')).not.toBeNull();
+    tab(host, 'tem').click();
+    await vi.waitFor(() => expect(host.querySelector('[data-ref="ctChips"]')).not.toBeNull());
+    expect(host.querySelector('[data-ref="bbChips"]')).toBeNull();
+    un();
+    const early = setup();
+    tab(early.host, 'bab').click();
+    early.un(); // panel gelmeden unmount: hata vermemeli
+    await new Promise((r) => setTimeout(r, 40));
+    expect(early.host.innerHTML).toBe('');
+  });
+
   it('üç sekme: yalnızca seçili panel görünür, ok tuşlarıyla gezilir', () => {
     const { host, un } = setup();
     const vis = () => Array.from(host.querySelectorAll<HTMLElement>('.pane')).map((p) => !p.hidden);
@@ -98,9 +114,10 @@ describe('savas-baris görünümü', () => {
     un();
   });
 
-  it('temas ve itibar: üç kart, odak çıktı çubuğunu belirler', () => {
+  it('temas ve itibar: üç kart, odak çıktı çubuğunu belirler', async () => {
     const { host, tick, un } = setup();
     tab(host, 'tem').click();
+    await vi.waitFor(() => expect(host.querySelector('[data-ref="ctChips"]')).not.toBeNull()); // sekme ayrı parçadan gelir
     for (let i = 0; i < 20; i++) tick(500);
     expect(say(host)).toContain('tur');
     const p2 = pane(host, 'tem');
@@ -115,9 +132,10 @@ describe('savas-baris görünümü', () => {
     un();
   });
 
-  it('babunlar: salgın kaydırıcısı kültürü değiştirir', () => {
+  it('babunlar: salgın kaydırıcısı kültürü değiştirir', async () => {
     const { host, un } = setup();
     tab(host, 'bab').click();
+    await vi.waitFor(() => expect(host.querySelector('[data-ref="tp3"] input')).not.toBeNull()); // sekme ayrı parçadan gelir
     const scrub = q(host, 'tp3').querySelector<HTMLInputElement>('input')!;
     input(scrub, 400);
     const withKill = say(host);

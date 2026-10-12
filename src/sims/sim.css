@@ -99,6 +99,10 @@
 .sim .how-in, .sim .more > div { display: flex; flex-direction: column; gap: 8px; padding-bottom: 12px; color: var(--muted); }
 .sim .how > p:last-child, .sim .more > p:last-child { padding-bottom: 12px; }
 
+/* Tembel yüklenen sayfa altı notları (lazyNotes, ui.ts): içindeki kutular panelin diğer öğeleri gibi aralıklanır. */
+.sim .notes { display: flex; flex-direction: column; gap: 18px; }
+.sim .notes:empty { display: none; }
+
 /* "Kitapta" kutusu (bookBox, ui.ts) ve replikasyon rozeti. */
 .sim .book { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--hyp); border-radius: 12px; padding: 10px 14px 12px; font-size: 13px; display: flex; flex-direction: column; gap: 6px; }
 .sim .book .sim-h { margin: 0; }

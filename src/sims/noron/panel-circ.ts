@@ -1,6 +1,7 @@
 // Sekme 3: Devre. Yanal inhibisyon (uzayda keskinleştirme), negatif geri bildirim (sinyali kısaltır), ileri beslemeli inhibisyon (zamanda keskinleştirir).
 import { svg, svgText } from '../kit';
 import { DT_C, N_UNITS, T_MAX, clamp, edgeStats, f1, f2, feedback, feedforward, lateral, pattern, tInput, tStats, type SPat, type TPat } from './model';
+import type { TourStep } from '../tour';
 import { chipRow, gridY, linePath, makeSlider, type Ctx, type Meter, type SliderHandle } from './ui';
 
 export type Motif = 'lat' | 'fb' | 'ff';
@@ -187,3 +188,45 @@ export function createCircPanel(ctx: Ctx, host: HTMLElement) {
     },
   };
 }
+
+type CircPanel = ReturnType<typeof createCircPanel>;
+
+/** Devre sekmesinin rehberli turu (sekmeyle birlikte tembel yüklenir). */
+export const circTour = (circ: CircPanel): TourStep[] => [
+  {
+    title: 'İnhibisyon yokken',
+    text: 'Her nöron girdisini olduğu gibi iletir; kenar iki düzey arasında düz bir basamaktır.',
+    look: 'Çıkış girişin kopyası, kenar zıtlığı 1 kat.',
+    apply: () => circ.scene({ motif: 'lat', sp: 'basamak', g: 0 }),
+  },
+  {
+    title: 'Yanal inhibisyon',
+    text: 'Her nöron komşularını bastırır. Kenarın parlak yanı daha az, karanlık yanı daha çok bastırıldığı için kenar belirginleşir.',
+    look: 'Parlak tarafta aşım, karanlık tarafta çukur.',
+    apply: () => circ.scene({ motif: 'lat', sp: 'basamak', g: 1, reach: 2 }),
+  },
+  {
+    title: 'Keskinliğin bedeli',
+    text: 'Daha güçlü ve geniş bastırmada kenar daha belirgin, ama düz bölgelerin düzeyi düşer. Gürültülü girişte de kenar seçilir.',
+    look: 'Düz bölge düzeyi çubuğu düşüyor.',
+    apply: () => circ.scene({ motif: 'lat', sp: 'gurultu', g: 1.5, reach: 3 }),
+  },
+  {
+    title: 'Negatif geri bildirim',
+    text: 'Çıkış ara nöronu uyarır, ara nöron çıkışı bastırır. Uzun girdi bile kısa bir patlamaya dönüşür: sinyal kısalır.',
+    look: 'Siyah çıkış zirve yapıp alçalıyor; kesikli girdi sürüyor.',
+    apply: () => circ.scene({ motif: 'fb', tp: 'uzun', g: 2 }),
+  },
+  {
+    title: 'İleri beslemeli inhibisyon',
+    text: 'Aynı girdi ara nöron aracılığıyla gecikmeli baskı da gönderir. Yanıt gecikme kadar sürer: sinyal zamanda keskinleşir.',
+    look: '~10 ms genişliğinde dar bir tepe.',
+    apply: () => circ.scene({ motif: 'ff', tp: 'uzun', g: 1, delay: 10 }),
+  },
+  {
+    title: 'Üçü üç ayrı iş yapar',
+    text: 'Yanal inhibisyon uzayda, ileri beslemeli zamanda keskinleştirir; geri bildirim sinyali kısaltır. İki vuru, iki ayrı kısa yanıt olur.',
+    look: 'İki dar tepe; gecikmeyi artırınca genişler.',
+    apply: () => circ.scene({ motif: 'ff', tp: 'iki', g: 1, delay: 10 }),
+  },
+];
