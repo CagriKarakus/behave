@@ -1,6 +1,6 @@
 .sim-emp .panel { display: flex; flex-direction: column; gap: 18px; }
 .sim-emp .panel[hidden] { display: none; }
-.sim-emp .btn-go { background: var(--ink); color: var(--bg); border-color: var(--ink); min-width: 96px; }
+.sim-emp .btn-go { background: var(--accent); color: var(--on-accent); border-color: var(--accent); min-width: 96px; }
 .sim-emp .tg { width: 100%; text-align: left; }
 .sim-emp .sliders > div > .tg { width: auto; }
 

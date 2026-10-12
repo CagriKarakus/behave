@@ -1,6 +1,6 @@
 /* Simülasyonların ortak parçaları. Her şey .sim altında kapsamlıdır. */
 .sim {
-  max-width: 560px; margin-inline: auto; display: flex; flex-direction: column; gap: 22px;
+  max-width: 760px; margin-inline: auto; display: flex; flex-direction: column; gap: 22px;
   font: 14px/1.5 var(--f-body); color: var(--ink);
 }
 .sim * { box-sizing: border-box; }
@@ -8,15 +8,15 @@
 .sim .lede { font-size: 15px; color: var(--muted); max-width: 46ch; }
 .sim .sim-h { margin: 0 0 8px; font: 600 12px/1.3 var(--f-body); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
 
-.sim .chips { display: flex; gap: 8px; overflow-x: auto; padding-block: 2px 6px; scrollbar-width: thin; }
+.sim .chips { display: flex; gap: 8px; overflow-x: auto; padding-block: 2px 6px; }
 .sim .chip { flex: none; min-height: 40px; font: 500 13px/1.1 var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--control-border); border-radius: 999px; padding: 10px 14px; cursor: pointer; }
-.sim .chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-.sim .btn { min-height: 40px; font: 500 13px/1.1 var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--control-border); border-radius: 10px; padding: 10px 14px; cursor: pointer; }
-.sim .btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sim .chip[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.sim .btn { min-height: 40px; font: 500 13px/1.1 var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--control-border); border-radius: 3px; padding: 10px 14px; cursor: pointer; }
+.sim .btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 .sim .row { display: flex; gap: 8px; flex-wrap: wrap; }
 .sim button:focus-visible, .sim input:focus-visible, .sim [tabindex]:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 
-.sim .stage { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px 6px 8px; }
+.sim .stage { background: var(--panel); border: 1px solid var(--line); border-radius: 3px; padding: 10px 6px 8px; }
 .sim .stage svg, .sim .chart svg { display: block; width: 100%; height: auto; max-width: 100%; }
 .sim .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 6px 10px 2px; font-size: 12px; color: var(--muted); align-items: center; }
 .sim .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
@@ -47,11 +47,11 @@
    Masaüstü: yerinde (diyagramın üstünde) kalır ve panelin üstüne yapışır; diyagramı örtmez. */
 .sim .sim-bar { order: 1; position: sticky; bottom: 0; z-index: 20; background: var(--panel); border-top: 1px solid var(--line);
   margin-inline: -16px; padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0px)); }
-.sim .sim-bar-in { position: relative; max-width: 560px; margin-inline: auto; display: flex; flex-direction: column; gap: 6px; }
+.sim .sim-bar-in { position: relative; max-width: 760px; margin-inline: auto; display: flex; flex-direction: column; gap: 6px; }
 .sim .say { font-size: 13px; line-height: 1.35; min-height: 2.7em; }
 .sim .sim-bar .say { padding-right: 36px; }
 .sim .bar-toggle { position: absolute; top: -6px; right: -8px; width: 40px; height: 40px; display: grid; place-items: center; padding: 0;
-  color: var(--muted); background: transparent; border: 0; border-radius: 10px; cursor: pointer; }
+  color: var(--muted); background: transparent; border: 0; border-radius: 3px; cursor: pointer; }
 .sim .bar-toggle svg { width: 16px; height: 16px; transition: transform .15s; }
 .sim .bar-toggle:hover { color: var(--ink); }
 .sim .sim-bar[data-collapsed="true"] .bar-toggle svg { transform: rotate(180deg); }
@@ -72,7 +72,7 @@
 }
 
 @media (min-width: 600px) {
-  .sim .sim-bar { margin-inline: 0; border: 1px solid var(--line); border-radius: 12px; }
+  .sim .sim-bar { margin-inline: 0; border: 1px solid var(--line); border-radius: 3px; }
 }
 @media (min-width: 960px) {
   .sim .sim-bar { order: 0; top: 0; bottom: auto; padding: 10px 12px; }
@@ -84,7 +84,7 @@
 @media (prefers-reduced-motion: reduce) { .sim * { scroll-behavior: auto; } }
 
 /* Sekmeler (bölmeli denetim): her simülasyonda aynı. */
-.sim .tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
+.sim .tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 3px; padding: 4px; }
 .sim .tab { min-height: 44px; font: 600 13px/1.2 var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 9px; padding: 6px 4px; cursor: pointer; }
 .sim .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
 @media (max-width: 420px) { .sim .tab { font-size: 12px; } }
@@ -93,7 +93,7 @@
 .sim .note { font-size: 13px; color: var(--muted); }
 
 /* "Model nasıl çalışıyor?" açılır kutusu (.how ya da .more). */
-.sim .how, .sim .more { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px 14px; font-size: 13px; }
+.sim .how, .sim .more { background: var(--panel); border: 1px solid var(--line); border-radius: 3px; padding: 4px 14px; font-size: 13px; }
 .sim .how summary, .sim .more summary { cursor: pointer; min-height: 40px; display: flex; align-items: center; font-weight: 600; }
 .sim .how p, .sim .more p { margin-top: 8px; color: var(--muted); }
 .sim .how-in, .sim .more > div { display: flex; flex-direction: column; gap: 8px; padding-bottom: 12px; color: var(--muted); }
@@ -104,7 +104,7 @@
 .sim .notes:empty { display: none; }
 
 /* "Kitapta" kutusu (bookBox, ui.ts) ve replikasyon rozeti. */
-.sim .book { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--hyp); border-radius: 12px; padding: 10px 14px 12px; font-size: 13px; display: flex; flex-direction: column; gap: 6px; }
+.sim .book { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--hyp); border-radius: 3px; padding: 10px 14px 12px; font-size: 13px; display: flex; flex-direction: column; gap: 6px; }
 .sim .book .sim-h { margin: 0; }
 .sim .book ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; }
 .sim .book a { color: var(--ink); font-weight: 600; text-underline-offset: 2px; }
@@ -116,7 +116,7 @@
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 
 /* Rehberli tur (tour.ts) */
-.sim .tour { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--ink); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.sim .tour { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--ink); border-radius: 3px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
 .sim .tour.is-closed { border-left-width: 1px; padding-block: 8px; }
 .sim .tour-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
 .sim .tour-k { font: 600 11px/1.3 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
@@ -125,6 +125,6 @@
 .sim .tour-text { font-size: 14px; }
 .sim .tour-look { font-size: 13px; color: var(--muted); }
 .sim .tour-nav { display: flex; gap: 8px; flex-wrap: wrap; }
-.sim .tour-next { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sim .tour-next { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 .sim .tour-exit { margin-left: auto; }
 .sim .tour button:disabled { opacity: .45; cursor: default; }

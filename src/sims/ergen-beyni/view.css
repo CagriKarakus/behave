@@ -51,7 +51,7 @@
 .sim-erg .s-burst path { stroke: var(--red); stroke-width: 4; stroke-linecap: round; }
 .sim-erg .s-burst text { font: 700 12px var(--f-body); fill: var(--red-text); paint-order: stroke; stroke: var(--panel); stroke-width: 3px; }
 
-.sim-erg .btn.go { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sim-erg .btn.go { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 .sim-erg .btn:disabled { opacity: .45; cursor: default; }
 .sim-erg .tally { font-size: 13px; min-height: 2.7em; }
 

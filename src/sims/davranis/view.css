@@ -7,7 +7,7 @@
 .sim-ad .stage .ax-t { font: 500 11px var(--f-body); fill: var(--muted); }
 .sim-ad .legend svg { width: 26px; }
 .sim-ad .sliders > div { min-width: 0; }
-.sim-ad .row .btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sim-ad .row .btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 
 /* Gösterge satırları */
 .sim-ad .sys { display: flex; flex-direction: column; gap: 8px; }
@@ -52,7 +52,7 @@
 .sim-ad .cellb[data-v="good"] { border-left: 5px solid var(--pfc); }
 .sim-ad .cellb[data-v="mid"] { border-left: 5px solid var(--dop); }
 .sim-ad .cellb[data-v="bad"] { border-left: 5px solid var(--amy); }
-.sim-ad .cellb[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sim-ad .cellb[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 .sim-ad .cellb[aria-pressed="true"] span { color: var(--bg); }
 
 /* Yer değiştirme */

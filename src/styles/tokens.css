@@ -1,50 +1,60 @@
-/* Ortak tasarım jetonları. İki simülasyonun (Bölüm 2 ve Ek 2) paletinin birleşimi.
-   Renkler anlam taşır:
+/* Ortak tasarım jetonları. Neoklasik tema: kâğıt/parşömen zemin, bordo (#752D2E) ve petrol (#596F75) ikilisi.
+   Renkler anlam taşır (simülasyon diyagramları ve lejantları bunlara dayanır):
    --amy kırmızı = amigdala · --pfc mavi = frontal korteks · --dop amber = dopamin
    --hyp mavi = hipotalamus · --pit mor = hipofiz · --gld yeşilimsi = bez · --eff amber = hedef hücre yanıtı
    --red = glikoz ve yanlış hormon · --lesion gri = lezyon */
 :root {
-  --bg: #ECEFF3;
-  --panel: #F8F9FB;
-  --ink: #131C28;
-  --muted: #566475;
-  --line: #C9D1DB;
-  --edge: #46566A;
+  --bg: #F3ECDF;
+  --panel: #FBF7EF;
+  --ink: #2B1B1C;
+  --muted: #5E5551;
+  --line: #D8CBB8;
+  --edge: #4E3F40;
   /* Denetim kenarları (WCAG 1.4.11, >= 3:1) ve renkli metin için koyu tonlar (>= 4.5:1). */
-  --control-border: #718096;
-  --eff-text: #8F5B00;
-  --gld-text: #0B7061;
-  --red-text: #B8301F;
+  --control-border: #8A7A70;
+  --eff-text: #7D5410;
+  --gld-text: #1F6B54;
+  --red-text: #9A2B27;
 
-  --amy: #C9382A;
-  --pfc: #1F66B0;
-  --dop: #B77800;
-  --lesion: #7B8797;
+  /* Marka vurguları */
+  --accent: #752D2E;
+  --on-accent: #FBF7EF;
+  --accent-2: #596F75;
+  --gold: #A98B52;
 
-  --hyp: #1F66B0;
-  --pit: #7B4FB8;
-  --gld: #0E8573;
-  --eff: #B77800;
-  --red: #C9382A;
+  --amy: #A8322F;
+  --pfc: #2F6275;
+  --dop: #A8741A;
+  --lesion: #8A8078;
 
-  --f-display: "Bricolage Grotesque Variable", "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --hyp: #2F6275;
+  --pit: #6E4A8E;
+  --gld: #2F7A62;
+  --eff: #A8741A;
+  --red: #A8322F;
+
+  --f-display: "Cormorant Garamond", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --radius: 3px;
+  --gutter: clamp(20px, 4vw, 72px);
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0B131D; --panel: #131D2A; --ink: #E7EDF4; --muted: #8FA0B3; --line: #263446; --edge: #9FB0C3; --control-border: #617489;
-    --eff-text: #F4B63A; --gld-text: #3CC4AE; --red-text: #FF6A52;
-    --amy: #FF6A52; --pfc: #5BA9F2; --dop: #F4B63A; --lesion: #6F7F92;
-    --hyp: #5BA9F2; --pit: #B795F0; --gld: #3CC4AE; --eff: #F4B63A; --red: #FF6A52;
+    --bg: #121A1D; --panel: #19242A; --ink: #EDE6DA; --muted: #9FB1B6; --line: #2D3C42; --edge: #B4C4C8; --control-border: #6D838A;
+    --eff-text: #E3B65A; --gld-text: #5CC4A4; --red-text: #F0908A;
+    --accent: #C9777A; --on-accent: #1A1112; --accent-2: #7F989F; --gold: #C4A56A;
+    --amy: #EA8680; --pfc: #6FB3CC; --dop: #E3B65A; --lesion: #7F8F94;
+    --hyp: #6FB3CC; --pit: #B79BDD; --gld: #5CC4A4; --eff: #E3B65A; --red: #EA8680;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0B131D; --panel: #131D2A; --ink: #E7EDF4; --muted: #8FA0B3; --line: #263446; --edge: #9FB0C3; --control-border: #617489;
-  --eff-text: #F4B63A; --gld-text: #3CC4AE; --red-text: #FF6A52;
-  --amy: #FF6A52; --pfc: #5BA9F2; --dop: #F4B63A; --lesion: #6F7F92;
-  --hyp: #5BA9F2; --pit: #B795F0; --gld: #3CC4AE; --eff: #F4B63A; --red: #FF6A52;
+  --bg: #121A1D; --panel: #19242A; --ink: #EDE6DA; --muted: #9FB1B6; --line: #2D3C42; --edge: #B4C4C8; --control-border: #6D838A;
+  --eff-text: #E3B65A; --gld-text: #5CC4A4; --red-text: #F0908A;
+  --accent: #C9777A; --on-accent: #1A1112; --accent-2: #7F989F; --gold: #C4A56A;
+  --amy: #EA8680; --pfc: #6FB3CC; --dop: #E3B65A; --lesion: #7F8F94;
+  --hyp: #6FB3CC; --pit: #B79BDD; --gld: #5CC4A4; --eff: #E3B65A; --red: #EA8680;
   color-scheme: dark;
 }
