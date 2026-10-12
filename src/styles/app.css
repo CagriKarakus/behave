@@ -35,8 +35,7 @@ h1 { margin: 8px 0 6px; font-weight: 600; font-size: clamp(38px, 5.2vw, 84px); l
 .hero h1 { text-transform: uppercase; letter-spacing: .05em; font-size: clamp(34px, 4.6vw, 88px); line-height: 1; margin-top: 14px; max-width: 30ch; }
 /* Köşeye yaslı çiçekli dal (satır içi SVG, görsel dosyası yok). */
 .hero::after { content: ""; position: absolute; right: -10px; bottom: -10px; width: min(46%, 560px); aspect-ratio: 4 / 3; z-index: 0; opacity: .85; background: no-repeat right bottom / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' fill='none'%3E%3Cg stroke='%2359453f' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M400 40C330 70 290 120 235 170S110 250 0 270'/%3E%3Cpath d='M300 95C290 60 300 35 322 12M240 160C225 125 232 100 250 80M170 215C160 190 165 170 180 150M120 245C105 262 90 268 70 270'/%3E%3C/g%3E%3Cg fill='%23752D2E'%3E%3Ccircle cx='322' cy='12' r='9'/%3E%3Ccircle cx='250' cy='80' r='10'/%3E%3Ccircle cx='180' cy='150' r='9'/%3E%3Ccircle cx='70' cy='270' r='8'/%3E%3Ccircle cx='350' cy='75' r='11'/%3E%3Ccircle cx='285' cy='128' r='12'/%3E%3Ccircle cx='215' cy='190' r='11'/%3E%3Ccircle cx='140' cy='232' r='10'/%3E%3Ccircle cx='392' cy='30' r='9'/%3E%3Ccircle cx='300' cy='60' r='8'/%3E%3C/g%3E%3Cg fill='%23F3ECDF'%3E%3Ccircle cx='350' cy='75' r='3.5'/%3E%3Ccircle cx='285' cy='128' r='4'/%3E%3Ccircle cx='215' cy='190' r='3.5'/%3E%3Ccircle cx='140' cy='232' r='3'/%3E%3Ccircle cx='250' cy='80' r='3'/%3E%3C/g%3E%3C/svg%3E"); }
-.page.home::before { content: "BEHAVE · SAPOLSKY · 2017"; position: absolute; left: calc(var(--gutter) * .35); top: 220px; writing-mode: vertical-rl; transform: rotate(180deg); font: 500 10px var(--f-body); letter-spacing: .4em; color: var(--accent-2); white-space: nowrap; }
-@media (max-width: 959px) { .page.home::before { display: none; } .hero::after { opacity: .35; } }
+@media (max-width: 959px) { .hero::after { opacity: .35; } }
 .timeline, .groups { margin-top: 12px; }
 .axis { position: relative; height: 54px; margin: 6px 12px 0; }
 .axis-line { position: absolute; left: 0; right: 0; top: 14px; height: 2px; background: linear-gradient(90deg, var(--accent), var(--gold), var(--accent-2)); border-radius: 2px; }
@@ -213,3 +212,32 @@ h1 { margin: 8px 0 6px; font-weight: 600; font-size: clamp(38px, 5.2vw, 84px); l
 .groups { max-width: 1480px; margin-inline: auto; text-align: center; }
 .group-h, .group-blurb { text-align: center; }
 @media (max-width: 599px) { .stops { gap: 56px; } .stop .cards > li, .groups .cards > li { flex-basis: 100%; } }
+
+/* ---- Kenar meridyenleri: iki yanda aşağı inen zaman cetveli ---- */
+.meridian { display: none; }
+@media (min-width: 1280px) {
+  .page.home { padding-inline: 112px; }
+  .meridian { display: block; position: fixed; top: 96px; bottom: 36px; width: 90px; z-index: 5; pointer-events: none; opacity: 0; transition: opacity .4s; --p: 0; }
+  .meridian.on { opacity: 1; }
+  .meridian-l { left: 8px; }
+  .meridian-r { right: 10px; }
+  .mer-cap { position: absolute; top: -22px; font: 600 9px var(--f-body); letter-spacing: .3em; text-transform: uppercase; color: var(--accent-2); white-space: nowrap; }
+  .meridian-l .mer-cap { right: 0; }
+  .meridian-r .mer-cap { left: 0; }
+  .mer-rail, .mer-fill { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--accent-2); }
+  .mer-fill { bottom: auto; height: calc(var(--p) * 100%); width: 3px; background: var(--accent); }
+  .meridian-l .mer-rail { right: 0; } .meridian-l .mer-fill { right: -1px; }
+  .meridian-r .mer-rail { left: 0; } .meridian-r .mer-fill { left: -1px; }
+  /* Cetvel çentikleri */
+  .meridian::before { content: ""; position: absolute; top: 0; bottom: 0; width: 6px; background: repeating-linear-gradient(to bottom, var(--line) 0 1px, transparent 1px 12px); }
+  .meridian-l::before { right: 2px; } .meridian-r::before { left: 2px; }
+  .mer-tick { position: absolute; right: 0; display: flex; align-items: center; gap: 4px; transform: translateY(-50%); font: 500 9px var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  .mer-tick u { width: 12px; height: 1px; background: var(--accent-2); }
+  .mer-tick b { font-weight: 500; }
+  .mer-stop { position: absolute; left: 0; display: flex; align-items: center; transform: translateY(-50%); }
+  .mer-stop u { width: calc(14px + var(--lane, 0) * 20px); height: 1px; background: var(--accent-2); }
+  .mer-stop b { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--bg); border: 1px solid var(--accent); color: var(--accent); font: 600 12px/1 var(--f-display); }
+  .mer-pin { position: absolute; left: 50%; top: calc(var(--p) * 100%); width: 11px; height: 11px; background: var(--accent); transform: translate(-50%, -50%) rotate(45deg); box-shadow: 0 0 0 3px var(--bg); }
+  .meridian-l .mer-pin { left: auto; right: 0; transform: translate(50%, -50%) rotate(45deg); }
+  .meridian-r .mer-pin { left: 0; transform: translate(-50%, -50%) rotate(45deg); }
+}

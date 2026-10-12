@@ -90,7 +90,39 @@ export function renderHome(el: HTMLElement, content: ContentIndex): Page {
       </div>`)}
     </section>` : ''}
 
+    ${tl.stops.length ? html`
+    <aside class="meridian meridian-l" aria-hidden="true" data-meridian>
+      <span class="mer-cap">Zaman</span>
+      <i class="mer-rail"></i><i class="mer-fill"></i>
+      ${ticks.map((t) => html`<span class="mer-tick" style="top:${(logPosition(t.s, tl.minLog, tl.maxLog) * 100).toFixed(2)}%"><b>${t.label}</b><u></u></span>`)}
+      <i class="mer-pin"></i>
+    </aside>
+    <aside class="meridian meridian-r" aria-hidden="true" data-meridian>
+      <span class="mer-cap">Basamak</span>
+      <i class="mer-rail"></i><i class="mer-fill"></i>
+      ${tl.stops.map((st, i) => html`<span class="mer-stop" style="top:${(st.pos * 100).toFixed(2)}%;--lane:${st.lane}" title="${st.label}"><u></u><b>${i + 1}</b></span>`)}
+      <i class="mer-pin"></i>
+    </aside>` : ''}
   </div>`.value;
+
+  // Kenar meridyenleri: zaman merdiveni bölümünde ne kadar ilerlendiğini gösterir.
+  const meridians = [...el.querySelectorAll<HTMLElement>('[data-meridian]')];
+  const section = el.querySelector<HTMLElement>('.timeline');
+  let raf = 0;
+  const sync = () => {
+    raf = 0;
+    if (!section) return;
+    const r = section.getBoundingClientRect();
+    const p = Math.min(1, Math.max(0, (innerHeight * 0.4 - r.top) / Math.max(1, r.height)));
+    const shown = r.top < innerHeight * 0.6;
+    for (const m of meridians) { m.style.setProperty('--p', p.toFixed(4)); m.classList.toggle('on', shown); }
+  };
+  const onScroll = () => { if (!raf) raf = requestAnimationFrame(sync); };
+  if (meridians.length) {
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll);
+    sync();
+  }
 
   const box = el.querySelector<HTMLElement>('[data-notice]');
   const closeBtn = el.querySelector<HTMLButtonElement>('[data-notice-close]');
@@ -101,5 +133,10 @@ export function renderHome(el: HTMLElement, content: ContentIndex): Page {
   };
   closeBtn?.addEventListener('click', onClose);
 
-  return staticPage(() => { closeBtn?.removeEventListener('click', onClose); el.innerHTML = ''; });
+  return staticPage(() => {
+    closeBtn?.removeEventListener('click', onClose);
+    removeEventListener('scroll', onScroll); removeEventListener('resize', onScroll);
+    if (raf) cancelAnimationFrame(raf);
+    el.innerHTML = '';
+  });
 }
