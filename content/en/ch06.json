@@ -1,0 +1,283 @@
+{
+ "timescale": "Adolescence (roughly a decade ago)",
+ "summary": "The chapter argues that adolescence is not a cultural invention but a neurobiologically real period that is distinct from adulthood. At its center is the frontal cortex, the region that matures last in terms of synapses, myelination and metabolism, and that keeps developing until the mid-twenties. During adolescence gray matter is pruned into a more efficient structure; meanwhile the limbic system, the autonomic nervous system and gonadal hormones come to the fore. As a result, adolescents are not at adult level in risk assessment, in processing negative feedback or in emotion regulation; they are hypersensitive to novel experience, reward and peer approval. The chapter also follows this picture through violence, empathy and moral reasoning, and concludes that the frontal cortex is shaped largely by experience.",
+ "keyConcepts": [
+  {
+   "term": "Delayed frontal cortical maturation",
+   "explanation": "The frontal cortex is the last brain region to mature in terms of synapses, myelination and metabolism, and its development is completed in the mid-twenties."
+  },
+  {
+   "term": "Synaptic pruning",
+   "explanation": "Neurons and synapses that were overproduced compete with one another, and those that are not functional are eliminated; the thinning of gray matter in adolescence is part of this process."
+  },
+  {
+   "term": "Myelination and connectivity",
+   "explanation": "Insulating axons speeds up communication and lets frontal cortex regions work more like a coordinated unit."
+  },
+  {
+   "term": "Reward sensitivity and the ventral striatum",
+   "explanation": "In adolescence the dopamine signal overreacts to large rewards, while small and expected rewards may feel negative."
+  },
+  {
+   "term": "Asymmetric updating of bad news",
+   "explanation": "Adolescents update their risk estimates after positive feedback, but negative feedback barely changes their estimates."
+  },
+  {
+   "term": "Peer influence and social exclusion",
+   "explanation": "The presence of peers increases adolescents' risky decisions, and they react to exclusion far more sensitively than adults do."
+  },
+  {
+   "term": "Empathic hyperarousal",
+   "explanation": "Adolescents experience another person's pain very intensely; this intensity can sometimes lead them to focus on their own distress, which makes helping harder."
+  },
+  {
+   "term": "Adolescent violence peak",
+   "explanation": "Violence peaks in late adolescence and early adulthood; this peak is not directly explained by the rise in testosterone and is not clearly distinguishable from adult violence in brain imaging."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Blakemore's risk estimation study",
+   "finding": "When participants estimated the probability of an event and then learned the actual rate, adolescents updated their estimates after good news as adults did, but barely processed bad news."
+  },
+  {
+   "name": "Steinberg's driving game experiment",
+   "finding": "When two peers were added alongside them in a video driving game, adolescents' risky behavior tripled while adults showed no change; in imaging, with peers present vmPFC activity decreased and ventral striatum activity increased in adolescents."
+  },
+  {
+   "name": "Eisenberger's Cyberball experiment",
+   "finding": "Adults excluded in a virtual ball game dampened the pain of exclusion via the vlPFC; in most adolescents the vlPFC was barely engaged, and the participants reported feeling worse."
+  },
+  {
+   "name": "Reward and nucleus accumbens study (children, adolescents, adults)",
+   "finding": "In adolescents receiving monetary rewards, the accumbens response to a large reward was much stronger than in adults, while the response to a small reward dropped; in children the response was independent of reward size."
+  },
+  {
+   "name": "Longitudinal cortical thickness and IQ study",
+   "finding": "Children whose period of cortical thickening lasted longer at the start of adolescence were found to score higher on IQ in adulthood."
+  },
+  {
+   "name": "Irony comprehension imaging study",
+   "finding": "To decode irony, adolescents used the dmPFC more than adults did, whereas adults relied on the face region and did the same job with less effort."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Frontal Cortex Maturation Timeline",
+   "shows": "Shows how gray matter pruning, myelination and connectivity between regions change relative to one another with age. The outputs are illustrative, not exact clinical values.",
+   "inputs": [
+    "Age (10-30)",
+    "Pruning rate",
+    "Myelination rate"
+   ],
+   "outputs": [
+    "Gray matter density curve",
+    "Connectivity curve between regions",
+    "Executive efficiency indicator"
+   ]
+  },
+  {
+   "title": "Feedback Updating Game",
+   "shows": "The user estimates the probability of an event, then receives good or bad news and updates the estimate. The asymmetry in updating after positive and negative news is observed by age profile.",
+   "inputs": [
+    "Initial estimate",
+    "Feedback type (good or bad news)",
+    "Age profile"
+   ],
+   "outputs": [
+    "Updated estimate",
+    "Update difference (for good and bad news)"
+   ]
+  },
+  {
+   "title": "Peer Influence Driving Simulation",
+   "shows": "Shows how the number of peers and the age group change risk-taking behavior in a risky driving task. It shows that as the number of peers increases, risk rises quickly in the adolescent group, while it changes less in the adult group.",
+   "inputs": [
+    "Age group (adolescent or adult)",
+    "Number of peers present",
+    "Reward size"
+   ],
+   "outputs": [
+    "Risk-taking rate",
+    "Reward signal indicator (striatum, illustrative)"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "The chapter treats the frontal cortex's role in regulating emotion and impulse together with the concept of reappraisal introduced in the second chapter."
+  },
+  {
+   "why": "How gonadal hormones change brain structure and behavior was covered in the fourth chapter; this chapter revisits it in the context of adolescence."
+  },
+  {
+   "why": "This chapter focuses on the shaping of the frontal cortex by experience as one of the strongest examples of the idea of neural plasticity from the previous chapter."
+  },
+  {
+   "why": "The roots of adolescent violence and the effects of childhood experiences are covered in the next chapter."
+  },
+  {
+   "why": "The role of genes in brain development, and the frontal cortex being shaped more by experience than by genes, are explained in more detail in the eighth chapter."
+  },
+  {
+   "why": "The idea that behavior evolved to spread the individual's genes rather than for the good of the species is discussed from an evolutionary perspective in the tenth chapter."
+  },
+  {
+   "why": "The fact that empathy alone does not turn into action, and the source of moral courage, are discussed in the thirteenth chapter."
+  },
+  {
+   "why": "The author's proposals on juvenile delinquency and criminal justice appear in the sixteenth chapter."
+  },
+  {
+   "why": "What myelination is and how it speeds up communication is explained in the first appendix."
+  }
+ ],
+ "experiments": {
+  "ch06-e1": {
+   "name": "Cortical thickness development and IQ",
+   "researchers": "P. Shaw et al.",
+   "question": "Is the timing of cortical gray matter thickening and thinning in childhood and adolescence related to adult intelligence?",
+   "method": "Children were repeatedly scanned with MRI up to adulthood and given IQ tests; each individual's cortical thickness trajectory was compared with their level of intelligence.",
+   "finding": "The longer the thickening phase of gray matter lasted in early adolescence and the later pruning began, the higher the IQ in adulthood.",
+   "roleInChapter": "Shows that frontal maturation in adolescence means not more brain but a brain that becomes more efficient through pruning.",
+   "replication": {
+    "note": "The relationship between intelligence and the cortical development trajectory has been partly confirmed in later longitudinal studies, but the direction of the relationship and its change with age have differed depending on sampling and method (e.g., Schnack et al. 2015). Effect sizes are small.",
+    "refs": [
+     "Schnack et al. 2015"
+    ]
+   }
+  },
+  "ch06-e2": {
+   "name": "Adolescents and adults interpreting irony",
+   "researchers": "A. Wang et al.",
+   "question": "Do adolescents and adults draw on the same brain regions when decoding a speaker's actual intent (irony)?",
+   "method": "Adolescent and adult participants were scanned with fMRI while interpreting communication examples that could contain irony, and the activated regions were compared.",
+   "finding": "Adolescents could not detect irony as well as adults and activated the dorsomedial prefrontal cortex (dmPFC) more while doing so. In adults the fusiform face area was more active; that is, for an adult, looking at the face was often enough.",
+   "roleInChapter": "Shows that the adolescent frontal cortex is not yet efficient, and that adults do the same job with less frontal effort.",
+   "caveats": "Sapolsky stresses that adolescent-adult imaging comparisons are easily misread: the greater frontal activity seen in adolescents at the same level of performance stems from inefficiency, not from strength.",
+   "replication": {
+    "note": "This is a single fMRI study with a small sample; no direct replication is known.",
+    "refs": []
+   }
+  },
+  "ch06-e3": {
+   "name": "Responses to emotional faces in adolescence",
+   "researchers": "W. Moore et al.",
+   "question": "How does pubertal development affect the brain's response to emotional facial expressions?",
+   "method": "Responses of limbic and prefrontal regions were measured with fMRI while young people at different levels of pubertal development were shown emotional facial expressions.",
+   "finding": "According to the book's summary, in adults an emotional face first activates the amygdala and then the vmPFC, which produces habituation. In adolescents the vmPFC response remains weak, so the amygdala response keeps increasing as long as the image continues.",
+   "roleInChapter": "Explains why adolescents experience emotions more intensely and why they have difficulty regulating their emotional responses.",
+   "replication": {
+    "note": "The idea that the amygdala overreacts to emotional faces in adolescents has been supported in many studies, but not all studies have found the same age pattern; results vary with the task and analysis method.",
+    "refs": [
+     "Pfeifer and Blakemore 2012"
+    ]
+   }
+  },
+  "ch06-e4": {
+   "name": "Failure to learn from bad news: updating of risk estimates",
+   "researchers": "C. Moutsiana, S.-J. Blakemore, T. Sharot et al.",
+   "question": "Do adolescents incorporate good and bad news about their own risks into their estimates to the same extent?",
+   "method": "Participants aged 9-26 estimated the probability of various events (e.g., winning the lottery, dying in a plane crash) happening to themselves; then the actual probability was told and they were asked to give their estimates again. Updates were compared according to whether the news was good or bad.",
+   "finding": "Adults reflected both kinds of feedback in their new estimates. Adolescents updated after good news as adults did, but barely changed their estimates after bad news.",
+   "roleInChapter": "Shows that adolescents' weakness in risk assessment has a specific form: they disregard information that is against their interest.",
+   "replication": {
+    "note": "The good/bad news updating paradigm on which this study relies has been criticized on the grounds that the observed asymmetry may be a statistical artifact (Shah et al. 2016). Sharot's team has defended the asymmetry with response studies; the debate continues.",
+    "refs": [
+     "Shah et al. 2016",
+     "Garrett and Sharot 2017"
+    ]
+   }
+  },
+  "ch06-e5": {
+   "name": "Accumbens response to rewards of different sizes",
+   "researchers": "A. Galvan, B. J. Casey et al.",
+   "question": "How does the nucleus accumbens respond to rewards of different sizes in children, adolescents and adults?",
+   "method": "Child, adolescent and adult participants in the scanner performed a task in which correct answers brought small, medium or large monetary rewards; accumbens and prefrontal activity were compared.",
+   "finding": "In children the accumbens response was similar regardless of reward size; in adults the response grew in proportion to the reward. In adolescents the medium reward produced the same response as in the other groups; the large reward led to a much larger increase than in adults, and the small reward to a drop in activity. Prefrontal activity was diffuse in children and adolescents.",
+   "roleInChapter": "Shows that in adolescents strong rewards are processed in an exaggerated way and moderate rewards in an unpleasant way, and that the immature frontal cortex has difficulty counteracting this dopamine system.",
+   "caveats": "Sapolsky notes that findings conflict on the dopamine response during reward anticipation: some studies found a stronger anticipation response in adolescents, others a weaker one.",
+   "replication": {
+    "note": "Increased striatal response to reward in adolescents has been found in many studies, but some have reported reduced response; meta-analyses show that the effect depends on the reward phase (anticipation or outcome) and the task. The study's sample was small (37 people).",
+    "refs": [
+     "Galvan 2010 review",
+     "Silverman et al. 2015 meta-analysis"
+    ]
+   }
+  },
+  "ch06-e6": {
+   "name": "Risk taking in a driving game in the presence of peers",
+   "researchers": "M. Gardner and L. Steinberg; J. Chein et al.",
+   "question": "Does the presence of peers affect risk-taking tendencies differently in adolescents and adults?",
+   "method": "Adolescents and adults played a video driving game either alone or with two peers who egged them on. In the imaging study (Chein et al. 2011), the peers watched and encouraged the participant from another room via intercom.",
+   "finding": "When alone, adolescents and adults took risks at similar rates. The presence of two peers did not affect adults but tripled risk taking in adolescents. In imaging, peer presence reduced vmPFC activity and increased ventral striatum activity in adolescents; no such change occurred in adults.",
+   "roleInChapter": "Shows why adolescents act more boldly around peers even though their risk assessment skills are close to those of adults.",
+   "replication": {
+    "note": "The finding that peer presence increases adolescent risk taking has been shown in several laboratories (e.g., Weigard et al. 2014; Smith et al. 2015), but samples are small and effect sizes variable; some studies have not found an age-specific effect.",
+    "refs": [
+     "Weigard et al. 2014",
+     "Smith et al. 2015"
+    ]
+   }
+  },
+  "ch06-e7": {
+   "name": "Cyberball: the neural trace of social exclusion",
+   "researchers": "N. Eisenberger et al.; C. Masten et al. (adolescent study)",
+   "question": "How is social exclusion processed in the brain, and do adolescents experience it differently from adults?",
+   "method": "Participants in the scanner were led to believe they were tossing a virtual ball with two other players on the screen (the players were in fact a computer program). After a while the other two “players” stopped throwing the ball to the participant. Masten and colleagues applied the same setup to adolescents.",
+   "finding": "In adults, exclusion activated regions associated with pain perception, anger and disgust (periaqueductal gray, anterior cingulate, amygdala, insula); shortly afterward the vlPFC came online, and the more active the vlPFC, the more the cingulate-insula was silenced and the less distress the person reported. In most adolescents the vlPFC was only weakly activated, the other responses were larger, and they reported feeling worse.",
+   "roleInChapter": "Shows that rejection hurts adolescents more and that this strengthens the need to belong.",
+   "caveats": "Sapolsky notes that some adolescents show the adult pattern: these are the young people who see themselves as least sensitive to rejection and who spend the most time with their friends.",
+   "replication": {
+    "note": "That Cyberball produces negative affect and need threat has been robustly shown by meta-analyses (Hartgerink et al. 2015). However, the interpretation that social pain uses the same neural circuitry as physical pain has been criticized, and brain patterns have been shown to be distinguishable (Woo et al. 2014).",
+    "refs": [
+     "Hartgerink et al. 2015",
+     "Woo et al. 2014"
+    ]
+   }
+  },
+  "ch06-e8": {
+   "name": "Susceptibility to peer influence and premotor mimicry response",
+   "researchers": "J. Pfeifer et al.",
+   "question": "Are the brains of children most open to peer pressure more prone to mimicking others' emotions?",
+   "method": "Ten-year-old children's brains were scanned while they watched short films containing hand movements and facial expressions; resistance to peer influence was assessed with a scale developed by Steinberg.",
+   "finding": "Premotor activity was highest in the children most susceptible to peer influence, but this held only for emotional facial expressions; there was no difference for hand movements.",
+   "roleInChapter": "Shows readiness to mimic another person's emotionality as a basic building block of conformity.",
+   "caveats": "Because the participants were ten years old, the authors framed the findings as a sign that may predict later adolescent behavior.",
+   "replication": {
+    "note": "No direct replication is known; it is a single-laboratory study with a small sample.",
+    "refs": []
+   }
+  },
+  "ch06-e9": {
+   "name": "Fairness views and acceptance of inequality",
+   "researchers": "I. Almås, A. Cappelen, E. Sørensen and B. Tungodden",
+   "question": "At what point, as children grow up, do they adopt achievement-based (meritocratic) principles instead of equality in sharing?",
+   "method": "From school age to late adolescence, Norwegian students divided earnings after a job between themselves and another person; whether the difference in earnings was due to effort or luck was varied (an adaptation of the Dictator Game).",
+   "finding": "Children's tendency to split equally was mostly replaced by meritocratic decisions in adolescence; a small number of utilitarian and libertarian choices were also seen. According to the book, adolescents grasp how individual circumstances affect behavior as well as adults do, but lag behind in grasping systemic circumstances.",
+   "roleInChapter": "Exemplifies that adolescents' moral judgments become increasingly nuanced but have not yet reached adult level.",
+   "replication": {
+    "note": "The same team has re-examined the distinction between merit and luck in different countries with similar paradigms; however, no independent replication of the age-related developmental finding is known.",
+    "refs": []
+   }
+  },
+  "ch06-e10": {
+   "name": "Development in evaluating intentional and accidental harm",
+   "researchers": "J. Decety and K. Michalska",
+   "question": "How do brain responses to intentional and accidental harm change from childhood to adulthood?",
+   "method": "Participants of different ages were scanned with fMRI while watching scenes in which someone was harmed intentionally or accidentally.",
+   "finding": "With increasing age, activity in three regions involved in pain processing (amygdala, insula, premotor areas) decreased in response to accidental harm; when intentional harm was considered, dlPFC and vmPFC activity increased. Harm done to people activated the amygdala increasingly more, and harm done to objects increasingly less.",
+   "roleInChapter": "Shows that grasping the pain of intentional harm is a frontal job and that moral sensitivity matures throughout adolescence.",
+   "replication": {
+    "note": "This is a cross-sectional fMRI study with a relatively small sample; no direct replication is known.",
+    "refs": []
+   }
+  }
+ },
+ "_uncertain": [
+  "ch06-e3: Turkish name 'Ergenlikte duygusal yüzlere tepki' has no standard literature name; I used 'Responses to emotional faces in adolescence' based on the citation title 'Facing Puberty: ... Neural Responses to Affective Facial Displays'.",
+  "ch06-e8: Turkish name has no standard literature name; I used 'Susceptibility to peer influence and premotor mimicry response' (citation title: 'Entering Adolescence: Resistance to Peer Influence...').",
+  "ch06-e9: 'liyakatçi' rendered as 'meritocratic' (Almas et al. use 'meritocrat'); 'faydacı' as 'utilitarian', 'liberter' as 'libertarian' (Almas et al. term 'libertarian egalitarian' may apply).",
+  "ch06-keyStudies: 'çekirdek accumbens' rendered as 'nucleus accumbens' (glossary term), and 'Cyberball' left untranslated as the standard name."
+ ]
+}

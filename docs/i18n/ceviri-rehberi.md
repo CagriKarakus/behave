@@ -56,7 +56,7 @@ Bölüm başlıkları zaten `titleEn` olarak `chapters.json` içinde vardır; ay
 
 ## Simülasyon metinleri
 - Her simülasyon klasöründe `text.tr.ts` (mevcut metin, **bire bir aynı**) ve `text.en.ts` (İngilizce) bulunur; `meta.ts` içine `en: { title, blurb }` eklenir (başlıklar aşağıda).
-- İngilizce metinde Türkçe harf (ç ğ ı ö ş ü İ) bulunmamalı (testle denetlenir; izinli istisna: kişi/yer adları).
+- İngilizce metinde Türkçe'ye özgü harf (ı ş ğ İ) bulunmamalı (hata); ç/ö/ü yalnızca yabancı özel adlarda (Müller, Bergmüller) kalabilir (uyarı).
 - Sayıların biçimi için ortak `src/i18n/fmt.ts` (`num`, `pct`, `pct1`, `percent`, `money`, `int`); Türkçe ondalık virgül/`%12`, İngilizce nokta/`12%`. `₺` → `$` (Sanfey ve ark. 2003).
 - Replikasyon durumu/güven etiketlerinin iç anahtarları (`sağlam`, `karışık`, `tartışmalı`, `bilinmiyor`; `yüksek`/`orta`/`düşük`) **kodda Türkçe kalır**; görünen metin `t()` ile gelir.
 

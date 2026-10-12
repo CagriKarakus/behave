@@ -1,0 +1,333 @@
+{
+ "summary": "The chapter starts from how status hierarchies work in nonhuman species and extends to humans' multiple hierarchies, the choice of leaders, and political orientation. What status means matters as much as status itself for health and stress; this is why the effects of poverty and inequality are especially destructive in humans. The second half of the chapter deals with conformity and obedience: people can go along with the group's decision, with authority, and with the crowd, often without thinking. The experiments of Asch, Milgram, and Zimbardo show how strong this tendency is, but the contested aspects of those same experiments, and the people who resist, are also described. In the end, the chapter stresses that situational pressures are powerful, but that resistance is also possible.",
+ "keyConcepts": [
+  {
+   "term": "Status hierarchy",
+   "explanation": "A ranking system that shapes inequality in access to limited resources; in nonhuman species it is stabilized by threat and display behaviors."
+  },
+  {
+   "term": "Social brain hypothesis",
+   "explanation": "The view that the brain, especially the neocortex, grows as social group size and social complexity increase; in humans this link is debated around Dunbar's number."
+  },
+  {
+   "term": "Meaning of rank",
+   "explanation": "Two individuals of the same rank can differ greatly in health depending on the behaviors that status brings, social support, and psychological burden; what matters is not the rank but the meaning of that rank."
+  },
+  {
+   "term": "Executive stress syndrome",
+   "explanation": "The idea that control and responsibility at the top create stress; the original experiments have been seriously questioned because of selection bias."
+  },
+  {
+   "term": "Socioeconomic status (SES)–health gradient",
+   "explanation": "The general pattern in which disease and mortality rates rise as one moves down the socioeconomic ladder; this relationship appears independent of access to health care and shows the effects of perceived status and income inequality."
+  },
+  {
+   "term": "Social capital",
+   "explanation": "Refers to the sense of trust and self-efficacy in a community; it is suggested that most of the effect of inequality on health is mediated by it."
+  },
+  {
+   "term": "Conformity",
+   "explanation": "The tendency of an individual to go along with the group's view despite their own perception; it appears sometimes as merely public compliance and sometimes as genuine change of opinion."
+  },
+  {
+   "term": "Obedience to authority",
+   "explanation": "The tendency to comply with the order of a leader or an institution; it varies strongly with situational factors such as proximity, legitimacy, and the distribution of responsibility."
+  },
+  {
+   "term": "Diffusion of responsibility",
+   "explanation": "When responsibility for an act is spread across many people, each individual feels less guilty about their own contribution; the firing squad and the two-syringe execution system are given as examples."
+  },
+  {
+   "term": "Ideological consistency",
+   "explanation": "The tendency for views on different issues such as the economy, the environment, morality, and foreign policy to move together, often as a single package; the roots of this consistency lie in cognitive style and emotional predispositions."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Group size and brain structure in captive macaques (neuroimaging)",
+   "finding": "In macaques living in larger groups, the prefrontal cortex (PFC) and the superior temporal gyrus (a region associated with Theory of Mind) were found to be thicker, and the activity coupling between the two regions was greater. This enlargement is also more pronounced in animals with high status within the group."
+  },
+  {
+   "name": "Brady's 1958 “executive monkey” experiment",
+   "finding": "“Executive” monkeys that could postpone the shocks developed more stomach ulcers despite their control, and the concept of “executive stress syndrome” was born. However, the monkeys were not chosen at random; they were picked from those that pressed the bar fastest in a pilot trial, which had placed anxious, emotionally reactive animals among the executives."
+  },
+  {
+   "name": "Sapolsky's wild baboon study and the Altmann–Alberts findings",
+   "finding": "Low-ranking male baboons had high basal glucocorticoid levels and responded more slowly to stressful situations. In contrast, the alpha males of the troops also showed elevated stress hormones; the reason was less status itself than the fact that alpha males fought more often and had to defend sexual consortships with females."
+  },
+  {
+   "name": "Asch conformity experiments (1950s)",
+   "finding": "Participants left alone almost never got the line length wrong, whereas in a group of seven that unanimously gave the wrong answer, about one-third of participants went along with the wrong answer. Conformity becomes noticeable from three people and peaks at around six people."
+  },
+  {
+   "name": "Milgram obedience experiments (1960s)",
+   "finding": "About 65% of participants continued to deliver shocks, although fake, up to 450 volts. Compliance dropped markedly when the authority was in a different room, when the experiment was held in an ordinary building, or when there was close contact with the learner. Gina Perry's archival review indicates that some of the data may have been inflated; even when the inflation is removed, the compliance rate is about 60%."
+  },
+  {
+   "name": "Stanford Prison Experiment (Zimbardo, 1971) and the 2001 BBC replication",
+   "finding": "When randomly selected volunteers took on the roles of guard and prisoner, the guards turned to degrading behavior and the experiment was stopped after six days. In the 2001 BBC replication of the same design, the prisoners organized and resisted abuse, and the guards' power collapsed; but the order was overthrown by a coup of the four people who had the highest authoritarianism scores at the start. Criticisms indicate that Zimbardo's role and the personality profile of the volunteers may have influenced the result."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "The Meaning of Status: Same Rank, Different Lives",
+   "shows": "Shows how the stress level of two individuals at the same hierarchical rank, their social bonds (grooming and support), and their risk of being picked on diverge depending on the variables. It makes concrete how meaning changes while rank stays fixed.",
+   "inputs": [
+    "Status rank (from 1 to 10)",
+    "Frequency of aggression directed from above",
+    "Grooming relationships and number of social supports",
+    "Whether there is an individual in a lower position who can be targeted"
+   ],
+   "outputs": [
+    "Relative stress level (indicator of basal stress)",
+    "Health risk score",
+    "Interpretation according to how the individual perceives status"
+   ]
+  },
+  {
+   "title": "The Asch Line Experiment: How Many People Force Conformity?",
+   "shows": "Shows the curve between group size and unanimity on the one hand and the conformity rate on the other; compliance that becomes noticeable at three people is seen to saturate at six. How the presence of a dissenter breaks this curve can also be tested.",
+   "inputs": [
+    "Number of people disagreeing (from 0 to 10)",
+    "Presence of a dissenting participant (yes/no)",
+    "Difficulty of the line difference"
+   ],
+   "outputs": [
+    "Rate of conforming to the wrong answer",
+    "Rate of independent answers",
+    "Change in the rate when a dissenter is present"
+   ]
+  },
+  {
+   "title": "Authority and Responsibility: Probability of Obedience",
+   "shows": "Shows how, in a Milgram-type setting, the proximity of the authority, the prestige of the venue, the distance of the learner, and the distribution of responsibility change the probability of obedience. The model should be used not as a prediction tool but as a teaching tool that visualizes the book's findings.",
+   "inputs": [
+    "Physical distance of the authority",
+    "Prestige level of the institution",
+    "Proximity of the learner (same room or handshake)",
+    "Whether responsibility is shared (signature on a form, “you are not responsible”)",
+    "Number of objectors alongside"
+   ],
+   "outputs": [
+    "Percentage reaching the highest shock level",
+    "Proportion of participants who stop",
+    "Effect of gradual escalation (long-term escalation)"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "The book describes this chapter as the natural continuation of the Us/Them distinction; the interaction between within-group hierarchy and between-group distinctions is discussed."
+  },
+  {
+   "why": "The socioeconomic status (SES)–health gradient, social capital, and the effect of inequality on health are described in detail in Chapter 9."
+  },
+  {
+   "why": "The chapter refers directly to the vocalization experiments in Chapter 10 and to the evolutionary framework of cooperation and social games."
+  },
+  {
+   "why": "Brain mechanisms such as the amygdala, the frontal cortex, and the response to uncertainty rest on the basic concepts in Chapter 2."
+  },
+  {
+   "why": "The relationship between testosterone and status is reconsidered together with the “challenge hypothesis” discussed in detail in Chapter 4."
+  },
+  {
+   "why": "Kohlberg's stages of moral development and peer pressure in children are examined in Chapter 7; they connect to the discussion of conformity and political morality in this chapter."
+  },
+  {
+   "why": "Facial attractiveness and the moral superiority attributed to the good-looking were covered in Chapter 3 and are mentioned again here in the context of voter preferences."
+  },
+  {
+   "why": "Twin studies and genome-scan findings on the genetic basis of political orientation are compared with the study limitations described in Chapter 8."
+  },
+  {
+   "why": "The link between political orientation and the emotion of disgust is noted as something to be revisited later in the book."
+  }
+ ],
+ "experiments": {
+  "ch12-e1": {
+   "name": "Group size and brain structure in macaques (Sallet et al.)",
+   "researchers": "J. Sallet et al.",
+   "question": "Does the size of the social network change the brain regions involved in social cognition in primates?",
+   "method": "Captive macaques were placed in groups of different sizes. Brain imaging was used to measure the thickness of the prefrontal cortex (PFC) and of the superior temporal gyrus, which is associated with Theory of Mind, as well as the activity coupling between these two regions; the animals' rank within the group was also recorded.",
+   "finding": "As the group grew, the prefrontal cortex (PFC) and the superior temporal gyrus became thicker and the activity of the two regions became more tightly coupled. In animals that reached a higher rank within the group, this enlargement and coupling were more pronounced.",
+   "roleInChapter": "Shows that social complexity shapes brain structure. It is the main evidence for the chapter's claim of a link between the “social brain” and status.",
+   "caveats": "Sapolsky notes that the animals were not imaged before and after group formation, so this study cannot resolve whether the brain shapes status or status shapes the brain; he adds that later studies suggest that reaching a high rank triggers the growth.",
+   "replication": {
+    "note": "Although later work by the same Oxford team (Noonan et al. 2014) supports circuits related to social status, a direct replication of the group-size effect by an independent laboratory is not known. The number of animals was relatively small.",
+    "refs": [
+     "Sallet et al. 2011",
+     "Noonan et al. 2014"
+    ]
+   }
+  },
+  "ch12-e2": {
+   "name": "Infants' expectations of hierarchy (the squares experiment)",
+   "researchers": "L. Thomsen et al.",
+   "question": "Do very young infants notice the dominance relationship between two objects and a violation of it?",
+   "method": "Infants were shown two squares on a screen, one large and one small, each with eyes and a mouth. First the squares passed each other as they crossed from opposite ends of the screen; then they met in the middle and collided repeatedly, and finally one bowed down and gave way to the other. The infants' looking times were measured. To rule out a physical explanation, the squares did not touch each other while giving way, and the square that gave way fell forward in front of the other, not backward as if it had been pushed.",
+   "finding": "Infants looked longer at the scene in which the large square gave way to the small one than at the scene in which the small one gave way to the large one; the outcome that violated their expectation was more interesting. Whichever square won, infants looked longer at the conflict scene than at the scene in which the squares passed peacefully.",
+   "roleInChapter": "Shows that the perception of status differences begins very early in humans. It supports the idea that interest in hierarchy is not learned but an ability present early in development.",
+   "caveats": null,
+   "replication": {
+    "note": "The finding that infants represent social dominance has been conceptually supported by other looking-time studies (e.g., Mascaro and Csibra 2012); however, no large-scale direct replication of this experiment is known. Infant looking-time studies in general suffer from small-sample problems.",
+    "refs": [
+     "Thomsen et al. 2011",
+     "Mascaro and Csibra 2012 (PNAS)"
+    ]
+   }
+  },
+  "ch12-e3": {
+   "name": "Brady's “executive monkey” experiment",
+   "researchers": "J. Brady et al.",
+   "question": "Does having control and predictability reduce an animal's stress, or is being at the top more stressful?",
+   "method": "Half of the monkeys could postpone the shocks by pressing a lever (the “executive” monkeys); the matched passive monkeys received the same shock whenever the executive received one. The executives were not chosen at random: those that pressed the lever earliest in preliminary trials were made executives.",
+   "finding": "Executive monkeys, which had control and predictability, developed ulcers more often. This result gave rise to the idea that those who carry responsibility experience more stress, that is, “executive stress syndrome.”",
+   "roleInChapter": "Shows that the effect of status on stress is not simple. It is the experiment that first brought out the burden of responsibility and control on the person at the top; the chapter later questions this idea.",
+   "caveats": "Sapolsky notes that the executives were chosen not at random but from those that pressed the lever earliest in preliminary trials, and that since these monkeys later turned out to be more emotionally reactive, Brady had unwittingly filled his executive group with animals prone to ulcers. According to current studies, the worst stress-related health is seen in the middle tier, where high demand and low autonomy combine.",
+   "replication": {
+    "note": "In later experiments with random assignment (Weiss's rat studies), the result reversed: animals with control developed fewer ulcers than their counterparts without control. Brady's finding is now regarded as a classic example of selection bias.",
+    "refs": [
+     "Weiss 1968",
+     "Weiss 1971 (Journal of Comparative and Physiological Psychology)"
+    ]
+   }
+  },
+  "ch12-e4": {
+   "name": "Sapolsky's wild baboon study",
+   "researchers": "R. Sapolsky",
+   "question": "What effect does low status have on stress hormones and the stress response in wild baboons?",
+   "method": "Wild baboons in East Africa were followed for many years; these were the first studies of this kind in wild primates. Male baboons' basal glucocorticoid levels, their hormonal response at the moment of stress, and the speed of return to the former level after the stressor had passed were measured and compared by rank; indicators of blood pressure, HDL cholesterol, immunity, and the reproductive system were also examined.",
+   "finding": "Low-ranking males had high basal glucocorticoid levels; their responses at the moment of stress remained relatively heavy, and their levels fell more slowly once the stressor had passed. In addition, their blood pressure was higher and their “good” HDL cholesterol was lower; their immunity was weak, their wound healing was slow, and their reproductive systems were more fragile against stress. At the level of mechanism, the picture resembled that in major depression in humans.",
+   "roleInChapter": "It is the first field evidence that the effect of status on health depends less on the animal's place in the hierarchy itself than on the meaning of that place.",
+   "caveats": "Sapolsky writes that he first took these findings to be the nature of “hierarchy” in general and of being at the bottom, but that this turned out to be “completely wrong”: the result depends on the stability of the hierarchy, on the species, and on the individual's way of coping. In wild animals it cannot be determined whether physiology determines rank or rank determines physiology; in captive primates the differences generally appear after the rank has formed.",
+   "replication": {
+    "note": "Elevated stress hormones in subordinates have been shown in many species; however, comparative analyses (Abbott et al. 2003) revealed that this does not hold in every species and every hierarchy, and that it depends on how rank is maintained and on social support. This is consistent with Sapolsky's own correction.",
+    "refs": [
+     "Abbott et al. 2003",
+     "Sapolsky 2005"
+    ]
+   }
+  },
+  "ch12-e5": {
+   "name": "Stress in alpha baboons (Altmann and Alberts findings)",
+   "researchers": "L. R. Gesquiere, J. Altmann, S. C. Alberts et al.",
+   "question": "In a stable hierarchy, why might the males at the very top be more stressed than those lower down?",
+   "method": "In wild baboons in Amboseli, Kenya, males' glucocorticoid levels within stable hierarchies were tracked by rank using fecal samples. Alpha and beta males were compared in terms of challenges from lower-ranking males, being groomed by females, fight frequency, and mating consortships with females.",
+   "finding": "Overall, lower-ranking males had high stress hormones, but the alphas' levels unexpectedly rose as high as those of the lowest-ranking males. Alpha and beta males faced challenges at a similar frequency and were groomed at a similar frequency; the difference was created by the alphas fighting more often and spending more time in mating consortships, in which they had to guard females against the other males.",
+   "roleInChapter": "Shows that being at the top is not always stressful, but that the behaviors that status brings can create stress. It makes concrete the importance of the meaning of status.",
+   "caveats": "Sapolsky emphasizes that this result does not mean “being on top is stressful”; the source of the stress is not status itself but the burden of fighting and sexual defense that status brings.",
+   "replication": {
+    "note": "A solid observation based on the long-running Amboseli data, but no direct replication showing that alpha males' stress levels rise in the same way in other populations is known; the result most likely depends on the dynamics of the hierarchy.",
+    "refs": [
+     "Gesquiere et al. 2011"
+    ]
+   }
+  },
+  "ch12-e6": {
+   "name": "Competent-looking candidates and election outcomes (Todorov et al.)",
+   "researchers": "A. Todorov et al.",
+   "question": "Do voters vote according to whether candidates look competent at a brief glance at their faces?",
+   "method": "Participants looked briefly at the faces of real election candidates they did not know and decided which looked more competent. These judgments were compared with the candidates' actual election results.",
+   "finding": "The faces that looked more competent won 68% of the elections.",
+   "roleInChapter": "Shows that the choice of leaders begins with an automatic evaluation of the face, before conscious reasons. It supports the chapter's thesis that “people choose their leaders by unconscious criteria.”",
+   "caveats": null,
+   "replication": {
+    "note": "The finding that competence judgments from faces predict election outcomes has been repeated in other countries and with different samples, even with children (Antonakis and Dalgas 2009); the predictive power varies with context and the voter's level of knowledge.",
+    "refs": [
+     "Ballew and Todorov 2007 (PNAS)",
+     "Antonakis and Dalgas 2009"
+    ]
+   }
+  },
+  "ch12-e7": {
+   "name": "Judges' parole decisions and the food break",
+   "researchers": "S. Danziger et al.",
+   "question": "Are court decisions affected by non-legal factors, for example by judges' hunger?",
+   "method": "More than 1,100 decisions made by parole boards in Israel were examined. The order of decisions within the day and their position relative to the judges' food breaks were compared with the rate of release.",
+   "finding": "Right after the judges had eaten, the release rate was about 60%; just before a food break it fell to nearly zero. There was also a general decline over the tiring day.",
+   "roleInChapter": "A real-world example showing that conditions such as cognitive load and fatigue make judgments, even decisions of justice, open to irrelevant factors; in the chapter it is tied to the idea that hunger and the metabolic cost of self-control affect decision making.",
+   "caveats": null,
+   "replication": {
+    "note": "Weinshall-Margel and Shapard (2011) showed that the order of cases was not random (prisoners without legal representation were left to the end of the day); Glöckner (2016) showed by simulation that most of the effect could arise from such ordering and session-scheduling artifacts. The size of the effect is now generally considered exaggerated.",
+    "refs": [
+     "Weinshall-Margel and Shapard 2011 (PNAS)",
+     "Glöckner 2016 (Judgment and Decision Making)"
+    ]
+   }
+  },
+  "ch12-e8": {
+   "name": "Asch conformity experiments",
+   "researchers": "Solomon Asch",
+   "question": "To what extent does one go along with a clearly wrong judgment under group pressure?",
+   "method": "At Swarthmore College in the early 1950s, volunteers who thought they were taking part in a perception study were shown two cards: one had a single line, the other had three lines of different lengths, and they were to be asked which one was the same length as the single line. In the experimental group, the participant answered aloud in turn in the same room with seven people; those other seven were working with the researcher, the participant was “by chance” the last to speak, and the earlier speakers unanimously picked the clearly wrong line.",
+   "finding": "People answering alone made errors in about 1% of trials. Facing a unanimous wrong majority, participants went along with the wrong answer in about one-third of trials. According to Asch's later experiments, conformity began with a unanimous majority of at least three people and reached its highest level at around six people.",
+   "roleInChapter": "Shows that group pressure can change even an independent judgment. It is the foundational experiment of the chapter's section on conformity.",
+   "caveats": "Sapolsky notes that these results cannot be transferred directly from the line-length task in the laboratory to the real world. The effect of a group of six does not approach the effect of a crowd of thousands.",
+   "replication": {
+    "note": "The conformity effect has been repeated in many countries over decades; the meta-analysis by Bond and Smith (1996) showed that the effect has declined over time in the US and is stronger in collectivist cultures. Whether the effect stems from internal change of opinion or from public compliance continues to be debated.",
+    "refs": [
+     "Bond and Smith 1996 (Psychological Bulletin)"
+    ]
+   }
+  },
+  "ch12-e9": {
+   "name": "Milgram obedience experiments",
+   "researchers": "S. Milgram",
+   "question": "When an authority gives the order, do ordinary people obey in a way that inflicts pain on another?",
+   "method": "In the early 1960s at Yale, of two volunteers taking part in a “memory study,” one became the “teacher” and the other the “learner”; the learner was in fact an actor working with the researchers. Working in separate rooms, without hearing or seeing each other, the teacher believed that he was giving the learner shocks of increasing intensity (up to 450 volts) at each wrong answer; at the start he had been given a real sample shock. When the teacher hesitated, the researcher in a lab coat beside him asked him to continue with increasingly firm commands and said that the responsibility was not his.",
+   "finding": "Most volunteers obeyed even as they protested and even wept; in the first study 65% went up to 450 volts, the highest shock. In later variations, obedience decreased when the researcher was in another room, when the experiment was held in an ordinary office instead of Yale, or when the learner was in the same room as the teacher.",
+   "roleInChapter": "Shows that situational pressure (authority, the diffusion of responsibility, distance from the victim) can bring ordinary people to the point of causing harm. It is the center of the chapter's discussion of obedience.",
+   "caveats": "According to Gina Perry's review of Milgram's unpublished documents and recordings, teachers had refused to give shocks much more often than reported, and many of them had realized that the learner was an actor. According to the book, an obedience rate of about 60% has been repeated, but most of the repetitions are reenactments made for film and television, not peer-reviewed academic studies.",
+   "replication": {
+    "note": "In a partial replication stopped at 150 volts for ethical reasons, Burger (2009) found an obedience rate close to the original; a replication in Poland (Doliński et al. 2017) also reported high obedience. On the other hand, Perry's archival work and the interpretations of Haslam and Reicher argue that the results should be read not as “blind obedience” but as identification with the scientific purpose of the experiment; the size and meaning of the effect are contested.",
+    "refs": [
+     "Burger 2009 (American Psychologist)",
+     "Doliński et al. 2017 (Social Psychological and Personality Science)",
+     "Perry 2013"
+    ]
+   }
+  },
+  "ch12-e10": {
+   "name": "Stanford Prison Experiment",
+   "researchers": "P. Zimbardo, C. Haney, W. C. Banks",
+   "question": "What happens when randomly selected ordinary volunteers take on the roles of guard and prisoner?",
+   "method": "In 1971, 24 young male volunteers, mostly university students, were randomly divided into 12 “prisoners” and 12 “guards”; the prisoners were to stay seven to fourteen days in a mock prison in the basement of the Stanford psychology department. The Palo Alto police “arrested” the prisoners at their homes. Zimbardo took the role of “warden” and told the guards that they could make the prisoners experience fear, helplessness, and humiliation without using violence.",
+   "finding": "The guards imposed meaningless and degrading rituals on the prisoners, confined them in cells, set them against one another, and called them by number instead of by name; they put down a revolt with a fire extinguisher. Over time most of the prisoners fell into passivity and hopelessness. The experiment was stopped on the sixth day at the insistence of the graduate student Christina Maslach.",
+   "roleInChapter": "Shows that situational forces can drive even normal people to cruel behavior. This is the experiment at the center of the chapter's “bad barrel” and “bad apple” debate.",
+   "caveats": "Sapolsky notes that Zimbardo, by setting the rules as “warden” rather than acting as a neutral observer and by meeting regularly with the guards, may have pushed them toward more extreme behavior. In 2007 it was shown that people who responded to an advertisement for a study that mentioned the word “prison” turned out to be more aggressive, authoritarian, and oriented toward social dominance (Sapolsky adds that it is unclear why this would skew the result only in favor of the guards). Zimbardo published little of the data in peer-reviewed journals, and there has been only one replication attempt.",
+   "replication": {
+    "note": "Le Texier (2019) showed, with archival documents and recordings, that the guards were largely coached on what to do and that the experiment was staged; Haslam, Reicher, and Van Bavel (2019) also argued that the results cannot be interpreted as a “spontaneous adoption of roles.” Today the experiment is regarded not as a replication but as a demonstration with serious methodological problems.",
+    "refs": [
+     "Le Texier 2019 (American Psychologist)",
+     "Haslam, Reicher, and Van Bavel 2019 (American Psychologist)"
+    ]
+   }
+  },
+  "ch12-e11": {
+   "name": "2001 BBC Prison Study",
+   "researchers": "S. Reicher and S. A. Haslam",
+   "question": "When the design of the Stanford Prison Experiment is set up again, does the guard-prisoner dynamic produce the same result?",
+   "method": "In the study carried out by Stephen Reicher of St Andrews and Alex Haslam of Exeter, financed by the BBC and filmed for a documentary, the basic design of the SPE was set up again; volunteers were divided into guard and prisoner roles, and personality measures such as authoritarianism were taken from the start.",
+   "finding": "The prisoners organized and resisted abuse; the guards' power collapsed and a cooperative, sharing form of governance was established. But this order was short-lived: the four people with the highest authoritarianism scores at the start of the experiment (three prisoners, one guard) overthrew the order and set up a repressive regime, and the study was ended.",
+   "roleInChapter": "That the same design gave a different result shows that, alongside the situation, the participants' personality profile also matters. It is the counter-evidence in the chapter's “bad barrel or bad apple” debate.",
+   "caveats": "Zimbardo argued that role assignments could not truly be random, that filming made the study unscientific, and that an order in which prisoners take over the prison could not be a model for anything. Reicher and Haslam objected, citing real prisons such as Maze and Robben Island, where prisoners actually took over control. Sapolsky notes that the fact that the four who set up the repressive regime at the end had scored highest on authoritarianism at the start supports the “bad apples” explanation.",
+   "replication": {
+    "note": "A one-off study made for television; it has not been repeated. Its interpretation based on group identity and leadership has been influential in the social identity literature, but the generalizability of the findings has not been tested.",
+    "refs": [
+     "Reicher and Haslam 2006",
+     "Haslam and Reicher 2012"
+    ]
+   }
+  }
+ },
+ "_uncertain": [
+  "ch12-e11: Turkish name '2001 BBC Hapishane Deneyi'; I used '2001 BBC Prison Study' because the cited paper title is 'The BBC Prison Study' (Reicher and Haslam 2006). The Turkish 'Deney' could also be rendered 'Experiment'.",
+  "ch12-e2: name '(kare deneyi)' rendered 'the squares experiment'; the literature title is 'Big and Mighty: Preverbal Infants Mentally Represent Social Dominance'; no standard short name.",
+  "ch12-e1: Turkish name has no standard literature name; I used 'Group size and brain structure in macaques (Sallet et al.)' (paper title: 'Social Network Size Affects Neural Circuits in Macaques').",
+  "ch12-e5: name kept as 'Stress in alpha baboons (Altmann and Alberts findings)'; paper title is 'Life at the Top: Rank and Stress in Wild Baboons'.",
+  "ch12-e8 / keyStudies: Turkish keyStudies says about one-third of participants conformed, while ch12-e8 says one-third of trials; translated each faithfully (source inconsistency).",
+  "ch12-e9: method says teacher and learner worked 'without hearing or seeing each other' yet finding mentions varying proximity; translated faithfully from Turkish.",
+  "ch12 summary: 'konformizm' rendered as 'conformity' (glossary term); 'Dunbar sayisi' as 'Dunbar's number'."
+ ]
+}

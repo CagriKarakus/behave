@@ -1,0 +1,101 @@
+{
+ "summary": "Appendix 1 summarizes the basic workings of the nervous system, which are needed to follow the rest of the book. It explains that a neuron carries an electrical signal from the dendrites toward the axon, and that this signal propagates in an all-or-none fashion depending on a threshold value. It notes that communication between neurons takes place at synapses via neurotransmitters, and that receptors, reuptake pumps and enzymes regulate this transmission. Examples of circuits follow, such as negative feedback, feed-forward and lateral inhibition, and two types of pain circuit. The appendix closes by stressing that the function of brain regions must be understood within connections and networks.",
+ "keyConcepts": [
+  {
+   "term": "Resting potential",
+   "explanation": "When a neuron is not generating a signal, its inside is negatively charged relative to the outside, and this state is actively maintained by pumps. According to the text, neurons spend about half of their energy on these pumps."
+  },
+  {
+   "term": "Action potential and threshold",
+   "explanation": "When the resting value of about -70 mV at the initial segment of the axon reaches the threshold, a large flow of ions begins. This produces a signal that travels in an all-or-none fashion."
+  },
+  {
+   "term": "Summation",
+   "explanation": "A single dendritic input usually creates only a ripple and dies out; for the signal to reach the axon, many inputs must arrive together."
+  },
+  {
+   "term": "Synapse and neurotransmitter",
+   "explanation": "A signal is transmitted when chemical messengers released from vesicles at the axon terminal cross the synaptic cleft and bind to the postsynaptic receptor. The binding is explained with the lock-and-key analogy."
+  },
+  {
+   "term": "Dale's principle",
+   "explanation": "This is the rule that the same type of neurotransmitter is released at all of a neuron's terminals. Thus one can speak of a neuron's chemical identity."
+  },
+  {
+   "term": "Reuptake and degradation",
+   "explanation": "After neurotransmitters detach from the receptor, they are either taken back up by reuptake pumps or broken down by enzymes. These two routes determine the duration of the synaptic signal."
+  },
+  {
+   "term": "Types of inhibition (feedback, feed-forward, lateral inhibition)",
+   "explanation": "Negative feedback shortens the signal, feed-forward inhibition sharpens the signal in time, and lateral inhibition increases spatial contrast by silencing neighboring neurons."
+  },
+  {
+   "term": "Neuropharmacology",
+   "explanation": "Drugs strengthen the synaptic signal by increasing synthesis, mimicking the receptor, or blocking reuptake; they weaken it by blocking the receptor."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Melzack and Wall (1965) gate control circuit for pain",
+   "finding": "They proposed that the two types of pain, sharp and sustained, arise from different circuits of fast and slow fibers. This model, in which an interneuron blocks the pain signal in the circuit, was first proposed theoretically, and it was later shown that this connection exists in the nervous system."
+  },
+  {
+   "name": "Golgi stain and Cajal's observations of single neurons",
+   "finding": "With Golgi's staining technique, neurons could be stained one by one, and the stain did not spread from one neuron to another. This finding supported the view that nerve cells are separate units rather than a single fused network; synapses, in turn, could be seen with the electron microscope in the 1950s."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Synaptic Transmission Simulator",
+   "shows": "Shows how presynaptic release, synaptic clearance and the postsynaptic receptor response are linked to one another. It makes it possible to observe how reuptake and enzyme activity change the duration of the signal.",
+   "inputs": [
+    "Amount of neurotransmitter released",
+    "Receptor density",
+    "Reuptake pump activity",
+    "Rate of enzymatic degradation"
+   ],
+   "outputs": [
+    "Neurotransmitter concentration in the synaptic cleft over time",
+    "Magnitude and duration of the postsynaptic response"
+   ]
+  },
+  {
+   "title": "Threshold and Summation Simulator",
+   "shows": "Shows how inputs from the dendrites are summed at the initial segment of the axon and whether they exceed the threshold. It visualizes the transition from analog summation to a digital action potential.",
+   "inputs": [
+    "Number of dendrites stimulated simultaneously",
+    "Threshold value",
+    "Temporal proximity of the inputs"
+   ],
+   "outputs": [
+    "Membrane potential time graph",
+    "Whether an action potential is generated"
+   ]
+  },
+  {
+   "title": "Circuit Simulator: Feedback and Lateral Inhibition",
+   "shows": "Shows how negative feedback, feed-forward inhibition and lateral inhibition sharpen the output signal.",
+   "inputs": [
+    "Strength of the feedback connection",
+    "Number of inhibitory connections",
+    "Level of excitation of neighboring neurons"
+   ],
+   "outputs": [
+    "Sharpness of the output signal over time",
+    "Signal-to-noise ratio of the target neuron"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "Appendix 1 recalls the main text's framing of the “nervous system” and its definition of a neurotransmitter, with reference to chapter 2."
+  },
+  {
+   "why": "The introduction to Appendix 2 is a continuation of the “Brain 101” basics in this appendix."
+  },
+  {
+   "why": "Appendix 3 reuses the lock-and-key analogy with reference to “appendix 1”; the receptor-and-messenger relationship is shared by the two appendices."
+  }
+ ],
+ "verifyNotes": []
+}

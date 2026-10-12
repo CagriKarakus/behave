@@ -1,0 +1,103 @@
+{
+ "summary": "Appendix 2 compares neurotransmitters with hormones: hormones enter the bloodstream, can affect many cells, and their effects emerge over hours and days. It explains that axes made up of the hypothalamus, the pituitary and a peripheral gland work in a stepwise fashion, using the chain of CRH, ACTH and cortisol during stress. It notes that hormones are produced cheaply from simple precursors, and that their effect on the target cell is tuned by receptor number, binding strength and the distribution of the receptor. Finally, it stresses that hormones have permanent effects during development and transient effects in adulthood.",
+ "keyConcepts": [
+  {
+   "term": "Hormone vs. neurotransmitter",
+   "explanation": "A neurotransmitter works within milliseconds in the synaptic cleft, whereas a hormone enters the blood and produces an effect that lasts hours or days and reaches distant cells."
+  },
+  {
+   "term": "Neuroendocrine axis",
+   "explanation": "In the chain among the hypothalamus, the pituitary and a peripheral gland, each step stimulates or suppresses the next. In this way the brain controls the hormonal response indirectly."
+  },
+  {
+   "term": "Chain of stress hormones (CRH, ACTH, cortisol)",
+   "explanation": "During stress the hypothalamus releases CRH, which stimulates the release of ACTH from the pituitary, and ACTH in turn causes the adrenal gland to release cortisol, a glucocorticoid."
+  },
+  {
+   "term": "Receptor number and avidity",
+   "explanation": "The number of receptors on the target cell and their binding strength determine the effect as much as the hormone level does. The text explains this with the analogy of the hormone's voice and the receptor's sensitivity."
+  },
+  {
+   "term": "Target cell specificity",
+   "explanation": "The receptors for a hormone are found only in certain cells and tissues. Therefore, even if the hormone is in the systemic circulation, its effect remains limited."
+  },
+  {
+   "term": "Organizational and activational effects",
+   "explanation": "Organizational effects permanently shape the structure of the brain during development; activational effects last hours or days and trigger adult behavior."
+  },
+  {
+   "term": "Cheap synthesis",
+   "explanation": "Hormones are produced from simple precursors, protein or cholesterol, in a few biosynthetic steps. All steroid hormones come from the same cholesterol precursor."
+  },
+  {
+   "term": "Receptor discrimination",
+   "explanation": "So that structurally similar steroid hormones do not get mixed up, receptors must be able to discriminate finely."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Endocrine Axis",
+   "shows": "Shows how the HPA and HPG axes and the glucose–insulin relationship in the pancreas are balanced by feedback. Compares how receptor number, binding eagerness and fussiness change the hormone's effect; the durations of action of a neurotransmitter and a hormone; and the difference between organizational and activational effects.",
+   "inputs": [
+    "Stimulus intensity (stress or hunger)",
+    "Axis choice (HPA, HPG, pancreas)",
+    "Feedback strength",
+    "Receptor number",
+    "Binding eagerness (avidity)",
+    "Fussiness (selectivity)",
+    "Signal type (neurotransmitter or hormone)",
+    "Period of action (development or adulthood)"
+   ],
+   "outputs": [
+    "Hormone level timeline",
+    "Receptor saturation curve",
+    "Time to return to balance through feedback",
+    "Comparison of permanent (organizational) and transient (activational) effects"
+   ]
+  },
+  {
+   "title": "Signal Timescale Comparison",
+   "shows": "Shows the durations and ranges of action of a neurotransmitter and a hormone side by side. Visualizes the difference between a local signal on the millisecond scale and a circulating signal on the scale of hours to days.",
+   "inputs": [
+    "Signal type (neurotransmitter or hormone)",
+    "Rate of signal decay",
+    "Number of target cells"
+   ],
+   "outputs": [
+    "Duration-of-effect graph",
+    "Change in the number of affected cells over time"
+   ]
+  },
+  {
+   "title": "Target Tissue Selectivity Map",
+   "shows": "Shows the difference between tissues that have receptors for a hormone and those that do not. Explains why the presence of a receptor makes different tissues respond differently to the same hormone.",
+   "inputs": [
+    "Hormone concentration",
+    "Receptor presence in the tissue",
+    "Receptor sensitivity"
+   ],
+   "outputs": [
+    "Map of responding tissues",
+    "Response threshold by hormone level"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "Appendix 2 begins with reference to the main text's definition of a neurotransmitter and to synaptic communication in chapter 2."
+  },
+  {
+   "why": "Appendix 2 begins by noting that the basic nervous system knowledge in Appendix 1 is complete; it is a continuation of the “Brain 101” flow."
+  },
+  {
+   "why": "The organizational effects of hormones in childhood and fetal life are discussed in chapter 7, and this appendix recalls them."
+  },
+  {
+   "why": "The effects of hormones such as glucocorticoids, testosterone and oxytocin on behavior are discussed in chapter 4; this appendix explains the endocrine basis of that chapter."
+  },
+  {
+   "why": "The precursors and receptors of hormones rest on protein structure; this is related to the concepts of protein shape and binding in appendix 3."
+  }
+ ],
+ "verifyNotes": []
+}

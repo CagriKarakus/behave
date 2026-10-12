@@ -5,7 +5,9 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 const src = JSON.parse(readFileSync(new URL('../content/chapters.json', import.meta.url), 'utf8'));
 const glossary = JSON.parse(readFileSync(new URL('../content/glossary.json', import.meta.url), 'utf8'));
 const dir = new URL('../content/en/', import.meta.url);
-const TR_CHARS = /[çğışöüÇĞİŞÖÜ]/;
+// Yalnızca Türkçe'ye özgü harfler (ı ş ğ İ) hata; ç ö ü yabancı özel adlarda (Müller, François) de geçer, uyarı verilir.
+const TR_CHARS = /[ışğİŞĞ]/;
+const SOFT_CHARS = /[çöüÇÖÜ]/;
 const ALLOWED = new Set(['timescale', 'summary', 'keyConcepts', 'keyStudies', 'simulationIdeas', 'links', 'verifyNotes', 'experiments', '_uncertain']);
 const EXP_KEYS = new Set(['name', 'researchers', 'question', 'method', 'finding', 'roleInChapter', 'caveats', 'replication']);
 
@@ -23,6 +25,7 @@ export function validate(id) {
   for (const k of Object.keys(o)) if (!ALLOWED.has(k)) E(`bilinmeyen alan: ${k}`);
   const text = (path, tr, en) => {
     if (typeof en !== 'string' || !en.trim()) { E(`${path}: boş/eksik`); return; }
+    if (SOFT_CHARS.test(en)) W(`${path}: ç/ö/ü var (özel ad değilse Türkçe sızmış olabilir): …${en.match(new RegExp('.{0,20}' + SOFT_CHARS.source + '.{0,20}'))?.[0]}…`);
     if (TR_CHARS.test(en)) E(`${path}: Türkçe harf var: …${en.match(new RegExp('.{0,25}' + TR_CHARS.source + '.{0,25}'))?.[0]}…`);
     const lo = en.toLowerCase();
     for (const t of glossary.terms) for (const a of t.avoid ?? []) if (a && lo.includes(a.toLowerCase())) E(`${path}: yasaklı varyant "${a}" (kullan: ${t.en})`);

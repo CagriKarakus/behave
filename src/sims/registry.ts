@@ -6,6 +6,7 @@
 // bu dosyaya dokunmak gerekmez.
 
 import { getLocale } from '../i18n/locale';
+import { setSimEn } from '../i18n/sim-text';
 
 export type Unmount = () => void;
 export type Mount = (container: HTMLElement) => Unmount;
@@ -28,6 +29,8 @@ export interface SimDef extends SimMeta {
 
 const metas = import.meta.glob<{ meta: SimMeta }>('./*/meta.ts', { eager: true });
 const views = import.meta.glob<{ mount: Mount }>('./*/view.ts');
+/** İngilizce metin tablosu (isteğe bağlı): yalnızca İngilizce modda ayrı parça olarak yüklenir. */
+const enTexts = import.meta.glob<{ default: unknown }>('./*/text.en.ts');
 
 function build(): Record<string, SimDef[]> {
   const out: Record<string, SimDef[]> = {};
@@ -35,7 +38,15 @@ function build(): Record<string, SimDef[]> {
     const viewPath = path.replace(/meta\.ts$/, 'view.ts');
     const loader = views[viewPath];
     if (!loader) throw new Error(`Simülasyon görünümü yok: ${viewPath}`);
-    const def: SimDef = { ...mod.meta, load: () => loader().then((m) => m.mount) };
+    const enLoader = enTexts[path.replace(/meta\.ts$/, 'text.en.ts')];
+    const def: SimDef = {
+      ...mod.meta,
+      load: async () => {
+        // İngilizce modda metin, görünüm çalışmadan önce hazır olmalı.
+        if (getLocale() === 'en' && enLoader) setSimEn(mod.meta.id, (await enLoader()).default);
+        return (await loader()).mount;
+      },
+    };
     (out[def.chapter] ??= []).push(def);
   }
   for (const list of Object.values(out)) list.sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.id.localeCompare(b.id));

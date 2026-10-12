@@ -1,0 +1,344 @@
+{
+ "timescale": "One second before",
+ "summary": "The chapter examines what happens in the brain immediately before a behavior and builds a framework that thinks of the brain in three functional layers; the author also stresses that these layers have no sharp boundaries. The amygdala, through circuits for threat and fear, plays a central role in both fear and angry aggression; however, fear and aggression are not always linked. The prefrontal cortex (PFC) restrains impulses, makes choices consistent with long-term goals possible, and constantly interacts with emotional signals. Dopamine is less about the arrival of a reward than about anticipating it; the difference between what is expected and what occurs, and uncertainty, are its strongest triggers. The author's formula for the frontal cortex is this: when the right thing is harder, it makes you do the hard thing. The balancing of these circuits against one another is the core of the brief calculation that precedes the choice of an action.",
+ "keyConcepts": [
+  {
+   "term": "Amygdala",
+   "explanation": "A limbic structure that rapidly evaluates threat, fear and emotional significance; the central nucleus governs the fear response, while the basolateral part governs the learning of fear."
+  },
+  {
+   "term": "Prefrontal cortex (PFC)",
+   "explanation": "Handles planning, impulse control and weighing of consequences; the dorsolateral part comes to the fore in cognitive decisions, and the ventromedial part in emotional decisions."
+  },
+  {
+   "term": "Dopamine and reward anticipation",
+   "explanation": "Dopamine rises before a reward occurs and signals according to the difference between what is expected and what occurs; for this reason it fuels movement and the pursuit of goals."
+  },
+  {
+   "term": "Impulse control",
+   "explanation": "The capacity of the prefrontal cortex to slow or alter fast, automatic responses coming from the amygdala; fatigue and stress weaken this capacity."
+  },
+  {
+   "term": "Neural shortcuts",
+   "explanation": "Sensory information can bypass the cortex and reach the amygdala directly, and motor outputs can also bypass cognitive approval; this speed is gained at the expense of accuracy."
+  },
+  {
+   "term": "Somatic markers",
+   "explanation": "The emotional consequences of options are simulated in the limbic system and shared with the prefrontal cortex; during decision-making they work like an emotional experience."
+  },
+  {
+   "term": "Uncertainty and dopamine",
+   "explanation": "When it is uncertain whether a reward will come, anticipatory dopamine rises to its highest level; gambling and addiction rely on this mechanism."
+  },
+  {
+   "term": "Serotonin and impulsivity",
+   "explanation": "A low serotonin signal is associated with impulsive rather than planned aggression, a preference for fast rewards, and behavioral impulsivity."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "LeDoux and the fear conditioning experiments (rats)",
+   "finding": "Pairing a tone with a shock causes neurons in the basolateral amygdala to connect to the central nucleus; through repeated pairings, the tone alone comes to produce a fear response. Later the fear is extinguished, and this results not from spontaneous forgetting by the amygdala but from the prefrontal cortex stepping in and suppressing it."
+  },
+  {
+   "name": "The Ultimatum Game in individuals with amygdala damage",
+   "finding": "These individuals respond unusually generously to unfair offers, and their rejection rates do not rise when they receive unfair offers. Because the amygdala adds a learned suspicion and vigilance to social decision-making, people respond more harshly to such offers when there is no damage. The authors describe the generosity of individuals with basolateral amygdala damage in the Trust Game as “pathological altruism.”"
+  },
+  {
+   "name": "Ernst Fehr's study silencing the dlPFC with TMS",
+   "finding": "When the dlPFC was temporarily silenced, participants impulsively accepted bad offers that they would normally reject in the hope of getting a better offer later. This effect appears only when the other player is a human; it does not change when playing against a computer. They continued to find the bad offers as unfair as the control group did; the problem lay not in the fairness judgment but in acting on that judgment."
+  },
+  {
+   "name": "Greene and Cohen's trolley problem scans",
+   "finding": "The thought of killing someone directly by pushing them with one's hands activates emotional regions, especially the amygdala and the vmPFC, and this emotional response holds a person back from pushing. Killing one person indirectly by pulling a lever is associated more with dlPFC activity."
+  },
+  {
+   "name": "Wolfram Schultz's monkey reward experiments",
+   "finding": "Dopamine neurons respond to the difference from what is expected rather than to the absolute amount of reward. A larger-than-expected reward produces an increase and a smaller-than-expected reward produces a decrease, and this scaling does not change even across a tenfold range of reward."
+  },
+  {
+   "name": "The Schultz group's reward probability experiments",
+   "finding": "When the reward arrives with only 50% probability rather than every time, the dopamine increase before the reward becomes markedly larger. When the probability is raised to 25% or 75%, this increase shrinks because uncertainty decreases; the strongest dopamine response is seen at the greatest uncertainty. Knutson's group, in turn, showed that medial PFC activity increases as reward probability increases."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "The One Second Before Circuit",
+   "shows": "Shows how the amygdala, the prefrontal cortex and the dopamine network influence one another in the response to a stimulus, and how threat, reward and control signals together turn into a behavioral choice.",
+   "inputs": [
+    "Threat intensity",
+    "Reward cue",
+    "Reward probability",
+    "Effort",
+    "Frontal strength",
+    "Stress"
+   ],
+   "outputs": [
+    "CeA fear",
+    "NAcc wanting",
+    "PFC control"
+   ]
+  },
+  {
+   "title": "Ultimatum Game",
+   "shows": "Shows how the response to an unfair offer changes depending on amygdala activity, prefrontal control, and the perception that the other player is a human or a computer.",
+   "inputs": [
+    "Fairness ratio of the offer",
+    "Amygdala sensitivity",
+    "Whether the dlPFC is temporarily silenced",
+    "Whether the other side is a human or a computer"
+   ],
+   "outputs": [
+    "Accept or reject decision",
+    "Level of anger and punishment",
+    "Minimum acceptable offer threshold"
+   ]
+  },
+  {
+   "title": "Reward Uncertainty Curve",
+   "shows": "Shows how the anticipatory dopamine signal rises and falls as the probability of reward changes, and why the peak signal appears at the intermediate probability where uncertainty is greatest.",
+   "inputs": [
+    "Reward probability (e.g., 25%, 50%, 75%)",
+    "Reward magnitude",
+    "Amount of unexpected surprise"
+   ],
+   "outputs": [
+    "Peak anticipatory dopamine",
+    "Change in dopamine after the surprise"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "This chapter forms the lowest rung of the time ladder established in the introduction."
+  },
+  {
+   "why": "The autonomic and stress responses triggered by the amygdala are continued in the third chapter, with effects extending from seconds to minutes."
+  },
+  {
+   "why": "The effects of stress on the amygdala and the prefrontal cortex, along with the hormonal connections, are addressed in the fourth chapter."
+  },
+  {
+   "why": "As seen in the Gage example, the ability of the prefrontal cortex to reorganize its functions after damage connects to the topic of brain plasticity."
+  },
+  {
+   "why": "The late maturation of the prefrontal cortex and how social exclusion changes the amygdala–prefrontal balance are examined in the context of adolescence."
+  },
+  {
+   "why": "Genetic variants associated with serotonin open up the genetic dimension of this chapter's findings on serotonin and impulsivity."
+  },
+  {
+   "why": "The in-group and out-group aspects of moral decisions vary with the context of the balance between the prefrontal cortex and emotional signals."
+  },
+  {
+   "why": "How seeing another's pain affects the sympathetic nervous system, and how it can suppress helping behavior, rests on this chapter's information about the autonomic nervous system."
+  },
+  {
+   "why": "How sensory and bodily cues (e.g., a cold drink) influence judgments is an example of information flow between layers."
+  },
+  {
+   "why": "The relationship of prefrontal cortex damage to criminal behavior and the neurolaw debate are connected to this chapter's findings."
+  },
+  {
+   "why": "That pulling a trigger may require more prefrontal effort than expected carries this chapter's framework of prefrontal control over to the topic of violence."
+  },
+  {
+   "why": "Neurotransmitters and the workings of the synapse explain the chemical basis of the circuits in this chapter."
+  },
+  {
+   "why": "The way moral judgment changes depending on how the question is asked, and the balance between intuition and reasoning, are addressed in ch13."
+  }
+ ],
+ "experiments": {
+  "ch02-e1": {
+   "name": "Berns's unpredictable shock study (anxiety and fear)",
+   "researchers": "Gregory Berns",
+   "question": "Does not knowing when a pain will arrive produce more fear and anxiety in the amygdala, independent of the pain itself?",
+   "method": "Participants in an fMRI scanner await foot shocks whose timing they do not always know in advance. In some trials they choose between waiting longer and receiving a weaker shock, or receiving a stronger shock immediately; brain activity during the waiting period is recorded.",
+   "finding": "The uncertainty and lack of control of waiting were found so aversive that many participants preferred to receive a stronger shock immediately. According to the book, in the rest, fearful anticipation during the waiting period activated the amygdala progressively more.",
+   "roleInChapter": "Shows that the amygdala responds not only to real threat but also to unpredictability and loss of control; explains the distinction between fear and anxiety.",
+   "caveats": null,
+   "replication": {
+    "note": "This is a single fMRI study with 32 participants. In the original paper, the most prominent between-group difference was found in regions associated with pain attention (caudal anterior cingulate); the emphasis on the amygdala is the book's interpretation. A tendency to choose to receive a painful stimulus immediately rather than postpone it has also been reported in later behavioral studies, but we know of no direct replication of the neuroimaging finding.",
+    "refs": []
+   }
+  },
+  "ch02-e2": {
+   "name": "LeDoux's fear conditioning experiments (rats)",
+   "researchers": "Joseph LeDoux et al.; M. Milad and G. Quirk (extinction)",
+   "question": "How does the basolateral amygdala learn to make a neutral tone produce a fear response, and how is learned fear extinguished?",
+   "method": "Rats are given a tone followed by an electric shock; through repeated pairings, the tone alone begins to produce freezing and a stress hormone response. Later the tone is repeated without the shock, and how the fear response declines is observed.",
+   "finding": "As the tone and shock are paired repeatedly, neurons in the basolateral amygdala connect to the central nucleus and it is learned that the tone alone produces fear. When these neurons are stimulated electrically, conditioning becomes easier; even a false fear can be taught without any shock. The extinction of fear results not from spontaneous forgetting by the amygdala but from the prefrontal cortex stepping in and activating inhibitory circuits.",
+   "roleInChapter": "By showing that fear is learned in the amygdala and that learned fear can be suppressed by the prefrontal cortex, it establishes the chapter's framework of amygdala–prefrontal cooperation.",
+   "caveats": null,
+   "replication": {
+    "note": "Pavlovian fear conditioning and the amygdala's role in this learning are among the most replicated findings in neuroscience; optogenetic studies have confirmed the causal role. That extinction is an active new learning mediated by the prefrontal cortex (infralimbic/vmPFC) has also been shown repeatedly in both rodents and humans.",
+    "refs": [
+     "Johansen et al. 2010",
+     "Milad and Quirk 2002",
+     "Phelps et al. 2004"
+    ]
+   }
+  },
+  "ch02-e3": {
+   "name": "Amygdala damage, generosity and rejection of unfair offers",
+   "researchers": "J. van Honk et al.; K. Gospic et al.",
+   "question": "How does basolateral amygdala damage change the anger and punishment response to unfair economic offers, and social trust?",
+   "method": "Individuals with selective basolateral amygdala damage (Urbach-Wiethe disease) are compared with healthy controls in economic games; the conditions in which they believe the other side is a human or a computer are examined separately. In addition, in healthy participants, the relationship between amygdala activity during unfair offers in the Ultimatum Game and the decision to reject is measured.",
+   "finding": "The more the amygdala is activated after an unfair offer, the higher the probability that the offer is rejected. Individuals with amygdala damage, on the other hand, according to the book behave unusually generously and do not increase their rejection rates when faced with unfair offers; yet they understand the rules, use the same strategy as controls when playing against a computer, and expect reciprocation as much as controls do. In the study by Van Honk et al., this generosity appeared in a Trust Game as investing about twice as much as controls in people they did not know.",
+   "roleInChapter": "Shows that the amygdala adds a learned suspicion and vigilance to social decisions, and that the default state is trust.",
+   "caveats": "Sapolsky says the findings suggest that the amygdala adds an implicit suspicion and vigilance to social decisions; this is an interpretation, not a direct measurement.",
+   "replication": {
+    "note": "The damage finding rests on only three Urbach-Wiethe patients, and such a small sample does not allow strong generalization. The amygdala–rejection relationship of Gospic et al. is a single pharmacological fMRI study; we know of no direct replications.",
+    "refs": []
+   }
+  },
+  "ch02-e4": {
+   "name": "Dog–cat morph images and PFC neurons (Freedman)",
+   "researchers": "D. Freedman, M. Riesenhuber, T. Poggio and E. Miller",
+   "question": "Do prefrontal cortex neurons encode visual stimuli by category?",
+   "method": "Monkeys learn to sort computer-generated cat and dog images into two categories. By morphing the images into one another, hybrids with different dog–cat ratios are produced, and the responses of neurons in the lateral prefrontal cortex are recorded.",
+   "finding": "Some PFC neurons responded to the “dog” category and others to the “cat” category. “Dog” neurons responded to 80% dog–20% cat or 60:40 hybrids as much as to an almost pure dog image, but at the 40:60 hybrid the “cat” neurons came into play; that is, the category boundary was sharp. When the monkeys learned new categories with the same images, the neuronal responses also changed according to the new boundary.",
+   "roleInChapter": "By showing that the brain divides a continuous variable into categories and that the PFC represents these boundaries, it ties into the chapter's theme of categorical thinking and the boundary fallacy.",
+   "caveats": null,
+   "replication": {
+    "note": "Learned category coding in prefrontal (and parietal) neurons was shown again in later monkey studies by Miller's group and other laboratories. Later studies also revealed that this coding is strongly dependent on task context and is not specific to the PFC alone.",
+    "refs": [
+     "Freedman and Assad 2006 (Nature)",
+     "McKee et al. 2014 (J Neurosci)"
+    ]
+   }
+  },
+  "ch02-e5": {
+   "name": "Silencing the right dlPFC with TMS and fairness (Knoch, Fehr et al.)",
+   "researchers": "Daria Knoch, Alvaro Pascual-Leone, Ernst Fehr et al.",
+   "question": "When the right dorsolateral PFC is temporarily silenced, can people no longer behave in line with principles of fairness toward unfair offers?",
+   "method": "Participants accept or reject offers as responders in the Ultimatum Game. The right or left dlPFC is temporarily suppressed with low-frequency transcranial magnetic stimulation (TMS), or sham stimulation is given; conditions in which the offer comes from a human versus a computer are compared.",
+   "finding": "Participants whose right dlPFC was suppressed accepted bad offers that they would normally reject more often. Although these people found the bad offers as unfair as the controls did, they behaved as if unable to carry out their fairness goals. The effect was seen only when there was a human on the other side; it disappeared when the offer came from a computer. Suppressing the left dlPFC had no effect.",
+   "roleInChapter": "Shows that the difference between finding something unfair and acting accordingly passes through prefrontal control; that the dlPFC plays a role in implementing social reciprocity goals.",
+   "caveats": null,
+   "replication": {
+    "note": "The same group's cathodal tDCS study gave a similar result, but there are also studies reporting that rTMS applied to the right dlPFC did not change the acceptance rate and only lengthened decision time. Because of the small samples and variable protocols of brain stimulation studies, the finding is not considered definitive.",
+    "refs": [
+     "Knoch et al. 2008 (Cereb Cortex)",
+     "van 't Wout et al. 2005 (NeuroReport)"
+    ]
+   }
+  },
+  "ch02-e6": {
+   "name": "Moral dilemmas in patients with vmPFC damage (Koenigs et al.)",
+   "researchers": "M. Koenigs et al.; L. Young et al.; B. Thomas et al.",
+   "question": "Does ventromedial prefrontal cortex (vmPFC) damage make judgment in moral dilemmas more utilitarian?",
+   "method": "Patients with vmPFC damage and healthy control participants are presented with moral scenarios in which one person's death could save five people. The scenarios compare sacrificing a family member, as well as cases of attempted intentional harm versus accidental death.",
+   "finding": "Patients with vmPFC damage were unusually willing to sacrifice one person, including a family member, to save five strangers. They looked at the outcome rather than the intention: they judged a person who caused an accidental death more harshly, while judging a person who attempted to kill but failed more leniently.",
+   "roleInChapter": "Shows that the emotional inputs of the vmPFC steer the decision; without this input, decisions become utilitarian but wrong.",
+   "caveats": null,
+   "replication": {
+    "note": "The tendency to respond more utilitarianly in personal moral dilemmas after vmPFC damage was also seen in other studies with different patient groups. However, whether these responses are truly “utilitarianism” or a weakening of the emotional response is contested, and the patient samples are small.",
+    "refs": [
+     "Ciaramelli et al. 2007 (SCAN)",
+     "Thomas et al. 2011",
+     "Kahane and Shackel 2008 (Nature, critique)"
+    ]
+   }
+  },
+  "ch02-e7": {
+   "name": "Iowa Gambling Task: covertly changing reward rates (Bechara et al.)",
+   "researchers": "A. Bechara, H. Damasio, D. Tranel and A. Damasio",
+   "question": "When reward rates change without being known, can people change their strategies even without conscious awareness, and does vmPFC damage affect this?",
+   "method": "Participants win or lose money by choosing cards from decks, some of which are tempting in the short term but cause losses in the long term, and others more modest but profitable. The payoffs of the decks are not told to participants. Healthy controls are compared with patients with vmPFC damage; skin conductance and participants' verbal reports of what they noticed are also recorded.",
+   "finding": "Control participants shifted to the optimal strategy before they could yet put into words which decks were better. Patients with vmPFC damage, on the other hand, continued to choose the disadvantageous decks even though they could verbalize the correct strategy.",
+   "roleInChapter": "Shows that emotional markers steer the decision; information alone is not enough, the “feeling” of negative feedback is needed. Supports the claim that the distinction between emotion and reason is false.",
+   "caveats": null,
+   "replication": {
+    "note": "The impairment of patients with vmPFC damage on this task has been replicated in many studies. In contrast, the claim that healthy participants choose correctly “before knowing” the strategy has been questioned: with more detailed questioning, participants were shown to have conscious knowledge very early on; the somatic marker theory is also contested.",
+    "refs": [
+     "Maia and McClelland 2004 (PNAS)",
+     "Dunn, Dalgleish and Lawrence 2006 (Neurosci Biobehav Rev)"
+    ]
+   }
+  },
+  "ch02-e8": {
+   "name": "Trolley dilemma scans (Greene and Cohen)",
+   "researchers": "J. Greene, J. Cohen et al.",
+   "question": "Which brain regions are active in the difference in judgment between killing a person by pushing them with our own hands and killing indirectly by pulling a lever?",
+   "method": "In an fMRI scanner, participants evaluate two versions of the trolley dilemma: pulling the switch lever to divert the trolley onto a side track, causing the death of one person there, or pushing a person in front of the trolley with their own hands. In both scenarios five people are saved; brain activity and the response given are recorded.",
+   "finding": "According to the book, 70–90% of people accept pulling the lever while 70–90% refuse to push the person; although the numerical balance is the same, the decisions are opposite. Thinking about pushing someone with one's hands activated, in addition to the dlPFC, the amygdala, the vmPFC and regions that respond to emotional words; the greater the amygdala activity and the reported negative emotion, the lower the likelihood of pushing. Thinking about pulling the lever, on the other hand, activated predominantly only the dlPFC.",
+   "roleInChapter": "Shows that emotion and cognition work in cooperation; that the emotional circuit determines the decision especially in cases of close and personal harm.",
+   "caveats": "Sapolsky notes that moral judgment depends on how the question is framed and that this dependence will be addressed in Chapter 13.",
+   "replication": {
+    "note": "The switch–footbridge (lever–push) response asymmetry is a robust behavioral pattern that has been found again in many cultures and large samples. However, the reaction-time finding in the 2001 paper turned out on reanalysis to depend on a few problematic scenarios, and the dual-process interpretation based on the “personal/impersonal” distinction became contested; Greene also acknowledged that the original reaction-time interpretation was invalid.",
+    "refs": [
+     "McGuire et al. 2009 (JESP)",
+     "Greene 2009 (JESP, response)",
+     "Awad et al. 2020 (PNAS)"
+    ]
+   }
+  },
+  "ch02-e9": {
+   "name": "Altruistic punishment and dopamine (de Quervain et al.)",
+   "researchers": "D. de Quervain, E. Fehr et al.",
+   "question": "Does punishing a norm violator activate reward circuits in the brain?",
+   "method": "In a Trust Game, player B can profit by not returning the money that A entrusted to them. Depending on the round, A either does nothing, or has some of B's money taken at no cost to themselves, or pays one unit to have two units taken from B. Brain activity during this decision is measured with PET.",
+   "finding": "Punishment activated the reward system, particularly the dorsal striatum (caudate); the book summarizes this as the dopamine system. The increase was more pronounced when the cost of punishment had to be paid, and people who showed more activity in this region during costless punishment were willing to pay more to punish.",
+   "roleInChapter": "Shows that punishing norm violators is itself rewarding; that moral anger and revenge have a biological reward side.",
+   "caveats": null,
+   "replication": {
+    "note": "That punishing norm violators activates striatal reward regions was also reported in some later fMRI studies, but we know of no direct replication of this small-sample PET study. What was measured is not dopamine release directly but blood flow in the caudate region.",
+    "refs": []
+   }
+  },
+  "ch02-e10": {
+   "name": "Schultz's monkey reward anticipation experiments (dopamine neurons)",
+   "researchers": "Philippe Tobler, Christopher Fiorillo and Wolfram Schultz",
+   "question": "Do dopamine neurons respond to the absolute magnitude of a reward, or to its difference relative to expectation?",
+   "method": "Monkeys learn to receive two or twenty units of reward in return for a certain task. Then, unexpectedly, four or forty units, or one or ten units, of reward are given, and the firing of dopamine neurons is recorded.",
+   "finding": "Rewards larger than expected (four instead of two, forty instead of twenty units) produced a dopamine burst of the same magnitude, and rewards smaller than expected (one or ten units) produced a dip of the same magnitude. Even across a tenfold range of reward, what mattered was the relative, not the absolute, magnitude of the surprise.",
+   "roleInChapter": "Supports the idea that dopamine works through the expectation–outcome difference rather than the reward itself, and therefore that much of pleasure lies in anticipation and pursuit.",
+   "caveats": null,
+   "replication": {
+    "note": "The finding that dopamine neurons encode reward prediction error is a fundamental result that has been confirmed repeatedly in different laboratories and species and supported causally by optogenetic studies. Coding that adapts to the reward range (relative coding) has also been supported in later monkey and human studies.",
+    "refs": [
+     "Schultz 2016 (Dialogues Clin Neurosci)",
+     "Steinberg et al. 2013 (Nat Neurosci)"
+    ]
+   }
+  },
+  "ch02-e11": {
+   "name": "Reward probability and uncertainty experiments (Schultz group and Knutson)",
+   "researchers": "C. Fiorillo, P. Tobler and W. Schultz; B. Knutson et al.",
+   "question": "How does the dopamine response tied to reward anticipation change as the probability of reward changes?",
+   "method": "Monkeys are given a reward after a light or sound signal; the probability of the reward arriving is varied between every time, 50 percent, 25 percent or 75 percent, and dopamine neurons are recorded during the period from the signal to the reward (the book simplifies the setup as a lever-pressing task; the original study is Pavlovian conditioning). In Knutson's human study, medial PFC activity during reward anticipation is measured with fMRI.",
+   "finding": "When the reward probability is 50%, the dopamine increase before the reward becomes markedly larger. When the probability rises to 25% or 75%, the increase shrinks because uncertainty decreases; the strongest response is seen at the greatest uncertainty. In humans, medial PFC activity rises as reward probability increases.",
+   "roleInChapter": "Shows that dopamine works most strongly under uncertainty (“maybe”); it is the basis of the mechanism that explains why gambling and addiction exert such a strong pull.",
+   "caveats": "Sapolsky infers from the largest dopamine response being seen in the mesocortical pathway that uncertainty is a cognitively more complex state; this is an inference, not a definitive measurement.",
+   "replication": {
+    "note": "That the dopamine response to the signal is proportional to reward probability is well supported. Whether the slowly ramping second response tied to uncertainty is a separate uncertainty signal, or a by-product arising from the averaging of prediction errors, has been debated.",
+    "refs": [
+     "Niv, Duff and Dayan 2005 (Behav Brain Funct)",
+     "Fiorillo, Tobler and Schultz 2005 (response)"
+    ]
+   }
+  },
+  "ch02-e12": {
+   "name": "Tryptophan depletion and the iterated prisoner's dilemma (Wood et al.)",
+   "researchers": "R. Wood, J. Rilling, A. Sanfey et al.; H. Clarke et al.",
+   "question": "When the serotonin signal is reduced, do healthy people impulsively break up a cooperative relationship?",
+   "method": "Healthy volunteers, in a double-blind crossover design, receive an amino acid drink with or without tryptophan; the tryptophan-free drink temporarily reduces serotonin synthesis in the brain. An iterated Prisoner's Dilemma is then played for real money. Clarke et al., in turn, examine the effect of prefrontal serotonin depletion on flexible learning in marmosets.",
+   "finding": "When serotonin was reduced, participants more readily broke up a stable relationship based on mutual cooperation; in the first session the level of cooperation fell and the likelihood of cooperating again after mutual cooperation decreased. In animal studies as well, serotonin depletion impaired cognitive flexibility and increased impulsivity.",
+   "roleInChapter": "Supports the relationship between low serotonin and impulsivity with evidence that lowering serotonin causally increases impulsivity.",
+   "caveats": "Sapolsky says the serotonin–aggression relationship is strong; however, he notes that this picture becomes contradictory in genetic studies (Chapter 8).",
+   "replication": {
+    "note": "The results of tryptophan depletion studies are variable: the effect of Wood et al. was seen only in the first session, and other studies found different social effects (e.g., more frequent rejection of unfair offers). A meta-analysis on the serotonin–aggression relationship in humans found an inverse but small relationship.",
+    "refs": [
+     "Crockett et al. 2008 (Science)",
+     "Duke et al. 2013 (Psychol Bull)"
+    ]
+   }
+  }
+ },
+ "_uncertain": [
+  "ch02-e1 name: Turkish '(kaygı ve korku)' rendered as '(anxiety and fear)'; the underlying paper title is 'Neurobiological Substrates of Dread' (Science 2006) and there is no established short name for the study.",
+  "ch02-e4 name: 'Köpek-kedi melez görüntüleri' rendered as 'Dog–cat morph images'; the study has no standard short name (paper: 'Categorical Representation of Visual Stimuli in the Primate Prefrontal Cortex')."
+ ]
+}

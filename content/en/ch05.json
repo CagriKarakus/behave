@@ -1,0 +1,314 @@
+{
+ "timescale": "Days to months before",
+ "summary": "The chapter describes how experiences that occur days or months before a behavior change the brain. At the foundation of learning lies the strengthening of synapses that fire together, along with glutamate-mediated long-term potentiation (LTP); long-term depression (LTD), in turn, sharpens the signal. Beyond this, experience can generate new dendritic spines and synapses, axons can extend toward new targets (remapping), and new neurons can be born in the adult hippocampus. Stress affects these processes in an inverted-U fashion: moderate stress strengthens the hippocampus, whereas chronic stress strengthens the amygdala and weakens connections of the frontal cortex. The chapter's conclusion is that neuroplasticity is not value-laden; it can produce both beneficial and harmful outcomes.",
+ "keyConcepts": [
+  {
+   "term": "Hebb's rule",
+   "explanation": "Synapses between neurons that repeatedly fire together become stronger; memory arises from the strengthening of existing connections rather than from new neurons or new synapses."
+  },
+  {
+   "term": "NMDA receptor and threshold behavior",
+   "explanation": "When glutamate signals arrive repeatedly and enough sodium enters, the NMDA receptor is engaged; this is the synaptic counterpart of learning."
+  },
+  {
+   "term": "Long-term potentiation (LTP)",
+   "explanation": "The calcium that enters when the NMDA receptor opens triggers changes that make the synapse easier to excite for a long time."
+  },
+  {
+   "term": "Long-term depression (LTD)",
+   "explanation": "A long-lasting decrease in the excitability of a synapse; by erasing unnecessary signals, it makes the important signal stand out, and it is not general forgetting."
+  },
+  {
+   "term": "Activity-dependent synaptogenesis",
+   "explanation": "The formation of new spines and axonal terminals on a neighboring dendrite during LTP; these new synapses can become stable within weeks."
+  },
+  {
+   "term": "Cortical remapping",
+   "explanation": "The expansion or shifting of a sensory or motor map in response to experience, loss, or damage; the extension of the touch area into the visual cortex after loss of vision is an example."
+  },
+  {
+   "term": "Adult neurogenesis",
+   "explanation": "The birth of new neurons in the adult hippocampus; it is influenced by learning, exercise, and stress, and plays a role in pattern separation."
+  },
+  {
+   "term": "Neuroplasticity is not value-laden",
+   "explanation": "The brain's changing with experience can have good or bad outcomes; growth of the amygdala in trauma is an example of this dilemma."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Pascual-Leone's piano study",
+   "finding": "In novice participants doing a five-finger exercise on the piano, the relevant area of the motor cortex expanded within a few days; four weeks of practice made this expansion last for days, and a similar change was seen in those who only imagined the exercise."
+  },
+  {
+   "name": "London taxi drivers",
+   "finding": "The posterior part of the hippocampus, which supports the spatial map, was larger in taxi drivers; during preparation for the licensing exam, the hippocampus grew in those who passed the exam."
+  },
+  {
+   "name": "Nottebohm's bird study",
+   "finding": "The production of new neurons in the brains of birds that learn a new song each year demonstrated the existence of adult neurogenesis and prompted later studies in mammals."
+  },
+  {
+   "name": "Blindfold experiments",
+   "finding": "In people who wore a blindfold for five days, auditory projections spread into the visual cortex; when the blindfold was removed, this spread receded."
+  },
+  {
+   "name": "Enriched environment and rats",
+   "finding": "The number of synapses in the hippocampus increased in rats housed in a stimulating environment; this revived the idea, abandoned after Hebb, that memory requires new synapses."
+  },
+  {
+   "name": "Juggling study",
+   "finding": "In people who learned juggling over three months, the cortical area involved in the visual processing of movement expanded."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Change in Synaptic Strength over Time",
+   "shows": "Shows how repeated glutamate signaling crosses the calcium threshold to lead to LTP or LTD, and how this change becomes lasting or temporary over time.",
+   "inputs": [
+    "Stimulation frequency",
+    "Calcium threshold",
+    "Number of repetitions"
+   ],
+   "outputs": [
+    "Synaptic strength curve",
+    "LTP or LTD state",
+    "Probability of recall over time"
+   ]
+  },
+  {
+   "title": "Cortical Map Expansion",
+   "shows": "Shows how a motor or sensory map expands, and how long it stays expanded, as the duration and frequency of practice increase or when practice is done by imagining.",
+   "inputs": [
+    "Duration of practice (days)",
+    "Daily practice time",
+    "Proportion of imagined practice"
+   ],
+   "outputs": [
+    "Map area",
+    "Duration of persistence",
+    "Receding after practice stops"
+   ]
+  },
+  {
+   "title": "Effect of Stress on Plasticity",
+   "shows": "Shows how the same glucocorticoid level pulls hippocampal spines and amygdala connections in different directions depending on whether it comes with fear or with controlled exercise.",
+   "inputs": [
+    "Duration and intensity of stress",
+    "Type of stress (fear or controlled exercise)",
+    "Presence or absence of enrichment in the environment"
+   ],
+   "outputs": [
+    "Hippocampal spines",
+    "Strength of amygdala and frontal cortex connections",
+    "Speed of fear learning and extinction"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "This chapter extends the neuronal plasticity introduced in the previous chapter and the role of the frontal cortex in fear extinction."
+  },
+  {
+   "why": "Short-term hormone and stress effects were described in the previous chapter; this chapter addresses the long-term consequences of the same effects."
+  },
+  {
+   "why": "How experience changes the on-off state of genes is addressed in a later chapter."
+  }
+ ],
+ "experiments": {
+  "ch05-e1": {
+   "name": "First demonstration of long-term potentiation (LTP)",
+   "researchers": "Terje Lømo (later T. Bliss and T. Lømo)",
+   "question": "Do hippocampal synapses increase their responses for a long time after receiving intense stimulation?",
+   "method": "The book does not detail the method; it only reports that LTP was first demonstrated by Lømo at the University of Oslo in 1966. Information from outside the book: the full publication (Bliss and Lømo 1973) is based on delivering high-frequency stimulation to the perforant path in anesthetized rabbits and monitoring dentate gyrus responses for hours.",
+   "finding": "After intense stimulation, the excitability of the synapse increased for a long time. The book defines LTP as the first strong activation of NMDA receptors making the synapse lastingly more responsive to subsequent stimulation; the basis of this is the calcium entering the cell.",
+   "roleInChapter": "Introduces the cellular counterpart of Hebb's idea that learning occurs through the strengthening of existing synapses.",
+   "caveats": "Sapolsky notes that LTP has more than one mechanism and that it is still debated whether presynaptic or postsynaptic changes are more decisive in learning.",
+   "replication": {
+    "note": "LTP is a fundamental phenomenon that has been demonstrated repeatedly for decades in many species and brain regions. The debate is not about the existence of the phenomenon but about its share in natural learning and the relative importance of the mechanisms.",
+    "refs": [
+     "Bliss and Lømo 1973",
+     "Nicoll and Roche 2013"
+    ]
+   }
+  },
+  "ch05-e2": {
+   "name": "Chronic stress causes frontostriatal reorganization and affects decision-making",
+   "researchers": "E. Dias-Ferreira et al.",
+   "question": "How does chronic stress change the frontal-striatal circuits that support decision-making?",
+   "method": "Rats were subjected to chronic unpredictable stress; the animals were then tested for whether they could adapt their behavior when the value of the reward or the action-outcome relationship changed, and neuronal structure was examined in the relevant frontal-striatal regions.",
+   "finding": "Stressed rats became insensitive to changes in the value of the outcome and shifted toward habit-based behavior. According to the book's summary, chronic stress increases the number of spines in frontal-motor connections while decreasing it in frontal-hippocampal connections; in the paper, this is reported as shrinkage in the medial prefrontal cortex and dorsomedial striatum and growth in the dorsolateral striatum.",
+   "roleInChapter": "Shows that prolonged stress rewires connections between regions, favoring habit-based decisions over flexible decisions that use new information.",
+   "replication": {
+    "note": "The stress-induced shift from goal-directed behavior toward habit has been supported in rodents and in human studies by Schwabe and Wolf. However, the reliability of habit-formation paradigms in humans has been questioned, and attempts to induce habits through overtraining have failed (de Wit et al. 2018).",
+    "refs": [
+     "Schwabe and Wolf 2009",
+     "de Wit et al. 2018"
+    ]
+   }
+  },
+  "ch05-e3": {
+   "name": "Chronic stress induces contrasting patterns of dendritic remodeling in hippocampal and amygdaloid neurons",
+   "researchers": "A. Vyas et al.; R. Mitra and R. Sapolsky",
+   "question": "Do prolonged stress or glucocorticoids affect the dendrites of hippocampal and amygdala neurons in the same direction?",
+   "method": "Vyas and colleagues subjected rats to chronic stress and compared the dendritic arbors of neurons in the hippocampus and the basolateral amygdala (BLA). Mitra and Sapolsky (2008) gave rats a single dose or repeated doses of corticosterone and measured anxiety behavior and BLA dendrites 12 days later.",
+   "finding": "Chronic stress shrank hippocampal dendrites while expanding BLA dendrites. In Mitra and Sapolsky, even a single dose of corticosterone was enough to increase anxiety and BLA dendritic growth. The book reports that prolonged stress raises BDNF levels in the BLA and lastingly strengthens anxiety and fear conditioning.",
+   "roleInChapter": "Shows that the amygdala changes in the opposite direction to the hippocampus and frontal cortex under stress, that is, that plasticity is independent of value.",
+   "caveats": "Sapolsky draws attention to the effect of context: glucocorticoid secreted with fear shrinks hippocampal dendrites, whereas a similar amount secreted with voluntary running enlarges them; whether the amygdala is engaged or not seems to determine the difference (note 11).",
+   "replication": {
+    "note": "Hippocampal CA3 dendritic shrinkage and BLA dendritic growth with chronic stress have been replicated many times by McEwen, Chattarji, and other laboratories. The single-dose corticosterone finding has also been supported by later studies.",
+    "refs": [
+     "Vyas et al. 2002",
+     "Mitra and Sapolsky 2008",
+     "McEwen 2016 review"
+    ]
+   }
+  },
+  "ch05-e4": {
+   "name": "Alexia for Braille following bilateral occipital stroke in an early blind woman",
+   "researchers": "R. Hamilton et al.",
+   "question": "Has Braille reading in a blind person become dependent on the visual cortex?",
+   "method": "A congenitally blind woman who read Braille very well had a bilateral occipital (visual cortex) stroke; her reading ability and other tactile functions were assessed.",
+   "finding": "The woman became unable to read Braille; she perceived the raised dots as flat and indistinct. By contrast, her other tactile functions remained intact.",
+   "roleInChapter": "Shows that axons carrying tactile information extended into the visual cortex and formed new connections there that contribute to reading (remapping).",
+   "replication": {
+    "note": "This is itself a single-case observation; however, experiments showing that temporary disruption of the visual cortex with TMS impairs Braille reading in blind people (Cohen et al. 1997) and numerous imaging studies support the finding.",
+    "refs": [
+     "Cohen et al. 1997",
+     "Sadato et al. 1996"
+    ]
+   }
+  },
+  "ch05-e5": {
+   "name": "Reading with sounds: sensory substitution selectively activates the visual word form area in the blind",
+   "researchers": "E. Striem-Amit, L. Cohen, S. Dehaene, and A. Amedi",
+   "question": "When people who have never seen learn to perceive letters through sounds, is the visual region that sighted people use in reading engaged?",
+   "method": "Congenitally blind adults were taught to associate letters with distinctive sound patterns (the paper used a sensory substitution device that converts images into a soundscape). Brain activity while reading in this way was measured with fMRI.",
+   "finding": "When blind participants read with sounds, the part of the visual cortex that is activated during reading in sighted readers (the visual word form area) was selectively activated.",
+   "roleInChapter": "Shows that the brain can place the reading function in the same region regardless of which sense the input comes from.",
+   "replication": {
+    "note": "The sample is small and this setup has not been directly replicated. Independent studies finding that the same region is activated during Braille reading in blind people (Reich et al. 2011) support the general idea.",
+    "refs": [
+     "Reich et al. 2011"
+    ]
+   }
+  },
+  "ch05-e6": {
+   "name": "Five days of blindfolding and remapping of the visual cortex",
+   "researchers": "A. Pascual-Leone et al. (via the review by Merabet and Pascual-Leone)",
+   "question": "When visual input is cut off for a short period, does information from other senses spread into the visual cortex?",
+   "method": "The eyes of sighted volunteers were covered continuously for five days, and the responses of the visual cortex to other sensory inputs were examined. The notes do not contain a primary paper for this experiment; the book's sources are reviews.",
+   "finding": "According to the book, after only five days of blindfolding, auditory projections began to spread into the visual cortex, and this spread receded when the blindfold was removed.",
+   "roleInChapter": "Shows that even a brief deprivation, without any actual injury, can change the brain map, and that this change can be reversed.",
+   "replication": {
+    "note": "Blindfolding studies are small experiments with few participants, and there are no large-scale independent replications. Because the citation of the original study is not in the book's notes, the details could not be verified.",
+    "refs": [
+     "Merabet and Pascual-Leone 2010"
+    ]
+   }
+  },
+  "ch05-e7": {
+   "name": "Five-finger piano exercise and the motor cortex",
+   "researchers": "Alvaro Pascual-Leone et al.",
+   "question": "Does short-term practice of a motor skill (or merely imagining it) expand the hand representation in the motor cortex?",
+   "method": "Non-musician volunteers practiced a piano finger exercise for two hours each day; one group only imagined the same exercise in their minds. The motor cortex map of the hand was measured (with TMS) over days; in addition, a condition in which the exercise lasted four weeks was examined.",
+   "finding": "Within a few days, the motor cortex area devoted to the movement of that hand grew, but when practice stopped, this increase disappeared in less than a day. In the four-week exercise, the expansion lasted for days after practice. Remapping was also seen in those who only imagined the exercise.",
+   "roleInChapter": "Shows that remapping does not require years of practice; it occurs through Hebbian strengthening in the short term and, in the long term, probably through new axonal branching.",
+   "replication": {
+    "note": "The expansion of motor cortex representations with skill learning has been demonstrated repeatedly in TMS and imaging studies. Effects of mental practice have also been reported, but these are generally smaller than those of physical practice.",
+    "refs": [
+     "Pascual-Leone et al. 1995",
+     "Pascual-Leone et al. 2005"
+    ]
+   }
+  },
+  "ch05-e8": {
+   "name": "Neuroplasticity: changes in grey matter induced by training (three months of juggling)",
+   "researchers": "B. Draganski et al.",
+   "question": "Does learning a new motor skill in adulthood visibly change brain structure?",
+   "method": "Volunteers learned juggling over three months; their brains were imaged with MRI before and after training, and gray matter volume was compared with that of untrained controls.",
+   "finding": "In those who learned juggling, expansion was seen in the cortical region related to the visual processing of movement. (According to the paper, this increase partly receded after juggling was stopped.)",
+   "roleInChapter": "Exemplifies that experience can change regional maps in the adult brain within a few months.",
+   "replication": {
+    "note": "Gray matter change with juggling has been replicated in older adults and with short training periods (Boyke et al. 2008; Driemeyer et al. 2008). Nevertheless, the cellular meaning of MRI-based volume measurements and small sample sizes have been criticized methodologically (Thomas and Baker 2013).",
+    "refs": [
+     "Boyke et al. 2008",
+     "Driemeyer et al. 2008",
+     "Thomas and Baker 2013"
+    ]
+   }
+  },
+  "ch05-e9": {
+   "name": "Altman and Das: first evidence of postnatal hippocampal neurogenesis in rats",
+   "researchers": "Joseph Altman and Gopal Das",
+   "question": "Are new neurons generated in the mammalian brain after birth and in adulthood?",
+   "method": "A building block incorporated only into DNA was radioactively labeled and injected into rats; the brain was examined after a waiting period. Neurons carrying the label were considered to have been born during the waiting period.",
+   "finding": "Labeled new neurons were found in the hippocampus (dentate gyrus); this was the first evidence of postnatal neurogenesis. The work was initially received with interest, but within a few years it was rejected by leading figures in the field; Altman did not get tenure and lost his funding.",
+   "roleInChapter": "Begins the story of the collapse of the dogma that the adult brain cannot produce new neurons, and shows the social dimension of scientific acceptance.",
+   "caveats": "Sapolsky relays two interpretations of the delayed acceptance: the view that skeptics were exercising quality control and that some early studies were weak, and the view that the older generation clung to dogma; he leaves the verdict to historians.",
+   "replication": {
+    "note": "Adult hippocampal neurogenesis has been firmly confirmed in rodents and monkeys. In humans, the debate has flared up again after 2018: Sorrells et al. (2018) found almost no new neurons in adulthood, whereas Boldrini et al. (2018) and Moreno-Jiménez et al. (2019) reported that it continues even in old age.",
+    "refs": [
+     "Sorrells et al. 2018",
+     "Boldrini et al. 2018",
+     "Moreno-Jiménez et al. 2019"
+    ]
+   }
+  },
+  "ch05-e10": {
+   "name": "Neuronal production, migration, and differentiation in the adult canary brain",
+   "researchers": "Fernando Nottebohm et al. (S. Goldman; J. Paton)",
+   "question": "Are new neurons produced in the brains of birds that learn a new song each year?",
+   "method": "Newly born cells in the brain nucleus controlling song in adult (female) canaries were labeled to follow their production, migration, and maturation; Paton and Nottebohm recorded from these neurons to test whether they joined circuits.",
+   "finding": "New neurons were produced in the adult bird brain, and these neurons joined functional circuits. According to the book, the quality of the finding and Nottebohm's reputation silenced doubts about whether neurogenesis exists.",
+   "roleInChapter": "It is the turning point that brought renewed acceptance of adult neurogenesis; it paved the way for later studies in rats, monkeys, and humans.",
+   "caveats": "Sapolsky recounts that the skeptics this time questioned the relevance of the finding to mammals, which was later answered by studies in rats and monkeys.",
+   "replication": {
+    "note": "Adult neurogenesis in songbirds and the incorporation of new neurons into circuits have been confirmed by many laboratories and have become one of the field's foundational findings.",
+    "refs": [
+     "Nottebohm 1985",
+     "Kornack and Rakic 1999"
+    ]
+   }
+  },
+  "ch05-e11": {
+   "name": "Requirement of hippocampal neurogenesis for the behavioral effects of antidepressants",
+   "researchers": "L. Santarelli et al.",
+   "question": "Does the behavioral effect of antidepressants depend on the production of new neurons in the hippocampus?",
+   "method": "Neurogenesis was stopped in mice by irradiating the neuron-producing region of the hippocampus; antidepressants were then given, and their effect in anxiety/depression-like behavior tests was compared with that in mice with intact neurogenesis.",
+   "finding": "When neurogenesis was blocked, the behavioral effect of antidepressants disappeared; this suggested that new neurons might be necessary for the drug effect.",
+   "roleInChapter": "Exemplifies that the relationship of adult neurogenesis to depression and its treatment is among the current topics of research.",
+   "caveats": "The book presents whether neurogenesis is necessary for antidepressants to work as a question that is still open.",
+   "replication": {
+    "note": "Although some studies support the finding, it has also been shown that certain behavioral effects of antidepressants occur independently of neurogenesis (David et al. 2009). The importance of neurogenesis varies with the test, the species, and the drug.",
+    "refs": [
+     "David et al. 2009"
+    ]
+   }
+  },
+  "ch05-e12": {
+   "name": "Navigation-related structural change in the hippocampi of taxi drivers",
+   "researchers": "E. Maguire et al.; K. Woollett and E. Maguire",
+   "question": "Does using spatial maps professionally change the size of the hippocampus?",
+   "method": "Brain images of London taxi drivers were compared with those of controls. In the follow-up study, candidates who began the multi-year licensing preparation were imaged before and after the process.",
+   "finding": "The posterior hippocampus, which is related to spatial memory, was larger in taxi drivers. In the follow-up study, the hippocampus grew only in candidates who passed the exam.",
+   "roleInChapter": "Concretely shows that experience can change the size of a brain region within months.",
+   "replication": {
+    "note": "The finding has been supported by the comparison with bus drivers (Maguire et al. 2006) and by the longitudinal follow-up study. However, the samples are relatively small and large independent replications are limited.",
+    "refs": [
+     "Maguire et al. 2006",
+     "Woollett and Maguire 2011"
+    ]
+   }
+  }
+ },
+ "_uncertain": [
+  "ch05-e6: no primary paper for the five-day blindfold study; name is descriptive ('Five days of blindfolding and remapping of the visual cortex'), not a literature title.",
+  "ch05-e9: no standard short name; I used 'Altman and Das: first evidence of postnatal hippocampal neurogenesis in rats' based on the citation title.",
+  "ch05-e10: no standard short name; I used the Goldman and Nottebohm (1983) citation title, 'Neuronal production, migration, and differentiation in the adult canary brain' (shortened from '... in a Vocal Control Nucleus of the Adult Female Canary Brain').",
+  "ch05-e8: name combines the Draganski 2004 title with a descriptive suffix '(three months of juggling)'.",
+  "ch05-e7: no literature title for the piano experiment; name is descriptive ('Five-finger piano exercise and the motor cortex').",
+  "keyStudies 'Nottebohm's bird study' / 'Blindfold experiments' are descriptive names, not formal study titles."
+ ]
+}

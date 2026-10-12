@@ -1,0 +1,304 @@
+{
+ "timescale": "Hours to days before",
+ "summary": "The chapter covers hormones that act hours and days before a behavior. It argues that testosterone is not a direct cause of aggression, that normal-range individual levels do not predict aggression, and that its effect is amplifying and depends on context, such as a struggle for status. A similar picture is drawn for oxytocin and vasopressin: they increase bonding and trust, but this effect is mostly limited to the scope of ‘us’ and can increase prejudice toward outsiders. Aggression in women, the fertility cycle and the popular claims about PMS are also evaluated within this contextual framework. Chronic stress, in turn, weakens empathy, decision making and emotion regulation; alcohol, too, does not create aggression on its own.",
+ "keyConcepts": [
+  {
+   "term": "Androgens and testosterone",
+   "explanation": "The androgen hormones that predominate in males; circulating levels within the normal range do not by themselves predict an individual’s aggression."
+  },
+  {
+   "term": "Subtraction-and-replacement experiment",
+   "explanation": "The logic of testing a hormone’s causal role in behavior by first removing the hormone and then giving it back."
+  },
+  {
+   "term": "Challenge hypothesis",
+   "explanation": "Testosterone rises only at a moment of challenge to status and supports behaviors that protect status rather than aggression."
+  },
+  {
+   "term": "Contingent hormone effect",
+   "explanation": "Hormones do not invent new behaviors; they amplify existing tendencies and responses shaped by social learning."
+  },
+  {
+   "term": "Oxytocin and vasopressin",
+   "explanation": "Neuropeptides that support mother–infant and pair bonds, trust and social closeness; their effects vary with the setting."
+  },
+  {
+   "term": "Us-versus-them (Us/Them) distinction",
+   "explanation": "Oxytocin can increase generosity toward the in-group while raising prejudice and hostility toward the out-group."
+  },
+  {
+   "term": "Inverted-U relationship",
+   "explanation": "Moderate, transient stress improves performance and the dopamine response, whereas excessive and sustained stress eliminates this benefit."
+  },
+  {
+   "term": "Displaced aggression",
+   "explanation": "Aggression that a person directs, after defeat or stress, toward someone weaker or innocent."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Eisenegger and Fehr’s Ultimatum Game study",
+   "finding": "Participants given testosterone made more generous offers; in a context where behaving fairly protects status, the hormone strengthened generous rather than aggressive behavior."
+  },
+  {
+   "name": "Testosterone belief experiment",
+   "finding": "Regardless of which substance they actually received, participants who believed they had received testosterone made less generous offers; that is, it was not the hormone itself but the belief about its effect that produced selfish behavior."
+  },
+  {
+   "name": "Talapoin monkeys (1977)",
+   "finding": "When a middle-ranking male was given testosterone, he attacked the males below him rather than those above him; the hormone did not create a new hierarchy but amplified the existing aggressive pattern."
+  },
+  {
+   "name": "De Dreu’s oxytocin studies",
+   "finding": "Oxytocin increased generosity within the team; but when the financial risk was high, it also increased the likelihood of preemptive betrayal of a player from the opposing team in a prisoner’s dilemma. In the second study, oxytocin increased implicit prejudice toward Middle Eastern and German out-groups and made participants less willing to sacrifice a person with a Dutch name (Dirk, Peter)."
+  },
+  {
+   "name": "Stress and empathy for strangers (study with Mogil)",
+   "finding": "Mice showed empathy only for the pain of close companions; when glucocorticoid secretion was blocked, empathy for a stranger mouse also appeared."
+  },
+  {
+   "name": "Local football team losses",
+   "finding": "After an unexpected loss by the local team, men’s violence toward their partners rose by about ten percent; no increase was seen when the team won or when it was expected to lose."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Status Challenge",
+   "shows": "Shows whether a rise in testosterone increases aggression or other status-protecting behaviors when there is a challenge.",
+   "inputs": [
+    "Testosterone level",
+    "Presence of a challenge",
+    "Way of protecting status (attack or generosity)",
+    "Norms and rewards"
+   ],
+   "outputs": [
+    "Behavior chosen",
+    "Change in status",
+    "Likelihood of renewed challenge"
+   ]
+  },
+  {
+   "title": "Stress Curve and Decision Quality",
+   "shows": "Shows performance first rising and then falling as stress intensity and duration increase, along with changes in risk taking and empathy responses.",
+   "inputs": [
+    "Stress intensity",
+    "Duration of stress (minutes to days)",
+    "Personal stress threshold"
+   ],
+   "outputs": [
+    "Working memory performance",
+    "Tendency to take risks",
+    "Empathy response to another’s distress"
+   ]
+  },
+  {
+   "title": "Us and Them Oxytocin Game",
+   "shows": "Shows how oxytocin can increase generosity and trust toward the in-group while turning into prejudice toward the out-group.",
+   "inputs": [
+    "Group membership",
+    "Threat level of the out-group",
+    "Oxytocin effect (on or off)"
+   ],
+   "outputs": [
+    "Share given to the in-group",
+    "Level of trust in the out-group",
+    "Prejudice score toward out-group members"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "The book recalls from the earlier chapter the ideas about the frontal cortex, amygdala and anterior cingulate that appear in this chapter."
+  },
+  {
+   "why": "The book states that it will address the effects of sustained stress over weeks and months in the next chapter."
+  },
+  {
+   "why": "The regulation of genes related to oxytocin and vasopressin is explained in a later chapter."
+  },
+  {
+   "why": "Oxytocin’s favoring of the in-group while increasing prejudice toward the out-group is taken up again in ch11 as the biology of the Us/Them distinction."
+  },
+  {
+   "why": "The production and signaling pathways of hormones are detailed in the endocrinology appendix."
+  }
+ ],
+ "experiments": {
+  "ch04-e1": {
+   "name": "Testosterone and dominance rank in talapoin monkeys",
+   "researchers": "A. Dixson and J. Herbert",
+   "question": "Does testosterone change the direction of aggression among male monkeys in a hierarchy, or does it amplify the existing ranking?",
+   "method": "In groups of captive talapoin monkeys, the middle-ranking male of each group was given testosterone; aggressive behaviors, that is, who attacked whom, were recorded.",
+   "finding": "The middle-ranking male given testosterone attacked the males below him more, not those above him; rather than moving up the hierarchy, he exaggerated the existing aggressive pattern.",
+   "roleInChapter": "Shows that testosterone does not create new patterns of aggression but amplifies existing contextual tendencies.",
+   "replication": {
+    "note": "This is a historical primate study conducted in small captive groups; we do not know of a direct replication. The general idea that testosterone, instead of creating aggression, strengthens existing tendencies and responses in the context of a challenge has, however, found broad support in later animal and human studies (the challenge hypothesis).",
+    "refs": []
+   }
+  },
+  "ch04-e2": {
+   "name": "Ultimatum Game and testosterone",
+   "researchers": "C. Eisenegger, E. Fehr et al.",
+   "question": "In a setting where behaving fairly protects status, does testosterone increase aggressive or generous behavior?",
+   "method": "Female participants were given a single sublingual dose of testosterone or placebo in a double-blind design; they then made offers in the Ultimatum Game with real money. Because a rejected offer means a loss of status in this setup, behaving fairly protects reputation.",
+   "finding": "Participants who received testosterone made more generous and fair offers, and conflict in bargaining decreased. According to the book, in a context where status is protected by behaving fairly, the hormone strengthened generosity, not aggression.",
+   "roleInChapter": "Shows that testosterone serves the need to protect status, and that behavior can turn out aggressive or generous depending on the norms it is tied to.",
+   "replication": {
+    "note": "In another study with males, testosterone reduced generosity in the Ultimatum Game; later studies found that testosterone increases both punishing bad offers and rewarding good offers, that is, it steers status-gaining behavior according to context. Results vary by sex, dose and game setup.",
+    "refs": [
+     "Zak et al. 2009 (PLoS ONE)",
+     "Dreher et al. 2016 (PNAS)"
+    ]
+   }
+  },
+  "ch04-e3": {
+   "name": "Testosterone belief experiment",
+   "researchers": "C. Eisenegger, E. Fehr et al.",
+   "question": "Does believing that a substance is testosterone change behavior, independently of the actual hormone effect?",
+   "method": "In the same double-blind testosterone/placebo experiment, participants were asked after the game which substance they thought they had received. The substance actually received and the participant’s belief were analyzed separately.",
+   "finding": "Regardless of what they actually received, participants who believed they had received testosterone made markedly less generous and less fair offers than those who believed they had received placebo. That is, the widespread belief that testosterone leads to bad behavior could itself worsen behavior.",
+   "roleInChapter": "Shows that hormone effects are largely shaped by expectation and social learning, and that the belief that ‘testosterone makes you aggressive’ can worsen behavior.",
+   "replication": {
+    "note": "The belief effect is a comparison based on questions asked after the experiment and not randomly assigned; we do not know of a direct replication of this finding.",
+    "refs": []
+   }
+  },
+  "ch04-e4": {
+   "name": "Testosterone and lying",
+   "researchers": "M. Wibral et al.",
+   "question": "In a situation where honesty brings reputation, does testosterone change men’s tendency to lie?",
+   "method": "Male participants took part in a task in which they privately rolled a die, reported the result, and earned money according to the number they reported. Participants were given testosterone or placebo.",
+   "finding": "Men given testosterone misreported the die result less; in this context the hormone led to more honest behavior. The book also reports that in a game involving public contributions to a common pool, testosterone made most participants more prosocial.",
+   "roleInChapter": "Shows that testosterone does not always produce aggression, that it does what status requires, and that it can increase positive behavior where honesty is valued.",
+   "replication": {
+    "note": "This is a single study with a small sample, and we do not know of a direct replication. The effects of testosterone administration on social behavior are generally found to be inconsistent and context-dependent.",
+    "refs": []
+   }
+  },
+  "ch04-e5": {
+   "name": "Vasopressin receptor and pair bonding (voles)",
+   "researchers": "L. Young, T. Insel et al.; M. Lim, L. Young et al.",
+   "question": "Can the density of the vasopressin receptor in the brain change monogamy-related partner preference and social bonding?",
+   "method": "Young et al. transferred the V1a vasopressin receptor gene of the monogamous prairie vole into male mice and, after vasopressin injection, observed their behavior toward familiar and unfamiliar females. Lim et al., in a promiscuous vole species, increased the number of V1a receptors in the brain’s reward regions through virus-mediated gene transfer and tested partner preference.",
+   "finding": "Male mice carrying the receptor of the monogamous species spent more time grooming and huddling with familiar females, with no such increase toward strangers. Promiscuous male voles with an increased receptor number showed more closeness to, and a partner preference for, a particular female.",
+   "roleInChapter": "Shows that bonding can be tuned at the level of a single gene and receptor, and that hormonal effects depend on the gene–biology setting.",
+   "caveats": "The book describes the second experiment in terms of the montane vole and the nucleus accumbens; Lim et al.’s actual study was carried out in the meadow vole and in the ventral pallidum.",
+   "replication": {
+    "note": "The association of V1a receptor distribution with pair bonding in voles has been supported by gene transfer and pharmacology studies from different laboratories. However, a 2023 CRISPR study showing that prairie voles lacking the oxytocin receptor can still form pair bonds is a reminder that explaining this with a single gene or receptor is too simple.",
+    "refs": [
+     "Pitkow et al. 2001 (J Neurosci)",
+     "Berendzen et al. 2023 (Neuron)"
+    ]
+   }
+  },
+  "ch04-e6": {
+   "name": "Dog–owner oxytocin–gaze positive loop",
+   "researchers": "M. Nagasawa, T. Kikusui et al.",
+   "question": "Does mutual gazing between a dog and its owner raise the oxytocin levels of both?",
+   "method": "While dogs and their owners interacted in a room, the time they spent looking at each other was measured and urinary oxytocin levels were determined before and after the interaction; the same setup was also tried with hand-raised wolves. In the second experiment, dogs were given oxytocin or saline through the nose, and the time they spent looking at their owners and the owners’ oxytocin levels were compared.",
+   "finding": "Oxytocin rose in dogs that gazed at their owners for a long time and in their owners; this loop was not seen in wolves. According to the book, this response appears not with strangers but only between a dog and its own owner. Dogs given intranasal oxytocin looked at their owners for longer, and this in turn raised the owners’ oxytocin levels.",
+   "roleInChapter": "Shows that a hormone that evolved for the mother–infant bond also plays a role in bonding between species, but that this effect depends on the nature of the relationship.",
+   "replication": {
+    "note": "Independent replications are limited. The study was criticized for confounding differences between the dog and wolf arms and for its small sample; the increase in gazing with intranasal oxytocin had been seen only in female dogs.",
+    "refs": [
+     "Kekecs et al. 2016 (Front Neurosci)"
+    ]
+   }
+  },
+  "ch04-e7": {
+   "name": "Oxytocin and the Trust Game (Kosfeld)",
+   "researchers": "M. Kosfeld, M. Heinrichs, P. Zak, U. Fischbacher and E. Fehr",
+   "question": "Does oxytocin given through the nose increase the trust that investors place in the other party?",
+   "method": "Male participants in the investor role were given oxytocin or placebo nasal spray; the investors could send part of their money to a trustee who was free to return it or not. As a control, the same risky choice was made in a ‘risk game’ in which the other side was not a human but a random mechanism (the book describes this as playing against a computer).",
+   "finding": "Investors given oxytocin entrusted more money than the placebo group; this effect was not seen in the condition where the other side was not human, that is, the effect concerned social trust, not general risk taking. The book also reports that investors who received oxytocin did not reduce their trust even after the other party had betrayed it (Baumgartner et al.).",
+   "roleInChapter": "As one of the first findings that oxytocin increases trust, it also serves as the starting point for the context dependence discussed in the next chapter.",
+   "caveats": "Apicella et al. (2010), cited in the notes as a ‘replication failure’, is not a repeat of the Kosfeld experiment but a study showing that no association was found between oxytocin receptor gene variants and social preferences. Sapolsky also notes that oxytocin reduces cooperation with anonymous strangers in another room.",
+   "replication": {
+    "note": "The finding of Kosfeld et al. could not be consistently reproduced in later Trust Game experiments; when the available studies were pooled, no reliable effect of intranasal oxytocin on trust was seen. How much intranasally administered oxytocin reaches the brain and the low statistical power of studies in the field have also been seriously criticized.",
+    "refs": [
+     "Nave, Camerer and McCullough 2015 (Perspect Psychol Sci)",
+     "Walum, Waldman and Young 2016 (Biol Psychiatry)"
+    ]
+   }
+  },
+  "ch04-e8": {
+   "name": "Oxytocin and the us-versus-them distinction (De Dreu)",
+   "researchers": "C. de Dreu et al.",
+   "question": "Does oxytocin increase cooperation only for ‘us’, or does it also raise prejudice and hostility toward the out-group?",
+   "method": "In the first study, male participants were divided into small teams, received oxytocin or placebo, and decided how much of their money to put into a common pool shared with teammates; they then played a game resembling the prisoner’s dilemma against someone from the opposing team. In the second study, Dutch students took the Implicit Association Test, and in the dilemma of ‘sacrificing one person to save five’ the name of the person to be sacrificed was varied to be typically Dutch, German or Middle Eastern.",
+   "finding": "Oxytocin increased generosity within the team; when the material risk was high, it raised the likelihood of preemptively betraying a player on the opposing team. In the second study, oxytocin increased implicit prejudice against Middle Eastern and German out-groups (according to the original paper, in-group favoritism was more pronounced than out-group derogation) and led participants to sacrifice the person with a Dutch name less than the person with a German or Middle Eastern name.",
+   "roleInChapter": "Shows that oxytocin may be a mechanism that helps separate ‘us’ from ‘them’, and that its prosocial effect is not universal.",
+   "replication": {
+    "note": "The findings were partly supported in other studies by the same group, but critiques have been published arguing that the data do not support the ‘ethnocentrism’ interpretation. It should also be kept in mind that intranasal oxytocin studies have generally been run with low statistical power and that many findings could not be reproduced.",
+    "refs": [
+     "Chen, Kumsta and Heinrichs 2011 (PNAS, letter)",
+     "Walum, Waldman and Young 2016 (Biol Psychiatry)"
+    ]
+   }
+  },
+  "ch04-e9": {
+   "name": "Chronic stress and frontostriatal reorganization",
+   "researchers": "E. Dias-Ferreira et al.",
+   "question": "How does prolonged chronic stress change decision making and the circuits between the prefrontal cortex and the striatum?",
+   "method": "Rats were subjected to unpredictable chronic stress for weeks; they were then tested on whether they changed their behavior in lever-pressing tasks when the value of the reward was reduced or when the action–reward relationship was disrupted. Structural changes in the prefrontal cortex and striatum regions were also examined.",
+   "finding": "Rats that had undergone chronic stress kept the same behavior even when the reward was devalued, starting to act on habit rather than goal-directed behavior. The prefrontal and striatal regions associated with goal-directed behavior shrank, while the striatal region associated with habit grew. The book summarizes this as stress weakening the connections in the frontal cortex that process new information and strengthening the connections with habit circuits.",
+   "roleInChapter": "Shows that stress weakens frontal control and strengthens habits, and that sustained stress makes it harder to adapt to new information.",
+   "replication": {
+    "note": "Stress shifting behavior toward habit has been reported in animals and humans in many studies. However, the reliability of paradigms for experimentally inducing habits in humans has been questioned; several preregistered attempts failed to induce habit formation.",
+    "refs": [
+     "Schwabe and Wolf 2009 (J Neurosci)",
+     "de Wit et al. 2018 (J Exp Psychol Gen)"
+    ]
+   }
+  },
+  "ch04-e10": {
+   "name": "Stress and sex differences in risk taking",
+   "researchers": "N. Lighthall et al.",
+   "question": "Does acute stress affect the risk-taking tendency of men and women differently?",
+   "method": "Participants were exposed either to cold pressor stress (holding a hand in ice water) or to a warm-water control condition; their risk-taking behavior was then measured in the Balloon Analogue Risk Task (accumulating gains by inflating a balloon without popping it).",
+   "finding": "Stress increased risk taking in men while decreasing it in women. According to the book, men take more risk than women even without stress; that is, moderate stress enlarges the existing sex difference, whereas major stressors increase risk taking in both sexes.",
+   "roleInChapter": "Shows that stress is a hormonal effect that reinforces existing tendencies, and that sex differences emerge within this context.",
+   "replication": {
+    "note": "The same group extended the finding in a later fMRI study, but we do not know of an independent, large replication. The literature on sex-dependent effects of stress on risk taking contains small-sample and inconsistent results.",
+    "refs": []
+   }
+  },
+  "ch04-e11": {
+   "name": "Football losses and family violence",
+   "researchers": "D. Card and G. Dahl",
+   "question": "Does an unexpected emotional event, namely a loss by the local team, increase men’s violence toward their partners?",
+   "method": "Domestic violence incidents reported to the police on Sundays during the NFL season in the US were compared with the local team’s game results. Using pre-game betting odds, games in which the team was expected to win, expected to lose, and evenly matched were separated.",
+   "finding": "When the team lost unexpectedly, men’s violence toward their partners rose by about ten percent; no increase was seen when the team won or when it was expected to lose. For unexpected losses by teams in the playoff race the increase was 13 percent, and for losses to a rival it was 20 percent.",
+   "roleInChapter": "Shows that stress that cannot be undone leads to displaced aggression, that is, aggression directed at someone weaker than oneself.",
+   "replication": {
+    "note": "It is based on a large natural experiment dataset, and studies in England on World Cup matches have also shown that reports of domestic violence rose on match days, especially after losses. Still, these are observational studies, and the size of the effect varies with context.",
+    "refs": [
+     "Kirby, Francis and O'Flaherty 2014 (J Res Crime Delinq)"
+    ]
+   }
+  },
+  "ch04-e12": {
+   "name": "Pain empathy toward a stranger mouse (glucocorticoid blockade)",
+   "researchers": "L. Martin, J. Mogil et al. (including R. Sapolsky); D. Langford et al.",
+   "question": "Do the glucocorticoids in the stress response limit the scope of empathy to close companions?",
+   "method": "Mice were tested in a setting where a companion sharing the same cage, or a stranger mouse, was in pain, and their own pain sensitivity was measured. In some mice, stress hormone synthesis was blocked with metyrapone, or their receptors were temporarily blocked with a drug. In the human study, the stress response in pairs of strangers was reduced either with the same drug or by having them play a short video game together.",
+   "finding": "According to Langford et al., a mouse’s pain threshold drops if the mouse in pain next to it is a cage mate, but not if it is a stranger. When glucocorticoid secretion was blocked, mice showed the ‘pain empathy’ they show for a cage mate toward a stranger mouse as well. In humans too, pain contagion toward a stranger appeared only when the stress response was blocked with the drug or when the people interacted socially with each other.",
+   "roleInChapter": "Shows that stress limits empathy by narrowing the definition of ‘us’, and explains how stress shrinks moral and social sensitivity.",
+   "caveats": "The book gives no citation for Sapolsky’s follow-up study with the Mogil group; the notes include only Langford et al. (2006), who established the paradigm. The citation of the follow-up study was added as a source from outside the book. Sapolsky puts forward only as a speculation that glucocorticoids may damage anterior cingulate neurons.",
+   "replication": {
+    "note": "That a cage mate’s pain changes pain sensitivity in mice has also been shown in different laboratories. However, we do not know of an independent replication of the finding that glucocorticoid blockade opens up empathy toward strangers, particularly of the small-sample human part.",
+    "refs": [
+     "Smith et al. 2016 (Science)"
+    ]
+   }
+  }
+ },
+ "_uncertain": [
+  "keyConcepts[1].term: 'Çıkarma ve yerine koyma deneyi' is not in the glossary; I used 'Subtraction-and-replacement experiment' (the usual literature wording is 'remove-and-replace' / 'ablation and replacement'; Sapolsky uses 'subtract and replace').",
+  "ch04-e1: name 'Testosterone and dominance rank in talapoin monkeys' is built from the Dixson & Herbert 1977 citation title ('Testosterone, Aggressive Behavior and Dominance Rank in Captive Adult Male Talapoin Monkeys'); there is no standard shorter name.",
+  "ch04-e3: 'Testosterone belief experiment' has no standard literature name (Eisenegger et al. 2010 describe it as the effect of subjects' beliefs about receiving testosterone vs placebo).",
+  "ch04-e5: researchers/caveats name the species as 'prairie vole', 'montane vole', 'meadow vole' (monogamous bozkir/dag/cayir tarla faresi) by standard common names; Lim et al. 2004 used meadow vole (Microtus pennsylvanicus) and ventral pallidum.",
+  "ch04-e8: name uses 'us-versus-them distinction' per the Turkish; the literature title for the work is 'parochial altruism' (De Dreu et al. 2010) and 'ethnocentrism' (2011).",
+  "ch04-e12: name 'Pain empathy toward a stranger mouse (glucocorticoid blockade)' has no standard literature name; Martin et al. 2015 title is 'Reducing Social Stress Elicits Emotional Contagion of Pain in Mouse and Human Strangers'."
+ ]
+}

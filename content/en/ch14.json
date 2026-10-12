@@ -1,0 +1,336 @@
+{
+ "summary": "The chapter shows that empathy is not a single feeling but a spectrum, running from emotional contagion to cognitive perspective-taking. Consolation and helping behaviors are seen in mice, chimpanzees, rats and prairie voles, but this help is often directed at close kin or members of the same group. In the brain, the anterior cingulate cortex (ACC) sits at the center of empathy because it processes not only the location of pain but also its meaning. An empathic feeling does not always turn into action: personal distress, cognitive load and prejudice against the outgroup block helping, while emotional distance opens the way to more effective help. Finally, the chapter argues that the mirror neuron claim has been exaggerated and that genuine altruism often contains elements of self-interest.",
+ "keyConcepts": [
+  {
+   "term": "Empathy, sympathy and compassion",
+   "explanation": "These concepts distinguish ways of responding to another person's pain: emotional contagion, empathy based on understanding, and compassion that moves one to act. The distinction is used to see at which stage a response stops."
+  },
+  {
+   "term": "Emotional contagion",
+   "explanation": "The strong emotional state of one individual passes to an observer without the observer noticing. Babies crying together or the anger of a crowd are examples."
+  },
+  {
+   "term": "Anterior cingulate cortex (ACC)",
+   "explanation": "A frontal region that processes the meaning of pain, conflict with expectation and social exclusion. It also plays a central role in responding to another person's pain."
+  },
+  {
+   "term": "Self- vs other-oriented perspective",
+   "explanation": "Thinking 'what if it were me' about another person's pain draws one into one's own distress; thinking about 'how it makes them feel' makes helping easier."
+  },
+  {
+   "term": "Cognitive load and empathy fatigue",
+   "explanation": "Taking the perspective of a stranger or a disliked person strains the frontal cortex. Repeating this strain reduces helpfulness."
+  },
+  {
+   "term": "Consolation",
+   "explanation": "Affiliative behavior after a fight that is directed toward the victim, not the aggressor. It is observed in species such as chimpanzees, wolves and prairie voles."
+  },
+  {
+   "term": "Mirror neurons",
+   "explanation": "Premotor cells that fire both when one watches another individual's movement and when one makes the movement oneself. Claims that they explain empathy have not yet been demonstrated."
+  },
+  {
+   "term": "Self-interest in altruism",
+   "explanation": "It is debated whether doing good contains self-interested components such as satisfaction, reputation, reduced guilt and defining oneself as a good person."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Overimitation",
+   "finding": "When an adult who demonstrated how to get a reward from a box also made unnecessary movements, chimpanzees imitated only the necessary steps, whereas children copied the unnecessary movements as well."
+  },
+  {
+   "name": "Pain sharing between mice (Mogil, 2006)",
+   "finding": "A mouse that watched another mouse in pain became more sensitive to pain itself. The effect was seen only in mice from the same cage, which showed that it was a social process."
+  },
+  {
+   "name": "Prairie vole consolation (Young and de Waal, 2016)",
+   "finding": "The partner of a stressed mate gave it more grooming and matched its level of anxiety. When oxytocin in the anterior cingulate cortex was blocked, this consolation disappeared."
+  },
+  {
+   "name": "Rat rescue experiments",
+   "finding": "Rats made an effort to lower a distressed rat from a harness or to free a cagemate from a restrainer, and they shared chocolate. They also helped genetically similar but unfamiliar rats; a rat raised by a mother of a different strain counted the group that raised it as 'us'."
+  },
+  {
+   "name": "Comparison of empathy training and compassion training",
+   "finding": "Training aimed at directly feeling the pain strongly activated the amygdala and produced a negative, exhausting state. Compassion training, which focused on feelings of warmth and caring, activated the dlPFC and the dopamine system and brought a more positive mood and more social behavior."
+  },
+  {
+   "name": "Heart rate and helping",
+   "finding": "People whose heart rate rose markedly on seeing another's pain helped less. Those whose heart rate fell helped more, which showed the importance of feeling the distress in the other's need rather than in one's own pounding heart."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Empathy–Helping Threshold",
+   "shows": "Shows whether an observer helps a person in pain, depending on closeness to that person, group identity and the observer's own level of distress.",
+   "inputs": [
+    "Closeness of the person in pain (kin, acquaintance, stranger)",
+    "Ingroup / outgroup status",
+    "Personal distress level",
+    "Cognitive load"
+   ],
+   "outputs": [
+    "Proportion of individuals who help",
+    "Distribution of the groups the help reaches",
+    "Rate of distress-driven avoidance"
+   ]
+  },
+  {
+   "title": "Perspective Shift and Emotional Contagion",
+   "shows": "Shows how observed pain passes into the observer's level of distress, and how focusing on the other person instead of the self lowers this distress.",
+   "inputs": [
+    "Intensity of the observed pain",
+    "Proportion of self-oriented perspective",
+    "Stress (glucocorticoid-like) level"
+   ],
+   "outputs": [
+    "The observer's distress curve",
+    "Probability of helping",
+    "Proportion of empathic and avoidant responses"
+   ]
+  },
+  {
+   "title": "The Target of Help: Us and Them",
+   "shows": "As in the rat experiment, shows on behalf of whom an individual acts, and how an identity label and the length of living together change this choice.",
+   "inputs": [
+    "Identity label (same group / different group)",
+    "Length of living together",
+    "Cost of helping"
+   ],
+   "outputs": [
+    "Number of individuals rescued",
+    "Proportion of the reward that is shared",
+    "Change in the definition of 'us'"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "The concepts of the anterior cingulate cortex (ACC) and the somatic marker are introduced in ch2; this chapter uses them in the context of empathy."
+  },
+  {
+   "why": "Where interoception and racial prejudice reflected in the hand's response connect to this chapter's discussion of empathy."
+  },
+  {
+   "why": "The role of oxytocin in bonding, trust and generosity is taken up again in the neurobiology of consolation."
+  },
+  {
+   "why": "Adolescents' intense feeling of the world's pain and the Cyberball exclusion experiment are mentioned again in this chapter."
+  },
+  {
+   "why": "The development of empathy in children and the capacity to distinguish one's own pain from another's pain are the ground on which this chapter rests."
+  },
+  {
+   "why": "Covers the emergence of the idea of a moralizing god in large communities and how reputational pressure affects compassion."
+  },
+  {
+   "why": "Kin selection and reciprocal help explain the evolutionary origin of altruism; the chapter's discussion of self-interest rests on this framework."
+  },
+  {
+   "why": "Fiske's 'Them' category and the difficulty of empathy for the outgroup are a direct continuation of this chapter's Us/Them discussion."
+  },
+  {
+   "why": "System justification is used to explain why the wealthy can be less empathic and less helpful."
+  },
+  {
+   "why": "The moral reasoning and response to injustice covered in the previous chapter lay the ground for this chapter's question of 'action'."
+  },
+  {
+   "why": "The processing of social pain by the anterior cingulate cortex in this chapter is taken up again in the next chapter as the starting point of the link between disgust and symbols."
+  }
+ ],
+ "experiments": {
+  "ch14-e1": {
+   "name": "Overimitation experiment",
+   "researchers": "V. Horner and A. Whiten (earlier work: A. Whiten et al. 1996)",
+   "question": "When chimpanzees and children learn to open a reward box, do they also imitate unnecessary movements?",
+   "method": "Chimpanzees and children watched an adult repeatedly retrieve the reward from a puzzle box; the adult also made extra movements that served no purpose. They then explored the box themselves, and which movements they copied was recorded.",
+   "finding": "Chimpanzees imitated only the steps necessary to open the box. Children also copied the unnecessary movements.",
+   "roleInChapter": "Shows that imitation is a strong basis of social learning, but that in humans this tendency is strong enough to include unnecessary details. It reveals that basic building blocks such as imitation and emotional contagion show continuity across species, and that the human difference lies in a stronger tendency to imitate.",
+   "replication": {
+    "note": "Overimitation in children has been replicated repeatedly across cultures (e.g., Kalahari San children; Nielsen and Tomaselli 2010) and in adults; the chimpanzees' tendency to skip unnecessary steps has also been generally supported.",
+    "refs": [
+     "Horner and Whiten 2005",
+     "Lyons et al. 2007",
+     "Nielsen and Tomaselli 2010"
+    ]
+   }
+  },
+  "ch14-e2": {
+   "name": "Social modulation of pain in mice (Langford et al., Mogil)",
+   "researchers": "D. J. Langford et al. (J. S. Mogil's team)",
+   "question": "Does a mouse's own pain sensitivity change when it watches a mouse in pain behind a glass partition?",
+   "method": "A mouse watched another mouse in pain, separated by Plexiglas. In one condition an irritant was injected into the mouse's paw; the amount of paw licking was used as the measure of pain. The study looked at the effect of the neighboring mouse having received more or less irritant (and therefore licking more or less); the mice could be cagemates or strangers.",
+   "finding": "Watching a mouse in pain increased the observer's pain sensitivity. A mouse watching one that licked more also licked more itself, and one watching one that licked less licked less. This shared pain was seen only between cagemates.",
+   "roleInChapter": "Shows that pain can be socially contagious and that this property shows continuity across species. The author also stresses that it cannot be known whether this behavior is truly empathy.",
+   "caveats": "Sapolsky notes that the inner states of mice cannot be known and that it is uncertain whether they 'put themselves in the place of' another mouse and feel its pain. For this reason, the use of the word 'empathy' in this literature is contested.",
+   "replication": {
+    "note": "The social contagion of pain in mice and its strengthening by familiarity were replicated and extended by Mogil's team (e.g., Martin et al. 2015) and other laboratories; calling it 'empathy', however, is conceptually contested.",
+    "refs": [
+     "Langford et al. 2006",
+     "Martin et al. 2015",
+     "Smith et al. 2016, Science Advances"
+    ]
+   }
+  },
+  "ch14-e3": {
+   "name": "Consolation behavior in prairie voles (Burkett, Young et al.)",
+   "researchers": "J. P. Burkett, L. J. Young et al.",
+   "question": "To what extent does the partner of a stressed individual move closer to console it, and does this behavior depend on oxytocin?",
+   "method": "Prairie vole pairs were placed in separate rooms; one member of the pair was stressed with a mild shock or left undisturbed, then the pair was reunited and the partner's licking-grooming behavior was measured. For comparison, stressed strangers and polygamous meadow voles were also tested; in the final stage the effect of oxytocin in the ACC was blocked.",
+   "finding": "The partner of the stressed individual licked and groomed it more, and shared its anxiety behavior and glucocorticoid level. This behavior was not shown toward a stressed stranger or toward polygamous meadow voles. When the effect of oxytocin in the ACC was blocked, the consolation behavior disappeared.",
+   "roleInChapter": "Shows that consolation and empathic response have a biological basis, that this response is directed at familiar and close bonds, and that it depends on the ACC-oxytocin circuit.",
+   "replication": {
+    "note": "Consolation behavior was later reported in other rodents (e.g., mandarin voles), but an independent direct replication of Burkett et al. 2016 is not known.",
+    "refs": [
+     "Burkett et al. 2016"
+    ]
+   }
+  },
+  "ch14-e4": {
+   "name": "Rat rescue experiments (Bartal et al.)",
+   "researchers": "I. Ben-Ami Bartal, J. Decety and P. Mason (earlier work on suspended rats: G. E. Rice and P. Gainer 1962)",
+   "question": "Do rats make an effort to rescue a rat in distress, and does this help extend beyond a familiar group?",
+   "method": "In an earlier study (Rice and Gainer 1962), rats could lower a distressed rat hanging in the air in a harness by pressing a lever; the comparison was a suspended block. In Bartal et al. 2011, rats could free their cagemates from a stressful restrainer; this motivation was compared with chocolate, and rescue and chocolate were offered at the same time. In the later study, unfamiliar rats, cagemates of a different strain, and rats given at birth to a mother of another strain were tested.",
+   "finding": "Rats worked harder to lower the suspended rat than the block. They were as motivated to free a cagemate from the restrainer as to get chocolate; when both rescue and chocolate were possible, they shared the chocolate more than half the time. They also helped strangers of their own strain; a rat raised with a different strain helped that strain, and a rat given to a mother of another strain helped the strain that raised it rather than its biological one. Rescue continued even when there was no opportunity for later interaction.",
+   "roleInChapter": "Shows that helping and compassion-like behaviors are also found in nonhuman species. It also shows that this help is shaped by the boundaries of 'us' and 'them' and can change with experience.",
+   "caveats": "Sapolsky notes that it is uncertain whether this behavior is genuine compassion or self-interest. Because rats helped even when there was no later interaction with the rescued rat, the behavior cannot be attributed only to the expectation of social reward; but self-interested interpretations, such as silencing a disturbing sound, are also plausible, he stresses.",
+   "replication": {
+    "note": "Rescue behavior has been replicated by Bartal's team and other laboratories (e.g., Sato et al. 2015, rescuing a soaked rat); however, whether the behavior is explained by empathy, by the desire for social contact, or by reducing one's own distress is contested (e.g., Silberberg et al. 2014).",
+    "refs": [
+     "Bartal et al. 2011",
+     "Sato et al. 2015, Animal Cognition",
+     "Silberberg et al. 2014"
+    ]
+   }
+  },
+  "ch14-e5": {
+   "name": "Social class and the candy bowl experiment (Piff, Keltner et al.)",
+   "researchers": "P. Piff, D. Keltner et al.",
+   "question": "How does social class affect sensitivity to another's pain and unethical behavior?",
+   "method": "The value of drivers' cars was taken as an indicator of socioeconomic status, and whether they yielded to pedestrians at crosswalks was observed. In the laboratory, participants were asked at the end of a task to take candy from a bowl whose remainder would be given to children. Participants were also led to feel wealthy or poor by comparing themselves with people who were better or worse off.",
+   "finding": "Drivers of expensive cars stopped less often at crosswalks; wealthier participants took more candy from the bowl. Participants led to feel wealthy also took more of the candy set aside for children.",
+   "roleInChapter": "Shows that social position affects empathy and good behavior, and that wealth can lead a person to bring their own perspective to the fore and ignore another's need.",
+   "replication": {
+    "note": "Studies with large, representative samples (e.g., Trautmann et al. 2013, Netherlands; Korndörfer et al. 2015, Germany/USA) could not replicate the finding that the upper class behaves less ethically, and even found the opposite on some measures; the generalizability of Piff et al.'s results is being questioned.",
+    "refs": [
+     "Piff et al. 2012",
+     "Trautmann et al. 2013",
+     "Korndörfer et al. 2015, PLoS ONE"
+    ]
+   }
+  },
+  "ch14-e6": {
+   "name": "Discovery of mirror neurons (Rizzolatti and the Parma group)",
+   "researchers": "G. Di Pellegrino, G. Rizzolatti, V. Gallese et al.",
+   "question": "Do some neurons in the premotor cortex of macaque monkeys fire only during the monkey's own movements, or also when it watches another perform the same movement?",
+   "method": "The activity of individual neurons in the premotor cortex of macaque monkeys was recorded. Neuronal activity was monitored while the monkeys performed movements such as bringing food to the mouth or placing an object in a container, and while another monkey or a human performed the same movements.",
+   "finding": "About 10% of the premotor neurons that became active when performing a movement (e.g., bringing food to the mouth) also became active when another monkey or a human performed the same movement; these cells were called 'mirror neurons'. In later studies, some mirror neurons were reported to be sensitive to the goal of the movement (lifting to drink tea versus to clear the table).",
+   "roleInChapter": "Shows that the idea that empathy can be explained by 'mirroring' is an attractive but unproven framework. Mirror neurons are related to imitation and the meaning of movement, but they have not been shown to be causally linked to empathy.",
+   "caveats": "Sapolsky notes that claims that mirror neurons explain empathy are greatly exaggerated. He stresses that correlations are presented as causation and that these claims have been discussed by many critics, especially in Hickok's book The Myth of Mirror Neurons.",
+   "replication": {
+    "note": "Mirror-neuron-like responses in macaques have been replicated in many laboratories; they have also been reported in humans with single-cell recordings. By contrast, the broad claims that mirror neurons explain empathy, language or autism are weakly supported and have been seriously criticized (Hickok 2014).",
+    "refs": [
+     "di Pellegrino et al. 1992",
+     "Mukamel et al. 2010",
+     "Hickok 2014"
+    ]
+   }
+  },
+  "ch14-e7": {
+   "name": "Heart rate and helping behavior (Eisenberg et al.)",
+   "researchers": "N. Eisenberg et al.",
+   "question": "How does the witness's own level of physiological arousal affect the likelihood of helping when they see another person's pain?",
+   "method": "Participants were shown stimuli about another person in distress while their heart rates were measured; changes in heart rate were related to subsequent helping behavior.",
+   "finding": "People whose heart rate rose markedly on seeing another's pain helped less. Those whose heart rate fell helped more.",
+   "roleInChapter": "Shows that for empathy to turn into action, a person has to manage their own distress. Helping depends on the individual reducing their own anxiety, while focusing on the other's need makes helping easier.",
+   "replication": {
+    "note": "The distinction between personal distress and empathic concern, and the relation of heart rate deceleration to concern, have been supported in many of Eisenberg's studies; however, no current large replication is known on how reliably this physiological measure predicts helping behavior.",
+    "refs": [
+     "Eisenberg et al. 1989",
+     "Eisenberg et al. 1994"
+    ]
+   }
+  },
+  "ch14-e8": {
+   "name": "Empathy for strangers when glucocorticoids are blocked (Martin et al.)",
+   "researchers": "L. Martin et al. (J. S. Mogil's team)",
+   "question": "Do social stress and the stress hormone glucocorticoid change pain sharing and empathy toward strangers?",
+   "method": "In mice and human participants, the effect of watching a stranger's pain on one's own pain sensitivity was measured. In some conditions the release of the stress hormone glucocorticoid was blocked with a drug (metyrapone).",
+   "finding": "When glucocorticoid release was blocked, both mice and humans became more empathic toward strangers; that is, a response of sharing the stranger's pain emerged.",
+   "roleInChapter": "Shows that stress and personal distress suppress the empathic response, and that turning toward another becomes easier when distress is reduced.",
+   "replication": {
+    "note": "This is a single study from Mogil's team; the sample of the human part is small and there is no known independent replication.",
+    "refs": [
+     "Martin et al. 2015"
+    ]
+   }
+  },
+  "ch14-e9": {
+   "name": "Empathy training versus compassion training (Klimecki and Ricard studies)",
+   "researchers": "O. Klimecki, T. Singer et al.; M. Ricard (R. Davidson's and T. Singer's teams)",
+   "question": "Do empathy training, which focuses on directly feeling the pain, and compassion training, which focuses on feelings of warmth and caring, produce different outcomes in the brain and in behavior?",
+   "method": "Volunteers received either empathy training (focusing on feeling the pain of someone who is suffering) or compassion training (focusing on feeling warmth and compassion toward that person), and were examined with brain imaging. In addition, the Buddhist monk Matthieu Ricard was scanned while approaching images of human suffering first with empathic sharing and then with compassion meditation.",
+   "finding": "Empathy training produced intense amygdala activity and a negative, anxious mood. Compassion training produced strong activity in the dlPFC, coupling between the dlPFC and dopaminergic regions, more positive emotions and more prosociality. Ricard said that empathic sharing quickly became unbearable and draining; in the compassion condition the amygdala was quiet and the mesolimbic dopamine system was strongly activated.",
+   "roleInChapter": "Shows that empathy can lead to burnout, whereas a compassion focused on warmth and caring can bring a more positive motivation and more effective help.",
+   "caveats": "Sapolsky notes that this literature is very small. He also stresses that the monks in these studies meditate about eight hours a day, so direct generalization of the results to people in general is limited.",
+   "replication": {
+    "note": "The studies have small samples and are limited to expert meditators; Singer's larger ReSource training project partly supported the different effects of compassion and empathy training, but independent direct replication is limited.",
+    "refs": [
+     "Klimecki et al. 2013",
+     "Klimecki et al. 2014"
+    ]
+   }
+  },
+  "ch14-e10": {
+   "name": "Response to seeing needles in acupuncturists (Cheng et al.)",
+   "researchers": "Y. Cheng et al.",
+   "question": "When people who routinely insert needles as part of their job watch someone else being pricked, do they respond differently from ordinary people?",
+   "method": "Acupuncture practitioners and non-experts were compared on brain responses and pain ratings while watching images of needles being inserted into another person's body.",
+   "finding": "In acupuncturists, the behavioral and neurological responses normally produced by seeing someone else being pricked were not seen.",
+   "roleInChapter": "Shows that repeated exposure and professional expertise can reduce the empathic response. It is therefore read in the context of the training given to health care workers on keeping empathy at a distance.",
+   "replication": {
+    "note": "This is a single fMRI study; the idea that expertise reduces the neural response to another's pain was supported in EEG studies with physicians (Decety et al. 2010), but no direct replication is known.",
+    "refs": [
+     "Cheng et al. 2007",
+     "Decety et al. 2010"
+    ]
+   }
+  },
+  "ch14-e11": {
+   "name": "Spending money on others promotes happiness (Dunn et al.)",
+   "researchers": "E. Dunn et al.",
+   "question": "Does spending money on oneself or on someone else increase happiness more?",
+   "method": "Participants were given five or twenty dollars; half were asked to spend the money that day on themselves, the other half on someone else (from a friend to a charity). They rated their happiness at the start and at the end of the day. Other participants, who were told about the experimental design, were also asked to predict the outcome.",
+   "finding": "Neither a larger sum of money nor spending on oneself increased happiness; only spending on others did. The people who were told about the design predicted the opposite: that spending on oneself and twenty dollars would bring more happiness.",
+   "roleInChapter": "Shows that helping others provides a subjective reward. That people mispredict this reward sets the ground for the debate on whether altruism may have a self-interest component.",
+   "replication": {
+    "note": "The finding that prosocial spending increases happiness has been supported in different countries; however, a preregistered replication (Aknin et al. 2020, JPSP) found the effect markedly smaller than the original, and the effect is thought to be sensitive to context.",
+    "refs": [
+     "Dunn et al. 2008",
+     "Aknin et al. 2020"
+    ]
+   }
+  },
+  "ch14-e12": {
+   "name": "Taxation and voluntary giving: brain reward (Harbaugh, Tricomi et al.)",
+   "researchers": "W. Harbaugh, U. Mayr and D. Burghart",
+   "question": "When mandatory taxation and voluntary giving produce the same public outcome, does the brain's reward system respond differently; that is, is there a self-interest component in altruism?",
+   "method": "Subjects were given an unexpected sum of money in the scanner. From some of it a mandatory tax going to a food bank was deducted; in other conditions they were given the chance to donate the same amount voluntarily. Brain activity and donation behavior were measured.",
+   "finding": "In participants whose dopamine reward system was strongly activated on receiving the unexpected money, activation during taxation or giving was lower. Those with high dopamine activity during taxation were more generous voluntarily. During voluntary giving, dopamine activity and satisfaction were higher than during mandatory taxation. This suggests that there is a self-interest reward in voluntary giving.",
+   "roleInChapter": "Discusses the question of whether altruism is pure by separating the components of a donation that both benefit others and include the person's own reward.",
+   "replication": {
+    "note": "This is a single fMRI study (19 participants); although the idea of 'warm glow' is widely accepted in behavioral economics, no direct replication of this neural finding is known.",
+    "refs": [
+     "Harbaugh et al. 2007"
+    ]
+   }
+  }
+ },
+ "_uncertain": [
+  "ch14-e1: name 'Overimitation experiment' - literature has no single standard title for this study; Turkish name is 'Aşırı taklit deneyi (overimitation)'. Source title is Horner & Whiten 2005 'Causal Knowledge and Imitation/Emulation Switching...'.",
+  "ch14-e4 finding: Turkish sentence 'farklı soydan biriyle büyüyen sıçan o soya, başka soydan anneye verilen sıçan da biyolojik değil, büyüdüğü soya yardım etti' is ambiguous; translated literally.",
+  "ch14-e6: researchers/name 'Rizzolatti and the Parma group' kept literal from Turkish ('Parma ekibi')."
+ ]
+}
