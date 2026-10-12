@@ -1,0 +1,68 @@
+.sim-hb { gap: 20px; }
+.sim-hb .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
+.sim-hb .tab { min-height: 40px; font: 600 13px/1.1 var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 9px; padding: 10px 6px; cursor: pointer; }
+.sim-hb .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
+.sim-hb .pane { display: flex; flex-direction: column; gap: 18px; }
+.sim-hb .pane[hidden] { display: none; }
+.sim-hb .note { font-size: 13px; color: var(--muted); }
+.sim-hb .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+
+/* Üst çubuk ve ölçerler */
+.sim-hb .meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.sim-hb .card .meters { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.sim-hb .m-top { display: flex; justify-content: space-between; font: 400 10.5px var(--f-mono); color: var(--muted); margin-bottom: 3px; gap: 4px; }
+.sim-hb .card .m-top { font-size: 12px; font-family: var(--f-body); }
+.sim-hb .m-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; font-family: var(--f-mono); }
+.sim-hb .track { position: relative; height: 7px; border-radius: 4px; }
+.sim-hb .track > b { transition: width .25s ease; }
+.sim-hb .track > i { position: absolute; top: -3px; bottom: -3px; width: 2.4px; background: var(--ink); border-radius: 1px; }
+.sim-hb .track > i[hidden] { display: none; }
+
+/* Sahne ve grafikler */
+.sim-hb .ln { fill: none; stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; }
+.sim-hb .grid { stroke: var(--line); stroke-width: 1; }
+.sim-hb .stage :where(svg text) { font: 400 10px var(--f-mono); fill: var(--muted); }
+.sim-hb .t-ink { font: 600 11.5px var(--f-body); fill: var(--ink); }
+.sim-hb .t-cap { font: 400 10.5px var(--f-body); fill: var(--muted); }
+.sim-hb .t-pct { font: 500 11px var(--f-mono); fill: var(--ink); }
+.sim-hb .chart text { font-family: var(--f-mono); }
+.sim-hb .legend i { display: inline-block; }
+.sim-hb .stage { padding: 8px 6px 6px; }
+
+/* Girdiler */
+.sim-hb .sliders { gap: 14px; }
+.sim-hb .ctls { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+.sim-hb .ctl { display: flex; flex-direction: column; gap: 6px; }
+.sim-hb .ctl .row .chip { min-height: 40px; }
+.sim-hb .readout { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.sim-hb .ro { border: 1px solid var(--line); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.sim-hb .ro .k { font-size: 12px; color: var(--muted); }
+.sim-hb .ro .v { font: 500 13px var(--f-mono); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+/* Uyarı kutusu (replikasyon) */
+.sim-hb .warn { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--eff); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+.sim-hb .warn-h { font: 600 14px/1.3 var(--f-display); }
+
+/* Tablo */
+.sim-hb .tbl { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.sim-hb .tbl caption { text-align: left; font: 600 12px/1.3 var(--f-body); letter-spacing: .04em; color: var(--muted); padding-bottom: 6px; }
+.sim-hb .tbl th, .sim-hb .tbl td { border: 1px solid var(--line); padding: 8px; text-align: center; font-weight: 500; }
+.sim-hb .tbl th[scope="row"] { text-align: left; }
+.sim-hb .tbl td { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.sim-hb .tbl td.on { background: var(--ink); color: var(--bg); font-weight: 700; }
+
+/* Ayrıntı ve kitap */
+.sim-hb .how { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px 14px; }
+.sim-hb .how summary { cursor: pointer; min-height: 40px; display: flex; align-items: center; font-weight: 600; }
+.sim-hb .how-in { display: flex; flex-direction: column; gap: 8px; padding-bottom: 12px; font-size: 13px; color: var(--muted); }
+.sim-hb .book-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px; }
+.sim-hb .book-list li { border-left: 3px solid var(--line); padding-left: 10px; color: var(--muted); }
+.sim-hb .book-list a { color: var(--ink); font-weight: 600; text-underline-offset: 2px; display: inline-block; min-height: 24px; }
+.sim-hb .book-list b { color: var(--ink); }
+
+@media (max-width: 420px) {
+  .sim-hb .meters { gap: 8px; }
+  .sim-hb .m-top { font-size: 10px; flex-direction: column; gap: 0; }
+  .sim-hb .readout { gap: 6px; }
+  .sim-hb .ro { padding: 8px; }
+}
