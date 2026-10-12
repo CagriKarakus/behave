@@ -1,0 +1,89 @@
+.sim-emp .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.sim-emp .tabs .chip[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sim-emp .panel { display: flex; flex-direction: column; gap: 18px; }
+.sim-emp .panel[hidden] { display: none; }
+.sim-emp .btn-go { background: var(--ink); color: var(--bg); border-color: var(--ink); min-width: 96px; }
+.sim-emp .tg { width: 100%; text-align: left; }
+.sim-emp .sliders > div > .tg { width: auto; }
+
+.sim-emp .meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.sim-emp .m-top { display: flex; justify-content: space-between; font: 400 10.5px var(--f-mono); color: var(--muted); margin-bottom: 3px; gap: 4px; }
+.sim-emp .m-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sim-emp .tally { font-size: 12.5px; color: var(--muted); padding: 2px 4px 0; }
+.sim-emp .chart { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px 8px 8px; }
+.sim-emp .chart .sim-h { padding-inline: 4px; }
+.sim-emp .chart .legend { padding-inline: 4px; }
+.sim-emp .legend .lg-dot { width: 14px; height: 14px; }
+.sim-emp .legend .k-amy { background: var(--amy); }
+.sim-emp .legend .k-dop { background: var(--dop); }
+.sim-emp .legend .k-pfc { background: var(--pfc); }
+.sim-emp .legend .fc { stroke: var(--ink); stroke-width: 2.5; }
+.sim-emp .legend .thr { stroke: var(--muted); stroke-width: 1.6; stroke-dasharray: 4 3; fill: none; }
+
+/* Sahne: figürler */
+.sim-emp .stage text, .sim-emp .chart text { font: 400 10.5px var(--f-body); fill: var(--muted); }
+.sim-emp .em-body { fill: var(--panel); stroke: var(--ink); stroke-width: 1.6; }
+.sim-emp .em-tint { fill: var(--amy); stroke: none; }
+.sim-emp .em-heart { fill: var(--dop); stroke: var(--ink); stroke-width: 1.2; }
+.sim-emp .em-burst { fill: none; stroke: var(--amy); stroke-width: 2.4; stroke-dasharray: 3 5; }
+.sim-emp .em-waves path { fill: none; stroke: var(--amy); stroke-width: 2; stroke-dasharray: 2 8; stroke-linecap: round; animation: em-flow 1.4s linear infinite; }
+.sim-emp .em-waves path:nth-child(2) { animation-delay: -.4s; }
+.sim-emp .em-waves path:nth-child(3) { animation-delay: -.8s; }
+@keyframes em-flow { to { stroke-dashoffset: -20; } }
+.sim-emp .em-alarm path { fill: none; stroke: var(--amy); stroke-width: 2.2; stroke-linecap: round; }
+.sim-emp .em-ar { fill: none; stroke-width: 2.6; stroke-linecap: round; }
+.sim-emp .em-ar.other, .sim-emp .em-ah.other { stroke: var(--dop); }
+.sim-emp .em-ar.self, .sim-emp .em-ah.self { stroke: var(--amy); }
+.sim-emp .em-ah { stroke-width: 1; }
+.sim-emp .em-ah.other { fill: var(--dop); }
+.sim-emp .em-ah.self { fill: var(--amy); }
+.sim-emp .em-ar.res, .sim-emp .em-ah.res { stroke: var(--pfc); fill: var(--pfc); }
+.sim-emp .em-ar.sh, .sim-emp .em-ah.sh { stroke: var(--dop); fill: var(--dop); }
+.sim-emp .em-ar.res, .sim-emp .em-ar.sh { fill: none; stroke-linecap: butt; }
+.sim-emp .em-cage { fill: none; stroke: var(--ink); stroke-width: 2; }
+.sim-emp .em-choc { fill: var(--dop); stroke: var(--ink); stroke-width: 1.6; }
+.sim-emp .em-choc-l { fill: none; stroke: var(--ink); stroke-width: 1.2; }
+.sim-emp .em-rat ellipse, .sim-emp .em-rat circle { stroke: var(--ink); stroke-width: 1.6; }
+.sim-emp .em-rat.light ellipse, .sim-emp .em-rat.light circle { fill: var(--panel); }
+.sim-emp .em-rat.dark ellipse, .sim-emp .em-rat.dark circle { fill: var(--ink); }
+.sim-emp .em-rat .tail { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; }
+.sim-emp .em-rat.light .eye { fill: var(--ink); stroke: none; }
+.sim-emp .em-rat.dark .eye { fill: var(--panel); stroke: none; }
+
+/* Grafikler */
+.sim-emp .chart .grid { stroke: var(--line); stroke-width: 1; }
+.sim-emp .chart .thr { stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 4 3; }
+.sim-emp .chart .ln-d { stroke: var(--amy); }
+.sim-emp .chart .ln-w { stroke: var(--dop); stroke-dasharray: 6 3; }
+.sim-emp .chart .ln-f { stroke: var(--pit); }
+.sim-emp .chart .ln-s { stroke: var(--muted); stroke-dasharray: 6 3; }
+.sim-emp .chart .head { stroke: var(--ink); stroke-width: 1; stroke-opacity: .5; }
+.sim-emp .chart .pt-d { fill: var(--amy); stroke: var(--panel); stroke-width: 1.5; }
+.sim-emp .chart .pt-w { fill: var(--dop); stroke: var(--panel); stroke-width: 1.5; }
+.sim-emp .chart .pt-m { fill: var(--panel); stroke: var(--ink); stroke-width: 2.2; }
+.sim-emp .chart .bar-r { fill: var(--pfc); }
+.sim-emp .chart .bar-s, .sim-emp .chart .bar-v { fill: var(--dop); }
+.sim-emp .chart .bar-t { fill: var(--pfc); }
+.sim-emp .chart .bar-l { fill: var(--lesion); }
+.sim-emp .chart .sel { fill: var(--line); fill-opacity: .4; }
+.sim-emp .chart .vl { font: 500 10.5px var(--f-mono); fill: var(--ink); }
+.sim-emp .chart .nm { font: 500 10.5px var(--f-body); fill: var(--ink); }
+.sim-emp .chart .fc { stroke: var(--ink); stroke-width: 2.6; stroke-linecap: round; }
+.sim-emp .chart .dp { fill: var(--pfc); fill-opacity: .8; stroke: var(--panel); stroke-width: 1; }
+.sim-emp .chart .trend { stroke: var(--ink); stroke-width: 1.4; stroke-dasharray: 5 3; }
+
+/* Gözlemci noktaları */
+.sim-emp .dh { fill: var(--pfc); }
+.sim-emp .dc { fill: none; stroke: var(--bg); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.sim-emp .da { fill: none; stroke: var(--amy); stroke-width: 2; }
+.sim-emp .dx { fill: none; stroke: var(--amy); stroke-width: 1.8; stroke-linecap: round; }
+.sim-emp .di { fill: var(--lesion); }
+
+.sim-emp .how, .sim-emp .more { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.sim-emp .more { margin-top: 10px; }
+.sim-emp .how summary, .sim-emp .more summary { cursor: pointer; font-weight: 600; min-height: 24px; }
+.sim-emp .how p, .sim-emp .more p { margin-top: 8px; font-size: 13px; }
+.sim-emp .book { border: 1px solid var(--line); border-left: 4px solid var(--dop); border-radius: 12px; padding: 12px 14px; }
+.sim-emp .book ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+.sim-emp .book a { color: var(--ink); text-decoration: underline; }
+@media (prefers-reduced-motion: reduce) { .sim-emp * { transition: none !important; animation: none !important; } }
