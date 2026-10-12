@@ -39,7 +39,7 @@
 .sim-hb .tbl th, .sim-hb .tbl td { border: 1px solid var(--line); padding: 8px; text-align: center; font-weight: 500; }
 .sim-hb .tbl th[scope="row"] { text-align: left; }
 .sim-hb .tbl td { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
-.sim-hb .tbl td.on { background: var(--ink); color: var(--bg); font-weight: 700; }
+.sim-hb .tbl td.on { background: var(--accent); color: var(--on-accent); font-weight: 700; }
 
 /* Ayrıntı ve kitap */
 

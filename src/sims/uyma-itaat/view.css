@@ -3,7 +3,7 @@
 .sim-uyma .sl-amy { --c: var(--amy); } .sim-uyma .sl-pfc { --c: var(--pfc); } .sim-uyma .sl-dop { --c: var(--dop); }
 .sim-uyma .sliders > div > .row { margin-block: 4px; }
 .sim-uyma .tg { width: 100%; text-align: left; }
-.sim-uyma .btn-go { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sim-uyma .btn-go { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 
 
 .sim-uyma .stage svg text { font: 400 10px var(--f-body); fill: var(--muted); }

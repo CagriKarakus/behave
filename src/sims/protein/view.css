@@ -8,7 +8,7 @@
 .sim-pr .legend { padding: 4px 8px 0; }
 .sim-pr .sl { --c: var(--ink); }
 .sim-pr .track { height: 7px; border-radius: 4px; }
-.sim-pr .btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.sim-pr .btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
 .sim-pr .notes { display: flex; flex-direction: column; gap: 18px; }
 
 /* Ortak SVG */
@@ -35,7 +35,7 @@
 .sim-pr .cd-a { font-family: var(--f-body); font-size: 12px; font-weight: 600; }
 .sim-pr .cd-a span { color: var(--muted); font-size: 9px; }
 .sim-pr .b { font-style: normal; padding: 0 1px; border-radius: 3px; }
-.sim-pr .b.mut { background: var(--ink); color: var(--bg); }
+.sim-pr .b.mut { background: var(--accent); color: var(--on-accent); }
 .sim-pr .b.cut { box-shadow: -3px 0 0 -0.5px var(--red); }
 .sim-pr .chain { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
 .sim-pr .ck { flex: 0 0 52px; font: 600 11px var(--f-mono); color: var(--muted); }

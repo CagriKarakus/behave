@@ -7,7 +7,7 @@
 .sim-nr .chart .sim-h { margin: 0 8px 4px; }
 .sim-nr .legend { padding: 4px 6px 0; }
 .sim-nr .sl { --c: var(--ink); }
-.sim-nr .btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.sim-nr .btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
 
 /* Çıktı çubuğu */
 .sim-nr .nr-meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }

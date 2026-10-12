@@ -8,7 +8,7 @@
 .sim-zm .rung { position: relative; display: flex; flex-direction: column; gap: 2px; }
 
 .sim-zm .r-when { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; font-size: 12px; color: var(--muted); }
-.sim-zm .r-n { flex: none; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font: 600 11px var(--f-mono); background: var(--ink); color: var(--bg); }
+.sim-zm .r-n { flex: none; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font: 600 11px var(--f-mono); background: var(--accent); color: var(--on-accent); }
 .sim-zm .rung.off .r-n { background: transparent; color: var(--muted); border: 1px solid var(--control-border); }
 .sim-zm .r-t { font-weight: 600; color: var(--ink); }
 .sim-zm .rung.off .r-t { color: var(--muted); font-weight: 500; }

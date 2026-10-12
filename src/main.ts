@@ -1,5 +1,10 @@
 // Yazı tipleri yerelden sunulur (Google'a istek yok). Türkçe karakterler için latin-ext dahil.
-import '@fontsource-variable/bricolage-grotesque/opsz.css';
+import '@fontsource/cormorant-garamond/latin-500.css';
+import '@fontsource/cormorant-garamond/latin-ext-500.css';
+import '@fontsource/cormorant-garamond/latin-500-italic.css';
+import '@fontsource/cormorant-garamond/latin-ext-500-italic.css';
+import '@fontsource/cormorant-garamond/latin-600.css';
+import '@fontsource/cormorant-garamond/latin-ext-600.css';
 import '@fontsource/ibm-plex-sans/latin-400.css';
 import '@fontsource/ibm-plex-sans/latin-ext-400.css';
 import '@fontsource/ibm-plex-sans/latin-500.css';
