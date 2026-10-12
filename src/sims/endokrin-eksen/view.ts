@@ -257,7 +257,7 @@ export function mount(container: HTMLElement): () => void {
       svg('rect', { class: 'box', x: BX, y, width: BW, height: BH, rx: 10 }, g);
       svg('rect', { x: BX, y: y + 12, width: 4, height: BH - 24, rx: 2, fill: `var(${s.c})` }, g);
       svgText(g, { class: 't-title', x: BX + 14, y: y + 20 }, s.t);
-      const hs = s.h.length > 34 ? s.h.slice(0, 33) + '…' : s.h;
+      const hs = s.h.length > 30 ? s.h.slice(0, 29) + '…' : s.h; // kutuya sığar (10,5 px mono ≈ 6,3 px/karakter)
       svgText(g, { class: 't-hor', x: BX + 14, y: y + 35 }, hs);
       svg('rect', { class: 'trk', x: BX + 14, y: y + 46, width: 150, height: 7, rx: 3.5 }, g);
       const fill = svg('rect', { x: BX + 14, y: y + 46, width: 0, height: 7, rx: 3.5, fill: `var(${s.c})` }, g);
@@ -404,7 +404,7 @@ export function mount(container: HTMLElement): () => void {
   const rcCell = svg('circle', { cx: CX, cy: CY, r: CR, fill: 'var(--eff)', 'fill-opacity': 0.1, stroke: 'var(--eff)', 'stroke-width': 2 }, rcSvg);
   const rcRecG = svg('g', {}, rcSvg);
   const rcCenter = svgText(rcSvg, { x: CX, y: CY - 2, 'text-anchor': 'middle', style: 'font:500 22px var(--f-mono);fill:var(--ink);paint-order:stroke;stroke:var(--panel);stroke-width:4px;stroke-linejoin:round' }, '0%');
-  svgText(rcSvg, { x: CX, y: CY + 16, 'text-anchor': 'middle', style: 'font:400 11px var(--f-body);fill:var(--muted)' }, 'hücre yanıtı');
+  svgText(rcSvg, { x: CX, y: CY + 16, 'text-anchor': 'middle', style: 'font:400 11px var(--f-body);fill:var(--ink);paint-order:stroke;stroke:var(--panel);stroke-width:3px;stroke-linejoin:round' }, 'hücre yanıtı');
   function drawReceptor(): void {
     const r = receptor(RC), count = Math.round(RC.number * SLOTS);
     rcCell.setAttribute('fill-opacity', (0.06 + 0.94 * r.response).toFixed(2));

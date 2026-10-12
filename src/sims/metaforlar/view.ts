@@ -1,10 +1,11 @@
+import { mulberry32 } from '../rng';
 import '../sim.css';
 import './view.css';
 import { Scope, ref, svg, svgText, uid } from '../kit';
 import { createTour } from '../tour';
 import {
   CARDS, CARD_IDS, DEFAULTS, K_REPL, SACRED, clamp, cyberNext, cyberShare, describeCard, describeSacred, expectedBacklash,
-  expectedSupport, gauges, maxShift, mulberry32, offerParts, simulateCrowd, type CardId, type Holder, type Inputs, type Mode,
+  expectedSupport, gauges, maxShift, offerParts, simulateCrowd, type CardId, type Holder, type Inputs, type Mode,
   type OfferKind, type Status,
 } from './model';
 

@@ -1,4 +1,5 @@
 import { mulberry32 } from '../rng';
+import { repBadge } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, svg, svgText, uid } from '../kit';
@@ -24,8 +25,9 @@ export const PHASE = { approach: 0.9, wait: 0.8, resolve: 1.15 } as const;
 const TEMPLATE = (id: string) => `
 <div class="sim sim-erg">
   <p class="lede">Ergenler neden daha fazla risk alır, ve bu neden bir "kusur" değil de bir gelişim dengesizliğidir?</p>
-  <div class="chips tabs" role="tablist" aria-label="Üç bakış" data-ref="tabs">
-    ${TABS.map((t, i) => `<button type="button" class="chip" role="tab" id="${id}-t${i}" aria-controls="${id}-p${i}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-i="${i}">${i + 1}. ${t}</button>`).join('')}
+  <div data-ref="tourHost"></div>
+  <div class="tabs" role="tablist" aria-label="Üç bakış" data-ref="tabs">
+    ${TABS.map((t, i) => `<button type="button" class="tab" role="tab" id="${id}-t${i}" aria-controls="${id}-p${i}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-i="${i}">${i + 1}. ${t}</button>`).join('')}
   </div>
 
   <div class="sim-bar" role="group" aria-label="Anlık çıktılar">
@@ -37,7 +39,6 @@ const TEMPLATE = (id: string) => `
     </div>
   </div>
   <p class="sr-only" aria-live="polite" data-ref="live"></p>
-  <div data-ref="tourHost"></div>
 
   <!-- 1. Olgunlaşma çizelgesi -->
   <section role="tabpanel" id="${id}-p0" aria-labelledby="${id}-t0" class="panel" data-ref="p0">
@@ -194,7 +195,7 @@ const TEMPLATE = (id: string) => `
   <!-- 3. Haber güncelleme -->
   <section role="tabpanel" id="${id}-p2" aria-labelledby="${id}-t2" class="panel" data-ref="p2" hidden>
     <div class="contested" role="note">
-      <b class="badge">Replikasyon: tartışmalı</b>
+      ${repBadge('tartışmalı')}
       <p>Ergenlerin kötü haberi tahminlerine katmadığı bulgusu, kullanılan iyi/kötü haber paradigmasının asimetriyi istatistiksel bir yapaylıktan üretebileceği gerekçesiyle eleştirildi (Shah ve ark. 2016). Sharot'un ekibi yeni çalışmalarla asimetriyi savundu; tartışma sürüyor. Aşağıdaki profiller kitaptaki sonucun basit bir modelidir, kesin bir bilgi değil.</p>
     </div>
     <div class="chips" role="group" aria-label="Yaş profili" data-ref="profChips"></div>
@@ -243,7 +244,7 @@ const TEMPLATE = (id: string) => `
     <p><b>Haber.</b> İyi haberde güncelleme oranı her profilde aynıdır; kötü haberde oran yaşla artar. Yeni tahmin = ilk tahmin + oran × haber farkı. Kötü haber oranının yaş eğrisi, kitaptaki "ergen neredeyse hiç güncellemez, yetişkin ikisini de eder" bulgusuna uydurulmuş bir varsayımdır.</p>
   </details>
 
-  <section class="book" aria-label="Kitapta">
+  <aside class="book" aria-label="Kitapta">
     <h3 class="sim-h">Kitapta</h3>
     <ul>
       <li><a href="#/bolum/ch06?deney=ch06-e6">Gardner ve Steinberg 2005; Chein ve ark. 2011</a>: yalnızken ergen ve yetişkin benzer risk alır; iki akran ergende riski yaklaşık üç katına çıkarır, yetişkinde değiştirmez. Akranlar varken ergende vmPFC etkinliği azalır, ventral striatum artar. Replikasyon: karışık (etki büyüklükleri değişken, bazı çalışmalar yaşa özgü etkiyi bulamadı).</li>
@@ -251,7 +252,7 @@ const TEMPLATE = (id: string) => `
       <li><a href="#/bolum/ch06?deney=ch06-e4">Moutsiana ve ark. 2013</a>: ergenler iyi haberle tahminini yetişkin gibi günceller, kötü haberle neredeyse hiç. Replikasyon: <b>tartışmalı</b>.</li>
       <li><a href="#/bolum/ch06?deney=ch06-e1">Shaw ve ark. 2006</a>: gri madde kalınlaşma ve budanma zamanlaması. Replikasyon: karışık.</li>
     </ul>
-  </section>
+  </aside>
 
   <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan gelenler: frontal korteksin yirmili yaşların ortasında olgunlaşması, ergenlikte dopamin tepesi, akranlarla ergen riskinin yaklaşık üç katına çıkması ve yetişkinde değişmemesi, Galvan'ın ödül büyüklüğü örüntüsü, ergenlerde kötü habere zayıf güncelleme. Tepe yaşları, eğri biçimleri, genç yetişkin değerleri ve haber oyunundaki olasılıklar modelin varsayımıdır.</p>
 </div>`;

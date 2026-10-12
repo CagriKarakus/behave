@@ -2,7 +2,7 @@
 // Kullanım: PW=/opt/node-tools/node_modules/playwright [CHROME_PATH=...] node scripts/verify.mjs http://localhost:4173/
 // Çıkış kodu 0 değilse en az bir denetim başarısız olmuştur. Ekran görüntüleri docs/screenshots/ (küçük bir set).
 import { createRequire } from 'node:module';
-import { existsSync, mkdirSync, readdirSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync } from 'node:fs';
 const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PW || 'playwright');
 const base = process.argv[2] || 'http://localhost:4173/';
@@ -19,19 +19,49 @@ function chromePath() {
   }
   return undefined;
 }
+// Tüm simülasyonlar: src/sims/*/meta.ts dosyalarından (yeni eklenenler otomatik dahil olur).
+const SIMS = readdirSync('src/sims', { withFileTypes: true })
+  .filter((d) => d.isDirectory() && existsSync(`src/sims/${d.name}/meta.ts`))
+  .map((d) => { const t = readFileSync(`src/sims/${d.name}/meta.ts`, 'utf8'); return { id: /id:\s*'([^']+)'/.exec(t)?.[1] ?? d.name, chapter: /chapter:\s*'([^']+)'/.exec(t)?.[1] ?? '' }; })
+  .filter((x) => x.chapter);
+// Simülasyonu olmayan bir bölüm (gezinti/rAF denetimleri için); yeni simülasyonlar eklendikçe otomatik kayar.
+const NOSIM = ['ch01', 'epilogue', 'app1', 'app3', 'intro'].find((c) => !SIMS.some((x) => x.chapter === c));
 const browser = await chromium.launch({ executablePath: chromePath(), args: ['--no-sandbox'] });
 let fail = 0;
 const check = (ok, msg) => { console.log(ok ? '  OK  ' : ' HATA ', msg); if (!ok) fail++; };
 
-// ---- Sayfa içi yardımcı (WCAG kontrastı) ----
-const contrastProbe = () => {
-  const parse = (c) => { const m = c.match(/rgba?\(([^)]+)\)/); if (!m) return null; const [r, g, b, a = 1] = m[1].split(/[ ,\/]+/).filter(Boolean).map(Number); return { r, g, b, a }; };
+// ---- Sayfa içi yardımcılar ----
+// WCAG kontrastı. SVG metninin arka planı, metnin ortasındaki noktada üstte olan şekillerin dolgularından (sıralı, saydamlık
+// dahil) hesaplanır; böylece dolu daire üstündeki harf, sayfa zeminine göre değil gerçek dolguya göre ölçülür.
+const contrastProbe = (rootSel) => {
+  const scopeEl = rootSel ? document.querySelector(rootSel) : document.body;
+  if (!scopeEl) return [`kök yok: ${rootSel}`];
+  const parse = (c) => { const m = c?.match(/rgba?\(([^)]+)\)/); if (!m) return null; const [r, g, b, a = 1] = m[1].split(/[ ,\/]+/).filter(Boolean).map(Number); return { r, g, b, a }; };
   const lum = ({ r, g, b }) => { const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
   const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+  const over = (top, bottom, alpha) => ({ r: top.r * alpha + bottom.r * (1 - alpha), g: top.g * alpha + bottom.g * (1 - alpha), b: top.b * alpha + bottom.b * (1 - alpha), a: 1 });
   const bgOf = (el) => { for (let e = el; e; e = e.parentElement) { const c = parse(getComputedStyle(e).backgroundColor); if (c && c.a > 0.99) return c; } return parse(getComputedStyle(document.body).backgroundColor); };
+  const SHAPES = new Set(['rect', 'circle', 'ellipse', 'path', 'polygon', 'polyline']);
+  const svgBg = (el) => {
+    // Kalın (>= 2 px) zemin renkli halo (paint-order: stroke) harfin gerçek zeminidir.
+    const own = getComputedStyle(el), halo = own.stroke !== 'none' ? parse(own.stroke) : null;
+    if (halo && halo.a > 0.99 && parseFloat(own.strokeWidth) >= 2) return halo;
+    const svgRoot = el.ownerSVGElement ?? el.closest('svg');
+    let bg = bgOf(svgRoot.parentElement ?? svgRoot);
+    const r = el.getBoundingClientRect();
+    const stack = document.elementsFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+    const below = stack.slice(stack.indexOf(el) + 1).filter((e) => e instanceof SVGElement && SHAPES.has(e.tagName.toLowerCase()) && svgRoot.contains(e));
+    for (const e of below.reverse()) {
+      const cs = getComputedStyle(e), fill = parse(cs.fill);
+      if (!fill || cs.fill === 'none') continue;
+      const alpha = fill.a * Number(cs.fillOpacity) * Number(cs.opacity);
+      if (alpha > 0) bg = over(fill, bg, alpha);
+    }
+    return bg;
+  };
   const bad = [];
   const seen = new Set();
-  for (const el of document.querySelectorAll('body *')) {
+  for (const el of scopeEl.querySelectorAll('*')) {
     if (!el.getClientRects().length || ![...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) continue;
     const cs = getComputedStyle(el);
     if (cs.visibility === 'hidden' || Number(cs.opacity) < 1 || el.closest('[hidden]')) continue;
@@ -40,12 +70,12 @@ const contrastProbe = () => {
     if (!fg || fg.a < 0.99) continue;
     const size = parseFloat(cs.fontSize), bold = parseInt(cs.fontWeight) >= 700;
     const need = size >= 24 || (size >= 18.66 && bold) ? 3 : 4.5;
-    const r = ratio(fg, bgOf(el));
+    const r = ratio(fg, isSvg ? svgBg(el) : bgOf(el));
     const key = (el.className?.baseVal ?? el.className) + '|' + cs.color + cs.fill;
     if (r < need && !seen.has(key)) { seen.add(key); bad.push(`${el.tagName.toLowerCase()}.${el.className?.baseVal ?? el.className} "${el.textContent.trim().slice(0, 24)}" ${r.toFixed(2)}<${need}`); }
   }
   // Denetim kenarlıkları (>= 3:1)
-  for (const el of document.querySelectorAll('.chip, .sim .btn, .theme-btn, .filters input, .filters select')) {
+  for (const el of scopeEl.querySelectorAll('.chip, .sim .btn, .theme-btn, .filters input, .filters select')) {
     if (!el.getClientRects().length || el.matches('[aria-pressed="true"]')) continue;
     const cs = getComputedStyle(el);
     const r = ratio(parse(cs.borderTopColor), bgOf(el.parentElement));
@@ -55,7 +85,98 @@ const contrastProbe = () => {
   return bad;
 };
 
-const routes = [['home', '#/'], ['ch02', '#/bolum/ch02'], ['app2', '#/bolum/app2'], ['ch11', '#/bolum/ch11'], ['deneyler', '#/deneyler']];
+// Simülasyon yerleşimi: yatay taşma, ekran dışına çıkan öğeler ve üst üste binen/kırpılan SVG etiketleri.
+const layoutProbe = () => {
+  const out = [];
+  const vw = document.documentElement.clientWidth;
+  const sim = document.querySelector('.sim');
+  if (!sim) return ['.sim yok'];
+  if (document.documentElement.scrollWidth > vw) out.push(`sayfa yatay taşıyor (${document.documentElement.scrollWidth} > ${vw})`);
+  const scrollers = (e) => { for (let p = e.parentElement; p && p !== sim; p = p.parentElement) { const o = getComputedStyle(p).overflowX; if (o === 'auto' || o === 'scroll') return true; } return false; };
+  const seen = new Set();
+  for (const e of sim.querySelectorAll('*')) {
+    if (!e.getClientRects().length || e.closest('[hidden]') || e instanceof SVGElement || scrollers(e)) continue;
+    const r = e.getBoundingClientRect();
+    if (r.width && (r.right > vw + 1 || r.left < -1)) { const k = e.tagName + '.' + e.className; if (!seen.has(k)) { seen.add(k); out.push(`taşıyor ${k} (${Math.round(r.left)}..${Math.round(r.right)})`); } }
+  }
+  const area = (a) => Math.max(0, a.width) * Math.max(0, a.height);
+  const inter = (a, b) => ({ width: Math.min(a.right, b.right) - Math.max(a.left, b.left), height: Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) });
+  for (const svg of sim.querySelectorAll('svg')) {
+    if (!svg.getClientRects().length || svg.closest('[hidden]')) continue;
+    const sr = svg.getBoundingClientRect();
+    const texts = [...svg.querySelectorAll('text')].filter((t) => t.textContent.trim() && t.getClientRects().length && getComputedStyle(t).visibility !== 'hidden' && Number(getComputedStyle(t).opacity) > 0.05);
+    const boxes = texts.map((t) => ({ t, r: t.getBoundingClientRect() }));
+    const name = svg.getAttribute('aria-label')?.slice(0, 28) ?? svg.dataset.ref ?? 'svg';
+    for (const { t, r } of boxes) {
+      if (r.left < sr.left - 1.5 || r.right > sr.right + 1.5) out.push(`SVG etiketi kırpılıyor [${name}] "${t.textContent.trim().slice(0, 22)}"`);
+    }
+    for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
+      const a = boxes[i].r, b = boxes[j].r, x = inter(a, b);
+      if (x.width > 2 && x.height > 2 && area(x) > 0.25 * Math.min(area(a), area(b))) out.push(`SVG etiketleri üst üste [${name}] "${boxes[i].t.textContent.trim().slice(0, 18)}" × "${boxes[j].t.textContent.trim().slice(0, 18)}"`);
+    }
+  }
+  return [...new Set(out)];
+};
+
+// Tüm simülasyonlar: her sekme ve tur adımında kontrast (açık ve koyu tema), yatay taşma, SVG etiketlerinin kırpılması/üst üste binmesi.
+// ONLY=sims yalnızca bunu çalıştırır; SIM=<id,id> belirli simülasyonlarla sınırlar.
+async function walkSims(page, open, w) {
+  const wanted = process.env.SIM ? process.env.SIM.split(',') : null;
+  const list = SIMS.filter((x) => !wanted || wanted.includes(x.id));
+  // Mobil çıktı çubuğu: simülasyon içinde ekranın altına yapışık kalır, küçültme düğmesi çubuğu tek satıra indirir ve geri açar,
+  // odaklanan öğeler çubuğun altında kalmasın diye scroll-padding-bottom tanımlıdır.
+  if (w < 600) {
+    const barProblems = [];
+    for (const sim of list) {
+      await open(`#/bolum/${sim.chapter}?sim=${sim.id}`, 900);
+      await page.evaluate(() => window.scrollTo(0, document.querySelector('.sim').getBoundingClientRect().top + scrollY + 420));
+      await page.waitForTimeout(200);
+      const g = () => page.evaluate(() => { const b = document.querySelector('.sim-bar'); const r = b?.getBoundingClientRect(); return { h: Math.round(r?.height ?? 0), bottom: Math.round(r?.bottom ?? 0), vh: innerHeight, collapsed: b?.dataset.collapsed, exp: b?.querySelector('.bar-toggle')?.getAttribute('aria-expanded'), pad: parseFloat(getComputedStyle(document.documentElement).scrollPaddingBottom) || 0 }; });
+      const a = await g();
+      if (a.bottom !== a.vh) barProblems.push(`${sim.id}: çubuk altta yapışık değil (bottom=${a.bottom}, vh=${a.vh})`);
+      if (a.exp !== 'true' || a.collapsed !== 'false') barProblems.push(`${sim.id}: küçültme düğmesi yok ya da başlangıç durumu yanlış (${a.exp}/${a.collapsed})`);
+      if (a.pad < a.h) barProblems.push(`${sim.id}: scroll-padding-bottom (${a.pad}) çubuktan (${a.h}) küçük`);
+      await page.click('.sim-bar .bar-toggle'); await page.waitForTimeout(150);
+      const c = await g();
+      if (c.collapsed !== 'true' || c.exp !== 'false' || c.h > 64 || c.h > a.h) barProblems.push(`${sim.id}: küçültülünce çubuk ${a.h} -> ${c.h} px (en çok 64 olmalı)`);
+      await page.click('.sim-bar .bar-toggle'); await page.waitForTimeout(150);
+      const d = await g();
+      if (d.collapsed !== 'false' || d.h !== a.h) barProblems.push(`${sim.id}: büyütünce çubuk eski boyuta dönmedi (${a.h} -> ${d.h})`);
+    }
+    for (const p of barProblems) console.log('   ·', p);
+    check(barProblems.length === 0, `çıktı çubuğu (${list.length} simülasyon, ${w}px): ${barProblems.length} sorun`);
+  }
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate((t) => { try { localStorage.setItem('behave-theme', t); } catch { /* */ } }, theme);
+    const problems = [];
+    for (const sim of list) {
+      await open(`#/bolum/${sim.chapter}?sim=${sim.id}`, 900);
+      const probe = async (tag) => {
+        await page.waitForTimeout(250);
+        for (const b of await page.evaluate(contrastProbe, '.ch-sim')) problems.push(`[${sim.id}/${tag}] ${b}`);
+        for (const b of await page.evaluate(layoutProbe)) problems.push(`[${sim.id}/${tag}] ${b}`);
+      };
+      await probe('ilk');
+      const nTabs = await page.evaluate(() => document.querySelectorAll('.sim [role=tab]').length);
+      for (let t = 1; t < nTabs; t++) {
+        await page.evaluate((i) => document.querySelectorAll('.sim [role=tab]')[i].click(), t);
+        await probe(`sekme${t + 1}`);
+      }
+      if (nTabs) { await page.evaluate(() => document.querySelectorAll('.sim [role=tab]')[0].click()); await page.waitForTimeout(200); }
+      // Rehberli tur: her adım simülasyonu bir duruma getirir.
+      for (let step = 1; step <= 12; step++) {
+        const nxt = await page.evaluate(() => { const b = document.querySelector('.sim .tour [data-t=next]'); if (!b || b.closest('[hidden]') || !b.getClientRects().length) return null; const label = b.textContent; b.click(); return label; });
+        if (nxt === null || nxt === 'Bitir') break;
+        await probe(`tur${step + 1}`);
+      }
+    }
+    for (const p of problems.slice(0, 120)) console.log('   ·', p);
+    check(problems.length === 0, `simülasyonlar (${list.length}), ${theme}, ${w}px: kontrast/taşma/etiket sorunu ${problems.length}`);
+  }
+  await page.evaluate(() => { try { localStorage.removeItem('behave-theme'); } catch { /* */ } });
+}
+
+const routes = [['home', '#/'], ['ch02', '#/bolum/ch02'], ['app2', '#/bolum/app2'], [NOSIM, `#/bolum/${NOSIM}`], ['deneyler', '#/deneyler']];
 for (const w of [390, 1280]) {
   console.log(`\n=== ${w}px ===`);
   const ctx = await browser.newContext({ viewport: { width: w, height: w === 390 ? 844 : 900 } });
@@ -71,13 +192,14 @@ for (const w of [390, 1280]) {
     window.requestAnimationFrame = (cb) => { window.__raf++; return o(cb); };
   });
   const open = async (hash, wait = 600) => { await page.goto(base + hash); await page.reload(); await page.waitForTimeout(wait); };
+  if (process.env.ONLY === 'sims') { await walkSims(page, open, w); await ctx.close(); continue; }
 
   // 1) Sayfalar: yatay taşma yok, başlık var; küçük ekran görüntüleri
   for (const [name, hash] of routes) {
     await open(hash, 900);
     const m = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, iw: window.innerWidth, h1: document.querySelector('h1')?.textContent }));
     check(m.sw <= m.iw && !!m.h1, `${name}: taşma yok, h1="${(m.h1 || '').slice(0, 30)}"`);
-    if (name !== 'ch11' && name !== 'deneyler') await page.screenshot({ path: `${OUT}/${name}-${w}.png` });
+    if (name !== NOSIM && name !== 'deneyler') await page.screenshot({ path: `${OUT}/${name}-${w}.png` });
   }
 
   // 2) Ana sayfa yalnızca ana paketi indirir (bölüm ayrıntısı/sim parçası yok)
@@ -150,11 +272,11 @@ for (const w of [390, 1280]) {
 
   // 6) Gezinme: sim döngüsü durur
   await open('#/bolum/ch02', 500);
-  await page.evaluate(() => { location.hash = '#/bolum/ch11'; });
+  await page.evaluate(() => { location.hash = `#/bolum/${NOSIM}`; });
   await page.waitForTimeout(500);
   const stopped = await raf();
   const gone = await page.evaluate(() => document.querySelectorAll('.sim').length);
-  check(stopped === 0 && gone === 0, `ch11'de rAF=${stopped}, kalan .sim=${gone}`);
+  check(stopped === 0 && gone === 0, `${NOSIM}'te rAF=${stopped}, kalan .sim=${gone}`);
 
   // 7) Etkileşim ve tema
   await open('#/bolum/ch02', 500);
@@ -250,6 +372,10 @@ for (const w of [390, 1280]) {
   await open(`#/bolum/ch02?sim=yok`, 900);
   ti = await tabInfo();
   check(ti.sel === 'bir-saniye-once' && ti.sims === 1, `geçersiz ?sim= ilkine düşer (${ti.sel})`);
+
+
+  // 13) Tüm simülasyonlar
+  await walkSims(page, open, w);
 
   check(errors.length === 0, `konsol hataları: ${errors.length} ${errors.slice(0, 3).join(' | ')}`);
   await ctx.close();

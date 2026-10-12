@@ -16,8 +16,8 @@ const TEMPLATE = (id: string) => `
 <div class="sim sim-sq">
   <p class="lede">Farkına bile varmadığımız duyusal ve sosyal ipuçları, birkaç saniye içinde kararlarımızı nasıl değiştirir? İki mekanizma: beyne fark edilmeden ulaşan hızlı alarm ve çevredeki düzensizliğin bulaşması.</p>
   <div class="tabs" role="tablist" aria-label="Mekanizma seçimi">
-    <button type="button" role="tab" class="chip" id="${id}-t-fast" aria-controls="${id}-p-fast" data-tab="fast">Hızlı yol ve düşünce</button>
-    <button type="button" role="tab" class="chip" id="${id}-t-norm" aria-controls="${id}-p-norm" data-tab="norm">Norm ihlallerinin yayılması</button>
+    <button type="button" role="tab" class="tab" id="${id}-t-fast" aria-controls="${id}-p-fast" data-tab="fast">Hızlı yol ve düşünce</button>
+    <button type="button" role="tab" class="tab" id="${id}-t-norm" aria-controls="${id}-p-norm" data-tab="norm">Norm ihlallerinin yayılması</button>
   </div>
 
   <div class="sim-bar" role="group" aria-label="Anlık çıktılar">

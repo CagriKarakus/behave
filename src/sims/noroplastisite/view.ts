@@ -1,3 +1,4 @@
+import { bookBox } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, ref, svg, uid } from '../kit';
@@ -42,9 +43,6 @@ const STRESS_KINDS: Array<{ k: StressKind; n: string; note: string }> = [
   { k: 'kosu', n: 'Gönüllü koşu', note: 'Bağlam: kitaba göre korkuyla salgılanan glukokortikoid hipokampüs dendritlerini küçültürken, gönüllü koşuyla salgılanan benzer miktar onları büyütür. Amigdalanın devrede olup olmaması farkı belirliyor gibidir.' },
 ];
 
-const BOOK_LINK = (id: string, text: string, rep: string): string =>
-  `<li><a href="#/bolum/ch05?deney=${id}">${text}</a><span class="rep">${rep}</span></li>`;
-
 const TEMPLATE = (id: string): string => `
 <div class="sim sim-nrp">
   <p class="lede">Deneyim, günler ve aylar içinde beynin fiziksel yapısını nasıl değiştirir?</p>
@@ -87,9 +85,9 @@ const TEMPLATE = (id: string): string => `
       <p>Ca²⁺ girişi = saniyedeki uyarı sayısı × tıkacın kalkma oranı. Ca²⁺ düzeyi iki eşiğe göre okunur: alt eşiğin altında değişim yok, iki eşik arasında LTD (AMPA reseptörleri azalır), üst eşiğin üstünde LTP (yeni AMPA reseptörleri yerleşir). Değişimin boyu toplam uyarı sayısıyla büyür ve doyar.</p>
       <p>Varsayım (kitapta yok): yetersiz uyarımda değişim erken evrede kalır ve saatler içinde söner; yeterince güçlüyse kalıcılaşır. Eşikler, hızlar ve süreler nitel ayarlardır.</p>
     </div></details>
-    <aside class="book" aria-label="Kitapta"><h3 class="sim-h">Kitapta</h3><ul>
-      ${BOOK_LINK('ch05-e1', 'Lømo (1966), Bliss ve Lømo (1973): yoğun uyarım sonrası sinaps uzun süre güçlü kalır (LTP)', 'Replikasyon: sağlam. Tartışma olgunun varlığında değil, doğal öğrenmedeki payında.')}
-    </ul></aside>
+    ${bookBox([
+      { id: 'ch05-e1', text: 'Lømo (1966), Bliss ve Lømo (1973): yoğun uyarım sonrası sinaps uzun süre güçlü kalır (LTP)', rep: 'sağlam', note: 'Tartışma olgunun varlığında değil, doğal öğrenmedeki payında.' },
+    ])}
     <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan: Hebb ilkesi, NMDA eşiği, Ca²⁺ aracılı LTP ve LTD'nin sinyali keskinleştirmesi. Kitap dışı: Mg²⁺ tıkacı ayrıntısı, frekans değerleri ve sürelerin kendisi. Bliss ve Lømo deneyi anestezili tavşanda perforan yola yüksek frekanslı uyarı verip saatlerce izleme düzeneğidir (kitap dışı bilgi).</p>
   </section>
 
@@ -119,11 +117,11 @@ const TEMPLATE = (id: string): string => `
       <p>Günlük etkin pratik = fiziksel dakikalar + 0,5 × hayal edilen dakikalar. Hızlı bileşen bu dozla doyarak yükselir (yarı doyum: günde ≈ 60 dk) ve pratik kesilince birkaç saatlik bir zamanla söner. Yavaş bileşen hızlı bileşenin sürdüğü sürece birikir ve ≈ 160 günlük bir zamanla yavaşça söner. Harita alanı = 1 + hızlı + yavaş; komşu alanlar toplam yüzey sabit kalacak biçimde daralır.</p>
       <p>Tüm katsayılar nitel ayardır; kitaptaki bulguların yönünü ve sırasını yakalamak için seçildi.</p>
     </div></details>
-    <aside class="book" aria-label="Kitapta"><h3 class="sim-h">Kitapta</h3><ul>
-      ${BOOK_LINK('ch05-e7', 'Pascual-Leone (1995): piyano alıştırması, hayal edilen pratik ve bırakınca hızlı kayıp', 'Replikasyon: sağlam. Zihinsel pratiğin etkisi raporlanmış ama genellikle fiziksel pratikten küçük.')}
-      ${BOOK_LINK('ch05-e8', 'Draganski (2004): üç ay jonglörlük ve gri madde', 'Replikasyon: sağlam; ancak MR hacim ölçümlerinin hücresel anlamı ve küçük örneklemler eleştirilmiş.')}
-      ${BOOK_LINK('ch05-e12', 'Maguire ve ark.: Londra taksi şoförlerinde hipokampüs', 'Replikasyon: sağlam; örneklemler görece küçük, büyük bağımsız replikasyonlar sınırlı.')}
-    </ul></aside>
+    ${bookBox([
+      { id: 'ch05-e7', text: 'Pascual-Leone (1995): piyano alıştırması, hayal edilen pratik ve bırakınca hızlı kayıp', rep: 'sağlam', note: 'Zihinsel pratiğin etkisi raporlanmış ama genellikle fiziksel pratikten küçük.' },
+      { id: 'ch05-e8', text: 'Draganski (2004): üç ay jonglörlük ve gri madde', rep: 'sağlam', note: 'Ancak MR hacim ölçümlerinin hücresel anlamı ve küçük örneklemler eleştirilmiş.' },
+      { id: 'ch05-e12', text: 'Maguire ve ark.: Londra taksi şoförlerinde hipokampüs', rep: 'sağlam', note: 'Örneklemler görece küçük, büyük bağımsız replikasyonlar sınırlı.' },
+    ])}
     <p class="foot">Nitel model. Kitaptan: günde 2 saat piyano alıştırması, birkaç gün ve dört hafta koşulları, hayal etme, bırakınca bir günden kısa sürede kayıp; üç ay jonglörlük ve kısmi gerileme; taksi şoförleri. Günlük 60 dk jonglörlük süresi ve tüm katsayılar kitap dışı varsayımdır.</p>
   </section>
 
@@ -153,9 +151,9 @@ const TEMPLATE = (id: string): string => `
       <p>Amigdalada glukokortikoid, hızlı kurulan ve yavaş sönen gizli bir programı (BDNF artışı gibi düşünülebilir) tetikler. Dendrit büyümesi bu programın karekökünü izler; bu yüzden tek doz bile görünür bir büyüme verir. Büyüme çabuk, geri çekilme çok yavaştır.</p>
       <p>Gönüllü koşuda hipokampüs dendritleri büyür, amigdala devreye girmez. Katsayılar nitel ayardır; BLA dikenleri modelde değişmez.</p>
     </div></details>
-    <aside class="book" aria-label="Kitapta"><h3 class="sim-h">Kitapta</h3><ul>
-      ${BOOK_LINK('ch05-e3', 'Vyas ve ark. (2002), Mitra ve Sapolsky (2008): stres hipokampüs dendritlerini küçültür, BLA dendritlerini büyütür', 'Replikasyon: sağlam; birçok laboratuvarda tekrarlandı. Bağlam önemli: koşuyla gelen glukokortikoid farklı etki eder.')}
-    </ul></aside>
+    ${bookBox([
+      { id: 'ch05-e3', text: 'Vyas ve ark. (2002), Mitra ve Sapolsky (2008): stres hipokampüs dendritlerini küçültür, BLA dendritlerini büyütür', rep: 'sağlam', note: 'Birçok laboratuvarda tekrarlandı. Bağlam önemli: koşuyla gelen glukokortikoid farklı etki eder.' },
+    ])}
     <p class="foot">Nitel model. Kitaptan: yön (hipokampüs küçülür, BLA büyür), tek dozun bile yetmesi (12. gün ölçümü), amigdala etkisinin kalıcı kaygıyla ilişkisi ve bağlam uyarısı. Kitap dışı: toparlanma zamanları ve yüzde değerleri. Çizimler şematiktir, gerçek morfoloji değildir.</p>
   </section>
 </div>`;
@@ -263,7 +261,7 @@ export function mount(container: HTMLElement): () => void {
     '<text class="lab" x="3" y="196">Dikencik</text><text class="lab" x="3" y="208">(postsin.)</text>' +
     '<text class="lab" x="52" y="119">AMPA</text><line class="lead" x1="80" y1="116" x2="114" y2="127"/>' +
     '<text class="lab" x="262" y="150">NMDA</text><line class="lead" x1="196" y1="140" x2="258" y2="147"/>' +
-    '<text class="lab" x="236" y="168">Mg²⁺ tıkacı</text><text class="lab" data-ref="post" x="180" y="290" text-anchor="middle">Dendrit</text>' +
+    '<text class="lab" x="214" y="114">Mg²⁺ tıkacı</text><line class="lead" x1="212" y1="112" x2="187" y2="124"/><text class="lab" data-ref="post" x="180" y="290" text-anchor="middle">Dendrit</text>' +
     '<text class="lab eff" x="12" y="14">Glutamat salımı</text>';
 
   // Titreşim: vezikül konumları
@@ -617,7 +615,7 @@ export function mount(container: HTMLElement): () => void {
   const mkT = (x: number, y: number, s: string, cls = 'lab') => { const t = svg('text', { class: cls, x, y }, stSvg); t.textContent = s; return t; };
   mkT(90, 20, 'Hipokampüs nöronu', 'lab ctr strong');
   mkT(270, 20, 'Amigdala (BLA) nöronu', 'lab ctr strong');
-  const treeHip: Tree = buildTree(stSvg, { seed: 11, x: 90, y: 214, roots: [-1.571, -2.2, -0.95], lens: [32, 26, 20, 15, 12], spread: 0.55, w: [0.25, 0.5, 0.9, 1.3, 1.6], color: 'var(--hyp)', spinesPer: 5, somaR: 8 });
+  const treeHip: Tree = buildTree(stSvg, { seed: 11, x: 90, y: 214, roots: [-1.571, -2.2, -0.95], lens: [28, 23, 18, 13, 10.5], spread: 0.55, w: [0.25, 0.5, 0.9, 1.3, 1.6], color: 'var(--hyp)', spinesPer: 5, somaR: 8 });
   const treeAmy: Tree = buildTree(stSvg, { seed: 23, x: 270, y: 132, roots: [0, 1.05, 2.1, 3.14, 4.2, 5.24], lens: [19, 17, 14, 12], spread: 0.6, w: [0.4, 0.9, 1.4, 1.8], color: 'var(--amy)', spinesPer: 0, somaR: 8 });
   const stTxtH = mkT(90, 240, '', 'val ctr');
   const stTxtA = mkT(270, 240, '', 'val ctr');

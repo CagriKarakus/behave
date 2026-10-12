@@ -2,7 +2,7 @@
 // Kitaptan (chapters.json, Ek 1): dinlenme ~-70 mV; eşiğe ulaşınca tam ya da hiç; tek girdi sönüp gider, birçok girdi birlikte
 // gerekir; salım -> reseptör -> geri alım / enzim; geri bildirim sinyali kısaltır, ileri beslemeli zamanda, yanal inhibisyon
 // uzayda keskinleştirir. Diğer bütün sayılar (eşik, tepe, süreler, genlikler, hız sabitleri) modelin varsayımıdır.
-import { mulberry32 } from './rng';
+import { mulberry32 } from '../rng';
 
 export const clamp = (v: number, lo = 0, hi = 1): number => Math.min(hi, Math.max(lo, v));
 

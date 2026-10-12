@@ -1,10 +1,7 @@
-.sim-ke .tabs { flex-wrap: wrap; overflow: visible; }
-.sim-ke .tabs .chip[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .sim-ke .panel { display: flex; flex-direction: column; gap: 16px; }
 .sim-ke .panel[hidden] { display: none; }
 .sim-ke .sl-pfc { --c: var(--pfc); } .sim-ke .sl-dop { --c: var(--dop); } .sim-ke .sl-gld { --c: var(--gld); } .sim-ke .sl-amy { --c: var(--amy); }
 
-.sim-ke .meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .sim-ke .m-top, .sim-ke .bar-top { display: flex; justify-content: space-between; font: 400 10.5px var(--f-mono); color: var(--muted); margin-bottom: 3px; gap: 4px; }
 .sim-ke .m-top b, .sim-ke .bar-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
@@ -24,11 +21,11 @@
 .sim-ke .nb.sel { stroke: var(--ink); stroke-width: 2.6; }
 .sim-ke svg .nt { font: 600 11px var(--f-body); fill: var(--ink); }
 .sim-ke svg .nv { font: 400 10px var(--f-mono); fill: var(--muted); }
+.sim-ke svg .nvv { fill: var(--ink); }
 
 .sim-ke .tests { display: flex; flex-direction: column; gap: 12px; }
 .sim-ke .tc, .sim-ke .pair { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
 .sim-ke .tc h4 { margin: 0; font: 600 13px/1.3 var(--f-body); display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; }
-.sim-ke .rep { font: 500 11px var(--f-mono); color: var(--eff-text); border: 1px solid var(--eff-text); border-radius: 999px; padding: 0 7px; }
 .sim-ke .bar { --c: var(--ink); }
 .sim-ke .pl { font: 600 13px var(--f-body); }
 .sim-ke .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; }
@@ -41,10 +38,4 @@
 .sim-ke .stack .s1 { background: var(--gld); } .sim-ke .stack .s2 { background: var(--red); }
 .sim-ke .tc .legend { padding: 0; }
 
-.sim-ke .how { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font-size: 13px; }
-.sim-ke .how summary { cursor: pointer; font-weight: 600; min-height: 28px; }
-.sim-ke .how p { margin-top: 8px; }
-.sim-ke .book { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
-.sim-ke .book ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
-.sim-ke .book a { color: var(--ink); text-underline-offset: 2px; font-weight: 600; }
 .sim-ke .sl-hint { font-size: 12px; color: var(--muted); }

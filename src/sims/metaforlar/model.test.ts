@@ -1,8 +1,9 @@
+import { mulberry32 } from '../rng';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
   CARDS, CARD_IDS, DEFAULTS, K_REPL, backlashOne, cyberNext, cyberShare, describeCard, describeSacred, expectedBacklash,
-  expectedSupport, gauges, maxShift, mulberry32, offerParts, simulateCrowd, supportOne, type CardId, type Holder, type Inputs,
+  expectedSupport, gauges, maxShift, offerParts, simulateCrowd, supportOne, type CardId, type Holder, type Inputs,
 } from './model';
 
 const ch15 = (JSON.parse(readFileSync('content/chapters.json', 'utf8')).chapters as Array<{ id: string; experiments: Array<{ id: string; replication: { status: string } }> }>)

@@ -1,13 +1,6 @@
 .sim-ck { gap: 20px; }
-.sim-ck .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
-.sim-ck .tab { min-height: 48px; font: 600 12.5px/1.2 var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 9px; padding: 8px 6px; cursor: pointer; }
-.sim-ck .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
-.sim-ck .pane { display: flex; flex-direction: column; gap: 18px; }
-.sim-ck .pane[hidden] { display: none; }
-.sim-ck .note { font-size: 13px; color: var(--muted); }
 .sim-ck .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
 .sim-ck .card .sim-h { margin: 0; }
-.sim-ck .say { min-height: 4em; }
 .sim-ck .stage { padding: 8px 6px 6px; }
 .sim-ck .stage text, .sim-ck .chart text { font: 400 10px var(--f-mono); fill: var(--muted); }
 .sim-ck .stage text.big { font: 600 20px var(--f-mono); fill: var(--ink); }
@@ -19,12 +12,7 @@
 .sim-ck .legend { padding: 4px 4px 0; }
 .sim-ck .chips { margin-inline: 0; padding-inline: 0; flex-wrap: wrap; overflow: visible; }
 
-.sim-ck .ck-meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.sim-ck .m-top { display: flex; flex-direction: column; font-size: 11px; line-height: 1.25; color: var(--muted); margin-bottom: 3px; gap: 1px; min-height: 2.5em; justify-content: flex-end; }
-.sim-ck .m-top b { font: 500 13px var(--f-mono); color: var(--ink); font-variant-numeric: tabular-nums; }
 .sim-ck .track { height: 7px; border-radius: 4px; }
-.sim-ck .track > b { transition: width .25s; }
-@media (prefers-reduced-motion: reduce) { .sim-ck .track > b { transition: none; } }
 
 .sim-ck .callout { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--eff); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
 .sim-ck .callout strong { color: var(--eff-text); }
@@ -50,17 +38,7 @@
 .sim-ck .arow .av { font: 500 12px var(--f-mono); text-align: right; }
 .sim-ck .arow .track { height: 10px; }
 
-.sim-ck .more { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font-size: 13px; }
-.sim-ck .more summary { cursor: pointer; font-weight: 600; min-height: 28px; display: flex; align-items: center; }
-.sim-ck .more p { margin-top: 8px; color: var(--muted); }
 
-.sim-ck .book { border: 1px solid var(--line); border-left: 4px solid var(--hyp); border-radius: 12px; padding: 10px 14px 12px; font-size: 13px; display: flex; flex-direction: column; gap: 6px; }
-.sim-ck .book .sim-h { margin: 0; }
-.sim-ck .book ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
-.sim-ck .book a { color: var(--ink); text-underline-offset: 3px; }
-.sim-ck .book a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 
 @media (max-width: 420px) {
-  .sim-ck .tab { font-size: 12px; padding: 6px 4px; }
-  .sim-ck .ck-meters { gap: 6px; }
 }

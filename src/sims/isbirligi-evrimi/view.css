@@ -1,10 +1,4 @@
 .sim-iso { gap: 20px; }
-.sim-iso .tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
-.sim-iso .tab { min-height: 40px; font: 600 13px/1.1 var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 9px; padding: 10px 6px; cursor: pointer; }
-.sim-iso .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
-.sim-iso .pane { display: flex; flex-direction: column; gap: 18px; }
-.sim-iso .pane[hidden] { display: none; }
-.sim-iso .note { font-size: 13px; color: var(--muted); }
 .sim-iso .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
 .sim-iso .card .stage { background: transparent; border: 0; padding: 0; }
 .sim-iso .card .stage + .stage { margin-top: 2px; }
@@ -36,12 +30,7 @@
 .sim-iso .ro .k { font-size: 12px; color: var(--muted); }
 .sim-iso .ro .v { font: 500 14px var(--f-mono); font-variant-numeric: tabular-nums; }
 
-.sim-iso .meters2 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.sim-iso .m-top { display: flex; justify-content: space-between; gap: 4px; font: 400 10.5px var(--f-mono); color: var(--muted); margin-bottom: 3px; }
-.sim-iso .m-top { align-items: flex-start; }
 .sim-iso .m-top span { line-height: 1.25; }
-.sim-iso .m-top b { white-space: nowrap; }
-.sim-iso .m-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
 .sim-iso .track > b { transition: none; }
 
 .sim-iso .det { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 0 14px; }
@@ -54,9 +43,6 @@
 .sim-iso .rules { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
 .sim-iso .rules b { color: var(--ink); }
 
-.sim-iso .book { border-left: 3px solid var(--line); padding-left: 12px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
-.sim-iso .book a { color: var(--ink); text-underline-offset: 2px; }
-.sim-iso .book b { font-weight: 600; }
 
 .sim-iso .formula { display: flex; flex-direction: column; gap: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
 .sim-iso .fm { font: 600 22px var(--f-display); letter-spacing: .02em; }
@@ -77,5 +63,4 @@
 
 @media (max-width: 420px) {
   .sim-iso .kr { grid-template-columns: minmax(0, 1.3fr) 30px 36px 78px 48px; gap: 4px; padding-inline: 8px; font-size: 12px; }
-  .sim-iso .meters2 { gap: 8px; }
 }

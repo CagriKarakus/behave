@@ -1,12 +1,7 @@
-.sim-erg .tabs .chip[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-.sim-erg .tabs { flex-wrap: wrap; overflow: visible; }
 .sim-erg .panel { display: flex; flex-direction: column; gap: 18px; }
 .sim-erg .panel[hidden] { display: none; }
 .sim-erg .sl-amy { --c: var(--amy); } .sim-erg .sl-dop { --c: var(--dop); }
 
-.sim-erg .meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.sim-erg .m-top { display: flex; justify-content: space-between; font: 400 10.5px var(--f-mono); color: var(--muted); margin-bottom: 3px; gap: 4px; }
-.sim-erg .m-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
 
 /* Beyin silueti */
 .sim-erg .b-out { fill: none; stroke: var(--edge); stroke-width: 2; }
@@ -62,7 +57,7 @@
 
 /* Haber güncelleme */
 .sim-erg .contested { border: 1px solid var(--line); border-left: 4px solid var(--dop); background: var(--panel); border-radius: 12px; padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
-.sim-erg .badge { align-self: flex-start; font: 600 12px var(--f-mono); color: var(--eff-text); letter-spacing: .03em; }
+.sim-erg .contested .rep { align-self: flex-start; }
 .sim-erg .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
 .sim-erg .card[hidden] { display: none; }
 .sim-erg .card-k { font: 600 11px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
@@ -76,9 +71,3 @@
 .sim-erg .rows .v { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .sim-erg .sl[hidden], .sim-erg .row[hidden] { display: none; }
 
-.sim-erg .how { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font-size: 13px; }
-.sim-erg .how summary { cursor: pointer; font-weight: 600; min-height: 32px; display: flex; align-items: center; }
-.sim-erg .how p { margin-top: 8px; }
-.sim-erg .book { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
-.sim-erg .book ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
-.sim-erg .book a { color: var(--ink); text-underline-offset: 2px; font-weight: 600; }

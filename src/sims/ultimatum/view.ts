@@ -134,16 +134,16 @@ const TEMPLATE = (id: string) => `
     </div>
   </details>
 
-  <section class="book" aria-label="Kitapta">
+  <aside class="book" aria-label="Kitapta">
     <h3 class="sim-h">Kitapta</h3>
-    <ul class="book-list">
+    <ul>
       <li><a href="#/bolum/ch15?deney=ch15-e6">Sanfey ve ark. (2003), Bölüm 15</a>: insandan gelen adaletsiz teklif insulayı etkinleştirir, bilgisayardan gelen daha az; insula etkinliği arttıkça ret artar. Replikasyon: sağlam. Tartışma: insulanın iğrenmeyi mi, genel bir beklenti ihlalini mi yansıttığı.</li>
       <li><a href="#/bolum/ch02?deney=ch02-e5">Knoch, Fehr ve ark. (2006)</a>: sağ dlPFC baskılanınca kötü teklifler daha çok kabul edilir; teklifler yine adaletsiz bulunur. Yalnızca insana karşı; sol dlPFC etkisiz. Replikasyon: karışık (bazı rTMS çalışmaları kabul oranını değiştirmedi, yalnızca karar süresini uzattı).</li>
       <li><a href="#/bolum/ch02?deney=ch02-e3">Amigdala hasarı (2013)</a>: haksız tekliften sonra amigdala etkinliği arttıkça ret artar; hasarlı kişiler cömerttir ve ret oranını artırmaz. Replikasyon: bilinmiyor; hasar bulgusu yalnızca üç hastaya dayanır.</li>
       <li><a href="#/bolum/ch02?deney=ch02-e12">Wood ve ark. (2006)</a>: serotonin azalınca işbirliği ilk oturumda düştü. Haksız tekliflerin daha sık reddi ise replikasyon notunda anılan başka çalışmalardan gelir. Replikasyon: karışık.</li>
       <li><a href="#/bolum/ch02?deney=ch02-e9">de Quervain ve ark. (2004)</a>: cezalandırma kaudatı etkinleştirir, bedel ödenince daha belirgin. Replikasyon: bilinmiyor; ölçülen şey kan akımıdır, doğrudan dopamin değil.</li>
     </ul>
-  </section>
+  </aside>
 
   <p class="foot">Nitel model: eğri biçimleri, ağırlıklar ve yüzdeler ölçüm değildir; bulguların yönünü ve sırasını gösterir. Kitaptan yalnızca yönler alındı (insula ve amigdala ile ret arasında artan ilişki, insana karşı daha güçlü; TMS ile kabulün artması; amigdala hasarında ret artışının olmaması; serotoninle ret artışı ilk oturumda; cezalandırmada kaudat etkinliği). Kitapta ret yüzdesi ya da eşik değeri verilmediği için bunlar uydurulmadı; 10 ₺'lik pay ve teklif sırası kurgudur. Gerçek beyin bundan çok daha karmaşıktır.</p>
 </div>`;

@@ -4,6 +4,6 @@ export const meta: SimMeta = {
   id: 'cocukluk',
   chapter: 'ch07',
   title: 'Çocukluk ve rahim',
-  blurb: 'Marshmallow testi, çocukluk adversitesi birikimi ve Kohlberg ahlaki gelişim aşamaları',
+  blurb: 'Marshmallow testi, adversite birikimi, ahlaki gelişim',
   order: 1,
 };

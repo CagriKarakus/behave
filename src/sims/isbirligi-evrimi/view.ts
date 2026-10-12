@@ -36,7 +36,7 @@ const TEMPLATE = (id: string) => `
 
   <div class="sim-bar" role="group" aria-label="Anlık açıklama"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
-    <div class="meters2" data-ref="meters"></div>
+    <div class="meters" data-ref="meters"></div>
   </div></div>
   <p class="sr-only" aria-live="polite" data-ref="live"></p>
 
@@ -85,11 +85,13 @@ const TEMPLATE = (id: string) => `
       </div>
     </details>
 
-    <section class="book" aria-label="Kitapta">
+    <aside class="book" aria-label="Kitapta">
       <h3 class="sim-h">Kitapta</h3>
-      <p>${BOOK_LINK('ch10-e6', 'Axelrod turnuvası')}: en basit strateji, Tit for Tat, kazandı; tek tek eşleşmelerin neredeyse hiçbirini kazanmadan toplamda öne geçti. Sinyal hatasında iki Tit for Tat karşılıklı misilleme döngüsüne kilitlendi; bu yüzden pişman ve affedici sürümler geliştirildi. <b>Tekrarlanma durumu: karışık.</b> Tit for Tat'in işbirliğini başlatma gücü doğrulandı, ama üstünlüğü koşula bağlı; gürültülü ortamlarda kazan-kal, kaybet-değiş gibi stratejiler daha iyi olabiliyor.</p>
-      <p>${BOOK_LINK('ch10-e7', 'Dikenli balık ayna deneyi')}: balığın Tit for Tat gibi davrandığı yorumu <b>tartışmalı</b>; ayna düzeneği karşılıklılığı mı yoksa yalnızca sosyal kolaylaştırmayı mı ölçüyor sorusu açık.</p>
-    </section>
+      <ul>
+        <li>${BOOK_LINK('ch10-e6', 'Axelrod turnuvası')}: en basit strateji, Tit for Tat, kazandı; tek tek eşleşmelerin neredeyse hiçbirini kazanmadan toplamda öne geçti. Sinyal hatasında iki Tit for Tat karşılıklı misilleme döngüsüne kilitlendi; bu yüzden pişman ve affedici sürümler geliştirildi. <b>Tekrarlanma durumu: karışık.</b> Tit for Tat'in işbirliğini başlatma gücü doğrulandı, ama üstünlüğü koşula bağlı; gürültülü ortamlarda kazan-kal, kaybet-değiş gibi stratejiler daha iyi olabiliyor.</li>
+        <li>${BOOK_LINK('ch10-e7', 'Dikenli balık ayna deneyi')}: balığın Tit for Tat gibi davrandığı yorumu <b>tartışmalı</b>; ayna düzeneği karşılıklılığı mı yoksa yalnızca sosyal kolaylaştırmayı mı ölçüyor sorusu açık.</li>
+      </ul>
+    </aside>
     <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan gelen bulgu: Tit for Tat'in kazanması ve sinyal hatasında intikam döngüsü. Getiri değerleri (5/3/1/0) klasik Axelrod değerleridir; kuşak, nüfus ve hata oranları bu modelin seçimidir.</p>
   </section>
 
@@ -126,12 +128,14 @@ const TEMPLATE = (id: string) => `
       </div>
     </details>
 
-    <section class="book" aria-label="Kitapta">
+    <aside class="book" aria-label="Kitapta">
       <h3 class="sim-h">Kitapta</h3>
-      <p>Bölüm, akraba seçilimini Hamilton'ın denklemi üzerinden anlatır: yardımın maliyeti ve faydası akrabalık derecesiyle tartılır.</p>
-      <p>${BOOK_LINK('ch10-e10', 'Köpek mi yabancı mı anketi')}: köpeği seçenlerin oranı akrabalık azaldıkça arttı (kardeşte %1, büyükanne-büyükbabada %2, uzak kuzende %16, yabancıda %26). <b>Tekrarlanma durumu: bilinmiyor</b>; tek anket ve varsayımsal senaryo.</p>
-      <p>${BOOK_LINK('ch10-e11', 'Avcı-toplayıcı toplulukları')}: gruptakilerin yalnızca yaklaşık %40'ı kan bağlı akraba çıktı, yani işbirliği akrabasız bireyler arasında da yürümek zorunda. İlk sekmedeki karşılıklılık tam bunu açıklar. <b>Tekrarlanma durumu: sağlam.</b></p>
-    </section>
+      <ul>
+        <li>Bölüm, akraba seçilimini Hamilton'ın denklemi üzerinden anlatır: yardımın maliyeti ve faydası akrabalık derecesiyle tartılır.</li>
+        <li>${BOOK_LINK('ch10-e10', 'Köpek mi yabancı mı anketi')}: köpeği seçenlerin oranı akrabalık azaldıkça arttı (kardeşte %1, büyükanne-büyükbabada %2, uzak kuzende %16, yabancıda %26). <b>Tekrarlanma durumu: bilinmiyor</b>; tek anket ve varsayımsal senaryo.</li>
+        <li>${BOOK_LINK('ch10-e11', 'Avcı-toplayıcı toplulukları')}: gruptakilerin yalnızca yaklaşık %40'ı kan bağlı akraba çıktı, yani işbirliği akrabasız bireyler arasında da yürümek zorunda. İlk sekmedeki karşılıklılık tam bunu açıklar. <b>Tekrarlanma durumu: sağlam.</b></li>
+      </ul>
+    </aside>
     <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Akrabalık katsayıları (1/2, 1/4, 1/8) standart genetik değerleridir; anket yüzdeleri kitaptandır. Gen modelinin nüfus büyüklüğü, süre ve başlangıç frekansı bu modelin seçimidir.</p>
   </section>
 </div>`;

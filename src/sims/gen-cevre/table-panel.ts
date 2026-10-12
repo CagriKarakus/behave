@@ -149,7 +149,7 @@ export function createTablePanel(ctx: Ctx, host: HTMLElement): TablePanel {
 
   /* ---- Reaksiyon normu ---- */
   const rn = $<SVGElement>('rn');
-  const R = { l: 38, r: 28, t: 12, b: 50, W: 360, H: 236 };
+  const R = { l: 38, r: 28, t: 26, b: 50, W: 360, H: 236 };
   const xAt = (e: number, n: number) => (n === 1 ? (R.l + R.W - R.r) / 2 : R.l + (e / (n - 1)) * (R.W - R.r - R.l - 8) + 4);
   const yAt = (v: number) => R.H - R.b - (v / 100) * (R.H - R.b - R.t);
   function drawRN(): void {

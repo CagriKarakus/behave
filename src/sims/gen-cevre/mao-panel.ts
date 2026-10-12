@@ -74,7 +74,7 @@ export function createMaoPanel(ctx: Ctx, host: HTMLElement): MaoPanel {
   setChip(chipFor());
 
   const ch = $<SVGElement>('chart');
-  const R = { l: 38, r: 16, t: 14, b: 44 };
+  const R = { l: 38, r: 16, t: 28, b: 44 };
   const xAt = (l: number) => R.l + l * (360 - R.l - R.r);
   const yAt = (v: number) => 230 - R.b - v * (230 - R.b - R.t);
   function drawChart(): void {

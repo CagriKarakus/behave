@@ -1,20 +1,10 @@
 .sim-hb { gap: 20px; }
-.sim-hb .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
-.sim-hb .tab { min-height: 40px; font: 600 13px/1.1 var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 9px; padding: 10px 6px; cursor: pointer; }
-.sim-hb .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
-.sim-hb .pane { display: flex; flex-direction: column; gap: 18px; }
-.sim-hb .pane[hidden] { display: none; }
-.sim-hb .note { font-size: 13px; color: var(--muted); }
 .sim-hb .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
 
 /* Üst çubuk ve ölçerler */
-.sim-hb .meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .sim-hb .card .meters { grid-template-columns: minmax(0, 1fr); gap: 10px; }
-.sim-hb .m-top { display: flex; justify-content: space-between; font: 400 10.5px var(--f-mono); color: var(--muted); margin-bottom: 3px; gap: 4px; }
 .sim-hb .card .m-top { font-size: 12px; font-family: var(--f-body); }
-.sim-hb .m-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; font-family: var(--f-mono); }
 .sim-hb .track { position: relative; height: 7px; border-radius: 4px; }
-.sim-hb .track > b { transition: width .25s ease; }
 .sim-hb .track > i { position: absolute; top: -3px; bottom: -3px; width: 2.4px; background: var(--ink); border-radius: 1px; }
 .sim-hb .track > i[hidden] { display: none; }
 
@@ -52,17 +42,8 @@
 .sim-hb .tbl td.on { background: var(--ink); color: var(--bg); font-weight: 700; }
 
 /* Ayrıntı ve kitap */
-.sim-hb .how { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px 14px; }
-.sim-hb .how summary { cursor: pointer; min-height: 40px; display: flex; align-items: center; font-weight: 600; }
-.sim-hb .how-in { display: flex; flex-direction: column; gap: 8px; padding-bottom: 12px; font-size: 13px; color: var(--muted); }
-.sim-hb .book-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px; }
-.sim-hb .book-list li { border-left: 3px solid var(--line); padding-left: 10px; color: var(--muted); }
-.sim-hb .book-list a { color: var(--ink); font-weight: 600; text-underline-offset: 2px; display: inline-block; min-height: 24px; }
-.sim-hb .book-list b { color: var(--ink); }
 
 @media (max-width: 420px) {
-  .sim-hb .meters { gap: 8px; }
-  .sim-hb .m-top { font-size: 10px; flex-direction: column; gap: 0; }
   .sim-hb .readout { gap: 6px; }
   .sim-hb .ro { padding: 8px; }
 }

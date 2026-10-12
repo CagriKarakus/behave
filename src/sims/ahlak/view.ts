@@ -78,13 +78,6 @@ const TEMPLATE = (id: string) => `
       <div class="sliders" data-ref="savedSl"></div>
     </section>
 
-    <details class="how">
-      <summary>Model nasıl çalışıyor?</summary>
-      <div class="how-in">
-        <p>Soğuk hesap kurtarılanların sayısının logaritmasıyla büyür. Sıcak sezgi üç parçadır: ölümü seçmenin genel bedeli (kaza değilse), kişisel güç x araç olma etkileşimi (en büyük parça), küçük bir yakınlık payı. Alarm niyete değil kişisel güce bağlıdır; döngüde araç olmak alarm çıkarmaz. Fark lojistik bir kuralla "evet" olasılığına çevrilir.</p>
-        <p>Ağırlıklar kitaptaki oranlara oturtuldu (anahtar ~%67, itme ~%30, kazara ~%80); sayının etkisi modelin varsayımı. İçi boş baklava, araç olmanın kassız da itme sayıldığı "tutarlı kuralı" gösterir (kitapta mantıken ~%30).</p>
-      </div>
-    </details>
 
     <section class="card" aria-label="Sonuç">
       <h3 class="sim-h">Sonuç: kararların ve kitap</h3>
@@ -105,14 +98,7 @@ const TEMPLATE = (id: string) => `
       <div class="kn" data-ref="kRes" hidden></div>
     </section>
 
-    <section class="book" aria-label="Kitapta">
-      <h3 class="sim-h">Kitapta</h3>
-      <ul class="book-list">
-        <li><a href="#/bolum/ch13?deney=ch13-e4">Greene ve ark. (2001, 2004)</a>: anahtar %60-70, elle itme ~%30, kazara itme ~%80; döngü %60-70 (mantıken ~%30). Sopa direnci azaltmadı (sayı yok). Denekler: ~%30 tutarlı deontolog, ~%30 tutarlı faydacı. Replikasyon: karışık; davranış deseni 45 ülkede doğrulandı, fMRI yorumu tartışmalı.</li>
-        <li><a href="#/bolum/ch13?deney=ch13-e1">Knobe (2003)</a>: zarar %85, yarar %23. Replikasyon: sağlam; yorumu tartışmalı.</li>
-        <li><a href="#/bolum/ch13?deney=ch13-e2">Hamlin ve ark. (2007)</a>, bebek ahlakı. Replikasyon: tartışmalı; ManyBabies 4 (37 laboratuvar, 567 bebek) şans düzeyi (~%49) buldu. Modele katılmadı.</li>
-      </ul>
-    </section>
+    <div class="notes" data-ref="notes-tro"></div>
   </section>
 
   <!-- ============ 2 · Kamu malı ve ceza ============ -->
@@ -144,23 +130,8 @@ const TEMPLATE = (id: string) => `
       <div class="sliders" data-ref="mkSl"></div>
     </section>
 
-    <details class="how">
-      <summary>Model nasıl çalışıyor?</summary>
-      <div class="how-in">
-        <p>Oyuncu katkısını gruptakilerin önceki tur ortalamasının hafif altında tutar (koşullu işbirliği); bu yüzden cezasız oyunda katkılar erir. Düşük katkıyı cezalandırmak (mavi oklar) cezalananı bir sonraki turda daha çok koymaya iter.</p>
-        <p>Antisosyal eğilimli oyuncular (elmas) kendilerinden fazla verenleri cezalandırır ve karşılık verir; cezalanan işbirlikçi katkısını düşürür, ahlaklı cezalandırıcı çekinir. Oranları ortalama sosyal sermaye ve hukukla düşer (varsayım). Oyun parametreleri (${PG.E} jeton, havuz çarpanı ${PG.mpcr * PG.groupSize}, ceza maliyeti ${PG.cost}, etkisi ${PG.impact}) da varsayımdır.</p>
-        <p>Henrich'te yalnızca uçlar kitaptandır: Hadza %27 verir, pazar ~%90'da ~%50; 50 kişiden küçük gruplarda pozitif teklifler kabul, 5000+ kişide adaletsizler ret. Arası varsayımdır.</p>
-      </div>
-    </details>
 
-    <section class="book" aria-label="Kitapta">
-      <h3 class="sim-h">Kitapta</h3>
-      <ul class="book-list">
-        <li><a href="#/bolum/ch13?deney=ch13-e7">Herrmann ve ark. (2008)</a>: ABD ve Avustralya'da cömerdi cezalandırma neredeyse yoktu; Umman ve Yunanistan'da ona harcanan para bencilliği cezalandırana harcanandan fazlaydı. Sosyal sermaye düştükçe antisosyal ceza arttı (korelasyon, kentli öğrenciler). Replikasyon: sağlam; ülke düzeyi genelleme sınırlı.</li>
-        <li><a href="#/bolum/ch13?deney=ch13-e8">Henrich ve ark. (2010)</a>: pazar ve topluluk büyüdükçe teklifler adilleşti, ceza arttı; dünya dini oranıyla üçüncü taraf cezası arttı. Replikasyon: karışık. Kitap "yirmi beş kültür" der, kaynak makale 15 toplum kapsar (birden çok çalışma birleşmiş olabilir). Lamba ve Mace (2011): tek etnik grubun köyleri arasında da kültürler arası kadar fark; din bulgusu tutarsız.</li>
-        <li><a href="#/bolum/ch13?deney=ch13-e9">Rand ve ark. (2012)</a>: hızlı karar işbirliğini artırdı. Replikasyon: tartışmalı; 21 laboratuvarlı kayıtlı replikasyon tekrarlayamadı. Modellenmedi.</li>
-      </ul>
-    </section>
+    <div class="notes" data-ref="notes-pg"></div>
   </section>
 
   <!-- ============ 3 · Zar ve dürüstlük ============ -->
@@ -184,21 +155,8 @@ const TEMPLATE = (id: string) => `
       <div class="row play"><button class="btn" type="button" data-ref="rerun">Yeniden çalıştır</button></div>
     </section>
 
-    <details class="how">
-      <summary>Model nasıl çalışıyor?</summary>
-      <div class="how-in">
-        <p>Dürüst oyuncu ilk atışı bildirir. Haklı dürüstlük iki atıştan daha çok kazandıranı bildirir. Tam yalancı hep 5 bildirir. İki atıştan iyisinin dağılımı hesapla çıkar: 5 için 11/36, 6 için 1/36.</p>
-        <p>Ödeme düzeni (1-5 yüzdeki sayı kadar, 6 sıfır) ve hazır toplum karışımları varsayımdır; kitaptan yön gelir. Sütunlar 300 kişilik tohumlu örneklemdir, işaretler beklenen oranı gösterir.</p>
-      </div>
-    </details>
 
-    <section class="book" aria-label="Kitapta">
-      <h3 class="sim-h">Kitapta</h3>
-      <ul class="book-list">
-        <li><a href="#/bolum/ch13?deney=ch13-e10">Gächter ve Schulz (2016)</a>: 23 ülke, 2.500'ü aşkın öğrenci. Herkes dürüst olsa her sayı altıda bir çıkardı; ülkede yolsuzluk, vergi kaçakçılığı ve seçim hilesi arttıkça yalan arttı. Çoğu kişi en yüksek sayıyı uydurmadı, iki atıştan yükseğini bildirdi. Replikasyon: sağlam (zar paradigması); ülke düzeyi ilişki daha az replike edildi.</li>
-        <li><a href="#/bolum/ch13?deney=ch13-e5">Cohn ve ark. (2014)</a>: bankacı kimliği hileyi ~%20 artırdı. Replikasyon: karışık (Rahwan ve ark. 2019 bulamadı). Modellenmedi.</li>
-      </ul>
-    </section>
+    <div class="notes" data-ref="notes-dice"></div>
   </section>
 
   <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan: trolley oranları, Knobe %85 ve %23, Hadza %73, pazar ~%90, 50 ve 5000 kişi eşikleri, ceza ve sosyal sermaye yönü, zarın iki atış düzeni. Oyun parametreleri, ağırlıklar, hazır karışımlar ve eğri biçimleri modelin varsayımıdır.</p>
@@ -778,6 +736,13 @@ export function mount(container: HTMLElement): () => void {
     if (dirty) { dirty = false; render(); }
   }
   render();
+  // Sayfa altı notları (nasıl çalışıyor + Kitapta) ayrı parçadan gelir; etkileşimli kısım daha küçük açılır.
+  let gone = false;
+  scope.onDispose(() => { gone = true; });
+  void import('./notes').then(({ NOTES }) => {
+    if (gone) return;
+    for (const k of ['tro', 'pg', 'dice'] as const) $(`notes-${k}`).innerHTML = NOTES[k];
+  });
   scope.loop(frame, { root, onResume: () => { last = performance.now(); dirty = true; } });
 
   return () => {

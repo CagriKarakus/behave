@@ -1,10 +1,4 @@
 .sim-ahl { gap: 20px; }
-.sim-ahl .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
-.sim-ahl .tab { min-height: 44px; font: 600 13px/1.2 var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 9px; padding: 6px 4px; cursor: pointer; }
-.sim-ahl .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
-.sim-ahl .pane { display: flex; flex-direction: column; gap: 18px; }
-.sim-ahl .pane[hidden] { display: none; }
-.sim-ahl .note { font-size: 13px; color: var(--muted); }
 .sim-ahl .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
 .sim-ahl .card .stage { background: transparent; border: 0; padding: 0; }
 .sim-ahl .card .chart { background: transparent; }
@@ -12,10 +6,6 @@
 .sim-ahl .chart .sim-h { margin-bottom: 4px; }
 
 /* Çıktı çubuğu */
-.sim-ahl .meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.sim-ahl .m-top { display: flex; justify-content: space-between; font: 400 10.5px var(--f-mono); color: var(--muted); margin-bottom: 3px; gap: 4px; }
-.sim-ahl .m-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.sim-ahl .track > b { transition: width .25s ease; }
 
 /* Trolley */
 .sim-ahl .sc-text { font-size: 14px; }
@@ -113,18 +103,9 @@
 .sim-ahl .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; }
 
 /* Ortak */
-.sim-ahl .how { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px 14px; }
-.sim-ahl .how summary { cursor: pointer; min-height: 40px; display: flex; align-items: center; font-weight: 600; }
-.sim-ahl .how-in { display: flex; flex-direction: column; gap: 8px; padding-bottom: 12px; font-size: 13px; color: var(--muted); }
-.sim-ahl .book-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px; }
-.sim-ahl .book-list li { border-left: 3px solid var(--line); padding-left: 10px; color: var(--muted); }
-.sim-ahl .book-list a { color: var(--ink); font-weight: 600; text-underline-offset: 2px; display: inline-block; min-height: 24px; }
-.sim-ahl .tour-next { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .sim-ahl .sl { --c: var(--ink); }
 
 @media (max-width: 480px) {
-  .sim-ahl .meters { gap: 8px; }
-  .sim-ahl .m-top { font-size: 10px; flex-direction: column; gap: 0; }
   .sim-ahl .sys { grid-template-columns: minmax(0, 1fr); }
   .sim-ahl .res li { grid-template-columns: minmax(0, 1fr) auto; }
   .sim-ahl .res .bk { grid-column: 1 / -1; text-align: left; }

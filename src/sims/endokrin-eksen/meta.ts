@@ -4,6 +4,6 @@ export const meta: SimMeta = {
   id: 'endokrin-eksen',
   chapter: 'app2',
   title: 'Endokrin eksen',
-  blurb: 'HPA / HPG / pankreas eksenleri, reseptör ve süre',
+  blurb: 'HPA, HPG ve pankreas eksenleri, reseptör, süre',
   order: 1,
 };

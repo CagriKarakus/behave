@@ -4,9 +4,8 @@
 //  2) Kutsal değerler (Atran, Ginges): maddi teklif büyüdükçe destek düşer (ters tepki), sembolik jest artırır.
 // chapters.json ch15 deneylerinde etki büyüklüğü sayısı YOK; yönler kitaptan, büyüklükler ve çarpanlar
 // modelin varsayımıdır ("ASSUME" ile işaretli).
-import { mulberry32, shuffle } from './rng';
+import { mulberry32, shuffle } from '../rng';
 
-export { mulberry32 };
 export const clamp = (x: number, lo = 0, hi = 1): number => Math.min(hi, Math.max(lo, x));
 const sigmoid = (z: number): number => 1 / (1 + Math.exp(-z));
 

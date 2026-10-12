@@ -19,6 +19,7 @@ Robert Sapolsky'nin *Behave* kitabını zaman ölçeklerine göre (bir saniye ö
 - `src/styles/`: `tokens.css` (ortak renk/yazı jetonları, açık/koyu tema), `base.css`, `app.css`
 - `src/sims/<isim>/model.ts`: UI'dan bağımsız model çekirdeği; `view.ts`: `mount(container) => unmount` (dinamik import ile ayrı parçada yüklenir)
 - `src/sims/registry.ts`: bölüm id -> simülasyonlar
+- `src/sims/rng.ts` (tohumlu RNG), `src/sims/ui.ts` (kaydırıcı, çipler, "Kitapta" kutusu, replikasyon rozeti), `src/sims/bar.ts` (çıktı çubuğunu küçültme düğmesi), `src/sims/sim.css` (sekme, panel, not, gösterge, kutu stilleri): simülasyonlar arasında paylaşılan modüller
 - `reference/artifacts/`: orijinal tek dosyalık simülasyonlar (eşdeğerlik testinin kaynağı)
 
 Yollar: `#/`, `#/bolum/ch02`, `#/deneyler`, `#/bolum/ch12?deney=ch12-e3`, `#/bolum/ch02?sim=ultimatum` (bölümde birden fazla simülasyon varsa sekmeli seçici; yalnızca seçili olan bağlanır, `?deney=` ile birlikte kullanılabilir).
@@ -26,7 +27,7 @@ Yollar: `#/`, `#/bolum/ch02`, `#/deneyler`, `#/bolum/ch12?deney=ch12-e3`, `#/bol
 ## Yeni simülasyon ekleme
 1. `src/sims/<isim>/model.ts` içine saf modeli yaz ve test et (varsa orijinal HTML ile eşdeğerlik testi ekle).
 2. `view.ts` içinde `mount(container: HTMLElement): () => void` yaz. `Scope` (`src/sims/kit.ts`) ile dinleyici ve `requestAnimationFrame` döngüsünü kaydet, dönen fonksiyonda `scope.dispose()` çağır. Kimlikler için `uid()` önekini, sorgular için `data-ref` kullan; global id kullanma. Stil: `.sim` taban sınıfı (`../sim.css`) + kendi `view.css` (kapsamlı sınıf).
-3. `src/sims/<isim>/meta.ts` içinde `export const meta: SimMeta = { id, chapter, title, blurb, order }` yaz; kayıt otomatiktir (`registry.ts` `meta.ts` dosyalarını bulur, `view.ts` dinamik import edilir). Tasarım ve pedagoji kuralları: `docs/simulasyon-rehberi.md`; adım adım anlatım için `src/sims/tour.ts`. `Scope.loop(frame, { root, onResume })` kullan: sim ekran dışına çıkınca döngü durur. Çıktı çubuğu (`.sim-bar`) şablonda çiplerin hemen altına konur (CSS mobilde sona alıp yapıştırır). Ekran okuyucu için `scope.announcer` ile gizli bir canlı bölge besle.
+3. `src/sims/<isim>/meta.ts` içinde `export const meta: SimMeta = { id, chapter, title, blurb, order }` yaz; kayıt otomatiktir (`registry.ts` `meta.ts` dosyalarını bulur, `view.ts` dinamik import edilir). Tasarım ve pedagoji kuralları: `docs/simulasyon-rehberi.md`; adım adım anlatım için `src/sims/tour.ts`. `Scope.loop(frame, { root, onResume })` kullan: sim ekran dışına çıkınca döngü durur. Çıktı çubuğu (`.sim-bar`) şablonda çiplerin hemen altına konur (CSS mobilde sona alıp yapıştırır; küçültme düğmesini bölüm sayfası ekler). Rastlantı için `../rng`, ortak arayüz parçaları için `../ui` kullan; yerleşim sırası `docs/simulasyon-rehberi.md` içinde. Ekran okuyucu için `scope.announcer` ile gizli bir canlı bölge besle.
 4. `npm test && npm run build`.
 
 ## Yayın

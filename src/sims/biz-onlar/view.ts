@@ -40,7 +40,7 @@ const TEMPLATE = (id: string) => `
 <div class="sim sim-biz">
   <p class="lede">"Biz" ve "Onlar" ayrımını ne kadar çabuk ve ne kadar keyfi kurarız, ve bu ayrım nasıl yeniden çizilir?</p>
   <div class="tabs" role="tablist" aria-label="Bölümler" data-ref="tabs">
-    ${TABS.map(([k, n]) => `<button type="button" role="tab" class="chip" id="${id}-t-${k}" aria-controls="${id}-p-${k}" data-tab="${k}">${n}</button>`).join('')}
+    ${TABS.map(([k, n]) => `<button type="button" role="tab" class="tab" id="${id}-t-${k}" aria-controls="${id}-p-${k}" data-tab="${k}">${n}</button>`).join('')}
   </div>
   <div class="sim-bar" role="group" aria-label="Anlık çıktılar">
     <div class="sim-bar-in">
@@ -529,7 +529,7 @@ export function mount(container: HTMLElement): () => void {
       title: 'Sıcaklık–yetkinlik haritası',
       text: 'Gruplar iki eksende konumlanır ve köşe duyguyu belirler. "Yeni grup" düşük–düşük köşeye sürüklenince tiksinme ve dışlama baskın olur. Sağ altta duran "Yaşlılar" ise acıma ve yardım uyandırır.',
       look: 'Bir daireyi sürükle; alt çubukta duygu ve davranış çubukları değişir.',
-      apply: () => { setTab('fiske'); S.layer = false; tgLayer(false); renderSoc(); setPos(4, 0.14, 0.2); renderF(); },
+      apply: () => { setTab('fiske'); S.layer = false; tgLayer(false); renderSoc(); setPos(4, 0.28, 0.34); renderF(); },
     },
     {
       title: 'Eşitsizlik ve karışık algı',

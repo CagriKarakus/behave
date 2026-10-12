@@ -41,12 +41,35 @@
 
 /* Anlık çıktı çubuğu. DOM'da çipler/sekmelerin hemen altındadır.
    Mobil: simülasyonun en sonuna dizilir (order) ve ekranın altına yapışır (sticky bottom). Simülasyon
-   kutusunun dışına taşamadığı için bölüm metnini örtmez.
+   kutusunun dışına taşamadığı için bölüm metnini örtmez. Uzun sekmelerde kontrolleri örtmesin diye
+   okuyucu çubuğu küçültebilir (bar.ts düğmeyi ekler: tek satır metin, göstergeler gizli) ve odaklanan
+   öğeler çubuğun üstünde kalacak biçimde kaydırılır (scroll-padding-bottom).
    Masaüstü: yerinde (diyagramın üstünde) kalır ve panelin üstüne yapışır; diyagramı örtmez. */
 .sim .sim-bar { order: 1; position: sticky; bottom: 0; z-index: 20; background: var(--panel); border-top: 1px solid var(--line);
-  margin-inline: -16px; padding: 9px 16px calc(9px + env(safe-area-inset-bottom, 0px)); }
-.sim .sim-bar-in { max-width: 560px; margin-inline: auto; display: flex; flex-direction: column; gap: 8px; }
+  margin-inline: -16px; padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0px)); }
+.sim .sim-bar-in { position: relative; max-width: 560px; margin-inline: auto; display: flex; flex-direction: column; gap: 6px; }
 .sim .say { font-size: 13px; line-height: 1.35; min-height: 2.7em; }
+.sim .sim-bar .say { padding-right: 36px; }
+.sim .bar-toggle { position: absolute; top: -6px; right: -8px; width: 40px; height: 40px; display: grid; place-items: center; padding: 0;
+  color: var(--muted); background: transparent; border: 0; border-radius: 10px; cursor: pointer; }
+.sim .bar-toggle svg { width: 16px; height: 16px; transition: transform .15s; }
+.sim .bar-toggle:hover { color: var(--ink); }
+.sim .sim-bar[data-collapsed="true"] .bar-toggle svg { transform: rotate(180deg); }
+.sim .sim-bar[data-collapsed="true"] .sim-bar-in > :not(.say):not(.bar-toggle) { display: none; }
+.sim .sim-bar[data-collapsed="true"] .say { min-height: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (prefers-reduced-motion: reduce) { .sim .bar-toggle svg { transition: none; } }
+@media (max-width: 959px) { html:has(.sim-bar) { scroll-padding-bottom: 170px; } }
+
+/* Çubuktaki üç gösterge. */
+.sim .meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: end; }
+.sim .m-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 4px; margin-bottom: 3px; font: 400 10.5px/1.25 var(--f-mono); color: var(--muted); }
+.sim .m-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sim .track > b { transition: width .25s ease; }
+@media (prefers-reduced-motion: reduce) { .sim .track > b { transition: none; } }
+@media (max-width: 480px) {
+  .sim .meters { gap: 8px; }
+  .sim .m-top { flex-direction: column; gap: 0; font-size: 10px; }
+}
 
 @media (min-width: 600px) {
   .sim .sim-bar { margin-inline: 0; border: 1px solid var(--line); border-radius: 12px; }
@@ -59,6 +82,31 @@
   .sim .chips { margin-inline: -16px; padding-inline: 16px; }
 }
 @media (prefers-reduced-motion: reduce) { .sim * { scroll-behavior: auto; } }
+
+/* Sekmeler (bölmeli denetim): her simülasyonda aynı. */
+.sim .tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
+.sim .tab { min-height: 44px; font: 600 13px/1.2 var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 9px; padding: 6px 4px; cursor: pointer; }
+.sim .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
+@media (max-width: 420px) { .sim .tab { font-size: 12px; } }
+.sim .pane { display: flex; flex-direction: column; gap: 18px; }
+.sim .pane[hidden] { display: none; }
+.sim .note { font-size: 13px; color: var(--muted); }
+
+/* "Model nasıl çalışıyor?" açılır kutusu (.how ya da .more). */
+.sim .how, .sim .more { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px 14px; font-size: 13px; }
+.sim .how summary, .sim .more summary { cursor: pointer; min-height: 40px; display: flex; align-items: center; font-weight: 600; }
+.sim .how p, .sim .more p { margin-top: 8px; color: var(--muted); }
+.sim .how-in, .sim .more > div { display: flex; flex-direction: column; gap: 8px; padding-bottom: 12px; color: var(--muted); }
+.sim .how > p:last-child, .sim .more > p:last-child { padding-bottom: 12px; }
+
+/* "Kitapta" kutusu (bookBox, ui.ts) ve replikasyon rozeti. */
+.sim .book { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--hyp); border-radius: 12px; padding: 10px 14px 12px; font-size: 13px; display: flex; flex-direction: column; gap: 6px; }
+.sim .book .sim-h { margin: 0; }
+.sim .book ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; }
+.sim .book a { color: var(--ink); font-weight: 600; text-underline-offset: 2px; }
+.sim .book a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.sim .book p { margin: 0; }
+.sim .rep { display: inline-block; padding: 0 8px; border: 1px solid var(--line); border-radius: 999px; font: 500 11px/1.6 var(--f-body); color: var(--muted); vertical-align: 1px; }
 
 /* Yalnızca ekran okuyucuya: kullanıcı eyleminden sonra güncellenen canlı bölge. */
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }

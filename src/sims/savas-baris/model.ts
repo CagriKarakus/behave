@@ -3,9 +3,8 @@
 //  2) Temas ve itibar: gruplar arası temas (ajan), orman ortak malı ve ceza, hatıra fotoğrafı satışı.
 //  3) Garbage Dump babun sürüsü: salgın sonrası kültür ve yeni gelen erkekler.
 // Kitaptan gelen yönler/sayılar BOOK içinde; geri kalan sayılar modelin varsayımıdır.
-import { mulberry32 } from './rng';
+import { mulberry32 } from '../rng';
 
-export { mulberry32 };
 export const clamp = (v: number, lo = 0, hi = 1): number => Math.min(hi, Math.max(lo, v));
 const gauss = (r: () => number): number => Math.sqrt(-2 * Math.log(1 - r())) * Math.cos(2 * Math.PI * r());
 const mean = (xs: ArrayLike<number>): number => { let s = 0; for (let i = 0; i < xs.length; i++) s += xs[i]; return xs.length ? s / xs.length : 0; };

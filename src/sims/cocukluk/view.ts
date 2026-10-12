@@ -24,7 +24,7 @@ const TEMPLATE = (id: string) => `
 
   <div class="sim-bar" role="group" aria-label="Anlık açıklama" data-ref="bar"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
-    <div class="ck-meters" data-ref="meters"></div>
+    <div class="meters" data-ref="meters"></div>
   </div></div>
   <p class="sr-only" aria-live="polite" data-ref="live"></p>
 
@@ -53,7 +53,7 @@ export function mount(container: HTMLElement): () => void {
   const panels: Record<Tab, Panel> = { marsh, ace, moral };
 
   /* ---- Çıktı çubuğu ---- */
-  metersEl.innerHTML = [0, 1, 2].map((i) => `<div class="ck-m"><div class="m-top"><span data-ref="ml${i}"></span><b data-ref="mv${i}"></b></div><div class="track"><b data-ref="mb${i}"></b></div></div>`).join('');
+  metersEl.innerHTML = [0, 1, 2].map((i) => `<div class="m"><div class="m-top"><span data-ref="ml${i}"></span><b data-ref="mv${i}"></b></div><div class="track"><b data-ref="mb${i}"></b></div></div>`).join('');
   function updateBar(): void {
     barDirty = false;
     const p = panels[tab];

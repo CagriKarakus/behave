@@ -26,6 +26,3 @@
 .sim-bso .d-list li { display: flex; justify-content: space-between; gap: 10px; }
 .sim-bso .d-list .v { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
-.sim-bso .meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.sim-bso .m-top { display: flex; justify-content: space-between; font: 400 10.5px var(--f-mono); color: var(--muted); margin-bottom: 3px; gap: 4px; }
-.sim-bso .m-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }

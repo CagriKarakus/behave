@@ -74,13 +74,13 @@ const TEMPLATE = (id: string) => `
       <p>Ultimatum'da teklif veren para, adalet ve statü arasında tartar. Cömertlikle statü kazanılan ortamda doz teklifleri yükseltir; saldırıyla statü kazanılan ortamda düşürür. "Testosteron aldığını sanmak" ise ilaçtan bağımsız ayrı bir terimdir ve teklifleri düşürür.</p>
       <p>Zar raporunda yalan oranı yalnızca dürüstlüğün itibar getirdiği (cömertlik yolu) bağlamda hormonla düşer. Saldırı yolunda kitapta test edilmiş bir durum yok, bu yüzden etkisiz bırakıldı.</p>
     </div></details>
-    <section class="book" aria-label="Kitapta"><h3 class="sim-h">Kitapta</h3><ul class="book-list">
+    <aside class="book" aria-label="Kitapta"><h3 class="sim-h">Kitapta</h3><ul>
       <li><a href="#/bolum/ch04?deney=ch04-e2">Eisenegger ve ark. (2010)</a>: kadın katılımcılara testosteron verildi; reddin statü kaybı olduğu Ultimatum'da daha adil teklif yaptılar. Replikasyon: karışık (erkeklerde cömertlik azalan bir çalışma da var).</li>
       <li><a href="#/bolum/ch04?deney=ch04-e3">Aynı deneyde inanç</a>: gerçekte ne aldıklarından bağımsız, testosteron aldığına inananlar daha adaletsiz teklif verdi. Replikasyon: bilinmiyor; karşılaştırma rastgele atanmış değil.</li>
       <li><a href="#/bolum/ch04?deney=ch04-e4">Wibral ve ark. (2012)</a>: testosteron verilen erkekler zar sonucunu daha az yanlış bildirdi. Replikasyon: bilinmiyor; tek, küçük çalışma.</li>
       <li><a href="#/bolum/ch04?deney=ch04-e1">Dixson ve Herbert (1977)</a>: talapoin maymunlarında testosteron, mevcut saldırgan kalıbı (aşağıdakilere) büyüttü. Replikasyon: bilinmiyor.</li>
       <li>Kavram: zorluk hipotezi (challenge hypothesis). Testosteron statü meydan okuması anında yükselir ve statüyü koruyan davranışı destekler.</li>
-    </ul></section>
+    </ul></aside>
   </section>
 
   <!-- ===== Oksitosin ===== -->
@@ -108,11 +108,11 @@ const TEMPLATE = (id: string) => `
       <p>Her karşı taraf için başlangıç güveni ayrıdır: iç grup yüksek, dış grup ve yabancı daha düşük. Oksitosin yalnızca belirli kapılarda etkilidir: iç gruba yatırım artar (De Dreu); anonim yabancıya yatırım, yalnızca özgün Kosfeld bulgusuna göre artar; rastgele mekanizmada etki yoktur, yani etki genel risk alma değil sosyal güvendir.</p>
       <p>Dış grup tehdidi (maddi risk) yüksekken oksitosin, karşı takıma önleyici ihanet olasılığını ve örtük önyargıyı artırır. "Birleşik analizler" görünümünde Kosfeld etkisi sıfırlanır (kitaba göre güvenilir etki görülmedi); De Dreu etkileri ise belirsizlik nedeniyle yarıya indirilir (bu oran modelin varsayımı).</p>
     </div></details>
-    <section class="book" aria-label="Kitapta"><h3 class="sim-h">Kitapta</h3><ul class="book-list">
+    <aside class="book" aria-label="Kitapta"><h3 class="sim-h">Kitapta</h3><ul>
       <li><a href="#/bolum/ch04?deney=ch04-e7">Kosfeld ve ark. (2005)</a>: oksitosin alan yatırımcılar daha çok para emanet etti; karşı tarafın rastgele mekanizma olduğu kontrolde etki yoktu. Replikasyon: <b>tartışmalı</b>. Ayrıca Sapolsky, oksitosinin anonim ve başka odadaki yabancılarla işbirliğini azalttığını belirtir.</li>
       <li><a href="#/bolum/ch04?deney=ch04-e8">De Dreu ve ark. (2010, 2011)</a>: oksitosin takım içi cömertliği artırdı, riskin yüksek olduğu durumlarda karşı takıma önleyici ihaneti ve dış gruplara örtük önyargıyı yükseltti. Replikasyon: karışık; "etnosentrizm" yorumu eleştirildi.</li>
       <li><a href="#/bolum/ch04?deney=ch04-e5">Young, Lim ve ark. (1999, 2004)</a>: V1a reseptörü tarla farelerinde eş yakınlığını ve tercihini artırdı. Replikasyon: sağlam. Kitap ikinci deneyi dağ tarla faresinde anlatır; asıl çalışma çayır tarla faresinde ve ventral pallidumdadır.</li>
-    </ul></section>
+    </ul></aside>
   </section>
 
   <!-- ===== Stres ===== -->
@@ -143,13 +143,13 @@ const TEMPLATE = (id: string) => `
       <p>Empati: yakın çevre stresle az, yabancı çok daralır. Glukokortikoid yanıtı engellenince yabancıya empati korunur. Fare deneyindeki yabancı karşılaşması başlı başına stresli olduğundan "yabancı" çubuğu stresle düşer.</p>
       <p>Yer değiştirme seçeneği, saldırganlığı daha zayıf birine yöneltmenin stres hormonu düzeyini düşürmesini temsil eder (kitaptaki sıçan ve babun örnekleri). Bedeli bu hedefin maruz kaldığı zarardır; model onu göstermez.</p>
     </div></details>
-    <section class="book" aria-label="Kitapta"><h3 class="sim-h">Kitapta</h3><ul class="book-list">
+    <aside class="book" aria-label="Kitapta"><h3 class="sim-h">Kitapta</h3><ul>
       <li><a href="#/bolum/ch04?deney=ch04-e9">Dias-Ferreira ve ark. (2009)</a>: kronik stresli sıçanlar ödül değersizleşse de alışkanlığı sürdürdü. Replikasyon: karışık; insanlarda alışkanlık oluşturma yöntemlerinin güvenilirliği sorgulandı.</li>
       <li><a href="#/bolum/ch04?deney=ch04-e10">Lighthall ve ark. (2009)</a>: soğuk baskı stresi erkeklerde risk almayı artırdı, kadınlarda azalttı. Replikasyon: bilinmiyor.</li>
       <li><a href="#/bolum/ch04?deney=ch04-e11">Card ve Dahl (2011)</a>: beklenmedik yenilgide erkeklerin partnerine şiddeti yaklaşık %10, playoff yarışında %13, rakibe yenilgide %20 arttı. Replikasyon: sağlam (gözlemsel).</li>
       <li><a href="#/bolum/ch04?deney=ch04-e12">Langford, Martin ve ark.</a>: glukokortikoid engellenince fareler yabancıya da acı empatisi gösterdi. Replikasyon: bilinmiyor.</li>
       <li><a href="#/bolum/ch01?deney=ch01-e1">Yer değiştirme saldırganlığı</a> (Levine'in sıçanları, Sapolsky'nin babunları): saldırganlığı başkasına yönelten babunların glukokortikoid düzeyi daha düşüktü. Replikasyon: sağlam (hormonu düşürme kısmı daha az çalışmaya dayanır).</li>
-    </ul></section>
+    </ul></aside>
   </section>
 
   <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan yalnızca Card ve Dahl yüzdeleri (yaklaşık %10, %13, %20) ve bulguların yönleri alındı; bütün diğer sayılar (kazançlar, eşikler, ₺ tutarları, kronikleşme süresi) modelin varsayımıdır. Gerçek hormon etkileri bundan çok daha karmaşıktır.</p>
@@ -315,7 +315,7 @@ export function mount(container: HTMLElement): () => void {
 
   // Doz-yanıt grafiği
   const tChart = $<SVGElement>('tChart');
-  const CX0 = 40, CX1 = 346, CT = 12, CB = 130;
+  const CX0 = 40, CX1 = 346, CT = 26, CB = 130;
   const cx = (v: number) => CX0 + (CX1 - CX0) * v, cy = (v: number) => CB - (CB - CT) * v;
   function gridXY(sv: SVGElement, xl: string, yl: string): void {
     for (const v of [0, 0.5, 1]) {

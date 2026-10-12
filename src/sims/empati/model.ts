@@ -4,8 +4,7 @@
 // Sekme 2: "biz" ağırlığı; sıçanların kurtarma/paylaşma kararı (Bartal e4), farelerde acı bulaşması (Langford e2).
 // Sekme 3: zorunlu vergi ve gönüllü bağışta ödül devresi (Harbaugh e12), parayı başkasına harcamak (Dunn e11).
 // Tüm katsayılar modelin varsayımıdır; kitaptan gelen, bulguların yönü ve birkaç sayıdır (ör. "zamanın yarısından fazlası").
-import { mulberry32 } from './rng';
-export { mulberry32 };
+import { mulberry32 } from '../rng';
 
 export const clamp = (v: number, lo = 0, hi = 1): number => Math.min(hi, Math.max(lo, v));
 const sig = (x: number): number => 1 / (1 + Math.exp(-x));

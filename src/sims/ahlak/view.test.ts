@@ -29,12 +29,25 @@ const input = (el: HTMLInputElement, v: number) => { el.value = String(v); el.di
 describe('ahlak kaydı', () => {
   it('ch13 içinde, başlık ve sıra doğru', () => {
     expect(meta.chapter).toBe('ch13');
-    expect(meta.title).toBe('Ahlak: sezgi ve akıl');
+    expect(meta.title).toBe('Ahlak ve sezgi');
     expect(simsFor('ch13').map((s) => s.id)).toContain('ahlak');
   });
 });
 
 describe('ahlak görünümü', () => {
+  it('sayfa altı notları (nasıl çalışıyor + Kitapta) ayrı parçadan her panele gelir; erken unmount güvenlidir', async () => {
+    const { host, un } = setup();
+    expect(host.querySelectorAll('.book')).toHaveLength(0);
+    await vi.waitFor(() => expect(host.querySelectorAll('.pane .book')).toHaveLength(3));
+    expect(host.querySelectorAll('.pane details.how')).toHaveLength(3);
+    expect(host.querySelector('.book a')?.getAttribute('href')).toMatch(/^#\/bolum\/ch13\?deney=ch13-e\d+$/);
+    un();
+    const early = setup();
+    early.un(); // notlar gelmeden unmount: hata vermemeli
+    await new Promise((r) => setTimeout(r, 30));
+    expect(early.host.innerHTML).toBe('');
+  });
+
   it('bağlanır, id çakışmaz, unmount rAF ve DOM\'u temizler', () => {
     const { pending, tick } = stubRaf();
     const a = document.createElement('div'), b = document.createElement('div');

@@ -1,3 +1,4 @@
+import { repBadge } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, uid } from '../kit';
@@ -40,15 +41,15 @@ const meterHtml = (k: number) =>
 const TEMPLATE = (id: string) => `
 <div class="sim sim-ke">
   <p class="lede">Ekoloji ve tarih, kültürleri nasıl biçimlendirir ve kültür bugünkü davranışımıza nasıl yansır?</p>
-  <div class="chips tabs" role="tablist" aria-label="Üç bakış">
-    ${TABS.map((t, i) => `<button type="button" class="chip" role="tab" id="${id}-t${i}" aria-controls="${id}-p${i}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">${i + 1}. ${t}</button>`).join('')}
+  <div data-ref="tourHost"></div>
+  <div class="tabs" role="tablist" aria-label="Üç bakış">
+    ${TABS.map((t, i) => `<button type="button" class="tab" role="tab" id="${id}-t${i}" aria-controls="${id}-p${i}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">${i + 1}. ${t}</button>`).join('')}
   </div>
   <div class="sim-bar" role="group" aria-label="Anlık çıktılar"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
     <div class="meters">${[0, 1, 2].map(meterHtml).join('')}</div>
   </div></div>
   <p class="sr-only" aria-live="polite" data-ref="live"></p>
-  <div data-ref="tourHost"></div>
 
   <section role="tabpanel" id="${id}-p0" aria-labelledby="${id}-t0" class="panel" data-ref="p0">
     <div class="chips" data-ref="scen" role="group" aria-label="Hazır senaryolar">${SCEN.map((s) => `<button type="button" class="chip" data-s="${s.id}" aria-pressed="false">${s.name}</button>`).join('')}</div>
@@ -125,7 +126,7 @@ const TEMPLATE = (id: string) => `
     <p><b>Kamu malı.</b> 24 oyuncu, 4'lü gruplar, 10 tur. Katkı grubun ortalamasına yaklaşır. Cezalandırıcı, hile yapanı (prososyal) ya da kendinden fazla katkı vereni (antisosyal) cezalandırabilir; antisosyal ceza olasılığı güven azaldıkça ve gelir eşitsizliği arttıkça yükselir. Güven, katkı ve cezalarla yavaşça değişir.</p>
   </details>
 
-  <section class="book" aria-label="Kitapta">
+  <aside class="book" aria-label="Kitapta">
     <h3 class="sim-h">Kitapta</h3>
     <ul>
       <li>${BOOK('ch09-e9', 'Lim ve ark. 2007; Rutherford ve ark. 2014')}: ayrışma sürerken önce ada ve yarımadalar belirir; 20-60 km çaplı adalar 1990 Yugoslavya'sında çatışma yerlerini öngördü, net sınırlar barışı destekledi. Replikasyon: bilinmiyor (geriye dönük uyarlama, ileriye dönük sınama yok).</li>
@@ -135,7 +136,7 @@ const TEMPLATE = (id: string) => `
       <li>${BOOK('ch09-e6', 'Herrmann ve ark. 2008')}: Yunanistan ve Umman'da cömert oyuncular cezalandırılır, Avustralya'da antisosyal ceza neredeyse yoktur. Replikasyon: sağlam. ${BOOK('ch09-e7', 'DeCelles ve Norton 2016')} (uçakta eşitsizlik ve hava öfkesi): bilinmiyor.</li>
       <li>${BOOK('ch09-e11', 'Chagnon ve Yanomamö')}: öldüren erkeklerin daha çok çocuğu olduğu bulgusu yaş farkı nedeniyle sorgulandı; başka toplumlarda tekrarlanmadı. Replikasyon: <b>tartışmalı</b>. ${BOOK('ch09-e12', 'Fry ve Söderberg 2013')}: 21 saf göçebe avcı-toplayıcı grubun çoğunda savaş görülmedi, %86'sında ölümcül şiddet vardı. Replikasyon: <b>tartışmalı</b> ("Hobbes mu Rousseau mu?" sorusu açık).</li>
     </ul>
-  </section>
+  </aside>
   <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan gelenler: Lim'in 20-60 km ada ölçeği, Rutherford'un net sınır sonucu, Talhelm ve Masuda yönleri, koridor deneyindeki Güneyli/Kuzeyli örüntüsü, Herrmann'ın Yunanistan/Umman ve Avustralya karşıtlığı, eşitsizlikle azalan sosyal sermaye. Hücre boyu, çan eğrisi, özerklik ağırlığı, çöl çobanlığı ve yağmur ormanı örnekleri, tüm yüzdeler ve katsayılar modelin varsayımıdır. Hukukun üstünlüğü bağı kitap dışından, Herrmann'ın makalesinden gelir.</p>
 </div>`;
 
@@ -328,14 +329,14 @@ export function mount(container: HTMLElement): () => void {
     const box = (x: number, y: number, w: number, name: string, k: string, color: string) => {
       const v = val[k];
       return `<g><rect x="${x}" y="${y}" width="${w}" height="36" rx="8" class="nb"/><rect x="${x + 1}" y="${y + 1}" width="${((w - 2) * v).toFixed(1)}" height="34" rx="7" fill="${color}" fill-opacity=".28"/>` +
-        `<text x="${x + 8}" y="${y + 15}" class="nt">${name}</text><text x="${x + 8}" y="${y + 29}" class="nv">%${pct(v)}</text></g>`;
+        `<text x="${x + 8}" y="${y + 15}" class="nt">${name}</text><text x="${x + 8}" y="${y + 29}" class="nv nvv">%${pct(v)}</text></g>`;
     };
     MECH.forEach((m) => { h += box(m.x, m.y, 80, m.n, m.k, m.k === 'L' ? 'var(--gld)' : 'var(--amy)'); });
     CULT.forEach((c) => { h += box(258, c.y, 100, c.n, c.k, c.k === 'K' ? 'var(--pfc)' : c.k === 'Hol' ? 'var(--pit)' : 'var(--amy)'); });
     h += `<text x="4" y="212" class="nv">* kitapta ayrıntısı yok, modelin örneği</text>`;
     mapSvg.innerHTML = h;
   }
-  const rep = '<span class="rep">replikasyon: karışık</span>';
+  const rep = repBadge('karışık');
   function drawTests(): void {
     const c = cultureOf(S.L, S.V);
     const dv = (x: number) => (x >= 1 ? `+%${Math.round((x - 1) * 100)}` : `-%${Math.round((1 - x) * 100)}`);

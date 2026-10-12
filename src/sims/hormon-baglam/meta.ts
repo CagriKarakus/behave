@@ -4,6 +4,6 @@ export const meta: SimMeta = {
   id: 'hormon-baglam',
   chapter: 'ch04',
   title: 'Hormonlar ve bağlam',
-  blurb: 'Testosteron, oksitosin ve stres: eğilimi büyütürler, yaratmazlar',
+  blurb: 'Testosteron, oksitosin ve stres eğrisi',
   order: 1,
 };

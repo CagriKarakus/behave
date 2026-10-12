@@ -4,6 +4,6 @@ export const meta: SimMeta = {
   id: 'biz-onlar',
   chapter: 'ch11',
   title: 'Biz ve Onlar',
-  blurb: 'Minimal grup, yeniden kategorileştirme ve sıcaklık-yetkinlik haritası',
+  blurb: 'Minimal grup, yeniden kategorileştirme, sıcaklık-yetkinlik',
   order: 1,
 };

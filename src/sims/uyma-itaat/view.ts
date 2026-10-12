@@ -31,8 +31,8 @@ const TEMPLATE = (id: string) => `
 <div class="sim sim-uyma">
   <p class="lede">Bir grup ya da bir otorite, insanı açıkça yanlış olana ne kadar götürebilir ve bunu ne kırar?</p>
   <div class="tabs" role="tablist" aria-label="Deney seçimi" data-ref="tabs">
-    <button type="button" role="tab" class="chip" id="${id}-t-asch" aria-controls="${id}-p-asch" data-tab="asch">Asch çizgi deneyi</button>
-    <button type="button" role="tab" class="chip" id="${id}-t-mil" aria-controls="${id}-p-mil" data-tab="mil">Milgram itaat deneyi</button>
+    <button type="button" role="tab" class="tab" id="${id}-t-asch" aria-controls="${id}-p-asch" data-tab="asch">Asch çizgi deneyi</button>
+    <button type="button" role="tab" class="tab" id="${id}-t-mil" aria-controls="${id}-p-mil" data-tab="mil">Milgram itaat deneyi</button>
   </div>
 
   <div class="sim-bar" role="group" aria-label="Anlık çıktılar">
@@ -50,7 +50,7 @@ const TEMPLATE = (id: string) => `
   <section role="tabpanel" id="${id}-p-asch" aria-labelledby="${id}-t-asch" data-ref="p-asch" class="panel">
     <div class="chips" data-ref="a-presets" role="group" aria-label="Asch senaryoları"></div>
     <div class="stage">
-      <svg viewBox="0 0 360 250" role="img" aria-label="Asch çizgi deneyi: bir referans çizgi, üç seçenek ve sırayla cevap veren katılımcılar" data-ref="a-stage"></svg>
+      <svg viewBox="0 0 360 258" role="img" aria-label="Asch çizgi deneyi: bir referans çizgi, üç seçenek ve sırayla cevap veren katılımcılar" data-ref="a-stage"></svg>
       <div class="legend">
         <span><i style="background:color-mix(in srgb, var(--amy) 24%, var(--panel));border:2px solid var(--amy);box-sizing:border-box"></i>Yanlış cevap</span>
         <span><i style="background:color-mix(in srgb, var(--pfc) 24%, var(--panel));border:2px solid var(--pfc);box-sizing:border-box"></i>Doğru cevap</span>
@@ -229,7 +229,7 @@ export function mount(container: HTMLElement): () => void {
     return l;
   });
   const seatsG = svg('g', {}, aStage);
-  const aStatus = svgText(aStage, { class: 'status', x: 180, y: 238, 'text-anchor': 'middle' }, '');
+  const aStatus = svgText(aStage, { class: 'status', x: 180, y: 248, 'text-anchor': 'middle' }, '');
   let seats: Array<{ c: SVGElement; t: SVGElement; ally: boolean }> = [];
 
   function drawCards(): void {
@@ -392,11 +392,11 @@ export function mount(container: HTMLElement): () => void {
   for (let i = 0; i < MIL.agents; i++) {
     dots.push(svg('circle', { class: 'ag', cx: DX + (i % 10) * DS + 6, cy: DY + Math.floor(i / 10) * DS + 6, r: 5.2 }, mStage));
   }
-  const mVolt = svgText(mStage, { class: 'big', x: 200, y: 104 }, '');
-  const mGo = svgText(mStage, { class: 'cap2', x: 200, y: 130 }, '');
-  const mStop = svgText(mStage, { class: 'cap2', x: 200, y: 150 }, '');
-  const mNote = svgText(mStage, { class: 'cap', x: 200, y: 176 }, '');
-  const mNote2 = svgText(mStage, { class: 'cap', x: 200, y: 190 }, '');
+  const mVolt = svgText(mStage, { class: 'big', x: 176, y: 104 }, '');
+  const mGo = svgText(mStage, { class: 'cap2', x: 176, y: 130 }, '');
+  const mStop = svgText(mStage, { class: 'cap2', x: 176, y: 150 }, '');
+  const mNote = svgText(mStage, { class: 'cap', x: 176, y: 176 }, '');
+  const mNote2 = svgText(mStage, { class: 'cap', x: 176, y: 190 }, '');
 
   function drawMilStage(): void {
     const shown = Math.floor(S.pos + 1e-9);
@@ -432,7 +432,7 @@ export function mount(container: HTMLElement): () => void {
     svg('line', { class: 'grid', x1: MC.x0, x2: MC.x1, y1: my(v), y2: my(v) }, mChart);
     svgText(mChart, { x: MC.x0 - 6, y: my(v) + 3.5, 'text-anchor': 'end' }, pct(v) + '%');
   }
-  for (const d of [1, 10, 20, 30]) svgText(mChart, { x: mx(d), y: MC.bot + 14, 'text-anchor': 'middle' }, volts(d) + ' V');
+  for (const d of [1, 10, 20, 30]) svgText(mChart, { x: mx(d), y: MC.bot + 14, 'text-anchor': d === 30 ? 'end' : 'middle' }, volts(d) + ' V');
   svgText(mChart, { x: (MC.x0 + MC.x1) / 2, y: MC.bot + 30, 'text-anchor': 'middle' }, 'Son verilen şokun gerilimi');
   const barsG = svg('g', {}, mChart);
   const survLine = svg('polyline', { class: 'ln surv', points: '' }, mChart);

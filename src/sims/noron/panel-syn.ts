@@ -1,7 +1,7 @@
 // Sekme 2: Sinaps. Salım -> reseptöre bağlanma -> geri alım / enzimle yıkım; ilaç benzeri engeller sinyalin düzeyini ve süresini değiştirir.
 import { svg, svgText } from '../kit';
 import { SYN_DEFAULT, advanceSyn, clamp, createSyn, f1, f2, release, singleSpike, type Single, type Syn, type SynP, type SynType } from './model';
-import { mulberry32 } from './rng';
+import { mulberry32 } from '../rng';
 import { chipRow, el, gridY, linePath, makeSlider, toggleBtn, type Ctx, type Meter, type SliderHandle } from './ui';
 
 const SPEED = 40;   // gerçek 1 sn = 40 ms model zamanı

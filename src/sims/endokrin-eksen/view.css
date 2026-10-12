@@ -1,10 +1,4 @@
 .sim-endo { gap: 20px; }
-.sim-endo .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
-.sim-endo .tab { min-height: 40px; font: 600 13px/1.1 var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 9px; padding: 10px 6px; cursor: pointer; }
-.sim-endo .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
-.sim-endo .pane { display: flex; flex-direction: column; gap: 18px; }
-.sim-endo .pane[hidden] { display: none; }
-.sim-endo .note { font-size: 13px; color: var(--muted); }
 .sim-endo .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
 .sim-endo .card .note { font-size: 13px; color: var(--muted); }
 .sim-endo .chart text, .sim-endo .stage text { font-family: var(--f-mono); }
@@ -17,13 +11,10 @@
 .sim-endo .arrow { fill: none; stroke: var(--edge); stroke-linecap: round; }
 .sim-endo .fbk { fill: none; stroke: var(--edge); stroke-dasharray: 6 4; stroke-linecap: round; }
 .sim-endo .meters { display: flex; flex-direction: column; gap: 8px; }
-.sim-endo .m-top { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--muted); margin-bottom: 3px; }
-.sim-endo .m-top b { font: 500 12px var(--f-mono); color: var(--ink); font-variant-numeric: tabular-nums; }
 .sim-endo .track { height: 7px; border-radius: 4px; }
 .sim-endo .readout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .sim-endo .ro { border: 1px solid var(--line); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .sim-endo .ro .k { font-size: 12px; color: var(--muted); }
 .sim-endo .ro .v { font: 500 13px var(--f-mono); font-variant-numeric: tabular-nums; }
-.sim-endo .say { min-height: 2.8em; }
 .sim-endo .legend { padding: 4px 10px 2px; }
 .sim-endo .stage { padding: 8px 6px 6px; }
