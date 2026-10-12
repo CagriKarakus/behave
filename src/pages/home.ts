@@ -32,7 +32,6 @@ export function chapterCard(c: ChapterMeta): Safe {
 
 
 const SEG = 160;
-const BW = 210;
 const clamp01 = (n: number): number => Math.min(1, Math.max(0, n));
 const f1 = (n: number): string => n.toFixed(1);
 
@@ -52,36 +51,39 @@ const cubic = (p0: Pt, p1: Pt, p2: Pt, p3: Pt, t: number): Pt => {
  * Kenar dalı: iki iç içe geçen dalgalı gövde, düzensiz aralıklı dalcıklar, alt dalcıklar, yapraklar ve
  * farklı boyda çiçekler/tomurcuklar. `data-y` her öğenin hangi yükseklikte belirdiğini söyler.
  */
-function branchSvg(h: number, seed: number): string {
+function branchSvg(h: number, w: number, seed: number): string {
   const rnd = rng(seed);
-  const n = Math.ceil(h / SEG) + 1;
+  const n = Math.max(1, Math.ceil(h / SEG));
+  const total = SEG * n;
   const stemPath = (x0: number, sign: number): string => {
-    let d = `M${x0},0 Q${x0 + sign * 18},${SEG / 2} ${x0},${SEG}`;
-    for (let i = 2; i <= n; i++) d += ` T${x0},${SEG * i}`;
+    let d = `M${f1(x0)},0 Q${f1(x0 + sign * 18)},${SEG / 2} ${f1(x0)},${SEG}`;
+    for (let i = 2; i <= n; i++) d += ` T${f1(x0)},${SEG * i}`;
     return d;
   };
-  const vines = [
-    { cls: 'br-stem', x0: 62, sign: 1, lag: 0, left: 54, right: 130 },
-    { cls: 'br-stem br-stem2', x0: 138, sign: -1, lag: 110, left: 120, right: 56 },
-  ];
+  // Gövdeler yan yana şeritlerde ilerler; dalcıklar kendi şeridinde kalır, böylece birbirine karışmaz.
+  const count = Math.min(4, Math.max(2, Math.round(w / 130)));
+  const lane = w / count;
+  const room = lane * 0.4;
+  const lags = [0, 110, 45, 150];
   let out = '';
-  for (const v of vines) {
-    out += `<path class="${v.cls}" pathLength="1" data-lag="${v.lag}" d="${stemPath(v.x0, v.sign)}"/>`;
-    const xAt = (y: number): number => v.x0 + v.sign * 9 * Math.sin((Math.PI * y) / SEG);
-    let y = 70 + rnd() * 50;
-    while (y < h + 20) {
+  for (let i = 0; i < count; i++) {
+    const x0 = lane * (i + 0.5);
+    const sign = i % 2 === 0 ? 1 : -1;
+    const lag = lags[i] ?? 0;
+    out += `<path class="br-stem${i ? ' br-stem2' : ''}" pathLength="1" data-lag="${lag}" data-total="${total}" d="${stemPath(x0, sign)}"/>`;
+    const xAt = (y: number): number => x0 + sign * 9 * Math.sin((Math.PI * y) / SEG);
+    let y = 50 + rnd() * 60;
+    while (y < h) {
       const dir = rnd() < 0.5 ? -1 : 1;
-      const room = dir > 0 ? v.right : v.left;
-      const L = room * (0.45 + rnd() * 0.55);
-      const dy = 18 + rnd() * 40;
+      const L = room * (0.5 + rnd() * 0.5);
+      const dy = 18 + rnd() * 36;
       const p0 = { x: xAt(y), y };
       const ex = p0.x + dir * L;
       const p1 = { x: p0.x + dir * L * 0.35, y: y + 4 + rnd() * 8 };
       const p2 = { x: p0.x + dir * L * 0.75, y: y + dy * 0.6 };
-      const p3 = { x: ex, y: y + dy };
-      const ly = y + v.lag;
+      const p3 = { x: ex, y: Math.min(h - 6, y + dy) };
+      const ly = y + lag;
       out += `<path class="br-twig" data-y="${f1(ly)}" pathLength="1" d="M${f1(p0.x)},${f1(p0.y)} C${f1(p1.x)},${f1(p1.y)} ${f1(p2.x)},${f1(p2.y)} ${f1(p3.x)},${f1(p3.y)}"/>`;
-      // yapraklar
       for (const t of [0.35, 0.65]) {
         if (rnd() < 0.6) {
           const q = cubic(p0, p1, p2, p3, t);
@@ -89,22 +91,21 @@ function branchSvg(h: number, seed: number): string {
           out += `<g transform="translate(${f1(q.x)} ${f1(q.y)}) rotate(${f1(ang)})"><path class="br-leaf br-bl" data-y="${f1(ly + dy * t + 20)}" d="M0,0 Q5,-5 12,0 Q5,5 0,0"/></g>`;
         }
       }
-      // alt dalcık
-      if (L > room * 0.6 && rnd() < 0.8) {
+      if (L > room * 0.7 && rnd() < 0.7) {
         const t = 0.55 + rnd() * 0.15;
         const q = cubic(p0, p1, p2, p3, t);
         const sd = rnd() < 0.5 ? -1 : 1;
-        const sl = 22 + rnd() * 30;
+        const sl = room * (0.2 + rnd() * 0.25);
         const sx = q.x + sd * sl;
-        const sy = q.y + 14 + rnd() * 22;
+        const sy = Math.min(h - 6, q.y + 14 + rnd() * 20);
         out += `<path class="br-twig" data-y="${f1(ly + dy * t)}" pathLength="1" d="M${f1(q.x)},${f1(q.y)} Q${f1(q.x + sd * sl * 0.4)},${f1(q.y + 2)} ${f1(sx)},${f1(sy)}"/>`;
         out += bloom(sx, sy, 3 + rnd() * 2.5, ly + dy * t + 40, rnd() < 0.35);
       }
       out += bloom(ex, p3.y, 4.5 + rnd() * 4.5, ly + dy + 30, rnd() < 0.2);
-      y += 38 + rnd() * 70;
+      y += 40 + rnd() * 70;
     }
   }
-  return `<svg viewBox="0 0 ${BW} ${h}" width="${BW}" height="${h}" focusable="false">${out}<circle class="br-tip" r="5"/></svg>`;
+  return `<svg viewBox="0 0 ${f1(w)} ${h}" width="${f1(w)}" height="${h}" focusable="false">${out}<circle class="br-tip" r="5"/></svg>`;
 }
 
 function bloom(x: number, y: number, r: number, at: number, bud: boolean): string {
@@ -196,18 +197,25 @@ export function renderHome(el: HTMLElement, content: ContentIndex): Page {
   const section = el.querySelector<HTMLElement>('.timeline');
   const branches = [...el.querySelectorAll<HTMLElement>('[data-branch]')];
   type Item = { el: SVGElement; y: number; k: number; bl: boolean };
-  type Built = { stems: { el: SVGPathElement; lag: number }[]; items: Item[]; tip: SVGCircleElement | null };
+  type Built = { stems: { el: SVGPathElement; lag: number; total: number }[]; items: Item[]; tip: SVGCircleElement | null };
   const built = new Map<HTMLElement, Built>();
   let builtH = 0;
+  let builtW = 0;
   /** Dallar: uç, ekranın ortasındaki konuma kadar uzar; bölüm geçilince tam boyda kalır, yukarı çıkınca geri çekilir. */
-  const growBranches = (p: number, h: number): void => {
+  const growBranches = (p: number, h: number, r: DOMRect): void => {
     if (!branches.length || h < 1) return;
-    if (Math.abs(h - builtH) > 1) {
-      builtH = h;
+    // Dallar, kenar cetveli ile içerik sütunu arasındaki boşluğu doldurur.
+    const vw = document.documentElement.clientWidth;
+    const w = Math.round(Math.min(560, Math.max(180, (r.left + r.width / 2) - 470 - 118)));
+    branches[0].style.left = `${118 - r.left}px`;
+    if (branches[1]) branches[1].style.right = `${118 - (vw - r.right)}px`;
+    if (Math.abs(h - builtH) > 1 || w !== builtW) {
+      builtH = h; builtW = w;
       branches.forEach((b, i) => {
-        b.innerHTML = branchSvg(Math.round(h), i === 0 ? 7 : 29);
+        b.style.width = `${w}px`;
+        b.innerHTML = branchSvg(Math.round(h), w, i === 0 ? 7 : 29);
         built.set(b, {
-          stems: [...b.querySelectorAll<SVGPathElement>('.br-stem')].map((e) => ({ el: e, lag: Number(e.dataset.lag) || 0 })),
+          stems: [...b.querySelectorAll<SVGPathElement>('.br-stem')].map((e) => ({ el: e, lag: Number(e.dataset.lag) || 0, total: Number(e.dataset.total) || h })),
           items: [...b.querySelectorAll<SVGElement>('.br-twig, .br-bl')].map((e) => ({ el: e, y: Number(e.dataset.y), k: -1, bl: e.classList.contains('br-bl') })),
           tip: b.querySelector<SVGCircleElement>('.br-tip'),
         });
@@ -217,11 +225,11 @@ export function renderHome(el: HTMLElement, content: ContentIndex): Page {
     for (const b of branches) {
       const st = built.get(b);
       if (!st) continue;
-      for (const s of st.stems) s.el.style.strokeDashoffset = String(1 - clamp01((tipY - s.lag) / h));
+      for (const s of st.stems) s.el.style.strokeDashoffset = String(1 - clamp01((tipY - s.lag) / s.total));
       const main = st.stems[0]?.el;
       if (st.tip) {
         let pt: { x: number; y: number } | null = null;
-        try { pt = main && typeof main.getPointAtLength === 'function' ? main.getPointAtLength(main.getTotalLength() * p) : null; } catch { pt = null; }
+        try { pt = main && typeof main.getPointAtLength === 'function' ? main.getPointAtLength(main.getTotalLength() * clamp01(tipY / (st.stems[0]?.total || h))) : null; } catch { pt = null; }
         st.tip.style.opacity = p > 0 && p < 1 && pt ? '1' : '0';
         if (pt) { st.tip.setAttribute('cx', String(pt.x)); st.tip.setAttribute('cy', String(pt.y)); }
       }
@@ -239,7 +247,7 @@ export function renderHome(el: HTMLElement, content: ContentIndex): Page {
     raf = 0;
     if (!section) return;
     const r = section.getBoundingClientRect();
-    growBranches(Math.min(1, Math.max(0, (innerHeight * 0.5 - r.top) / Math.max(1, r.height))), r.height);
+    growBranches(Math.min(1, Math.max(0, (innerHeight * 0.5 - r.top) / Math.max(1, r.height))), r.height, r);
     const p = Math.min(1, Math.max(0, (innerHeight * 0.5 - r.top) / Math.max(1, r.height)));
     // Yalnızca zaman merdiveni bölümü ekranın ortasındayken görünür.
     const shown = r.top < innerHeight * 0.55 && r.bottom > innerHeight * 0.45;

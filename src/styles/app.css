@@ -247,10 +247,10 @@ h1 { margin: 8px 0 6px; font-weight: 600; font-size: clamp(38px, 5.2vw, 84px); l
 .timeline > :not(.branch) { position: relative; z-index: 1; }
 .branch { display: none; }
 @media (min-width: 1280px) {
-  .branch { display: block; position: absolute; top: 0; width: 210px; pointer-events: none; z-index: 0; }
+  .branch { display: block; position: absolute; top: 0; bottom: 0; width: 210px; overflow: hidden; pointer-events: none; z-index: 0; }
   .branch-l { left: -20px; }
   .branch-r { right: -20px; transform: scaleX(-1); }
-  .branch svg { display: block; overflow: visible; }
+  .branch svg { display: block; }
   .br-stem, .br-twig { fill: none; stroke: var(--accent-2); stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
   .br-stem { stroke-width: 3; }
   .br-stem2 { stroke-width: 2.2; }
