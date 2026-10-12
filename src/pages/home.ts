@@ -6,6 +6,11 @@ import { buildTimeline, formatDuration, logPosition } from '../lib/timeline';
 import { simsFor } from '../sims/registry';
 import { staticPage, type Page } from './page';
 
+/** "Okumadan önce" kutusunun kapatma tercihi (yalnızca bu tarayıcıda). Depolama kısıtlıysa kutu her seferinde görünür. */
+export const NOTICE_KEY = 'behave-notice-dismissed';
+const noticeDismissed = (): boolean => { try { return localStorage.getItem(NOTICE_KEY) === '1'; } catch { return false; } };
+const rememberDismissed = (): void => { try { localStorage.setItem(NOTICE_KEY, '1'); } catch { /* kısıtlı ortam */ } };
+
 export function chapterCard(c: ChapterMeta): Safe {
   const simCount = simsFor(c.id).length;
   const hasSim = simCount > 0;
@@ -37,6 +42,14 @@ export function renderHome(el: HTMLElement, content: ContentIndex): Page {
       <p class="hero-en" lang="en">${content.book.titleEn}</p>
       <p class="hero-note">Türkçe ad önerilen çeviridir (resmî baskı adı doğrulanmadı).</p>
       <p class="lede">Sapolsky bir davranışı tek bir nedene bağlamaz: bir saniye öncesinden evrimsel geçmişe kadar geriye giden bir zaman merdiveni kurar. Aşağıdaki şerit bu merdiveni logaritmik ölçekte gösterir. Bir bölüme gir, özetini oku, varsa simülasyonla oyna.</p>
+      ${noticeDismissed() ? '' : html`<aside class="notice" role="note" aria-labelledby="notice-h" data-notice>
+        <div class="notice-body">
+          <h2 id="notice-h" class="notice-h">Okumadan önce</h2>
+          <p>Bu sitedeki içerik Sapolsky'nin Behave kitabından esinlenmiştir ve kitabın yerine geçmez. Özetler ve açıklamalar bizim yorumumuzdur. Simülasyonlar fikirleri kavramayı kolaylaştırmak için tasarlanmış basitleştirilmiş modellerdir; gösterdikleri sayılar kesin sonuçlar değildir. Kitapta anlatılan bazı deneyler sonradan tekrarlanamamış ya da tartışmalı hale gelmiştir; her deneyin kartında bilinen güncel durumu (sağlam, karışık, tartışmalı, bilinmiyor) yer alır. Güncel araştırmalar bu sonuçları değiştirebilir.</p>
+          <p class="notice-links"><a href="#/deneyler">Deneyler sayfası</a> <a href="#/deneyler?odak=durum">Replikasyon durumuna göre süz</a></p>
+        </div>
+        <button type="button" class="notice-close" data-notice-close aria-label="“Okumadan önce” kutusunu kapat">Kapat</button>
+      </aside>`}
       <p><a class="btn-link" href="#/deneyler">Kitaptaki deneylerin listesi →</a></p>
     </header>
 
@@ -77,8 +90,16 @@ export function renderHome(el: HTMLElement, content: ContentIndex): Page {
       </div>`)}
     </section>` : ''}
 
-    <p class="foot-note">Bu uygulama bir inceleme aracıdır; kitabın yerini tutmaz. Simülasyonlar nitel modellerdir: sayılar ölçüm değildir, ilişkilerin yönünü gösterir.</p>
   </div>`.value;
 
-  return staticPage(() => { el.innerHTML = ''; });
+  const box = el.querySelector<HTMLElement>('[data-notice]');
+  const closeBtn = el.querySelector<HTMLButtonElement>('[data-notice-close]');
+  const onClose = () => {
+    rememberDismissed();
+    box?.remove();
+    (document.getElementById('page-title') as HTMLElement | null)?.focus({ preventScroll: true });
+  };
+  closeBtn?.addEventListener('click', onClose);
+
+  return staticPage(() => { closeBtn?.removeEventListener('click', onClose); el.innerHTML = ''; });
 }

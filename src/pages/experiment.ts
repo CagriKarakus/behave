@@ -55,12 +55,13 @@ export function experimentCard(e: Experiment, ch: ChapterMeta, link: boolean): S
 }
 
 /** Deney listesi. Her bölümün deneyleri o bölümün ayrıntı parçasından gelir; hepsi yüklenince liste çizilir. */
-export function renderExperiments(el: HTMLElement, src: ContentSource): Page {
+export function renderExperiments(el: HTMLElement, src: ContentSource, focus?: 'durum'): Page {
   let disposed = false;
   let teardown: () => void = () => {};
   el.innerHTML = html`<div class="page">
     <a class="back" href="#/">← Tüm bölümler</a>
     <h1 id="page-title" tabindex="-1">Deneyler</h1>
+    <p class="repl-note" role="note">Replikasyon durumları 2026 itibarıyla bilinen çalışmalara göre özetlenmiştir; yeni çalışmalarla değişebilir.</p>
     <p class="lede">Kitapta anlatılan deneyler ve çalışmalar; bölüme, replikasyon durumuna ve metne göre süzülebilir.</p>
     <div data-slot="list" aria-busy="true"><p class="muted" role="status">Yükleniyor…</p></div>
   </div>`.value;
@@ -68,6 +69,7 @@ export function renderExperiments(el: HTMLElement, src: ContentSource): Page {
   const ready = Promise.all(src.index.chapters.map(async (c) => ({ c, d: await src.detail(c.id) }))).then((rows) => {
     if (disposed) return false;
     teardown = fill(el.querySelector<HTMLElement>('[data-slot="list"]') as HTMLElement, rows.flatMap(({ c, d }) => d.experiments.map((e) => ({ e, c }))), rows.filter(({ d }) => d.experiments.length).map(({ c }) => c));
+    if (focus === 'durum') el.querySelector<HTMLSelectElement>('[data-f=st]')?.focus({ preventScroll: false });
     return false;
   }).catch((err) => {
     console.error(err);

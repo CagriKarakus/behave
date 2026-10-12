@@ -26,6 +26,16 @@ afterEach(() => { dispose?.(); host.remove(); vi.restoreAllMocks(); });
 const go = async (hash: string) => { location.hash = hash; window.dispatchEvent(new HashChangeEvent('hashchange')); await flush(); };
 
 describe('uygulama kabuğu ve yönlendirme', () => {
+  it('site altbilgisi her sayfada bulunur ve kutu kapatılsa da kalır', async () => {
+    dispose = createApp(host, sourceFromContent(normalizeContent(newSchema)));
+    await go('#/');
+    host.querySelector<HTMLButtonElement>('[data-notice-close]')?.click();
+    expect(host.querySelector('[data-notice]')).toBeNull();
+    for (const h of ['#/', '#/deneyler', '#/bolum/ch02']) {
+      await go(h);
+      expect(host.querySelector('footer.site-foot')?.textContent).toContain('bağımsız bir okuma ve öğrenme aracıdır');
+    }
+  });
   it('rota değişince önceki sayfa (simülasyon dahil) temizlenir', async () => {
     dispose = createApp(host, sourceFromContent(normalizeContent(newSchema)));
     await go('#/bolum/ch02');

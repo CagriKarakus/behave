@@ -11,6 +11,7 @@ describe('router', () => {
     expect(parseHash('#/bolum/ch02?sim=ultimatum')).toEqual({ name: 'chapter', id: 'ch02', experiment: undefined, sim: 'ultimatum' });
     expect(parseHash('#/bolum/ch02?deney=ch02-e1&sim=ultimatum')).toMatchObject({ experiment: 'ch02-e1', sim: 'ultimatum' });
     expect(parseHash('#/deneyler')).toEqual({ name: 'experiments' });
+    expect(parseHash('#/deneyler?odak=durum')).toEqual({ name: 'experiments', focus: 'durum' });
     expect(parseHash('#/yok').name).toBe('notfound');
   });
 });

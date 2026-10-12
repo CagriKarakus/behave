@@ -59,7 +59,17 @@ h1 { margin: 6px 0 4px; font-weight: 700; font-size: clamp(28px, 6vw, 44px); let
 .group { margin-top: 22px; }
 .group-h { margin: 0; font-size: 20px; }
 .group-blurb { font-size: 14px; margin: 2px 0 10px; }
-.foot-note { margin-top: 40px; font-size: 13px; color: var(--muted); max-width: 64ch; }
+/* Uyarı / feragat: tam kutu (ana sayfa) ve site altbilgisi. */
+.notice { display: flex; align-items: flex-start; gap: 12px; margin: 16px 0 8px; padding: 12px 14px; max-width: 70ch; background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--pfc); border-radius: 12px; font-size: 14px; color: var(--ink); }
+.notice-body { flex: 1; min-width: 0; }
+.notice-body p { margin: 6px 0 0; overflow-wrap: anywhere; }
+.notice-h { margin: 0; font: 600 15px var(--f-display); }
+.notice-links { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.notice-links a { display: inline-flex; align-items: center; min-height: 32px; color: var(--ink); text-decoration: underline; }
+.notice-close { flex: none; min-height: 40px; padding: 6px 12px; font: 500 13px var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--control-border); border-radius: 10px; cursor: pointer; }
+.repl-note { margin: 4px 0 0; font-size: 13px; color: var(--muted); max-width: 70ch; }
+.site-foot { max-width: 1200px; margin-inline: auto; padding: 16px 16px 32px; border-top: 1px solid var(--line); }
+.site-foot p { margin: 0; font-size: 12px; line-height: 1.5; color: var(--muted); max-width: 80ch; overflow-wrap: anywhere; }
 @media (min-width: 600px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (min-width: 960px) {
   .stops { padding-left: 32px; }

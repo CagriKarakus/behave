@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import oldDraft from '../content/__fixtures__/old-draft.json';
 import newSchema from '../content/__fixtures__/new-schema.json';
 import { normalizeContent } from '../content/normalize';
 import { sourceFromContent } from '../content';
-import { renderHome } from './home';
+import { renderHome, NOTICE_KEY } from './home';
 import { renderChapter } from './chapter';
 import { renderExperiments } from './experiment';
 
@@ -144,5 +144,53 @@ describe('sayfalar (eski taslak ve yeni şema)', () => {
     await renderChapter(el, sourceFromContent(c), 'ch05').ready;
     expect(el.querySelector('.exp-sources a')?.getAttribute('href')).toBe('https://doi.org/10.1037/abc');
     expect(el.querySelector('.doi')?.textContent).toBe('doi:10.1037/abc');
+  });
+});
+
+describe('uyarı / feragat metinleri', () => {
+  const src = () => sourceFromContent(normalizeContent(newSchema));
+  beforeEach(() => { try { localStorage.removeItem(NOTICE_KEY); } catch { /* yok */ } });
+
+  it('ana sayfada "Okumadan önce" notu, Deneyler bağlantısı ve süzgeç bağlantısı var', () => {
+    const el = mk();
+    renderHome(el, src().index);
+    const n = el.querySelector('aside[role=note]')!;
+    expect(n.querySelector('h2')?.textContent).toBe('Okumadan önce');
+    expect(n.getAttribute('aria-labelledby')).toBe('notice-h');
+    const hrefs = Array.from(n.querySelectorAll('a')).map((a) => a.getAttribute('href'));
+    expect(hrefs).toContain('#/deneyler');
+    expect(hrefs).toContain('#/deneyler?odak=durum');
+  });
+
+  it('kapatma tercihi localStorage\'a yazılır; sonraki çizimde kutu yok', () => {
+    const el = mk();
+    renderHome(el, src().index).dispose();
+    const el2 = mk();
+    renderHome(el2, src().index);
+    el2.querySelector<HTMLButtonElement>('[data-notice-close]')!.click();
+    expect(el2.querySelector('[data-notice]')).toBeNull();
+    expect(localStorage.getItem(NOTICE_KEY)).toBe('1');
+    const el3 = mk();
+    renderHome(el3, src().index);
+    expect(el3.querySelector('[data-notice]')).toBeNull();
+  });
+
+  it('localStorage hata verirse kutu yine görünür ve kapatma çökmez', () => {
+    const get = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw new Error('x'); });
+    const set = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('x'); });
+    const el = mk();
+    renderHome(el, src().index);
+    expect(el.querySelector('[data-notice]')).not.toBeNull();
+    el.querySelector<HTMLButtonElement>('[data-notice-close]')!.click();
+    expect(el.querySelector('[data-notice]')).toBeNull();
+    get.mockRestore(); set.mockRestore();
+  });
+
+  it('deneyler sayfasında 2026 notu; odak=durum süzgeci odaklar', async () => {
+    const el = mk();
+    document.body.appendChild(el);
+    await renderExperiments(el, src(), 'durum').ready;
+    expect(el.querySelector('.repl-note')?.textContent).toContain('2026 itibarıyla');
+    expect(document.activeElement).toBe(el.querySelector('[data-f=st]'));
   });
 });

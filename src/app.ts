@@ -19,7 +19,8 @@ export function createApp(host: HTMLElement, src: ContentSource): () => void {
     <nav class="topnav" aria-label="Ana gezinti"><a href="#/">Bölümler</a><a href="#/deneyler">Deneyler</a></nav>
     <button class="theme-btn" type="button" id="theme-btn"></button>
   </header>
-  <main id="main" tabindex="-1"></main>`;
+  <main id="main" tabindex="-1"></main>
+  <footer class="site-foot"><p>Bu site Robert M. Sapolsky'nin Behave (2017) kitabından esinlenen bağımsız bir okuma ve öğrenme aracıdır; kitabın yazarı ya da yayıncısıyla bağlantılı değildir. Simülasyonlar nitel modellerdir, ölçüm değildir. Bilim ilerledikçe bulgular değişebilir; bazı deneylerin güncel replikasyon durumu kartlarında belirtilmiştir.</p></footer>`;
   const main = host.querySelector('#main') as HTMLElement;
   const skip = host.querySelector('.skip') as HTMLAnchorElement;
   const themeBtn = host.querySelector('#theme-btn') as HTMLButtonElement;
@@ -82,7 +83,7 @@ export function createApp(host: HTMLElement, src: ContentSource): () => void {
       if (ch) chapterId = ch.id;
     } else if (route.name === 'experiments') {
       title = `Deneyler · ${book.titleTr}`;
-      page = renderExperiments(main, src);
+      page = renderExperiments(main, src, route.focus);
     } else {
       page = renderNotFound(main, 'Aradığın sayfa yok.');
     }

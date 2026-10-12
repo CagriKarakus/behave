@@ -1,12 +1,12 @@
 import { normalizeId } from '../content/normalize';
 
-export type Route = { name: 'home' } | { name: 'chapter'; id: string; experiment?: string; sim?: string } | { name: 'experiments' } | { name: 'notfound'; hash: string };
+export type Route = { name: 'home' } | { name: 'chapter'; id: string; experiment?: string; sim?: string } | { name: 'experiments'; focus?: 'durum' } | { name: 'notfound'; hash: string };
 
 export function parseHash(hash: string): Route {
   const [h, query = ''] = hash.replace(/^#/, '').split('?');
   const parts = h.split('/').filter(Boolean);
   if (parts.length === 0) return { name: 'home' };
-  if (parts.length === 1 && parts[0] === 'deneyler') return { name: 'experiments' };
+  if (parts.length === 1 && parts[0] === 'deneyler') return new URLSearchParams(query).get('odak') === 'durum' ? { name: 'experiments', focus: 'durum' } : { name: 'experiments' };
   if (parts[0] === 'bolum' && parts.length === 2) {
     let id = parts[1];
     try { id = decodeURIComponent(id); } catch { /* ham kalsın */ }
