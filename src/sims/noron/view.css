@@ -1,0 +1,106 @@
+.sim-nr { gap: 20px; }
+.sim-nr .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px; }
+.sim-nr .tab { min-height: 48px; font: 600 12.5px/1.2 var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 9px; padding: 8px 6px; cursor: pointer; }
+.sim-nr .tab[aria-selected="true"] { background: var(--ink); color: var(--bg); }
+.sim-nr .pane { display: flex; flex-direction: column; gap: 18px; }
+.sim-nr .pane[hidden], .sim-nr [hidden] { display: none; }
+.sim-nr .note { font-size: 13px; color: var(--muted); }
+.sim-nr .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.sim-nr .card .sim-h { margin: 0; }
+.sim-nr .say { min-height: 4em; }
+.sim-nr .chips { margin-inline: 0; padding-inline: 0; flex-wrap: wrap; overflow: visible; }
+.sim-nr .stage { padding: 8px 6px 6px; }
+.sim-nr .chart { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px 6px 6px; }
+.sim-nr .chart .sim-h { margin: 0 8px 4px; }
+.sim-nr .legend { padding: 4px 6px 0; }
+.sim-nr .sl { --c: var(--ink); }
+.sim-nr .btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+/* Çıktı çubuğu */
+.sim-nr .nr-meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.sim-nr .m-top { display: flex; flex-direction: column; font-size: 11px; line-height: 1.25; color: var(--muted); margin-bottom: 3px; gap: 1px; min-height: 2.5em; justify-content: flex-end; }
+.sim-nr .m-top b { font: 500 13px var(--f-mono); color: var(--ink); font-variant-numeric: tabular-nums; }
+.sim-nr .track { height: 7px; border-radius: 4px; }
+.sim-nr .track > b { transition: width .2s; }
+@media (prefers-reduced-motion: reduce) { .sim-nr .track > b { transition: none; } }
+
+/* Ortak SVG */
+.sim-nr svg text { font: 400 10px var(--f-mono); fill: var(--muted); }
+.sim-nr svg text.lb { font: 400 10px var(--f-body); }
+.sim-nr .grid { stroke: var(--line); stroke-width: 1; }
+.sim-nr .nd { fill: var(--panel); stroke: var(--ink); stroke-width: 1.6; }
+.sim-nr text.ndt { font: 600 12px var(--f-body); fill: var(--ink); }
+.sim-nr .xx { fill: none; stroke: var(--red); stroke-width: 2.6; stroke-linecap: round; }
+
+/* Sekme 1 */
+.sim-nr .dn { fill: none; stroke: var(--edge); stroke-linecap: round; }
+.sim-nr .ax { fill: var(--edge); stroke: var(--edge); stroke-linecap: round; }
+.sim-nr .my { fill: var(--panel); stroke: var(--edge); stroke-width: 1.4; }
+.sim-nr .soma { fill: var(--panel); stroke: var(--ink); stroke-width: 2; }
+.sim-nr .hill { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-dasharray: 3 2; }
+.sim-nr text.sv { font: 600 10px var(--f-mono); fill: var(--ink); }
+.sim-nr .tip { cursor: pointer; }
+.sim-nr .tip .hit { fill: transparent; }
+.sim-nr .tip .dot { fill: var(--panel); stroke: var(--dop); stroke-width: 2.2; }
+.sim-nr .tip[data-k="-1"] .dot { stroke: var(--pfc); }
+.sim-nr .tip:focus-visible { outline: none; }
+.sim-nr .tip:focus-visible .dot { stroke-width: 4; stroke: var(--ink); }
+.sim-nr .tip .pulse { fill: none; stroke-width: 2; }
+.sim-nr text.sg { font: 700 14px var(--f-body); fill: var(--ink); pointer-events: none; }
+.sim-nr text.mv { font: 400 9.5px var(--f-mono); paint-order: stroke; stroke: var(--panel); stroke-width: 3px; pointer-events: none; }
+.sim-nr .refr { fill: var(--lesion); opacity: .28; }
+.sim-nr .thr { stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 5 4; }
+.sim-nr .sh { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 2 3; }
+.sim-nr .vl { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
+.sim-nr .tk { fill: none; stroke: var(--ink); stroke-width: 2.4; }
+.sim-nr .fil { fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linejoin: round; }
+.sim-nr .fim { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+.sim-nr .fid { fill: var(--dop); stroke: var(--panel); stroke-width: 2; }
+
+/* Sekme 2 */
+.sim-nr .term { fill: var(--bg); stroke: var(--edge); stroke-width: 1.6; }
+.sim-nr .post { fill: var(--bg); stroke: var(--line); stroke-width: 1.4; }
+.sim-nr .mem { fill: none; stroke: var(--edge); stroke-width: 2; }
+.sim-nr .ves { fill: var(--gld); fill-opacity: .22; stroke: var(--gld); stroke-width: 1.6; }
+.sim-nr .vd { fill: var(--gld); }
+.sim-nr .imp { fill: var(--ink); }
+.sim-nr .pump { fill: var(--panel); stroke: var(--gld); stroke-width: 1.8; }
+.sim-nr .pumpa { fill: none; stroke: var(--gld); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.sim-nr .enz { fill: var(--pit); }
+.sim-nr .np { fill: var(--gld); }
+.sim-nr .rc { fill: var(--panel); stroke: var(--ink); stroke-width: 2; }
+.sim-nr .rc.off { stroke: var(--line); stroke-dasharray: 3 3; stroke-width: 1.4; }
+.sim-nr .rc.bound { fill: var(--dop); }
+.sim-nr .cl { fill: none; stroke: var(--gld); stroke-width: 2.4; stroke-linejoin: round; }
+.sim-nr .rl { fill: none; stroke: var(--dop); stroke-width: 2.4; stroke-linejoin: round; }
+.sim-nr .mean { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 3; }
+.sim-nr .fates { display: flex; flex-direction: column; gap: 8px; }
+.sim-nr .fate { display: grid; grid-template-columns: minmax(0, 8.5em) minmax(0, 1fr) 3em; gap: 8px; align-items: center; font-size: 12.5px; }
+.sim-nr .fate .track { height: 10px; }
+.sim-nr .fate .fv { font: 500 12px var(--f-mono); text-align: right; }
+
+/* Sekme 3 */
+.sim-nr .arc { fill: none; stroke: var(--pfc); stroke-width: 1.3; }
+.sim-nr .bin { fill: var(--edge); opacity: .55; }
+.sim-nr .bout { fill: var(--dop); }
+.sim-nr .olin { fill: none; stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 3 3; }
+.sim-nr .edge { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; }
+.sim-nr .tin { fill: none; stroke: var(--edge); stroke-width: 1.6; stroke-dasharray: 5 4; }
+.sim-nr .tref { fill: none; stroke: var(--lesion); stroke-width: 1.8; stroke-dasharray: 1 3; stroke-linecap: round; }
+.sim-nr .tout { fill: none; stroke: var(--ink); stroke-width: 2.6; stroke-linejoin: round; }
+
+/* Ortak kutular */
+.sim-nr .more { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; font-size: 13px; }
+.sim-nr .more summary { cursor: pointer; font-weight: 600; min-height: 28px; display: flex; align-items: center; }
+.sim-nr .more p { margin-top: 8px; color: var(--muted); }
+.sim-nr .book { border: 1px solid var(--line); border-left: 4px solid var(--hyp); border-radius: 12px; padding: 10px 14px 12px; font-size: 13px; display: flex; flex-direction: column; gap: 8px; }
+.sim-nr .book .sim-h { margin: 0; }
+.sim-nr .book-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.sim-nr .book-list li { border-left: 3px solid var(--line); padding-left: 10px; color: var(--muted); }
+.sim-nr .book a { color: var(--ink); text-underline-offset: 3px; font-weight: 600; }
+
+@media (max-width: 480px) {
+  .sim-nr .nr-meters { gap: 8px; }
+  .sim-nr .m-top { font-size: 10.5px; }
+  .sim-nr .m-top b { font-size: 12.5px; }
+}
