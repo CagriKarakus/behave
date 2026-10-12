@@ -1,0 +1,812 @@
+{
+ "_comment": "Bilimsel terim sözlüğü: İngilizce çeviri bu girdilerden çıkar. 'avoid' listesi testlerde yasaklı varyantlar olarak denetlenir (küçük/büyük harf duyarsız, tam ifade).",
+ "terms": [
+  {
+   "tr": "amigdala",
+   "en": "amygdala",
+   "note": "",
+   "avoid": [
+    "amigdala"
+   ]
+  },
+  {
+   "tr": "prefrontal korteks",
+   "en": "prefrontal cortex (PFC)",
+   "note": "",
+   "avoid": [
+    "pre-frontal"
+   ]
+  },
+  {
+   "tr": "frontal korteks",
+   "en": "frontal cortex",
+   "note": "Türkçede 'ön korteks' yerine 'frontal korteks' kullanılır (icerik-denetimi B16).",
+   "avoid": [
+    "front cortex",
+    "anterior cortex"
+   ]
+  },
+  {
+   "tr": "dorsolateral prefrontal korteks (dlPFC)",
+   "en": "dorsolateral prefrontal cortex (dlPFC)",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "ventromedial prefrontal korteks (vmPFC)",
+   "en": "ventromedial prefrontal cortex (vmPFC)",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "orbitofrontal korteks (OFK)",
+   "en": "orbitofrontal cortex (OFC)",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "ön singulat korteks (ÖSK)",
+   "en": "anterior cingulate cortex (ACC)",
+   "note": "",
+   "avoid": [
+    "front cingulate"
+   ]
+  },
+  {
+   "tr": "insula",
+   "en": "insula",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "ventral striatum",
+   "en": "ventral striatum",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "nükleus akumbens",
+   "en": "nucleus accumbens",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "hipokampus",
+   "en": "hippocampus",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "hipotalamus",
+   "en": "hypothalamus",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "talamus",
+   "en": "thalamus",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "periakuaduktal gri madde",
+   "en": "periaqueductal gray (PAG)",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "fusiform yüz alanı",
+   "en": "fusiform face area (FFA)",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "ventral tegmental alan",
+   "en": "ventral tegmental area (VTA)",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "lateral septum",
+   "en": "lateral septum",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "bazal gangliyonlar",
+   "en": "basal ganglia",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "serebellum",
+   "en": "cerebellum",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "temporoparietal kavşak",
+   "en": "temporoparietal junction (TPJ)",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "medial prefrontal korteks",
+   "en": "medial prefrontal cortex (mPFC)",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "limbik sistem",
+   "en": "limbic system",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "beyin sapı",
+   "en": "brainstem",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "ön ada",
+   "en": "anterior insula",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "dopamin",
+   "en": "dopamine",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "serotonin",
+   "en": "serotonin",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "noradrenalin",
+   "en": "norepinephrine",
+   "note": "Kitabın İngilizcesine uygun olarak 'norepinephrine'; 'noradrenaline' kullanılmaz.",
+   "avoid": [
+    "noradrenaline"
+   ]
+  },
+  {
+   "tr": "adrenalin",
+   "en": "epinephrine",
+   "note": "",
+   "avoid": [
+    "adrenaline"
+   ]
+  },
+  {
+   "tr": "oksitosin",
+   "en": "oxytocin",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "vazopressin",
+   "en": "vasopressin",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "testosteron",
+   "en": "testosterone",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "östrojen",
+   "en": "estrogen",
+   "note": "",
+   "avoid": [
+    "oestrogen"
+   ]
+  },
+  {
+   "tr": "progesteron",
+   "en": "progesterone",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "glukokortikoid",
+   "en": "glucocorticoid",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "kortizol",
+   "en": "cortisol",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "CRH (kortikotropin salgılatıcı hormon)",
+   "en": "corticotropin-releasing hormone (CRH)",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "ACTH (adrenokortikotropik hormon)",
+   "en": "adrenocorticotropic hormone (ACTH)",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "GABA",
+   "en": "GABA",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "glutamat",
+   "en": "glutamate",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "asetilkolin",
+   "en": "acetylcholine",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "endorfin",
+   "en": "endorphin",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "nörotransmitter",
+   "en": "neurotransmitter",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "nöroendokrin eksen",
+   "en": "neuroendocrine axis",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "hipotalamus-hipofiz-adrenal (HPA) ekseni",
+   "en": "hypothalamic–pituitary–adrenal (HPA) axis",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "nöroplastisite",
+   "en": "neuroplasticity",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "uzun süreli potansiyelleşme (LTP)",
+   "en": "long-term potentiation (LTP)",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "uzun süreli depresyon (LTD)",
+   "en": "long-term depression (LTD)",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "sinaptogenez",
+   "en": "synaptogenesis",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "sinaptik budama",
+   "en": "synaptic pruning",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "miyelinizasyon",
+   "en": "myelination",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "nörogenez",
+   "en": "neurogenesis",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "eylem potansiyeli",
+   "en": "action potential",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "sinaps",
+   "en": "synapse",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "reseptör",
+   "en": "receptor",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "epigenetik",
+   "en": "epigenetics",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "kalıtılabilirlik",
+   "en": "heritability",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "gen-çevre etkileşimi",
+   "en": "gene–environment interaction",
+   "note": "",
+   "avoid": [
+    "gene-environment interplay"
+   ]
+  },
+  {
+   "tr": "gen-kültür eşevrimi",
+   "en": "gene–culture coevolution",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "aday gen",
+   "en": "candidate gene",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "genom çapında ilişkilendirme çalışması (GWAS)",
+   "en": "genome-wide association study (GWAS)",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "transkripsiyon faktörü",
+   "en": "transcription factor",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "alternatif ekleme",
+   "en": "alternative splicing",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "MAOA geni",
+   "en": "MAOA gene",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "alel",
+   "en": "allele",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "polimorfizm",
+   "en": "polymorphism",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "biz-onlar ayrımı",
+   "en": "us-versus-them (Us/Them) distinction",
+   "note": "",
+   "avoid": [
+    "we-they split"
+   ]
+  },
+  {
+   "tr": "konformite (uyma)",
+   "en": "conformity",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "otoriteye itaat",
+   "en": "obedience to authority",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "karşılıklı özgecilik",
+   "en": "reciprocal altruism",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "akraba seçilimi",
+   "en": "kin selection",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "grup seçilimi",
+   "en": "group selection",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "yeşil sakal etkisi",
+   "en": "green-beard effect",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "karşılık ver (Tit for Tat) stratejisi",
+   "en": "Tit for Tat strategy",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "tutsak ikilemi",
+   "en": "prisoner's dilemma",
+   "note": "",
+   "avoid": [
+    "prisoners dilemma"
+   ]
+  },
+  {
+   "tr": "ultimatum oyunu",
+   "en": "Ultimatum Game",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "diktatör oyunu",
+   "en": "Dictator Game",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "kamu malları oyunu",
+   "en": "public goods game",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "güven oyunu",
+   "en": "Trust Game",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "minimal grup paradigması",
+   "en": "minimal group paradigm",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "örtük ilişkilendirme testi (IAT)",
+   "en": "Implicit Association Test (IAT)",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "stereotip içeriği modeli (sıcaklık ve yetkinlik)",
+   "en": "stereotype content model (warmth and competence)",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "zorluk hipotezi",
+   "en": "challenge hypothesis",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "ters U ilişkisi",
+   "en": "inverted-U relationship",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "yer değiştirme saldırganlığı",
+   "en": "displaced aggression",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "gecikmiş doyum",
+   "en": "delayed gratification",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "zihin kuramı",
+   "en": "Theory of Mind",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "empati",
+   "en": "empathy",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "sempati",
+   "en": "sympathy",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "şefkat",
+   "en": "compassion",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "duygusal bulaşma",
+   "en": "emotional contagion",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "somatik işaretleyici",
+   "en": "somatic marker",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "bedene dayalı biliş",
+   "en": "embodied cognition",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "ahlaki şaşkınlık",
+   "en": "moral dumbfounding",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "sosyal sezgicilik",
+   "en": "social intuitionism",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "trolley problemi (tramvay ikilemi)",
+   "en": "trolley problem",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "eşitsizlik karşıtlığı (adaletsizlikten kaçınma)",
+   "en": "inequity aversion",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "üçüncü taraf cezası",
+   "en": "third-party punishment",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "dolaylı karşılıklılık",
+   "en": "indirect reciprocity",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "antisosyal cezalandırma",
+   "en": "antisocial punishment",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "kutsal değerler",
+   "en": "sacred values",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "sahte türleşme",
+   "en": "pseudospeciation",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "insanlıktan çıkarma",
+   "en": "dehumanization",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "onur kültürü",
+   "en": "culture of honor",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "Büyük Tanrılar",
+   "en": "Big Gods",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "sosyal beyin hipotezi",
+   "en": "social brain hypothesis",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "sosyal sermaye",
+   "en": "social capital",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "sosyoekonomik statü-sağlık gradyanı",
+   "en": "socioeconomic status (SES)–health gradient",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "hazırlık potansiyeli",
+   "en": "readiness potential",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "özgür irade",
+   "en": "free will",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "determinizm",
+   "en": "determinism",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "orta düzey özgür irade",
+   "en": "mitigated free will",
+   "note": "Dennett'in terimi: mitigated free will (Sapolsky).",
+   "avoid": []
+  },
+  {
+   "tr": "homunkülüs",
+   "en": "homunculus",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "noktalı denge",
+   "en": "punctuated equilibrium",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "ekzaptasyon",
+   "en": "exaptation",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "spandrel",
+   "en": "spandrel",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "aynalama nöronları",
+   "en": "mirror neurons",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "Hebb ilkesi",
+   "en": "Hebb's rule",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "replikasyon krizi",
+   "en": "replication crisis",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "replikasyon",
+   "en": "replication",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "saldırganlık",
+   "en": "aggression",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "reaktif saldırganlık",
+   "en": "reactive aggression",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "proaktif (soğukkanlı) saldırganlık",
+   "en": "proactive (cold-blooded) aggression",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "dürtüsellik",
+   "en": "impulsivity",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "kategorik düşünme",
+   "en": "categorical thinking",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "Kitty Genovese olayı",
+   "en": "Kitty Genovese case",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "seyirci etkisi",
+   "en": "bystander effect",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "Wellesley etkisi (menstrüel senkronizasyon)",
+   "en": "Wellesley effect (menstrual synchrony)",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "kırık pencere kuramı",
+   "en": "broken windows theory",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "çerçeveleme etkisi",
+   "en": "framing effect",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "bilinçaltı ipucu (subliminal)",
+   "en": "subliminal cue",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "iç duyu",
+   "en": "interoception",
+   "note": "",
+   "avoid": []
+  }
+ ]
+}
