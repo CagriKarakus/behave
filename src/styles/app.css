@@ -149,8 +149,8 @@ h1 { margin: 8px 0 6px; font-weight: 600; font-size: clamp(38px, 5.2vw, 84px); l
 .nav-title { font: 600 20px/1.2 var(--f-display); }
 
 @media (min-width: 960px) {
-  .chapter.has-sim { grid-template-columns: minmax(0, 1fr) clamp(520px, 42vw, 760px); grid-template-areas: "head sim" "rest sim"; column-gap: clamp(32px, 4vw, 72px); align-items: start; }
-  .chapter.has-sim .ch-sim { position: sticky; top: 72px; max-height: calc(100vh - 88px); overflow-y: auto; overflow-x: hidden; padding: 0 12px 0 0; margin-right: -12px; scrollbar-width: thin; }
+  .chapter.has-sim { grid-template-columns: clamp(520px, 42vw, 760px) minmax(0, 1fr); grid-template-areas: "sim head" "sim rest"; column-gap: clamp(32px, 4vw, 72px); align-items: start; }
+  .chapter.has-sim .ch-sim { position: sticky; top: 72px; max-height: calc(100vh - 88px); overflow-y: auto; overflow-x: hidden; padding: 0 0 0 12px; margin-left: -12px; scrollbar-width: thin; }
   .chapter:not(.has-sim) { grid-template-areas: "head" "rest"; }
 }
 
