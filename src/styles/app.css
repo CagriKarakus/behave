@@ -216,10 +216,10 @@ h1 { margin: 8px 0 6px; font-weight: 600; font-size: clamp(38px, 5.2vw, 84px); l
 /* ---- Kenar meridyenleri: iki yanda aşağı inen zaman cetveli ---- */
 .meridian { display: none; }
 @media (min-width: 1280px) {
-  .page.home { padding-inline: 112px; }
-  .meridian { display: block; position: fixed; top: 96px; bottom: 36px; width: 90px; z-index: 5; pointer-events: none; opacity: 0; transition: opacity .4s; --p: 0; }
+  .page.home { padding-inline: 124px; }
+  .meridian { display: block; position: fixed; top: 96px; bottom: 36px; width: 104px; z-index: 5; pointer-events: none; opacity: 0; transition: opacity .4s; --p: 0; }
   .meridian.on { opacity: 1; }
-  .meridian-l { left: 8px; }
+  .meridian-l { left: 6px; }
   .meridian-r { right: 10px; }
   .mer-cap { position: absolute; top: -22px; font: 600 9px var(--f-body); letter-spacing: .3em; text-transform: uppercase; color: var(--accent-2); white-space: nowrap; }
   .meridian-l .mer-cap { right: 0; }

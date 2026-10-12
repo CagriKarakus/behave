@@ -113,8 +113,9 @@ export function renderHome(el: HTMLElement, content: ContentIndex): Page {
     raf = 0;
     if (!section) return;
     const r = section.getBoundingClientRect();
-    const p = Math.min(1, Math.max(0, (innerHeight * 0.4 - r.top) / Math.max(1, r.height)));
-    const shown = r.top < innerHeight * 0.6;
+    const p = Math.min(1, Math.max(0, (innerHeight * 0.5 - r.top) / Math.max(1, r.height)));
+    // Yalnızca zaman merdiveni bölümü ekranın ortasındayken görünür.
+    const shown = r.top < innerHeight * 0.55 && r.bottom > innerHeight * 0.45;
     for (const m of meridians) { m.style.setProperty('--p', p.toFixed(4)); m.classList.toggle('on', shown); }
   };
   const onScroll = () => { if (!raf) raf = requestAnimationFrame(sync); };
