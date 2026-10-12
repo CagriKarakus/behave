@@ -32,28 +32,86 @@ export function chapterCard(c: ChapterMeta): Safe {
 
 
 const SEG = 160;
+const BW = 210;
 const clamp01 = (n: number): number => Math.min(1, Math.max(0, n));
+const f1 = (n: number): string => n.toFixed(1);
 
-/** Kenar dalı: dalgalı bir gövde, dönüşümlü sağ/sol dalcıklar ve uçlarında çiçekler. Yüksekliğe göre üretilir. */
-function branchSvg(h: number): string {
+/** Küçük, tekrarlanabilir rastgele sayı üreteci (her yenilemede aynı dal çıkar). */
+function rng(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => { a = (a + 0x6d2b79f5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+
+type Pt = { x: number; y: number };
+const cubic = (p0: Pt, p1: Pt, p2: Pt, p3: Pt, t: number): Pt => {
+  const u = 1 - t;
+  return { x: u * u * u * p0.x + 3 * u * u * t * p1.x + 3 * u * t * t * p2.x + t * t * t * p3.x, y: u * u * u * p0.y + 3 * u * u * t * p1.y + 3 * u * t * t * p2.y + t * t * t * p3.y };
+};
+
+/**
+ * Kenar dalı: iki iç içe geçen dalgalı gövde, düzensiz aralıklı dalcıklar, alt dalcıklar, yapraklar ve
+ * farklı boyda çiçekler/tomurcuklar. `data-y` her öğenin hangi yükseklikte belirdiğini söyler.
+ */
+function branchSvg(h: number, seed: number): string {
+  const rnd = rng(seed);
   const n = Math.ceil(h / SEG) + 1;
-  let stem = `M40,0 Q58,${SEG / 2} 40,${SEG}`;
-  for (let i = 2; i <= n; i++) stem += ` T40,${SEG * i}`;
-  let twigs = '';
-  for (let k = 1; k < n; k++) {
-    const y = SEG * k;
-    const right = k % 2 === 1;
-    const L = right ? 62 + ((k * 37) % 40) : 22 + ((k * 13) % 14);
-    const dy = 28 + (k % 3) * 8;
-    const ex = right ? 40 + L : 40 - L;
-    const ey = y + dy;
-    const c1 = right ? 62 : 28;
-    const c2 = right ? 40 + L * 0.7 : 40 - L * 0.6;
-    const r = right ? 7 : 5;
-    twigs += `<path class="br-twig" data-y="${y}" pathLength="1" d="M40,${y} C${c1},${y + 6} ${c2},${y + 20} ${ex},${ey}"/>`
-      + `<g transform="translate(${ex} ${ey})"><g class="br-bl" data-y="${y}"><circle class="br-p" r="${r}"/><circle class="br-p" cx="${-r * 0.8}" cy="${-r * 0.7}" r="${r * 0.7}"/><circle class="br-p" cx="${r * 0.8}" cy="${-r * 0.8}" r="${r * 0.7}"/><circle class="br-c" r="${r * 0.35}"/></g></g>`;
+  const stemPath = (x0: number, sign: number): string => {
+    let d = `M${x0},0 Q${x0 + sign * 18},${SEG / 2} ${x0},${SEG}`;
+    for (let i = 2; i <= n; i++) d += ` T${x0},${SEG * i}`;
+    return d;
+  };
+  const vines = [
+    { cls: 'br-stem', x0: 62, sign: 1, lag: 0, left: 54, right: 130 },
+    { cls: 'br-stem br-stem2', x0: 138, sign: -1, lag: 110, left: 120, right: 56 },
+  ];
+  let out = '';
+  for (const v of vines) {
+    out += `<path class="${v.cls}" pathLength="1" data-lag="${v.lag}" d="${stemPath(v.x0, v.sign)}"/>`;
+    const xAt = (y: number): number => v.x0 + v.sign * 9 * Math.sin((Math.PI * y) / SEG);
+    let y = 70 + rnd() * 50;
+    while (y < h + 20) {
+      const dir = rnd() < 0.5 ? -1 : 1;
+      const room = dir > 0 ? v.right : v.left;
+      const L = room * (0.45 + rnd() * 0.55);
+      const dy = 18 + rnd() * 40;
+      const p0 = { x: xAt(y), y };
+      const ex = p0.x + dir * L;
+      const p1 = { x: p0.x + dir * L * 0.35, y: y + 4 + rnd() * 8 };
+      const p2 = { x: p0.x + dir * L * 0.75, y: y + dy * 0.6 };
+      const p3 = { x: ex, y: y + dy };
+      const ly = y + v.lag;
+      out += `<path class="br-twig" data-y="${f1(ly)}" pathLength="1" d="M${f1(p0.x)},${f1(p0.y)} C${f1(p1.x)},${f1(p1.y)} ${f1(p2.x)},${f1(p2.y)} ${f1(p3.x)},${f1(p3.y)}"/>`;
+      // yapraklar
+      for (const t of [0.35, 0.65]) {
+        if (rnd() < 0.6) {
+          const q = cubic(p0, p1, p2, p3, t);
+          const ang = (dir > 0 ? -35 : -145) + (rnd() - 0.5) * 40;
+          out += `<g transform="translate(${f1(q.x)} ${f1(q.y)}) rotate(${f1(ang)})"><path class="br-leaf br-bl" data-y="${f1(ly + dy * t + 20)}" d="M0,0 Q5,-5 12,0 Q5,5 0,0"/></g>`;
+        }
+      }
+      // alt dalcık
+      if (L > room * 0.6 && rnd() < 0.8) {
+        const t = 0.55 + rnd() * 0.15;
+        const q = cubic(p0, p1, p2, p3, t);
+        const sd = rnd() < 0.5 ? -1 : 1;
+        const sl = 22 + rnd() * 30;
+        const sx = q.x + sd * sl;
+        const sy = q.y + 14 + rnd() * 22;
+        out += `<path class="br-twig" data-y="${f1(ly + dy * t)}" pathLength="1" d="M${f1(q.x)},${f1(q.y)} Q${f1(q.x + sd * sl * 0.4)},${f1(q.y + 2)} ${f1(sx)},${f1(sy)}"/>`;
+        out += bloom(sx, sy, 3 + rnd() * 2.5, ly + dy * t + 40, rnd() < 0.35);
+      }
+      out += bloom(ex, p3.y, 4.5 + rnd() * 4.5, ly + dy + 30, rnd() < 0.2);
+      y += 38 + rnd() * 70;
+    }
   }
-  return `<svg viewBox="0 0 150 ${h}" width="150" height="${h}" focusable="false"><path class="br-stem" pathLength="1" d="${stem}"/>${twigs}<circle class="br-tip" r="5"/></svg>`;
+  return `<svg viewBox="0 0 ${BW} ${h}" width="${BW}" height="${h}" focusable="false">${out}<circle class="br-tip" r="5"/></svg>`;
+}
+
+function bloom(x: number, y: number, r: number, at: number, bud: boolean): string {
+  const pet = bud
+    ? `<circle class="br-p" r="${f1(r * 0.7)}"/>`
+    : `<circle class="br-p" r="${f1(r)}"/><circle class="br-p" cx="${f1(-r * 0.8)}" cy="${f1(-r * 0.7)}" r="${f1(r * 0.7)}"/><circle class="br-p" cx="${f1(r * 0.8)}" cy="${f1(-r * 0.8)}" r="${f1(r * 0.7)}"/><circle class="br-p" cx="${f1(r * 0.1)}" cy="${f1(r * 0.9)}" r="${f1(r * 0.6)}"/><circle class="br-c" r="${f1(r * 0.35)}"/>`;
+  return `<g transform="translate(${f1(x)} ${f1(y)})"><g class="br-bl" data-y="${f1(at)}">${pet}</g></g>`;
 }
 
 export function renderHome(el: HTMLElement, content: ContentIndex): Page {
@@ -137,31 +195,43 @@ export function renderHome(el: HTMLElement, content: ContentIndex): Page {
   const meridians = [...el.querySelectorAll<HTMLElement>('[data-meridian]')];
   const section = el.querySelector<HTMLElement>('.timeline');
   const branches = [...el.querySelectorAll<HTMLElement>('[data-branch]')];
+  type Item = { el: SVGElement; y: number; k: number; bl: boolean };
+  type Built = { stems: { el: SVGPathElement; lag: number }[]; items: Item[]; tip: SVGCircleElement | null };
+  const built = new Map<HTMLElement, Built>();
   let builtH = 0;
   /** Dallar: uç, ekranın ortasındaki konuma kadar uzar; bölüm geçilince tam boyda kalır, yukarı çıkınca geri çekilir. */
   const growBranches = (p: number, h: number): void => {
     if (!branches.length || h < 1) return;
     if (Math.abs(h - builtH) > 1) {
       builtH = h;
-      for (const b of branches) b.innerHTML = branchSvg(Math.round(h));
+      branches.forEach((b, i) => {
+        b.innerHTML = branchSvg(Math.round(h), i === 0 ? 7 : 29);
+        built.set(b, {
+          stems: [...b.querySelectorAll<SVGPathElement>('.br-stem')].map((e) => ({ el: e, lag: Number(e.dataset.lag) || 0 })),
+          items: [...b.querySelectorAll<SVGElement>('.br-twig, .br-bl')].map((e) => ({ el: e, y: Number(e.dataset.y), k: -1, bl: e.classList.contains('br-bl') })),
+          tip: b.querySelector<SVGCircleElement>('.br-tip'),
+        });
+      });
     }
     const tipY = p * h;
     for (const b of branches) {
-      const stem = b.querySelector<SVGPathElement>('.br-stem');
-      const tip = b.querySelector<SVGCircleElement>('.br-tip');
-      if (stem) stem.style.strokeDashoffset = String(1 - p);
-      if (tip) {
+      const st = built.get(b);
+      if (!st) continue;
+      for (const s of st.stems) s.el.style.strokeDashoffset = String(1 - clamp01((tipY - s.lag) / h));
+      const main = st.stems[0]?.el;
+      if (st.tip) {
         let pt: { x: number; y: number } | null = null;
-        try { pt = stem && typeof stem.getPointAtLength === 'function' ? stem.getPointAtLength(stem.getTotalLength() * p) : null; } catch { pt = null; }
-        tip.style.opacity = p > 0 && p < 1 && pt ? '1' : '0';
-        if (pt) { tip.setAttribute('cx', String(pt.x)); tip.setAttribute('cy', String(pt.y)); }
+        try { pt = main && typeof main.getPointAtLength === 'function' ? main.getPointAtLength(main.getTotalLength() * p) : null; } catch { pt = null; }
+        st.tip.style.opacity = p > 0 && p < 1 && pt ? '1' : '0';
+        if (pt) { st.tip.setAttribute('cx', String(pt.x)); st.tip.setAttribute('cy', String(pt.y)); }
       }
-      b.querySelectorAll<SVGPathElement>('.br-twig').forEach((t) => { t.style.strokeDashoffset = String(1 - clamp01((tipY - Number(t.dataset.y)) / 90)); });
-      b.querySelectorAll<SVGGElement>('.br-bl').forEach((g) => {
-        const k = clamp01((tipY - Number(g.dataset.y) - 70) / 50);
-        g.style.opacity = String(k);
-        g.style.transform = `scale(${0.2 + 0.8 * k})`;
-      });
+      for (const it of st.items) {
+        const k = it.bl ? clamp01((tipY - it.y - 40) / 50) : clamp01((tipY - it.y) / 90);
+        if (k === it.k) continue;
+        it.k = k;
+        if (it.bl) { it.el.style.opacity = String(k); it.el.style.transform = `scale(${0.2 + 0.8 * k})`; }
+        else it.el.style.strokeDashoffset = String(1 - k);
+      }
     }
   };
   let raf = 0;
