@@ -1,0 +1,84 @@
+.sim-biz .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.sim-biz .tabs .chip[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sim-biz .panel { display: flex; flex-direction: column; gap: 18px; }
+.sim-biz .panel[hidden] { display: none; }
+.sim-biz .tg { width: 100%; text-align: left; }
+.sim-biz .btn-go { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sim-biz .btn:disabled { opacity: .45; cursor: default; }
+.sim-biz .sliders > button { align-self: flex-start; }
+
+.sim-biz .meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.sim-biz .m-top { display: flex; justify-content: space-between; font: 400 10.5px var(--f-mono); color: var(--muted); margin-bottom: 3px; gap: 4px; }
+.sim-biz .m-top b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.sim-biz .box { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 12px 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+.sim-biz .box .chips { margin-inline: 0; padding-inline: 0; }
+.sim-biz .hintline, .sim-biz .t-label, .sim-biz .fb, .sim-biz .note, .sim-biz .tally { font-size: 12.5px; color: var(--muted); }
+.sim-biz .t-label { color: var(--ink); }
+.sim-biz .fb { min-height: 2.6em; }
+
+/* Tajfel matrisi: sol etiket sütunu + 7 sütun */
+.sim-biz .mx { display: grid; grid-template-columns: 34px repeat(7, minmax(0, 1fr)); gap: 4px; align-items: stretch; }
+.sim-biz .mx[hidden] { display: none; }
+.sim-biz .rl { display: flex; flex-direction: column; justify-content: space-around; font: 500 11px var(--f-mono); color: var(--muted); }
+.sim-biz .cell { display: flex; flex-direction: column; align-items: center; justify-content: space-around; min-height: 62px; padding: 4px 0; background: transparent; color: var(--ink); border: 1px solid var(--control-border); border-radius: 8px; cursor: pointer; font: 600 14px var(--f-mono); font-variant-numeric: tabular-nums; }
+.sim-biz .cell .b { font-weight: 400; border-top: 1px solid var(--line); width: 70%; text-align: center; padding-top: 3px; }
+.sim-biz .cell[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.sim-biz .cell[aria-pressed="true"] .b { border-top-color: var(--bg); }
+.sim-biz .cell:disabled { opacity: .45; cursor: default; }
+.sim-biz .mx-h { align-items: end; min-height: 120px; }
+.sim-biz .hb { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 2px; }
+.sim-biz .hb i { display: block; width: 100%; background: var(--pfc); border-radius: 3px 3px 0 0; min-height: 1px; transition: height .2s ease; }
+.sim-biz .hb span { font: 400 10px var(--f-mono); color: var(--muted); }
+.sim-biz .tg2 { text-align: center; font: 600 12px var(--f-mono); color: var(--ink); min-height: 1.3em; }
+
+/* Kurzban sahnesi */
+.sim-biz .stage svg text { font: 400 10px var(--f-body); fill: var(--muted); }
+.sim-biz .pp { cursor: pointer; outline: none; }
+.sim-biz .pp .sel { fill: none; stroke: var(--ink); stroke-width: 2; opacity: 0; }
+.sim-biz .pp.on .sel, .sim-biz .pp:focus-visible .sel { opacity: 1; }
+.sim-biz .pp .head { stroke: var(--ink); stroke-width: 1.2; }
+.sim-biz .pp .body { stroke: var(--ink); stroke-width: 1.2; }
+.sim-biz .body.sh-n { fill: var(--panel); }
+.sim-biz .body.sh0 { fill: var(--dop); }
+.sim-biz .body.b1 { stroke: var(--ink); }
+.sim-biz .sh1 { fill: var(--lesion); }
+.sim-biz .stripe { fill: var(--ink); fill-opacity: .55; }
+.sim-biz .pp .badge { fill: var(--bg); stroke: var(--ink); stroke-width: 1.5; }
+.sim-biz .stage .nm { font: 600 11px var(--f-mono); fill: var(--ink); }
+.sim-biz .stage .pr { font: 500 10.5px var(--f-mono); fill: var(--ink); }
+.sim-biz .stage .cap { font: 400 10.5px var(--f-body); fill: var(--muted); }
+.sim-biz .chart text.ch-t { font: 400 10.5px var(--f-body); fill: var(--muted); }
+.sim-biz .chart text.ch-v { font: 600 11px var(--f-mono); fill: var(--ink); }
+.sim-biz .chart .ch-line { stroke: var(--muted); stroke-width: 1.4; stroke-dasharray: 4 3; }
+.sim-biz .chart .cb.race { fill: var(--amy); }
+.sim-biz .chart .cb.shirt { fill: var(--dop); }
+.sim-biz .chart .cb { transition: width .2s ease; }
+
+/* Fiske haritası */
+.sim-biz .quad { fill-opacity: .12; stroke: none; }
+.sim-biz .frame { fill: none; stroke: var(--line); stroke-width: 1.2; }
+.sim-biz .stage text.qlab { font: 600 11px var(--f-body); fill: var(--ink); }
+.sim-biz .stage text.ax { font: 400 10.5px var(--f-body); fill: var(--muted); }
+.sim-biz .soc circle { fill: var(--muted); fill-opacity: .55; }
+.sim-biz .tok { cursor: grab; outline: none; transition: transform .35s ease; touch-action: none; }
+.sim-biz .tok.drag { cursor: grabbing; transition: none; }
+.sim-biz .tok .hit { fill: transparent; }
+.sim-biz .tok .dot { fill: var(--panel); stroke: var(--ink); stroke-width: 1.6; }
+.sim-biz .tok.on .dot { stroke-width: 3.4; }
+.sim-biz .tok:focus-visible .dot { stroke-dasharray: 4 3; stroke-width: 3; }
+.sim-biz .stage text.tl { font: 600 12px var(--f-mono); fill: var(--ink); pointer-events: none; }
+.sim-biz .stage text.tn { font: 500 10.5px var(--f-body); fill: var(--ink); paint-order: stroke; stroke: var(--panel); stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
+.sim-biz .bars { display: flex; flex-direction: column; gap: 5px; }
+.sim-biz .bar-r { display: grid; grid-template-columns: 128px minmax(0, 1fr) 38px; gap: 8px; align-items: center; font-size: 12.5px; }
+.sim-biz .bar-r em { font: 500 11.5px var(--f-mono); font-style: normal; text-align: right; font-variant-numeric: tabular-nums; }
+.sim-biz .bar-r .track b { transition: width .15s ease; }
+.sim-biz .txt { min-height: 40px; font: 14px var(--f-body); color: var(--ink); background: transparent; border: 1px solid var(--control-border); border-radius: 8px; padding: 8px 10px; width: 100%; }
+
+.sim-biz .how { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.sim-biz .how summary { cursor: pointer; font-weight: 600; min-height: 24px; }
+.sim-biz .how p { margin-top: 8px; font-size: 13px; }
+.sim-biz .book { border: 1px solid var(--line); border-left: 4px solid var(--dop); border-radius: 12px; padding: 12px 14px; }
+.sim-biz .book ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+.sim-biz .book a { color: var(--ink); text-decoration: underline; }
+@media (prefers-reduced-motion: reduce) { .sim-biz * { transition: none !important; } }
