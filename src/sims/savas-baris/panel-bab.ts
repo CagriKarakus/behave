@@ -1,50 +1,56 @@
 // Savaş ve barış, "Babunlar" sekmesi: ayrı (tembel yüklenen) parça; sekme seçilince yüklenir.
+import { t } from '../../i18n/t';
+import { num } from '../../i18n/fmt';
 import { svg, svgText } from '../kit';
 import { createTour } from '../tour';
 import { BABOON_DEFAULT, BB, approachDays, describeBaboons, simulateBaboons, type BabParams, type BabRun } from './model';
-import { LG, cls, f1, key, pc, pctFmt, sv, type Env, type PanelApi } from './env';
+import { L } from './text';
+import { LG, cls, key, pc, pctFmt, sv, type Env, type PanelApi } from './env';
 
-export const BAB_HTML = (): string => `
+export const BAB_HTML = (): string => {
+  const b = L().bb;
+  return `
     <div data-ref="tour3"></div>
-    <section class="card" aria-label="Babun sürüsü">
-      <h3 class="sim-h">Garbage Dump sürüsü: salgın ve yeni gelenler</h3>
-      <div class="chips" role="group" aria-label="Senaryo" data-ref="bbChips"></div>
+    <section class="card" aria-label="${b.cardAria}">
+      <h3 class="sim-h">${b.h}</h3>
+      <div class="chips" role="group" aria-label="${b.scenarioAria}" data-ref="bbChips"></div>
       <div class="stage">
-        <svg viewBox="0 0 360 212" role="img" aria-label="Sürü" data-ref="bbStage"></svg>
-        ${key([sv(14, 12, '<circle cx="7" cy="6" r="5" fill="var(--dop)" fill-opacity=".7" stroke="var(--ink)"/>'), 'dişi (koyu = gergin)'], [sv(14, 12, '<rect x="2" y="1" width="10" height="10" fill="var(--amy)" fill-opacity=".7" stroke="var(--ink)"/>'), 'erkek (koyu = saldırgan)'], [sv(14, 12, '<rect x="2" y="1" width="10" height="10" fill="var(--amy)" fill-opacity=".7" stroke="var(--ink)" stroke-width="2.4" stroke-dasharray="3 2"/>'), 'çöplükçü erkek'], [sv(14, 12, '<path d="M7 1L13 6L7 11L1 6z" fill="var(--amy)" fill-opacity=".7" stroke="var(--pfc)" stroke-width="2"/>'), 'yeni gelen'], [sv(14, 12, '<circle cx="7" cy="6" r="3" fill="var(--pfc)"/>'), 'dişi yaklaştı'])}
+        <svg viewBox="0 0 360 212" role="img" aria-label="${b.stageAria}" data-ref="bbStage"></svg>
+        ${key([sv(14, 12, '<circle cx="7" cy="6" r="5" fill="var(--dop)" fill-opacity=".7" stroke="var(--ink)"/>'), b.lgFemale], [sv(14, 12, '<rect x="2" y="1" width="10" height="10" fill="var(--amy)" fill-opacity=".7" stroke="var(--ink)"/>'), b.lgMale], [sv(14, 12, '<rect x="2" y="1" width="10" height="10" fill="var(--amy)" fill-opacity=".7" stroke="var(--ink)" stroke-width="2.4" stroke-dasharray="3 2"/>'), b.lgDump], [sv(14, 12, '<path d="M7 1L13 6L7 11L1 6z" fill="var(--amy)" fill-opacity=".7" stroke="var(--pfc)" stroke-width="2"/>'), b.lgNew], [sv(14, 12, '<circle cx="7" cy="6" r="3" fill="var(--pfc)"/>'), b.lgNear])}
       </div>
       <div data-ref="tp3"></div>
-      <div class="chart"><svg viewBox="0 0 360 184" role="img" aria-label="Aylara göre erkek saldırganlığı, dişi gerginliği ve yeni gelenlerin saldırganlığı" data-ref="bbChart"></svg>
-        ${key([LG.line('var(--amy)'), 'erkek saldırganlığı'], [LG.line('var(--dop)', ' stroke-dasharray="5 3"'), 'dişi gerginliği'], [LG.line('var(--pfc)'), 'yeni gelenler'])}
+      <div class="chart"><svg viewBox="0 0 360 184" role="img" aria-label="${b.chartAria}" data-ref="bbChart"></svg>
+        ${key([LG.line('var(--amy)'), b.lgMaleAgg], [LG.line('var(--dop)', ' stroke-dasharray="5 3"'), b.lgStress], [LG.line('var(--pfc)'), b.lgNewcomers])}
       </div>
       <div class="readout" data-ref="bbRead"></div>
       <div class="sliders" data-ref="bbSl"></div>
     </section>
 
     <details class="how">
-      <summary>Model nasıl çalışıyor?</summary>
+      <summary>${t('sim.how')}</summary>
       <div class="how-in">
-        <p>Sürüde 24 dişi, 12 çöplükçü, 12 sakin erkek var. Salgında çöplükçülerin seçilen payı ölür, geri kalanların yarısı da ölür (oranlar varsayım). Tümü ölürse dişi:erkek 2:1 olur, kitaptaki gibi.</p>
-        <p>Dişi gerginliği erkek saldırganlığıyla artar; gergin dişiler yeni erkeğe geç yaklaşır (tipik sürüde iki aydan uzun, salgın sonrası günler-haftalar: kitaptaki iki uç). Yeni gelen dişiyle temas kurunca saldırganlığı sürünün ortalamasına kayar. Kitap doğrudan öğretim kanıtı olmadığını, en olası yolun rahat dişiler olduğunu söyler; model bu yolu kullanır. Yeni gelenler de ortalamaya katılır, bu yüzden çok hızlı göç kültürü seyreltir (modelin sonucu).</p>
+        <p>${b.how.p1}</p>
+        <p>${b.how.p2}</p>
       </div>
     </details>
 
-    <aside class="book" aria-label="Kitapta">
-      <h3 class="sim-h">Kitapta</h3>
+    <aside class="book" aria-label="${t('sim.book')}">
+      <h3 class="sim-h">${t('sim.book')}</h3>
       <ul>
-        <li><a href="#/bolum/ch17?deney=ch17-e11">Sapolsky ve Share (2004)</a>: çöplük sürüsünde salgın, çöplüğe giden erkeklerin tümü öldü; dişi:erkek 2:1, saldırganlık düştü; yeni erkekler ~6 ayda uydu, dişiler günler-haftalar içinde yaklaştı (tipik: 2 aydan uzun). Tek sürü, replikasyon yok.</li>
+        <li>${b.book}</li>
       </ul>
     </aside>
 `;
+};
 
 export function createBabPanel(env: Env, host: HTMLElement): PanelApi {
   const { scope, id, $, S, need, touch, setBar, makeSlider, toggles, makeTransport, tiles, yGrid, poly, clipRect } = env;
   host.innerHTML = BAB_HTML();
 
   const bs = $<SVGElement>('bbStage');
-  svgText(bs, { class: 'tl', x: 4, y: 12 }, 'dişiler');
-  svgText(bs, { class: 'tl', x: 4, y: 98 }, 'erkekler');
-  svgText(bs, { class: 'tl', x: 4, y: 178 }, 'yeni gelenler');
+  svgText(bs, { class: 'tl', x: 4, y: 12 }, L().bb.females);
+  svgText(bs, { class: 'tl', x: 4, y: 98 }, L().bb.males);
+  svgText(bs, { class: 'tl', x: 4, y: 178 }, L().bb.newcomers);
   const rpos = (i: number, sex: 'F' | 'M'): [number, number] => { const j = sex === 'F' ? i : i - BB.females; return [30 + (j % 8) * 43, (sex === 'F' ? 28 : 108) + Math.floor(j / 8) * 26]; };
   let runB: BabRun;
   interface BEl { g: SVGElement; shape: SVGElement; x: SVGElement }
@@ -72,9 +78,9 @@ export function createBabPanel(env: Env, host: HTMLElement): PanelApi {
   const bx = (d: number): number => BC.x0 + ((BC.x1 - BC.x0) * d) / (BB.days - 1), by = (v: number): number => BC.bot - (BC.bot - BC.top) * v;
   yGrid(bch, BC.x0, BC.x1, by, [0, 0.5, 1], pc);
   for (let m = 0; m <= 18; m += 3) svgText(bch, { class: 'ax', x: bx(m * 30), y: BC.bot + 14, 'text-anchor': m === 0 ? 'start' : 'middle' }, String(m));
-  svgText(bch, { class: 'ax', x: (BC.x0 + BC.x1) / 2, y: BC.bot + 30, 'text-anchor': 'middle' }, 'ay');
+  svgText(bch, { class: 'ax', x: (BC.x0 + BC.x1) / 2, y: BC.bot + 30, 'text-anchor': 'middle' }, L().bb.axMonth);
   svg('line', { class: 'offline', x1: bx(BB.outbreak), x2: bx(BB.outbreak), y1: BC.top, y2: BC.bot }, bch);
-  svgText(bch, { class: 'ax', x: bx(BB.outbreak) + 4, y: BC.top + 9 }, 'salgın');
+  svgText(bch, { class: 'ax', x: bx(BB.outbreak) + 4, y: BC.top + 9 }, L().bb.outbreak);
   const bClip = clipRect(bch, `${id}-clipB`, 184);
   const bG = svg('g', { 'clip-path': `url(#${id}-clipB)` }, bch);
   const bLM = svg('polyline', { class: 'ln b-male' }, bG), bLS = svg('polyline', { class: 'ln b-str' }, bG), bLN = svg('polyline', { class: 'ln b-new' }, bG);
@@ -103,7 +109,7 @@ export function createBabPanel(env: Env, host: HTMLElement): PanelApi {
     bLN.setAttribute('points', poly(runB.newAgg.flatMap((v, d) => (Number.isNaN(v) ? [] : [[bx(d), by(v)] as [number, number]]))));
     bTicks.setAttribute('d', runB.newcomers.map((n) => `M${bx(n.arrive).toFixed(1)},${BC.bot}v-7`).join(''));
   }
-  const tB = makeTransport($('tp3'), { max: BB.days, speed: 30, unit: 'Gün', seed: () => { S.bseed++; need.b = true; } });
+  const tB = makeTransport($('tp3'), { max: BB.days, speed: 30, unit: 'day', seed: () => { S.bseed++; need.b = true; } });
   const bbSl = $('bbSl');
   const setB = (patch: Partial<BabParams>) => {
     S.b = { ...S.b, ...patch };
@@ -112,24 +118,24 @@ export function createBabPanel(env: Env, host: HTMLElement): PanelApi {
     if (patch.months !== undefined) hMo.set(patch.months);
     need.b = true; touch();
   };
-  const hKi = makeSlider(bbSl, { name: 'Salgında ölen çöplükçü erkek payı', hint: 'Kitapta çöplüğe giden erkeklerin tümü öldü (%100). Düşürünce kültür değişmez', min: 0, max: 100, step: 5, val: 100, fmt: pctFmt, cb: (v) => setB({ kill: v / 100 }), color: 'var(--amy)' });
-  const hGa = makeSlider(bbSl, { name: 'Yeni gelen aralığı', hint: 'Kaç günde bir yeni erkek katılır. Çok sık gelirse kültür seyrelir (modelin sonucu)', min: 10, max: 180, step: 5, val: S.b.gap, fmt: (v) => `${v} gün`, cb: (v) => setB({ gap: v }), color: 'var(--pfc)' });
-  const hMo = makeSlider(bbSl, { name: 'Uyum süresi', hint: 'Yaklaşan dişiyle temastan sonra yeni gelenin davranışının sürüye oturması (kitapta yaklaşık 6 ay)', min: 3, max: 12, step: 1, val: S.b.months, fmt: (v) => `${v} ay`, cb: (v) => setB({ months: v }), color: 'var(--pfc)' });
-  const syncBb = toggles($('bbChips'), [{ k: 'no', name: 'Salgın çöplükçülere dokunmasaydı' }, { k: 'yes', name: 'Çöplükçüler öldü (kitaptaki)' }], () => (S.b.kill === 0 ? 'no' : S.b.kill === 1 ? 'yes' : null), (k) => setB({ kill: k === 'yes' ? 1 : 0 }));
+  const hKi = makeSlider(bbSl, { name: L().bb.kill.name, hint: L().bb.kill.hint, min: 0, max: 100, step: 5, val: 100, fmt: pctFmt, cb: (v) => setB({ kill: v / 100 }), color: 'var(--amy)' });
+  const hGa = makeSlider(bbSl, { name: L().bb.gap.name, hint: L().bb.gap.hint, min: 10, max: 180, step: 5, val: S.b.gap, fmt: (v) => L().days(v), cb: (v) => setB({ gap: v }), color: 'var(--pfc)' });
+  const hMo = makeSlider(bbSl, { name: L().bb.adapt.name, hint: L().bb.adapt.hint, min: 3, max: 12, step: 1, val: S.b.months, fmt: (v) => L().months(v), cb: (v) => setB({ months: v }), color: 'var(--pfc)' });
+  const syncBb = toggles($('bbChips'), [{ k: 'no', name: L().bb.chipNo }, { k: 'yes', name: L().bb.chipYes }], () => (S.b.kill === 0 ? 'no' : S.b.kill === 1 ? 'yes' : null), (k) => setB({ kill: k === 'yes' ? 1 : 0 }));
   function readBab(d: number): void {
     const f = runB.females[d], m = runB.resMales[d];
     const typical = approachDays(runB.stress[0]);
     $('bbRead').innerHTML = tiles([
-      ['Dişi:erkek (yerleşik)', `${m ? f1(f / m) : '-'}:1`], ['Dişiler yaklaşınca (gün)', String(Math.round(approachDays(runB.stress[d])))],
-      ['Salgından önce (gün)', String(Math.round(typical))], ['Yeni gelenler (saldırganlık)', Number.isNaN(runB.newAgg[d]) ? '-' : pc(runB.newAgg[d])],
+      [L().bb.tRatio, `${m ? num(f / m, 1) : '-'}:1`], [L().bb.tApproach, String(Math.round(approachDays(runB.stress[d])))],
+      [L().bb.tBefore, String(Math.round(typical))], [L().bb.tNewAgg, Number.isNaN(runB.newAgg[d]) ? '-' : pc(runB.newAgg[d])],
     ]);
   }
   function barBab(): void {
     const d = tB.idx();
     setBar(describeBaboons(runB, d), [
-      { label: 'Erkek saldırganlığı', text: pc(runB.maleAgg[d]), frac: runB.maleAgg[d], color: 'var(--amy)' },
-      { label: 'Dişi gerginliği', text: pc(runB.stress[d]), frac: runB.stress[d], color: 'var(--dop)' },
-      { label: 'Yaklaşma süresi', text: `${Math.round(approachDays(runB.stress[d]))} gün`, frac: approachDays(runB.stress[d]) / 120, color: 'var(--pfc)' },
+      { label: L().bb.meterMale, text: pc(runB.maleAgg[d]), frac: runB.maleAgg[d], color: 'var(--amy)' },
+      { label: L().bb.meterStress, text: pc(runB.stress[d]), frac: runB.stress[d], color: 'var(--dop)' },
+      { label: L().bb.meterApproach, text: L().days(Math.round(approachDays(runB.stress[d]))), frac: approachDays(runB.stress[d]) / 120, color: 'var(--pfc)' },
     ]);
   }
   function renderBab(): void {
@@ -139,20 +145,15 @@ export function createBabPanel(env: Env, host: HTMLElement): PanelApi {
   }
 
   const seekB = (d: number, play = false) => tB.set(d, play);
-  const tour3 = createTour(scope, [
-    { title: 'Salgından önce', text: 'Çöplükçü erkekler saldırgan, dişiler gergin. Tipik sürüde dişilerin yeni erkeğe yaklaşması iki aydan uzun sürer (kitap).',
-      look: 'Koyu kırmızı kareler ve koyu turuncu daireler; "salgından önce" kutusu.', apply: () => { setB({ ...BABOON_DEFAULT }); S.bseed = 4; seekB(80); } },
-    { title: 'Salgın', text: 'Salgın çöplüğe giden erkekleri ve sürünün çoğunu öldürdü. Dişi:erkek 2:1 kalıyor.',
-      look: 'Çarpılı kareler; erkek saldırganlığı ve dişi gerginliği çizgileri düşer.', apply: () => { setB({ ...BABOON_DEFAULT }); S.bseed = 4; seekB(135); } },
-    { title: 'Yeni gelen erkek', text: 'Dışarıdan bir erkek yüksek saldırganlıkla katılıyor. Gerginliği düşük dişiler ona günler içinde yaklaşıyor.',
-      look: 'Alttaki elmas koyu; mavi nokta yaklaşıldığını gösterir.', apply: () => { setB({ ...BABOON_DEFAULT }); S.bseed = 4; seekB(175); } },
-    { title: 'Altı ay sonra', text: 'Yeni gelenler ~6 ayda sürünün kültürüne uyuyor. Kitap: öğretim kanıtı yok, en olası yol rahat dişiler.',
-      look: 'Mavi çizgi erkek saldırganlığı çizgisine iner.', apply: () => { setB({ ...BABOON_DEFAULT }); S.bseed = 4; seekB(400); } },
-    { title: 'Salgın olmasaydı', text: 'Çöplükçüler hayatta kalsaydı dişiler gergin kalır, yeni gelene geç yaklaşır; erkekler saldırgan kalırdı.',
-      look: 'Kırmızı çizgi yüksekte, mavi çizgi inmiyor.', apply: () => { setB({ ...BABOON_DEFAULT, kill: 0 }); S.bseed = 4; seekB(BB.days - 1); } },
-    { title: 'Çok hızlı göç kültürü seyreltir', text: 'Sık gelen yeni erkekler ortalamayı yükseltip dişileri yeniden geriyor (modelin sonucu, kitapta yok).',
-      look: 'Salgından sonra bile kırmızı çizgi yeniden yükselir.', apply: () => { setB({ ...BABOON_DEFAULT, gap: 10 }); S.bseed = 4; seekB(BB.days - 1); } },
-  ]);
+  const apply3: (() => void)[] = [
+    () => { setB({ ...BABOON_DEFAULT }); S.bseed = 4; seekB(80); },
+    () => { setB({ ...BABOON_DEFAULT }); S.bseed = 4; seekB(135); },
+    () => { setB({ ...BABOON_DEFAULT }); S.bseed = 4; seekB(175); },
+    () => { setB({ ...BABOON_DEFAULT }); S.bseed = 4; seekB(400); },
+    () => { setB({ ...BABOON_DEFAULT, kill: 0 }); S.bseed = 4; seekB(BB.days - 1); },
+    () => { setB({ ...BABOON_DEFAULT, gap: 10 }); S.bseed = 4; seekB(BB.days - 1); },
+  ];
+  const tour3 = createTour(scope, L().tour3.map((st, i) => ({ ...st, apply: apply3[i] })));
   $('tour3').appendChild(tour3.el);
   return { render: renderBab, tp: tB };
 }

@@ -99,6 +99,7 @@ export const TR = {
     geneHint: 'Kitaptaki hesapta %10. Gen × stres etkileşimi tekrarlanamadı: sıfıra çekip toplamı gör.',
     powerCard: 'Öngörü gücü',
     powerH: '2 · Öngörü gücü',
+    stackSvgLabel: 'Bilinen etkenlerin açıkladığı pay',
     stackLabel: (k: number, r2: string, unk: string): string => `Bilinen ${k} etken öngörünün ${r2} kadarını açıklıyor, ${unk} açıklanamıyor`,
     certainty: 'kesinlik',
     explainedLbl: (p: string): string => `açıklanan ${p}`,

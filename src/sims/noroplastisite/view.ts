@@ -13,7 +13,7 @@ import {
 } from './model';
 import { buildTree, type Tree } from './dendrite';
 import {
-  Meters, fmtDays, fmtHz, fmtMin, fmtSec, logPos, logVal, makeSlider, niceDays, niceFreq, niceSec, pctOf, signed,
+  Meters, fmtDays, fmtHz, fmtMin, fmtSec, logPos, logVal, makeSlider, niceDays, niceFreq, niceSec, signed,
   type SliderHandle,
 } from './ui';
 
@@ -716,7 +716,7 @@ export function mount(container: HTMLElement): () => void {
   // Başlangıç durumu
   syncPcT(); syncStT();
   const i0 = STRESS_KINDS.findIndex((k) => k.k === ST.inp.kind);
-  setStChip(i0); stNote.textContent = STRESS_KINDS[i0].note;
+  setStChip(i0); stNote.textContent = S.stressKinds[i0].note;
   applySyn();
   showTab('syn');
   const poke = scope.announcer($('live'), () => lastSay);

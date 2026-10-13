@@ -9,7 +9,7 @@ import {
   beliefTable, betray, chronic, choice, describeO, describeS, describeT, empathy, gcLevel, habit, lieRate,
   meanOffer, minutesOf, perf, perfAcute, popOffers, prejudice, rejectRate, risk, sampleOffers, sliderOf, statusKept,
   transfer, vole, mean,
-  type Belief, type Evidence, type OIn, type Partner, type Route, type SIn, type TIn, type VoleIn,
+  type Belief, type Evidence, type OIn, type Route, type SIn, type TIn, type VoleIn,
 } from './model';
 import { mulberry32 } from '../rng';
 import { money, pct, percent } from '../../i18n/fmt';

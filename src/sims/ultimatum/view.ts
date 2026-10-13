@@ -2,6 +2,11 @@ import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, svg, svgText, uid } from '../kit';
 import { createTour } from '../tour';
+import { bookBox, type BookItem } from '../ui';
+import { money, num } from '../../i18n/fmt';
+import { t } from '../../i18n/t';
+import { L } from './text';
+import { TR } from './text.tr';
 import {
   BASE, DECK, FAIR, POT, curve, describe, evaluate, threshold, trpActive,
   type Activity, type Conditions, type RegionId,
@@ -11,16 +16,16 @@ import { mulberry32, shuffle } from '../rng';
 type NodeId = RegionId | 'tek' | 'dec';
 interface NodeDef { id: NodeId; ab: string; cap: string; grp: string; x: number; y: number }
 const R = 26;
-const NODES: NodeDef[] = [
-  { id: 'tek', ab: 'TEKLİF', cap: '', grp: 'io', x: 180, y: 40 },
-  { id: 'amy', ab: 'AMG', cap: 'amigdala · kuşku', grp: 'amy', x: 72, y: 140 },
-  { id: 'insula', ab: 'INS', cap: 'insula · haksızlık', grp: 'ins', x: 72, y: 250 },
-  { id: 'caud', ab: 'KAU', cap: 'kaudat · ret tatmini', grp: 'cau', x: 72, y: 360 },
-  { id: 'dlpfc', ab: 'dlPFC', cap: 'adalet hedefi', grp: 'pfc', x: 288, y: 140 },
-  { id: 'vm', ab: 'vmPFC', cap: 'değer · OFC', grp: 'val', x: 288, y: 250 },
-  { id: 'dec', ab: 'RET', cap: 'ret eğilimi', grp: 'io', x: 180, y: 360 },
+// Yapı (kimlik, grup, koordinat) modül düzeyinde; kısaltma/altyazı metni `L().nodes` üzerinden mount anında gelir.
+const NODE_BASE: Array<Omit<NodeDef, 'ab' | 'cap'>> = [
+  { id: 'tek', grp: 'io', x: 180, y: 40 },
+  { id: 'amy', grp: 'amy', x: 72, y: 140 },
+  { id: 'insula', grp: 'ins', x: 72, y: 250 },
+  { id: 'caud', grp: 'cau', x: 72, y: 360 },
+  { id: 'dlpfc', grp: 'pfc', x: 288, y: 140 },
+  { id: 'vm', grp: 'val', x: 288, y: 250 },
+  { id: 'dec', grp: 'io', x: 180, y: 360 },
 ];
-const byId = Object.fromEntries(NODES.map((n) => [n.id, n])) as Record<NodeId, NodeDef>;
 
 interface EdgeDef { from: NodeId; to: NodeId; inh?: boolean }
 const EDGES: EdgeDef[] = [
@@ -30,57 +35,50 @@ const EDGES: EdgeDef[] = [
   { from: 'vm', to: 'dec', inh: true },
 ];
 
-export const INFO: Record<RegionId, [string, string]> = {
-  insula: ['İnsula (insula)', 'Bedenden gelen hoşnutsuzluk, iğrenme ve acı duygularını işleyen bölge. İnsandan gelen adaletsiz teklifte etkinleşir; etkinliği yükseldikçe teklifin reddi artar. Bilgisayardan gelen aynı teklifte daha az etkinleşir. İnsulanın burada iğrenmeyi mi yoksa genel bir beklenti ihlalini mi yansıttığı tartışmalıdır.'],
-  amy: ['Amigdala (amygdala)', 'Tehdit ve sosyal tetikte olmayı değerlendirir. Haksız tekliften sonra etkinliği arttıkça ret olasılığı artar. Amigdalası hasarlı kişiler olağandışı cömert davranır ve haksız tekliflerde ret oranını artırmaz; kitap bunu, amigdalanın sosyal kararlara örtük bir kuşku kattığı biçiminde yorumlar (ölçüm değil, yorum).'],
-  caud: ['Kaudat çekirdek (caudate)', 'Ödül devresinin bir parçası. Normu çiğneyeni cezalandırmak bu bölgeyi etkinleştirir, ceza bedelliyse daha belirgin. Reddetmenin "tatmini" budur: bedel ödense de bir şey kazandırır. Ölçülen doğrudan dopamin salımı değil, bölgedeki kan akımıdır.'],
-  dlpfc: ['dlPFC (dorsolateral prefrontal korteks)', 'Genel rolü uzun vadeli çıkar ve dürtü kontrolüdür. Bu oyunda sürpriz var: sağ dlPFC susturulunca kişi adaletsiz teklifi daha sık kabul etti, ama teklifi yine adaletsiz buldu. Bölge, dürtüyü dizginleyen taraftan çok adalet hedefini eyleme çeviren taraf gibi davrandı. Yalnızca insana karşı; sol dlPFC etkisiz kaldı.'],
-  vm: ['vmPFC/OFC (değer)', 'Seçeneklerin değerini ve sosyal bağlamı bağlar. Modelde teklifin parasal değerini temsil eder ve kabule doğru çeker: pay büyüdükçe etkinliği artar. Bu bölgenin ultimatum oyunundaki bu rolü kitaptaki bir ölçüme değil, modelin varsayımına dayanır.'],
-};
+/** Yalnızca Türkçe anlık görüntü (testler/eşdeğerlik için); ekran metni mount anında `L().info` ile okunur. */
+export const INFO: Record<RegionId, [string, string]> = TR.info;
 
-const SLIDER_HINT = 'Karşı tarafın sana önerdiği pay. 5 ₺ eşit paydır, 0 ₺ hiçbir şey demektir';
 const TURNS = DECK.length;
-const f1 = (x: number): string => x.toFixed(1).replace('.', ',');
 
-const TEMPLATE = (id: string) => `
+const TEMPLATE = (id: string, T: typeof TR) => `
 <div class="sim sim-ult">
-  <p class="lede">Adaletsiz bir teklifi, kendi zararına olsa bile neden reddederiz ve beynin hangi parçaları bu kararı çekiştirir?</p>
-  <div class="chips" data-ref="chips" role="group" aria-label="Koşullar"></div>
+  <p class="lede">${T.lede}</p>
+  <div class="chips" data-ref="chips" role="group" aria-label="${T.chipsAria}"></div>
 
-  <div class="sim-bar" role="group" aria-label="Anlık çıktılar" data-ref="bar">
+  <div class="sim-bar" role="group" aria-label="${T.barAria}" data-ref="bar">
     <div class="sim-bar-in">
       <p class="say" data-ref="say"></p>
       <div class="meters">
-        <div class="m" style="--c: var(--amy)"><div class="m-top"><span>Ret olasılığı</span><b data-ref="m-p">0%</b></div><div class="track"><b data-ref="b-p"></b></div></div>
-        <div class="m" style="--c: var(--edge)"><div class="m-top"><span>Adaletsiz buluyor</span><b data-ref="m-j">0%</b></div><div class="track"><b data-ref="b-j"></b></div></div>
-        <div class="m" style="--c: var(--edge)"><div class="m-top"><span>Kabul eşiği</span><b data-ref="m-t">0 ₺</b></div><div class="track"><b data-ref="b-t"></b></div></div>
+        <div class="m" style="--c: var(--amy)"><div class="m-top"><span>${T.meterReject}</span><b data-ref="m-p">0%</b></div><div class="track"><b data-ref="b-p"></b></div></div>
+        <div class="m" style="--c: var(--edge)"><div class="m-top"><span>${T.meterJudge}</span><b data-ref="m-j">0%</b></div><div class="track"><b data-ref="b-j"></b></div></div>
+        <div class="m" style="--c: var(--edge)"><div class="m-top"><span>${T.meterThreshold}</span><b data-ref="m-t">${money(0)}</b></div><div class="track"><b data-ref="b-t"></b></div></div>
       </div>
     </div>
   </div>
   <p class="sr-only" aria-live="polite" data-ref="live"></p>
 
-  <section class="game" aria-label="Oyun">
+  <section class="game" aria-label="${T.gameAria}">
     <div class="g-top"><span class="g-round" data-ref="round"></span><span class="g-who" data-ref="who"></span></div>
     <p class="g-offer" data-ref="offerText"></p>
     <div class="split" role="img" data-ref="split"><i class="me" data-ref="sMe"></i><i class="them"></i></div>
     <div class="split-lab"><span data-ref="labMe"></span><span data-ref="labThem"></span></div>
-    <p class="g-rule">Kabul edersen ikiniz de teklifteki payı alırsınız. Reddedersen ikiniz de 0 ₺ alırsınız.</p>
+    <p class="g-rule">${T.gameRule(0)}</p>
     <div class="row g-btns" data-ref="btns">
-      <button class="btn btn-acc" type="button" data-ref="accept">Kabul et</button>
-      <button class="btn btn-rej" type="button" data-ref="reject">Reddet</button>
+      <button class="btn btn-acc" type="button" data-ref="accept">${T.accept}</button>
+      <button class="btn btn-rej" type="button" data-ref="reject">${T.reject}</button>
     </div>
     <div class="g-result" data-ref="result" hidden>
       <p data-ref="resultText"></p>
       <button class="btn tour-next" type="button" data-ref="next"></button>
     </div>
     <p class="g-score" data-ref="score" hidden></p>
-    <ol class="g-log" data-ref="log" aria-label="Tur günlüğü"></ol>
+    <ol class="g-log" data-ref="log" aria-label="${T.logAria}"></ol>
   </section>
 
-  <section aria-label="Beyin paneli">
-    <h3 class="sim-h">Beyin paneli</h3>
+  <section aria-label="${T.brainAria}">
+    <h3 class="sim-h">${T.brainH}</h3>
     <div class="stage">
-      <svg viewBox="0 0 360 428" role="group" aria-label="Dokunulabilir beyin devresi diyagramı: teklif, insula, amigdala, kaudat, dlPFC, vmPFC ve ret eğilimi" data-ref="net">
+      <svg viewBox="0 0 360 428" role="group" aria-label="${T.netAria}" data-ref="net">
         <defs>
           <marker id="${id}-mx" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto"><path class="mk" d="M0,1 L10,5 L0,9 z"/></marker>
           <marker id="${id}-mi" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path class="mk-bar" d="M5,0 L5,10"/></marker>
@@ -90,70 +88,65 @@ const TEMPLATE = (id: string) => `
         <text class="ser-tag" x="180" y="422" text-anchor="middle" data-ref="serTag"></text>
       </svg>
       <div class="legend">
-        <span><i style="background:var(--pit)"></i>İnsula</span>
-        <span><i style="background:var(--amy)"></i>Amigdala</span>
-        <span><i style="background:var(--dop)"></i>Kaudat</span>
-        <span><i style="background:var(--pfc)"></i>dlPFC</span>
-        <span><i style="background:var(--gld)"></i>vmPFC/OFC</span>
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="20" y2="5" stroke="var(--edge)" stroke-width="2"/><path d="M17,1 L25,5 L17,9 z" fill="var(--edge)"/></svg>ret yönünde</span>
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="22" y2="5" stroke="var(--edge)" stroke-width="2" stroke-dasharray="5 3"/><line x1="23" y1="0" x2="23" y2="10" stroke="var(--edge)" stroke-width="2.4"/></svg>kabul yönünde</span>
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><circle cx="13" cy="5" r="4.2" fill="none" stroke="var(--lesion)" stroke-width="1.6" stroke-dasharray="3 2"/><line x1="9" y1="9" x2="17" y2="1" stroke="var(--lesion)" stroke-width="1.6"/></svg>devre dışı</span>
+        <span><i style="background:var(--pit)"></i>${T.legendInsula}</span>
+        <span><i style="background:var(--amy)"></i>${T.legendAmy}</span>
+        <span><i style="background:var(--dop)"></i>${T.legendCaud}</span>
+        <span><i style="background:var(--pfc)"></i>${T.legendDlpfc}</span>
+        <span><i style="background:var(--gld)"></i>${T.legendVm}</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="20" y2="5" stroke="var(--edge)" stroke-width="2"/><path d="M17,1 L25,5 L17,9 z" fill="var(--edge)"/></svg>${T.legendReject}</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="22" y2="5" stroke="var(--edge)" stroke-width="2" stroke-dasharray="5 3"/><line x1="23" y1="0" x2="23" y2="10" stroke="var(--edge)" stroke-width="2.4"/></svg>${T.legendAccept}</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><circle cx="13" cy="5" r="4.2" fill="none" stroke="var(--lesion)" stroke-width="1.6" stroke-dasharray="3 2"/><line x1="9" y1="9" x2="17" y2="1" stroke="var(--lesion)" stroke-width="1.6"/></svg>${T.legendOff}</span>
       </div>
     </div>
   </section>
 
   <section class="detail" data-ref="detail"></section>
 
-  <section class="chart" aria-label="Ret olasılığı eğrisi">
-    <h3 class="sim-h">Teklife göre ret olasılığı</h3>
-    <svg viewBox="0 0 360 232" role="img" aria-label="Teklif büyüdükçe ret olasılığının düşüşü; geçerli koşul ve ortalama kişi eğrisi" data-ref="chart"></svg>
+  <section class="chart" aria-label="${T.chartAria}">
+    <h3 class="sim-h">${T.chartH}</h3>
+    <svg viewBox="0 0 360 232" role="img" aria-label="${T.chartLabel}" data-ref="chart"></svg>
   </section>
 
-  <section aria-label="Girdiler">
-    <h3 class="sim-h">Girdiler</h3>
+  <section aria-label="${T.inputsAria}">
+    <h3 class="sim-h">${T.inputsH}</h3>
     <div class="sliders">
       <div class="sl-off">
-        <div class="sl-top"><label class="sl-name" for="${id}-off">Teklif (₺)</label><span class="sl-val" data-ref="offV"></span></div>
+        <div class="sl-top"><label class="sl-name" for="${id}-off">${T.offerName}</label><span class="sl-val" data-ref="offV"></span></div>
         <input type="range" id="${id}-off" min="0" max="${FAIR}" step="1" data-ref="off">
-        <p class="sl-hint">${SLIDER_HINT}</p>
+        <p class="sl-hint">${T.sliderHint(FAIR)}</p>
       </div>
     </div>
     <div class="row sess">
-      <button class="btn" type="button" aria-pressed="false" data-ref="sess">İkinci oturum</button>
+      <button class="btn" type="button" aria-pressed="false" data-ref="sess">${T.session2}</button>
       <p class="sl-hint" data-ref="sessHint"></p>
     </div>
   </section>
 
   <details class="how">
-    <summary>Model nasıl çalışıyor?</summary>
+    <summary>${t('sim.how')}</summary>
     <div class="how-in">
-      <p>Teklif 5 ₺'nin altına indikçe "adaletsizlik" büyür. Her bölgenin etkinliği buna bağlıdır: insula ve amigdala insana karşı tam, bilgisayara karşı kısmen devreye girer; kaudat insulanın ardından ret etmenin tatminini hazırlar; dlPFC adalet hedefini yalnızca insana karşı uygular; vmPFC/OFC teklifin parasal değerini taşır ve kabule çeker.</p>
-      <p>Bölgelerin katkıları toplanıp S biçimli bir eğriden (lojistik) ret olasılığına çevrilir. Çıktı, ortalama bir kişinin davranış eğilimidir; tek bir bireyin yanıtı rastlantıya ve kişisel farka açıktır, bu yüzden senin yanıtınla model aynı olmak zorunda değildir.</p>
-      <p>"Adaletsiz buluyor" göstergesi yalnızca payın aritmetiğinden gelir. TMS koşulunda değişmemesi kitaptaki bulgudur (kötü teklifleri kontroller kadar haksız buldular), diğer koşullarda bu bir varsayımdır.</p>
-      <p>Tur teklifleri tohumlu karıştırılır: aynı tohumla aynı sıra gelir, "Yeniden oyna" yeni bir sıra seçer.</p>
+      ${T.how.map((h) => `<p>${h(FAIR)}</p>`).join('\n      ')}
     </div>
   </details>
 
-  <aside class="book" aria-label="Kitapta">
-    <h3 class="sim-h">Kitapta</h3>
-    <ul>
-      <li><a href="#/bolum/ch15?deney=ch15-e6">Sanfey ve ark. (2003), Bölüm 15</a>: insandan gelen adaletsiz teklif insulayı etkinleştirir, bilgisayardan gelen daha az; insula etkinliği arttıkça ret artar. Replikasyon: sağlam. Tartışma: insulanın iğrenmeyi mi, genel bir beklenti ihlalini mi yansıttığı.</li>
-      <li><a href="#/bolum/ch02?deney=ch02-e5">Knoch, Fehr ve ark. (2006)</a>: sağ dlPFC baskılanınca kötü teklifler daha çok kabul edilir; teklifler yine adaletsiz bulunur. Yalnızca insana karşı; sol dlPFC etkisiz. Replikasyon: karışık (bazı rTMS çalışmaları kabul oranını değiştirmedi, yalnızca karar süresini uzattı).</li>
-      <li><a href="#/bolum/ch02?deney=ch02-e3">Amigdala hasarı (2013)</a>: haksız tekliften sonra amigdala etkinliği arttıkça ret artar; hasarlı kişiler cömerttir ve ret oranını artırmaz. Replikasyon: bilinmiyor; hasar bulgusu yalnızca üç hastaya dayanır.</li>
-      <li><a href="#/bolum/ch02?deney=ch02-e12">Wood ve ark. (2006)</a>: serotonin azalınca işbirliği ilk oturumda düştü. Haksız tekliflerin daha sık reddi ise replikasyon notunda anılan başka çalışmalardan gelir. Replikasyon: karışık.</li>
-      <li><a href="#/bolum/ch02?deney=ch02-e9">de Quervain ve ark. (2004)</a>: cezalandırma kaudatı etkinleştirir, bedel ödenince daha belirgin. Replikasyon: bilinmiyor; ölçülen şey kan akımıdır, doğrudan dopamin değil.</li>
-    </ul>
-  </aside>
+  ${bookBox(BOOK_REPS.map((rep, i): BookItem => ({ id: BOOK_IDS[i], text: T.book[i].text, rep, note: T.book[i].note })))}
 
-  <p class="foot">Nitel model: eğri biçimleri, ağırlıklar ve yüzdeler ölçüm değildir; bulguların yönünü ve sırasını gösterir. Kitaptan yalnızca yönler alındı (insula ve amigdala ile ret arasında artan ilişki, insana karşı daha güçlü; TMS ile kabulün artması; amigdala hasarında ret artışının olmaması; serotoninle ret artışı ilk oturumda; cezalandırmada kaudat etkinliği). Kitapta ret yüzdesi ya da eşik değeri verilmediği için bunlar uydurulmadı; 10 ₺'lik pay ve teklif sırası kurgudur. Gerçek beyin bundan çok daha karmaşıktır.</p>
+  <p class="foot">${T.foot(POT)}</p>
 </div>`;
+
+// "Kitapta" kutusundaki deney kimlikleri ve replikasyon durumları (iç anahtarlar Türkçe kalır; etiket repBadge'den gelir).
+const BOOK_IDS = ['ch15-e6', 'ch02-e5', 'ch02-e3', 'ch02-e12', 'ch02-e9'];
+const BOOK_REPS: BookItem['rep'][] = ['sağlam', 'karışık', 'bilinmiyor', 'karışık', 'bilinmiyor'];
 
 interface LogEntry { offer: number; proposer: Conditions['proposer']; rejected: boolean; p: number }
 
 export function mount(container: HTMLElement): () => void {
   const scope = new Scope();
   const id = uid('ult');
-  container.innerHTML = TEMPLATE(id);
+  const T = L();
+  container.innerHTML = TEMPLATE(id, T);
+  const NODES: NodeDef[] = NODE_BASE.map((n) => ({ ...n, ab: T.nodes[n.id].ab, cap: T.nodes[n.id].cap }));
+  const byId = Object.fromEntries(NODES.map((n) => [n.id, n])) as Record<NodeId, NodeDef>;
   const root = container.firstElementChild as HTMLElement;
   const $ = <T extends Element = HTMLElement>(name: string) => ref<T>(root, name);
 
@@ -185,7 +178,7 @@ export function mount(container: HTMLElement): () => void {
     p: svg('path', { class: 'edge' + (e.inh ? ' inh' : ''), d: edgePath(byId[e.from], byId[e.to]), 'marker-end': e.inh ? `url(#${id}-mi)` : `url(#${id}-mx)` }, edgesG),
   }));
   const nodeEls = {} as Record<NodeId, { g: SVGElement; fill: SVGElement; slash: SVGElement; pc: SVGElement }>;
-  const label = (n: NodeDef): string => (n.id === 'tek' ? 'Teklif' : n.id === 'dec' ? 'Ret eğilimi' : INFO[n.id as RegionId][0]);
+  const label = (n: NodeDef): string => (n.id === 'tek' ? T.nodeOffer : n.id === 'dec' ? T.nodeReject : T.info[n.id as RegionId][0]);
   for (const n of NODES) {
     const interactive = n.id !== 'tek' && n.id !== 'dec';
     const g = svg('g', { class: `node grp-${n.grp}`, transform: `translate(${n.x},${n.y})`, ...(interactive ? { tabindex: '0', role: 'button', 'aria-pressed': 'false', 'aria-label': label(n) } : { role: 'img', 'aria-label': label(n) }) }, nodesG);
@@ -224,7 +217,7 @@ export function mount(container: HTMLElement): () => void {
       const o = nodeEls[n.id];
       if (n.id === 'tek') {
         o.fill.setAttribute('fill-opacity', '0.08');
-        o.pc.textContent = `${S.offer} ₺`;
+        o.pc.textContent = money(S.offer);
         continue;
       }
       const les = silenced(n.id);
@@ -235,26 +228,26 @@ export function mount(container: HTMLElement): () => void {
       o.g.classList.toggle('sel', S.sel === n.id);
       o.pc.textContent = les ? '' : pct(v) + '%';
     }
-    serTag.textContent = trpActive(S.c) ? 'serotonin düşük: dürtü freni zayıf' : '';
+    serTag.textContent = trpActive(S.c) ? T.serotoninTag : '';
   }
 
   // ---- Ayrıntı paneli ----
   const detail = $('detail');
   function buildDetail(): void {
     if (!S.sel) {
-      detail.innerHTML = '<p class="hint">Bir bölgeye dokun: rolünü, bu koşulda ne kadar etkin olduğunu ve ret eğilimine katkısını gör. Dolgusu koyulaştıkça bölge daha etkin, çizgiler kalınlaştıkça etki daha güçlü.</p>';
+      detail.innerHTML = `<p class="hint">${T.detailHint}</p>`;
       return;
     }
     const rid = S.sel;
     const btn = rid === 'amy'
-      ? `<div class="row"><button class="btn" data-ref="dTog" type="button" aria-pressed="${S.c.amyLesion}">${S.c.amyLesion ? 'Hasarı kaldır' : 'Amigdala hasarı ver'}</button></div>`
+      ? `<div class="row"><button class="btn" data-ref="dTog" type="button" aria-pressed="${S.c.amyLesion}">${S.c.amyLesion ? T.lesionRemove : T.lesionApply}</button></div>`
       : rid === 'dlpfc'
-        ? `<div class="row"><button class="btn" data-ref="dTog" type="button" aria-pressed="${S.c.tmsRight}">${S.c.tmsRight ? 'TMS\'yi kaldır' : 'Sağ dlPFC\'ye TMS uygula'}</button></div>`
+        ? `<div class="row"><button class="btn" data-ref="dTog" type="button" aria-pressed="${S.c.tmsRight}">${S.c.tmsRight ? T.tmsRemove : T.tmsApply}</button></div>`
         : '';
     detail.innerHTML =
-      `<div class="d-head grp-${NODES.find((n) => n.id === rid)!.grp}"><span class="d-name">${INFO[rid][0]}</span><span class="d-pct" data-ref="dPct">0%</span></div>` +
+      `<div class="d-head grp-${NODES.find((n) => n.id === rid)!.grp}"><span class="d-name">${T.info[rid][0]}</span><span class="d-pct" data-ref="dPct">0%</span></div>` +
       `<div class="track grp-${NODES.find((n) => n.id === rid)!.grp}"><b data-ref="dFill"></b></div>` +
-      `<p>${INFO[rid][1]}</p>` +
+      `<p>${T.info[rid][1]}</p>` +
       `<ul class="d-list" data-ref="dList"></ul>` + btn;
     updateDetail();
   }
@@ -270,14 +263,14 @@ export function mount(container: HTMLElement): () => void {
     if (!S.sel) return;
     const rid = S.sel;
     const off = silenced(rid);
-    ref(detail, 'dPct').textContent = off ? 'devre dışı' : pct(ev.act[rid]) + '%';
+    ref(detail, 'dPct').textContent = off ? T.detailOff : pct(ev.act[rid]) + '%';
     ref(detail, 'dFill').style.width = (off ? 0 : pct(ev.act[rid])) + '%';
     const part = ev.parts.find((p) => p.id === rid);
     const rows: string[] = [];
-    if (part) rows.push(`<li><span>Ret eğilimine katkı</span><span class="v">${part.v < 0 ? '−' : '+'}${Math.abs(part.v).toFixed(2)}</span></li>`);
-    rows.push(`<li><span>${part && part.v < 0 ? 'Kabule doğru çeker' : 'Reddetmeye doğru çeker'}</span><span class="v">${off ? 'yok' : ''}</span></li>`);
-    if (rid === 'dlpfc' && S.c.tmsLeft) rows.push('<li><span>Sol dlPFC susturuldu: etkisiz kaldı</span></li>');
-    if (rid === 'dlpfc' && S.c.proposer === 'computer') rows.push('<li><span>Bilgisayar karşıda: adalet hedefi devreye girmiyor</span></li>');
+    if (part) rows.push(`<li><span>${T.contribution}</span><span class="v">${part.v < 0 ? '−' : '+'}${Math.abs(part.v).toFixed(2)}</span></li>`);
+    rows.push(`<li><span>${part && part.v < 0 ? T.pullAccept : T.pullReject}</span><span class="v">${off ? T.none : ''}</span></li>`);
+    if (rid === 'dlpfc' && S.c.tmsLeft) rows.push(`<li><span>${T.leftSilenced}</span></li>`);
+    if (rid === 'dlpfc' && S.c.proposer === 'computer') rows.push(`<li><span>${T.computerOpposite}</span></li>`);
     ref(detail, 'dList').innerHTML = rows.join('');
   }
   function select(rid: RegionId): void {
@@ -290,12 +283,12 @@ export function mount(container: HTMLElement): () => void {
   // ---- Koşul çipleri ----
   type ChipDef = { id: string; name: string; on: () => boolean; set: () => void };
   const CHIPS: ChipDef[] = [
-    { id: 'human', name: 'Teklif eden: insan', on: () => S.c.proposer === 'human', set: () => { S.c.proposer = 'human'; } },
-    { id: 'computer', name: 'Teklif eden: bilgisayar', on: () => S.c.proposer === 'computer', set: () => { S.c.proposer = 'computer'; } },
-    { id: 'tmsR', name: 'TMS sağ dlPFC', on: () => S.c.tmsRight, set: () => { S.c.tmsRight = !S.c.tmsRight; } },
-    { id: 'tmsL', name: 'TMS sol dlPFC', on: () => S.c.tmsLeft, set: () => { S.c.tmsLeft = !S.c.tmsLeft; } },
-    { id: 'amy', name: 'Amigdala hasarı', on: () => S.c.amyLesion, set: () => { S.c.amyLesion = !S.c.amyLesion; } },
-    { id: 'trp', name: 'Serotonin düşük', on: () => S.c.trp, set: () => { S.c.trp = !S.c.trp; } },
+    { id: 'human', name: T.chips.human, on: () => S.c.proposer === 'human', set: () => { S.c.proposer = 'human'; } },
+    { id: 'computer', name: T.chips.computer, on: () => S.c.proposer === 'computer', set: () => { S.c.proposer = 'computer'; } },
+    { id: 'tmsR', name: T.chips.tmsR, on: () => S.c.tmsRight, set: () => { S.c.tmsRight = !S.c.tmsRight; } },
+    { id: 'tmsL', name: T.chips.tmsL, on: () => S.c.tmsLeft, set: () => { S.c.tmsLeft = !S.c.tmsLeft; } },
+    { id: 'amy', name: T.chips.amy, on: () => S.c.amyLesion, set: () => { S.c.amyLesion = !S.c.amyLesion; } },
+    { id: 'trp', name: T.chips.trp, on: () => S.c.trp, set: () => { S.c.trp = !S.c.trp; } },
   ];
   const chips = $('chips');
   const chipEls = CHIPS.map((ch) => {
@@ -313,53 +306,52 @@ export function mount(container: HTMLElement): () => void {
   function syncUi(): void {
     CHIPS.forEach((ch, i) => chipEls[i].setAttribute('aria-pressed', String(ch.on())));
     offInput.value = String(Math.min(FAIR, S.offer));
-    offInput.setAttribute('aria-valuetext', `${S.offer} lira`);
-    offV.textContent = `${S.offer} ₺`;
+    offInput.setAttribute('aria-valuetext', T.offerValueText(S.offer));
+    offV.textContent = money(S.offer);
     sessBtn.setAttribute('aria-pressed', String(S.c.session === 2));
     sessHint.textContent = S.c.session === 2
-      ? 'Sonraki oturum: triptofan etkisi kitapta yalnızca ilk oturumda görüldü, bu yüzden kalkar.'
-      : 'İlk oturum: serotonin düşüklüğü yalnızca burada ret olasılığını artırır.';
+      ? T.sessHint2
+      : T.sessHint1;
   }
 
   // ---- Oyun kartı ----
   const accept = $<HTMLButtonElement>('accept'), reject = $<HTMLButtonElement>('reject');
   const resultBox = $('result'), resultText = $('resultText'), nextBtn = $('next'), scoreEl = $('score'), logEl = $('log');
-  const who = (c: Conditions['proposer']): string => (c === 'human' ? 'İnsan' : 'Bilgisayar');
+  const who = (c: Conditions['proposer']): string => (c === 'human' ? T.whoHuman : T.whoComputer);
   function verdict(en: LogEntry): string {
     const p = Math.round(en.p * 100);
-    const money = en.rejected ? 'İkiniz de 0 ₺ aldınız.' : `Sen ${en.offer} ₺, karşı taraf ${POT - en.offer} ₺ aldı.`;
-    let cmp: string;
-    if (en.p > 0.35 && en.p < 0.65) cmp = `Ortalama bir kişi için de kararsız bir teklif (ret olasılığı %${p}).`;
-    else if ((en.p >= 0.65) === en.rejected) cmp = `Ortalama bir kişiyle aynı yöndesin: ret olasılığı %${p}.`;
-    else cmp = `Ortalama kişiden farklı davrandın: onun ret olasılığı %${p}.`;
-    return `${en.rejected ? 'Reddettin.' : 'Kabul ettin.'} ${money} ${cmp}`;
+    let kind: 'unsure' | 'same' | 'diff';
+    if (en.p > 0.35 && en.p < 0.65) kind = 'unsure';
+    else if ((en.p >= 0.65) === en.rejected) kind = 'same';
+    else kind = 'diff';
+    return T.verdict(en.rejected, en.offer, POT - en.offer, p, kind);
   }
   function drawGame(): void {
-    $('round').textContent = `Tur ${Math.min(S.turn + 1, TURNS)} / ${TURNS}`;
-    $('who').textContent = `Teklif eden: ${who(S.c.proposer)}`;
-    $('offerText').innerHTML = `10 ₺'dan sana <b>${S.offer} ₺</b> öneriyor`;
+    $('round').textContent = T.round(Math.min(S.turn + 1, TURNS), TURNS);
+    $('who').textContent = T.proposerLine(who(S.c.proposer));
+    $('offerText').innerHTML = T.offerText(POT, S.offer);
     const me = (S.offer / POT) * 100;
     $('sMe').style.width = me + '%';
-    $('split').setAttribute('aria-label', `Pay dağılımı: sen ${S.offer} lira, karşı taraf ${POT - S.offer} lira`);
-    $('labMe').textContent = `Sen ${S.offer} ₺`;
-    $('labThem').textContent = `Karşı taraf ${POT - S.offer} ₺`;
+    $('split').setAttribute('aria-label', T.splitAria(S.offer, POT - S.offer));
+    $('labMe').textContent = T.labMe(S.offer);
+    $('labThem').textContent = T.labThem(POT - S.offer);
     const done = S.log.length >= TURNS;
     $('btns').hidden = S.decided;
     accept.disabled = reject.disabled = S.decided;
     resultBox.hidden = !S.decided;
     if (S.decided) {
       const last = S.log[S.log.length - 1];
-      resultText.textContent = verdict(last) + (last.rejected && ev.satisfaction > 0.3 ? ` Kaudat ("ret etmenin tatmini") bu teklifte %${pct(ev.satisfaction)} etkin.` : '');
-      nextBtn.textContent = done ? 'Yeniden oyna' : 'Sonraki teklif';
+      resultText.textContent = verdict(last) + (last.rejected && ev.satisfaction > 0.3 ? ` ${T.satisfactionNote(pct(ev.satisfaction))}` : '');
+      nextBtn.textContent = done ? T.replay : T.nextOffer;
     }
     logEl.innerHTML = S.log
-      .map((en, i) => `<li><span>${i + 1}. ${who(en.proposer)} · ${en.offer} ₺</span><span>${en.rejected ? 'Ret' : 'Kabul'} · model %${pct(en.p)}</span></li>`)
+      .map((en, i) => `<li><span>${T.logLeft(i + 1, who(en.proposer), en.offer)}</span><span>${T.logRight(en.rejected, pct(en.p))}</span></li>`)
       .join('');
     if (S.log.length) {
       const mine = S.log.filter((l) => l.rejected).length;
       const exp = S.log.reduce((a, l) => a + l.p, 0);
       scoreEl.hidden = false;
-      scoreEl.textContent = `${S.log.length} turda ${mine} kez reddettin. Model, ortalama bir kişi için yaklaşık ${f1(exp)} ret bekliyordu.` + (done ? ' Fark bireysel farktan ve rastlantıdan gelir; tek bir kişinin yanıtı ortalama eğriyle birebir örtüşmez.' : '');
+      scoreEl.textContent = T.score(S.log.length, mine, num(exp, 1)) + (done ? ` ${T.scoreDone}` : '');
     } else scoreEl.hidden = true;
   }
   let liveOverride = '';
@@ -388,21 +380,21 @@ export function mount(container: HTMLElement): () => void {
     svg('line', { class: 'grid', x1: CH.x0, x2: CH.x1, y1: yOf(v), y2: yOf(v) }, chart);
     svgText(chart, { x: CH.x0 - 6, y: yOf(v) + 3.5, 'text-anchor': 'end' }, pct(v) + '%');
   }
-  for (let o = 0; o <= FAIR; o++) svgText(chart, { x: xOf(o), y: CH.bot + 14, 'text-anchor': o === 0 ? 'start' : o === FAIR ? 'end' : 'middle' }, `${o} ₺`);
-  svgText(chart, { x: (CH.x0 + CH.x1) / 2, y: CH.bot + 28, 'text-anchor': 'middle' }, 'teklif edilen pay');
+  for (let o = 0; o <= FAIR; o++) svgText(chart, { x: xOf(o), y: CH.bot + 14, 'text-anchor': o === 0 ? 'start' : o === FAIR ? 'end' : 'middle' }, money(o));
+  svgText(chart, { x: (CH.x0 + CH.x1) / 2, y: CH.bot + 28, 'text-anchor': 'middle' }, T.axisOffer);
   const refLine = svg('polyline', { class: 'ln ref', points: '' }, chart);
   const curLine = svg('polyline', { class: 'ln cur', points: '' }, chart);
   const curDot = svg('circle', { class: 'cur-dot', r: 4.5, cx: CH.x0, cy: CH.bot }, chart);
   const marks = svg('g', {}, chart);
   const lgY = 200, lgY2 = 218;
   svg('line', { class: 'ln ref', x1: CH.x0, x2: CH.x0 + 18, y1: lgY - 4, y2: lgY - 4 }, chart);
-  svgText(chart, { x: CH.x0 + 24, y: lgY }, 'ortalama kişi (insan)');
+  svgText(chart, { x: CH.x0 + 24, y: lgY }, T.legendAvg);
   svg('line', { class: 'ln cur', x1: CH.x0 + 150, x2: CH.x0 + 168, y1: lgY - 4, y2: lgY - 4 }, chart);
-  svgText(chart, { x: CH.x0 + 174, y: lgY }, 'seçili koşul');
+  svgText(chart, { x: CH.x0 + 174, y: lgY }, T.legendCur);
   svg('circle', { class: 'mk-rej', r: 3.6, cx: CH.x0 + 4, cy: lgY2 - 4 }, chart);
-  svgText(chart, { x: CH.x0 + 14, y: lgY2 }, 'senin reddin');
+  svgText(chart, { x: CH.x0 + 14, y: lgY2 }, T.legendYourReject);
   svg('circle', { class: 'mk-acc', r: 3.6, cx: CH.x0 + 104, cy: lgY2 - 4 }, chart);
-  svgText(chart, { x: CH.x0 + 114, y: lgY2 }, 'senin kabulün');
+  svgText(chart, { x: CH.x0 + 114, y: lgY2 }, T.legendYourAccept);
   const refPts = curve(BASE).filter((c) => c.offer <= FAIR).map((c) => `${xOf(c.offer).toFixed(1)},${yOf(c.p).toFixed(1)}`).join(' ');
   refLine.setAttribute('points', refPts);
   function drawChart(): void {
@@ -425,7 +417,7 @@ export function mount(container: HTMLElement): () => void {
     mP.textContent = pct(ev.pReject) + '%'; bP.style.width = pct(ev.pReject) + '%';
     mJ.textContent = pct(ev.judge) + '%'; bJ.style.width = pct(ev.judge) + '%';
     const t = threshold(S.c);
-    mT.textContent = t === 0 ? 'hepsi' : `≥ ${t} ₺`; bT.style.width = pct(t / FAIR) + '%';
+    mT.textContent = t === 0 ? T.thresholdAll : T.thresholdFrom(t); bT.style.width = pct(t / FAIR) + '%';
     sayEl.textContent = describe(S.offer, S.c, ev);
   }
 
@@ -446,14 +438,15 @@ export function mount(container: HTMLElement): () => void {
     S.offer = offer;
     syncUi(); refresh(); buildDetail();
   };
-  const tour = createTour(scope, [
-    { title: 'Adil teklif', text: 'Karşı taraf 10 ₺\'dan 5 ₺ öneriyor: eşit pay. Kabul etmek hem kârlı hem adil olduğundan çoğu kişi için sorun yok.', look: 'Ret olasılığı çubuğu ve insula neredeyse sönük.', apply: () => setState({}, 5) },
-    { title: 'Çok adaletsiz teklif', text: '1 ₺ kabul edilse de elde bir şey kalır. Yine de insula ve amigdala belirir, kaudat reddetmenin tatminini hazırlar. Kitaba göre insula etkinliği yükseldikçe ret artar.', look: 'İnsula parlıyor, ret olasılığı yüksek.', apply: () => setState({}, 1) },
-    { title: 'Karşıda bilgisayar', text: 'Aynı 1 ₺, ama bir insan haksızlık etmiyor: sadece bir program. İnsula daha az etkinleşir, ret azalır. Ret kararı parayla birlikte "kim yaptı" bilgisine de bağlı.', look: 'Aynı teklifte insula ve ret olasılığı düşer.', apply: () => setState({ proposer: 'computer' }, 1) },
-    { title: 'Sağ dlPFC susturuldu (TMS)', text: 'Teklif 2 ₺, karşıda yine bir insan. Sağ dlPFC susturulunca kişi aynı teklifi daha sık kabul eder, ama yine de adaletsiz bulur: adalet hedefini eyleme çeviremez. Sol dlPFC\'de ya da bilgisayara karşı bu etki yok. Bulgu karışık; bazı rTMS çalışmaları kabul oranında fark bulmadı.', look: '"Adaletsiz buluyor" aynı kalır, ret olasılığı düşer, dlPFC çizgili.', apply: () => setState({ tmsRight: true }, 2) },
-    { title: 'Serotonin düşük (triptofan yoksunluğu)', text: 'Aynı 2 ₺ teklifi, bu kez serotonin azaltılmış. Ret artar ve kabul eşiği yukarı kayar. Wood\'un etkisi yalnızca ilk oturumda görüldü: "İkinci oturum" düğmesine basınca etki kalkar.', look: 'Ret olasılığı yükselir, eşik büyür.', apply: () => setState({ trp: true }, 2) },
-    { title: 'Sonuç', text: 'Ret, "para mı onur mu" tartısından çok bir çekişme: insula ve amigdala reddetmeyi, kaudat tatmini, sağ dlPFC adalet hedefini öne iter; vmPFC/OFC paranın değeriyle kabule çeker. Koşullar bu dengeyi kaydırır. Şimdi koşulları bozmadan oyna ve kendi yanıtlarını ortalama eğriyle karşılaştır.', look: 'Eğrideki ret (kırmızı) ve kabul (boş) noktaları.', apply: () => setState({}, 3) },
-  ]);
+  const applies = [
+    () => setState({}, 5),
+    () => setState({}, 1),
+    () => setState({ proposer: 'computer' }, 1),
+    () => setState({ tmsRight: true }, 2),
+    () => setState({ trp: true }, 2),
+    () => setState({}, 3),
+  ];
+  const tour = createTour(scope, T.tour.map((st, i) => ({ title: st.title, text: st.text(), look: st.look, apply: applies[i] })));
   root.querySelector('.lede')!.after(tour.el);
 
   syncUi();

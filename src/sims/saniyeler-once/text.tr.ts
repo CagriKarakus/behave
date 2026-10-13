@@ -149,3 +149,4 @@ export const TR = {
     },
   ],
 };
+export type Strings = typeof TR;

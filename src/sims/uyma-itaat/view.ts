@@ -11,31 +11,32 @@ import {
 } from './model';
 
 const LETTERS = ['A', 'B', 'C'];
-const LEARNERS = ['Ayrı oda', 'Aynı oda', 'Eli tutulacak kadar yakın'];
-
-export const ASCH_PRESETS: Array<{ id: string; name: string; u: AschInputs }> = [
-  { id: 'base', name: 'Temel (7 ortak)', u: ASCH_DEFAULT },
-  { id: 'small', name: 'İki ortak', u: { ...ASCH_DEFAULT, n: 2 } },
-  { id: 'ally', name: 'Bir müttefik', u: { ...ASCH_DEFAULT, ally: true } },
-  { id: 'private', name: 'Gizli cevap', u: { ...ASCH_DEFAULT, open: false } },
+export const ASCH_PRESETS: Array<{ id: string; u: AschInputs }> = [
+  { id: 'base', u: ASCH_DEFAULT },
+  { id: 'small', u: { ...ASCH_DEFAULT, n: 2 } },
+  { id: 'ally', u: { ...ASCH_DEFAULT, ally: true } },
+  { id: 'private', u: { ...ASCH_DEFAULT, open: false } },
 ];
-export const MIL_PRESETS: Array<{ id: string; name: string; u: MilgramInputs }> = [
-  { id: 'base', name: 'Temel koşul', u: MIL_DEFAULT },
-  { id: 'far', name: 'Otorite uzakta', u: { ...MIL_DEFAULT, authority: 0 } },
-  { id: 'near', name: 'Öğrenci aynı odada', u: { ...MIL_DEFAULT, learner: 1 } },
-  { id: 'diff', name: 'Sorumluluk dağıldı', u: { ...MIL_DEFAULT, diffused: true } },
-  { id: 'peer', name: 'Akran direniyor', u: { ...MIL_DEFAULT, peer: true } },
+export const MIL_PRESETS: Array<{ id: string; u: MilgramInputs }> = [
+  { id: 'base', u: MIL_DEFAULT },
+  { id: 'far', u: { ...MIL_DEFAULT, authority: 0 } },
+  { id: 'near', u: { ...MIL_DEFAULT, learner: 1 } },
+  { id: 'diff', u: { ...MIL_DEFAULT, diffused: true } },
+  { id: 'peer', u: { ...MIL_DEFAULT, peer: true } },
 ];
 
-const TEMPLATE = (id: string) => `
+const TEMPLATE = (id: string) => {
+  const T = L();
+  const rep = (key: 'sağlam' | 'karışık' | 'tartışmalı') => `(${t('repl.badge', { s: t(`repl.${key}` as MsgKey) }).toLowerCase()})`;
+  return `
 <div class="sim sim-uyma">
-  <p class="lede">Bir grup ya da bir otorite, insanı açıkça yanlış olana ne kadar götürebilir ve bunu ne kırar?</p>
-  <div class="tabs" role="tablist" aria-label="Deney seçimi" data-ref="tabs">
-    <button type="button" role="tab" class="tab" id="${id}-t-asch" aria-controls="${id}-p-asch" data-tab="asch">Asch çizgi deneyi</button>
-    <button type="button" role="tab" class="tab" id="${id}-t-mil" aria-controls="${id}-p-mil" data-tab="mil">Milgram itaat deneyi</button>
+  <p class="lede">${T.lede}</p>
+  <div class="tabs" role="tablist" aria-label="${T.tabsAria}" data-ref="tabs">
+    <button type="button" role="tab" class="tab" id="${id}-t-asch" aria-controls="${id}-p-asch" data-tab="asch">${T.tabAsch}</button>
+    <button type="button" role="tab" class="tab" id="${id}-t-mil" aria-controls="${id}-p-mil" data-tab="mil">${T.tabMil}</button>
   </div>
 
-  <div class="sim-bar" role="group" aria-label="Anlık çıktılar">
+  <div class="sim-bar" role="group" aria-label="${T.barAria}">
     <div class="sim-bar-in">
       <p class="say" data-ref="say"></p>
       <div class="meters">
@@ -48,81 +49,82 @@ const TEMPLATE = (id: string) => `
   <p class="sr-only" aria-live="polite" data-ref="live"></p>
 
   <section role="tabpanel" id="${id}-p-asch" aria-labelledby="${id}-t-asch" data-ref="p-asch" class="panel">
-    <div class="chips" data-ref="a-presets" role="group" aria-label="Asch senaryoları"></div>
+    <div class="chips" data-ref="a-presets" role="group" aria-label="${T.asch.presetsAria}"></div>
     <div class="stage">
-      <svg viewBox="0 0 360 258" role="img" aria-label="Asch çizgi deneyi: bir referans çizgi, üç seçenek ve sırayla cevap veren katılımcılar" data-ref="a-stage"></svg>
+      <svg viewBox="0 0 360 258" role="img" aria-label="${T.asch.stageAria}" data-ref="a-stage"></svg>
       <div class="legend">
-        <span><i style="background:color-mix(in srgb, var(--amy) 24%, var(--panel));border:2px solid var(--amy);box-sizing:border-box"></i>Yanlış cevap</span>
-        <span><i style="background:color-mix(in srgb, var(--pfc) 24%, var(--panel));border:2px solid var(--pfc);box-sizing:border-box"></i>Doğru cevap</span>
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><circle cx="13" cy="5" r="4" fill="none" stroke="var(--ink)" stroke-width="2"/></svg>Gerçek denek (en son konuşur)</span>
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><circle cx="13" cy="5" r="4" fill="none" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="2 2"/></svg>Müttefik</span>
+        <span><i style="background:color-mix(in srgb, var(--amy) 24%, var(--panel));border:2px solid var(--amy);box-sizing:border-box"></i>${T.asch.legendWrong}</span>
+        <span><i style="background:color-mix(in srgb, var(--pfc) 24%, var(--panel));border:2px solid var(--pfc);box-sizing:border-box"></i>${T.asch.legendRight}</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><circle cx="13" cy="5" r="4" fill="none" stroke="var(--ink)" stroke-width="2"/></svg>${T.asch.legendReal}</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><circle cx="13" cy="5" r="4" fill="none" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="2 2"/></svg>${T.asch.legendAlly}</span>
       </div>
     </div>
     <div class="row">
-      <button class="btn btn-go" type="button" data-ref="a-play">Denemeyi oynat</button>
-      <button class="btn" type="button" data-ref="a-rerun">Yeniden çalıştır</button>
+      <button class="btn btn-go" type="button" data-ref="a-play">${T.asch.play}</button>
+      <button class="btn" type="button" data-ref="a-rerun">${T.asch.rerun}</button>
     </div>
     <p class="tally" data-ref="a-tally" aria-live="off"></p>
-    <section class="chart" aria-label="Grup büyüklüğü ve uyma">
-      <h3 class="sim-h">Çoğunluk büyüklüğü ve uyma</h3>
-      <svg viewBox="0 0 360 185" role="img" aria-label="Çoğunluk büyüklüğüne göre yanlışa uyma oranı eğrisi" data-ref="a-chart"></svg>
+    <section class="chart" aria-label="${T.asch.chartAria}">
+      <h3 class="sim-h">${T.asch.chartTitle}</h3>
+      <svg viewBox="0 0 360 185" role="img" aria-label="${T.asch.chartSvgAria}" data-ref="a-chart"></svg>
       <div class="legend">
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--amy)" stroke-width="2.4"/></svg>Şu anki ayar</span>
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4 3"/></svg>Temel koşul (oybirliği, açık cevap)</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--amy)" stroke-width="2.4"/></svg>${T.asch.legendCur}</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4 3"/></svg>${T.asch.legendBase}</span>
       </div>
     </section>
-    <section aria-label="Asch girdileri">
-      <h3 class="sim-h">Girdiler</h3>
+    <section aria-label="${T.asch.inputsAria}">
+      <h3 class="sim-h">${T.asch.inputsTitle}</h3>
       <div class="sliders" data-ref="a-in"></div>
     </section>
   </section>
 
   <section role="tabpanel" id="${id}-p-mil" aria-labelledby="${id}-t-mil" data-ref="p-mil" class="panel" hidden>
-    <div class="chips" data-ref="m-presets" role="group" aria-label="Milgram senaryoları"></div>
+    <div class="chips" data-ref="m-presets" role="group" aria-label="${T.mil.presetsAria}"></div>
     <div class="stage">
-      <svg viewBox="0 0 360 232" role="img" aria-label="Voltaj merdiveni ve yüz ajanın ilerleyişi" data-ref="m-stage"></svg>
+      <svg viewBox="0 0 360 232" role="img" aria-label="${T.mil.stageAria}" data-ref="m-stage"></svg>
       <div class="legend">
-        <span><i style="background:var(--amy)"></i>Şok vermeye devam ediyor</span>
-        <span><i style="background:transparent;border:2px solid var(--pfc);width:10px;height:10px;box-sizing:border-box"></i>Bıraktı</span>
+        <span><i style="background:var(--amy)"></i>${T.mil.legendGoing}</span>
+        <span><i style="background:transparent;border:2px solid var(--pfc);width:10px;height:10px;box-sizing:border-box"></i>${T.mil.legendQuit}</span>
       </div>
     </div>
     <div class="row">
-      <button class="btn btn-go" type="button" data-ref="m-play">Merdiveni oynat</button>
-      <button class="btn" type="button" data-ref="m-rerun">Yeniden çalıştır</button>
+      <button class="btn btn-go" type="button" data-ref="m-play">${T.mil.play}</button>
+      <button class="btn" type="button" data-ref="m-rerun">${T.mil.rerun}</button>
     </div>
-    <section class="chart" aria-label="Bırakma noktaları">
-      <h3 class="sim-h">Kimler hangi voltta bıraktı</h3>
-      <svg viewBox="0 0 360 185" role="img" aria-label="Her gerilimde şoka devam edenlerin oranı ve bırakma noktalarının dağılımı" data-ref="m-chart"></svg>
+    <section class="chart" aria-label="${T.mil.chartAria}">
+      <h3 class="sim-h">${T.mil.chartTitle}</h3>
+      <svg viewBox="0 0 360 185" role="img" aria-label="${T.mil.chartSvgAria}" data-ref="m-chart"></svg>
       <div class="legend">
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--ink)" stroke-width="2.2"/></svg>Hâlâ şok veren oranı</span>
-        <span><i style="background:var(--pfc)"></i>Bu voltta bırakanlar</span>
-        <span><i style="background:var(--amy)"></i>450 V'a kadar gidenler</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--ink)" stroke-width="2.2"/></svg>${T.mil.legendStill}</span>
+        <span><i style="background:var(--pfc)"></i>${T.mil.legendStopAt}</span>
+        <span><i style="background:var(--amy)"></i>${T.mil.legendFull}</span>
       </div>
     </section>
-    <section aria-label="Milgram girdileri">
-      <h3 class="sim-h">Girdiler</h3>
+    <section aria-label="${T.mil.inputsAria}">
+      <h3 class="sim-h">${T.mil.inputsTitle}</h3>
       <div class="sliders" data-ref="m-in"></div>
     </section>
   </section>
 
   <details class="how">
-    <summary>Model nasıl çalışıyor?</summary>
-    <p><b>Asch.</b> Her kritik denemede uyma olasılığı, çoğunluk büyüklüğüne bağlı doyan bir eğriyle verilir: tek başına ~%1 hata, 3 kişide belirgin artış, ~6 kişide doyum ve oybirlikli 7 kişide yaklaşık üçte bir. Müttefik, gizli cevap ve çizgi farkı bu olasılığı çarpanlarla değiştirir. Sanal denekler 12 kritik deneme yapar ve her birinin duyarlılığı biraz farklıdır; sonuç tohumlu bir rastlantıyla çıkar.</p>
-    <p><b>Milgram.</b> Her ajanın bir toleransı vardır (ortalaması koşullara göre kayar, ayrıntısı rastlantı). Voltaj arttıkça zorlanma da artar; öğrencinin tepkisi sertleştikçe zorlanma üç eşikte (modelin varsayımı olarak 75, 150 ve 300 V) sıçrar. Ajan, zorlanma toleransını aşınca bırakır. Otoriteye yakınlık, kurumun prestiji ve sorumluluğun dağılması toleransı artırır; öğrencinin yakınlığı ve itaat etmeyen bir akran azaltır. Temel koşul %65'e göre ayarlıdır.</p>
-    <p>Varsayımlar: ajanlar birbirinden bağımsızdır, gerçek insanlardaki bağlam, ikna ve etik kaygılar modele girmez.</p>
+    <summary>${t('sim.how')}</summary>
+    <p><b>${T.how.aschLabel}</b> ${T.how.asch}</p>
+    <p><b>${T.how.milLabel}</b> ${T.how.mil}</p>
+    <p>${T.how.assumptions}</p>
   </details>
 
-  <aside class="book" aria-label="Kitapta">
-    <h3 class="sim-h">Kitapta</h3>
+  <aside class="book" aria-label="${t('sim.book')}">
+    <h3 class="sim-h">${t('sim.book')}</h3>
     <ul>
-      <li><a href="#/bolum/ch12?deney=ch12-e8">Asch konformite deneyleri</a> (replikasyon: sağlam). Denemelerin yaklaşık üçte birinde uyma; üç kişide başlayıp altı kişi civarında en yükseğe çıkma. Etkinin içsel fikir değişiminden mi yoksa kamuya açık uyumdan mı geldiği tartışılıyor, bu yüzden açık/gizli cevap ayrımı var.</li>
-      <li><a href="#/bolum/ch12?deney=ch12-e9">Milgram itaat deneyleri</a> (replikasyon: karışık). İlk çalışmada %65 en yüksek şoka çıktı; araştırmacı başka odadayken, sıradan bir büroda ya da öğrenci aynı odadayken itaat azaldı. Gina Perry'nin arşiv çalışmasına göre öğretmenler şoku bildirilenden çok daha sık reddetmiş ve çoğu öğrencinin oyuncu olduğunu fark etmişti; bulguların anlamı (kör itaat mi, deneyin amacıyla özdeşleşme mi) tartışmalı.</li>
-      <li><a href="#/bolum/ch12?deney=ch12-e10">Stanford Hapishane Deneyi</a> (replikasyon: tartışmalı) burada simüle edilmedi. Le Texier (2019) arşivlerle gardiyanlara ne yapacaklarının büyük ölçüde telkin edildiğini gösterdi; deney bugün ciddi yöntem sorunları olan bir gösterim sayılıyor. Aynı tasarımı yeniden kuran BBC çalışmasında (<a href="#/bolum/ch12?deney=ch12-e11">ch12-e11</a>) mahkumlar direndi.</li>
+      <li><a href="#/bolum/ch12?deney=ch12-e8">${T.book.asch.link}</a> ${rep('sağlam')}. ${T.book.asch.note}</li>
+      <li><a href="#/bolum/ch12?deney=ch12-e9">${T.book.mil.link}</a> ${rep('karışık')}. ${T.book.mil.note}</li>
+      <li><a href="#/bolum/ch12?deney=ch12-e10">${T.book.sper.link}</a> ${rep('tartışmalı')} ${T.book.sper.before}<a href="#/bolum/ch12?deney=ch12-e11">ch12-e11</a>${T.book.sper.after}</li>
     </ul>
   </aside>
 
-  <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan gelenler: Asch'ta tek başına ~%1 hata, oybirlikli çoğunlukta denemelerin ~üçte biri, 3 kişide belirginleşip ~6'da doyum; Milgram'da %65 temel koşul ve uzaklık/yakınlık yönleri. Müttefik, gizli cevap, sorumluluğun dağılması, akran direnişi ve eşik basamakları gibi büyüklükler modelin varsayımıdır; yalnızca yönleri kitaba ve genel bulgulara dayanır.</p>
+  <p class="foot">${T.foot}</p>
 </div>`;
+};
 
 export function mount(container: HTMLElement): () => void {
   const scope = new Scope();
