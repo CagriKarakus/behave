@@ -7,7 +7,7 @@ const run = async (m: (c: HTMLElement) => () => void) => {
   const out: string[] = [];
   m(host);
   for (let i = 0; i < 6; i++) await new Promise((r) => setTimeout(r, 10));
-  const strip = (h: string) => h.replace(/zm-\d+/g, 'zm');
+  const strip = (h: string) => h.replace(/zm\d+/g, 'zm');
   out.push(strip(host.innerHTML));
   const btns = [...host.querySelectorAll<HTMLButtonElement>('button')];
   for (const b of btns) { if (!host.contains(b)) continue; b.click(); await new Promise((r) => setTimeout(r, 5)); out.push(strip(host.innerHTML)); }

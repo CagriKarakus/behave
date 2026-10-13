@@ -3,7 +3,6 @@
 // 2) Kategori sınırı yanılgısı: sürekli bir değişken kutulara bölününce kutu içi farklar küçülür,
 //    kutular arası farklar büyür (her değer algıda kutusunun merkezine doğru çekilir).
 import { LINKS, RUNGS, type Link } from './data';
-import { L } from './text';
 
 /* ---------- Merdiven ---------- */
 export interface LadderStats {
@@ -31,17 +30,19 @@ export function linksOf(i: number): { into: Link[]; out: Link[] } {
 }
 
 export function describeLadder(behavior: string, depth: number, sel: number | null): string {
-  const s = ladderStats(depth), T = L().model;
+  const s = ladderStats(depth);
   if (sel !== null && sel < s.depth) {
     const { into, out } = linksOf(sel);
     const first = out.find((l) => l.to < s.depth) ?? into.find((l) => l.from < s.depth);
     const n = into.filter((l) => l.from < s.depth).length + out.filter((l) => l.to < s.depth).length;
-    if (!first) return T.selNone(RUNGS[sel].name, n);
-    return T.selLink(RUNGS[sel].name, n, RUNGS[first.from].name, RUNGS[first.to].name, first.label);
+    const head = `${RUNGS[sel].name}: ${n} bağ.`;
+    if (!first) return `${head} Bu basamak görünen başka bir basamağa bağlanmıyor; daha derine ya da yakına bakmak gerekir.`;
+    return `${head} ${RUNGS[first.from].name} → ${RUNGS[first.to].name}: ${first.label}`;
   }
-  if (s.depth === 1) return T.depth1(behavior, s.hidden, s.cut);
-  if (s.depth === RUNGS.length) return T.depthAll(behavior, s.depth, s.seen);
-  return T.depthMid(behavior, s.depth, s.seen, s.hidden, s.cut);
+  const what = `"${behavior}" için`;
+  if (s.depth === 1) return `${what} yalnızca bir saniye öncesine bakılıyor: 1 etken görünür, ${s.hidden} etken ve ${s.cut} bağ dışarıda.`;
+  if (s.depth === RUNGS.length) return `${what} tüm merdiven görünür: ${s.depth} etken, ${s.seen} bağ. Her açıklama kendinden öncekilerin hepsini içerir.`;
+  return `${what} ${s.depth} basamağa bakılıyor: ${s.depth} etken ve ${s.seen} bağ görünür; ${s.hidden} etken ve ${s.cut} bağ dışarıda.`;
 }
 
 /* ---------- Kategori sınırı ---------- */
@@ -123,12 +124,11 @@ export function sweep(p: CatParams, steps = 61): Array<{ offset: number; perceiv
   });
 }
 
-/** Birim sözcüğü: iç anahtar ('%', 'puan', 'cm') geçerli dildeki sözcüğe çevrilir. */
-export const unitWord = (unit: string): string => L().units[unit] ?? unit;
-
 export function describeCat(p: CatParams, unit: string, fmt: (v: number) => string): string {
-  const c = compare(p), T = L().model, u = unitWord(unit);
-  const truth = `${fmt(c.truth)} ${u}`, perceived = `${fmt(c.perceived)} ${u}`;
-  if (p.strength === 0) return T.catNone(truth);
-  return c.straddles ? T.catStraddle(truth, perceived, fmt(c.ratio)) : T.catSame(truth, perceived, Math.round(c.ratio * 100));
+  const c = compare(p);
+  const u = unit === '%' ? ' puan' : ` ${unit}`;
+  if (p.strength === 0) return `Kategori yok: gerçek fark ${fmt(c.truth)}${u}, algılanan da aynı.`;
+  const rel = c.straddles ? 'sınır ikisinin arasında' : 'ikisi aynı kutuda';
+  const tail = c.straddles ? `${fmt(c.ratio)} katına çıkıyor` : `gerçeğin %${Math.round(c.ratio * 100)}'ine iniyor`;
+  return `Gerçek fark ${fmt(c.truth)}${u}; algılanan ${fmt(c.perceived)}${u}: ${rel}, fark ${tail}.`;
 }

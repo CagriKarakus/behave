@@ -1,34 +1,32 @@
 // Sekme 1: Merdiven. Seçilen bir davranış için zaman basamaklarındaki etkenler ve basamaklar arası oklar.
 import { SVGNS } from '../kit';
 import { chipRow, makeSlider, type Ctx, type Meter, type Panel, type SliderHandle } from '../ui';
-import { L } from './text';
 import { BEHAVIORS, LINKS, RUNGS, type Dir } from './data';
 import { clampDepth, describeLadder, ladderStats, linksOf } from './model';
 
-const dirTag = (d: Dir): string => L().dir[d];
+const DIR_TAG: Record<Dir, string> = { for: '▲ yöneltir', against: '▼ frenler', ctx: '◆ bağlama bağlı' };
 
 export interface LadderPanel extends Panel {
   set(p: { behavior?: string; depth?: number; sel?: number | null }): void;
 }
 
 const rungHtml = (i: number): string => {
-  const r = RUNGS[i], T = L().ladder;
+  const r = RUNGS[i];
   return `<li class="rung" data-i="${i}">
   <div class="r-when"><span class="r-n" aria-hidden="true">${i + 1}</span><span class="r-t">${r.when}</span>
-    <a class="r-go" href="#/bolum/${r.ch}?sim=${r.sim}">${T.goChapter(+r.ch.slice(2))}</a></div>
+    <a class="r-go" href="#/bolum/${r.ch}?sim=${r.sim}">Bölüm ${+r.ch.slice(2)} ve simülasyonu</a></div>
   <button type="button" class="card" aria-pressed="false" data-c="card"><span class="c-dir"></span><b class="c-title"></b><span class="c-text"></span></button>
-  <p class="r-off" hidden>${T.off}</p>
+  <p class="r-off" hidden>Bu basamak dışarıda: daha geriye bakınca görünür.</p>
   <ul class="c-links" hidden></ul>
 </li>`;
 };
 
 export function createLadderPanel(ctx: Ctx, host: HTMLElement): LadderPanel {
-  const T = L().ladder;
   const mk = `${ctx.id}-ar`, mkOn = `${ctx.id}-aron`;
   host.innerHTML = `
 <div class="chips" data-ref="beh"></div>
 <div class="stage lad">
-  <p class="lad-top">${T.near} <span aria-hidden="true">↓</span> ${T.far}</p>
+  <p class="lad-top">Yakın zaman <span aria-hidden="true">↓</span> uzak zaman</p>
   <div class="lad-wrap" data-ref="wrap">
     <svg class="rail" data-ref="rail" aria-hidden="true" focusable="false">
       <defs>
@@ -37,14 +35,14 @@ export function createLadderPanel(ctx: Ctx, host: HTMLElement): LadderPanel {
       </defs>
       <g data-ref="rails"></g>
     </svg>
-    <ol class="rungs" data-ref="rungs" aria-label="${T.rungsAria}">${RUNGS.map((_, i) => rungHtml(i)).join('')}</ol>
+    <ol class="rungs" data-ref="rungs" aria-label="Zaman basamakları">${RUNGS.map((_, i) => rungHtml(i)).join('')}</ol>
   </div>
-  <div class="legend" aria-label="${T.legendAria}">
-    <span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M1 5 H20" class="lg-ln"/><path d="M19 1.5 L25 5 L19 8.5 z" class="lg-ar"/></svg>${T.legendArrow}</span>
-    <span>${dirTag('for')} · ${dirTag('against')} · ${dirTag('ctx')}</span>
+  <div class="legend" aria-label="Açıklama">
+    <span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M1 5 H20" class="lg-ln"/><path d="M19 1.5 L25 5 L19 8.5 z" class="lg-ar"/></svg>Ok: derindeki basamak yakındakini etkiler</span>
+    <span>▲ yöneltir · ▼ frenler · ◆ bağlama bağlı</span>
   </div>
 </div>
-<section aria-label="${T.inputsAria}"><h3 class="sim-h">${T.inputsH}</h3><div class="sliders" data-ref="sliders"></div></section>
+<section aria-label="Merdiven girdileri"><h3 class="sim-h">Girdiler</h3><div class="sliders" data-ref="sliders"></div></section>
 <div class="notes" data-notes="ladder"></div>`;
 
   const $ = <T extends Element = HTMLElement>(n: string) => host.querySelector<T>(`[data-ref="${n}"]`)!;
@@ -63,11 +61,11 @@ export function createLadderPanel(ctx: Ctx, host: HTMLElement): LadderPanel {
 
   const setChip = chipRow($('beh'), ctx, BEHAVIORS.map((b) => ({ key: b.key, label: b.label })), (k) => {
     S.behavior = Math.max(0, BEHAVIORS.findIndex((b) => b.key === k)); S.dirty = true;
-  }, T.chipsAria);
+  }, 'Davranış seçimi');
 
   const sl: Record<string, SliderHandle> = {};
-  sl.depth = makeSlider(ctx, $('sliders'), 'depth', T.depthName, T.depthHint, 1, RUNGS.length, S.depth,
-    (v) => { S.depth = clampDepth(v); S.dirty = true; }, (v) => T.depthVal(v, RUNGS.length, RUNGS[clampDepth(v) - 1].name), 'var(--pfc)');
+  sl.depth = makeSlider(ctx, $('sliders'), 'depth', 'Ne kadar geriye bakılıyor?', 'Sağa kaydırdıkça daha eski zamanlar açılır; kartlar ve oklar belirir.', 1, RUNGS.length, S.depth,
+    (v) => { S.depth = clampDepth(v); S.dirty = true; }, (v) => `${v} / ${RUNGS.length}: ${RUNGS[clampDepth(v) - 1].name.toLowerCase()}`, 'var(--pfc)');
 
   for (const [i, p] of parts.entries()) {
     ctx.scope.on(p.card, 'click', () => { S.sel = S.sel === i ? null : i; S.dirty = true; ctx.touch(); });
@@ -115,11 +113,11 @@ export function createLadderPanel(ctx: Ctx, host: HTMLElement): LadderPanel {
       lis[i].classList.toggle('sel', S.sel === i);
       p.card.setAttribute('aria-pressed', String(S.sel === i));
       const c = b.cards[i];
-      p.dir.textContent = dirTag(c.dir);
+      p.dir.textContent = DIR_TAG[c.dir];
       p.card.dataset.dir = c.dir;
       p.title.textContent = c.title;
       p.text.textContent = c.text;
-      p.card.setAttribute('aria-label', T.cardAria(RUNGS[i].when, c.title, dirTag(c.dir).slice(2)));
+      p.card.setAttribute('aria-label', `${RUNGS[i].when}: ${c.title}. ${DIR_TAG[c.dir].slice(2)}.`);
       const open = S.sel === i && !off;
       p.links.hidden = !open;
       p.links.textContent = '';
@@ -133,7 +131,7 @@ export function createLadderPanel(ctx: Ctx, host: HTMLElement): LadderPanel {
           li.lastElementChild!.textContent = l.label;
           p.links.appendChild(li);
         }
-        if (!vis.length) { const li = document.createElement('li'); li.textContent = T.noLinks; p.links.appendChild(li); }
+        if (!vis.length) { const li = document.createElement('li'); li.textContent = 'Görünen basamaklar arasında bu karta bağlanan ok yok. Daha geriye ya da başka karta bakmak gerekir.'; p.links.appendChild(li); }
       }
     });
     drawRail();
@@ -144,9 +142,9 @@ export function createLadderPanel(ctx: Ctx, host: HTMLElement): LadderPanel {
     meters(): Meter[] {
       const s = ladderStats(S.depth);
       return [
-        { label: T.mDepth, value: `${s.depth}/${RUNGS.length}`, frac: s.depth / RUNGS.length, color: 'var(--pfc)' },
-        { label: T.mSeen, value: `${s.seen}/${s.total}`, frac: s.seen / s.total, color: 'var(--gld)' },
-        { label: T.mCut, value: `${s.cut}`, frac: s.cut / s.total, color: 'var(--amy)' },
+        { label: 'Geriye bakış', value: `${s.depth}/${RUNGS.length}`, frac: s.depth / RUNGS.length, color: 'var(--pfc)' },
+        { label: 'Görünen bağ', value: `${s.seen}/${s.total}`, frac: s.seen / s.total, color: 'var(--gld)' },
+        { label: 'Dışarıda kalan', value: `${s.cut}`, frac: s.cut / s.total, color: 'var(--amy)' },
       ];
     },
     draw(): boolean { if (!S.dirty) return false; render(); return true; },
