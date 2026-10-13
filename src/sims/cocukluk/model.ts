@@ -1,6 +1,7 @@
 // Çocukluk ve rahim (Bölüm 7): üç nitel model. DOM yok; tohumlu RNG.
 // Kitaptan (chapters.json ch07) gelen noktalar "KİTAP:", diğer sayılar "VARSAYIM:" ile işaretlidir.
 import { mulberry32 } from '../rng';
+import { L } from './text';
 
 const clamp = (v: number, a: number, b: number): number => Math.max(a, Math.min(b, v));
 /** Standart normal dağılım fonksiyonu (Abramowitz-Stegun). */
@@ -18,10 +19,10 @@ export const MAX_WAIT = 900;
 export type Strategy = 'look' | 'eyes' | 'cold' | 'hot';
 /** Yön KİTAP (dikkat dağıtma ve "soğuk" düşünme uzatır, lezzeti düşünmek kısaltır); saniye büyüklükleri VARSAYIM. */
 export const STRATEGIES: Record<Strategy, { label: string; shift: number }> = {
-  look: { label: 'Ödüle bakmak', shift: 0 },
-  eyes: { label: 'Gözleri kapatmak', shift: 150 },
-  cold: { label: '"Soğuk" düşünmek (bulut)', shift: 230 },
-  hot: { label: '"Sıcak" düşünmek (lezzet)', shift: -170 },
+  look: { get label() { return L().strategies.look.label; }, shift: 0 },
+  eyes: { get label() { return L().strategies.eyes.label; }, shift: 150 },
+  cold: { get label() { return L().strategies.cold.label; }, shift: 230 },
+  hot: { get label() { return L().strategies.hot.label; }, shift: -170 },
 };
 export interface MarshInput { age: number; strategy: Strategy; trust: boolean }
 /** VARSAYIM: taban ortalama 5 yaş, ödül görünür, deneyciye güven var; kitaptaki grup özetine (üçte bir, ~11 dk) göre ayarlı. */
@@ -93,25 +94,15 @@ export function lateLife(cohort: Child[], w: number[]): Late {
 }
 
 /* ======================= 2) Çocukluk adversitesi ======================= */
-export const ACES = [
-  'Duygusal istismar (sürekli aşağılama, tehdit)',
-  'Fiziksel istismar',
-  'Cinsel istismar',
-  'Duygusal ihmal (sevilmeme, desteksizlik hissi)',
-  'Fiziksel ihmal (bakımsızlık, yetersiz beslenme)',
-  'Evde şiddete tanıklık',
-  'Ailede madde bağımlılığı',
-  'Ailede ruhsal hastalık',
-  'Ebeveyn kaybı ya da ayrılığı',
-  'Ailede biri hapse girmiş',
-] as const;
+/** On deneyim; adlar `L().aces` içinde (aynı sırada). */
+export const ACES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
 
 export type Outcome = 'dep' | 'imp' | 'str';
 /** k: yükün etkisi; wSes: SES'in doğrudan etkisi; wAtt: güvenli bağlanmanın doğrudan etkisi. Hepsi VARSAYIM (yön KİTAP). */
 export const OUTCOMES: Record<Outcome, { label: string; short: string; k: number; wSes: number; wAtt: number }> = {
-  dep: { label: 'Depresyon', short: 'Depresyon', k: 0.30, wSes: 0.25, wAtt: 0.1 },
-  imp: { label: 'Dürtü kontrolü güçlüğü', short: 'Dürtü kontrolü', k: 0.28, wSes: 0.5, wAtt: 0.1 },
-  str: { label: 'Aşırı stres tepkisi', short: 'Stres tepkisi', k: 0.32, wSes: 0.35, wAtt: 0.25 },
+  dep: { get label() { return L().outcomes.dep.label; }, get short() { return L().outcomes.dep.short; }, k: 0.30, wSes: 0.25, wAtt: 0.1 },
+  imp: { get label() { return L().outcomes.imp.label; }, get short() { return L().outcomes.imp.short; }, k: 0.28, wSes: 0.5, wAtt: 0.1 },
+  str: { get label() { return L().outcomes.str.label; }, get short() { return L().outcomes.str.short; }, k: 0.32, wSes: 0.35, wAtt: 0.25 },
 };
 /** Eşik: referans (adversitesiz) dağılımın üst ~%16'sı "yüksek eğilim" bölgesi sayılır. VARSAYIM. */
 export const THRESHOLD = 1;
@@ -144,8 +135,13 @@ export const pHigh = (o: Outcome, a: AceInput): number => 1 - Phi(THRESHOLD - sh
 export const pRef = 1 - Phi(THRESHOLD);
 
 export function levelWord(s: number): string {
-  return s < 0.15 ? 'Referansa yakın' : s < 0.5 ? 'Hafif artmış' : s < 1 ? 'Belirgin artmış' : 'Yüksek';
+  return L().levelWords[levelIdx(s)];
 }
+/** Küçük harfli biçim (cümle içi). */
+export function levelWordLow(s: number): string {
+  return L().levelWordsLow[levelIdx(s)];
+}
+const levelIdx = (s: number): number => (s < 0.15 ? 0 : s < 0.5 ? 1 : s < 1 ? 2 : 3);
 /** Mekanizma göstergeleri (0-1, nitel): frontal korteks, glukokortikoid tepkisi, amigdala. */
 export function mechanisms(a: AceInput): { frontal: number; gc: number; amy: number } {
   const L = loadOf(a) * buffer(a), s = 0.5 - a.ses;
@@ -158,7 +154,6 @@ export function mechanisms(a: AceInput): { frontal: number; gc: number; amy: num
 
 /* ======================= 3) Kohlberg ======================= */
 export const levelOf = (stage: number): 0 | 1 | 2 => (stage <= 2 ? 0 : stage <= 4 ? 1 : 2);
-export const LEVEL_NAMES = ['Gelenek öncesi (ceza/ödül)', 'Geleneksel (ilişki/kural)', 'Gelenek sonrası (ilke/vicdan)'] as const;
 /**
  * Yaşa göre aşama dağılımı (6 aşama, toplamı 1).
  * KİTAP: ~8-10 yaşa dek çoğunlukla ilk düzey; ergen/yetişkinlerin çoğu geleneksel düzey; 5-6. aşamada tutarlı neredeyse kimse yok.

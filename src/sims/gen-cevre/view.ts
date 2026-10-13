@@ -2,6 +2,7 @@ import '../sim.css';
 import './view.css';
 import { Scope, ref, uid } from '../kit';
 import { createTour } from '../tour';
+import { L } from './text';
 import { createGwasPanel } from './gwas-panel';
 import { createMaoPanel } from './mao-panel';
 import { createTablePanel } from './table-panel';
@@ -9,21 +10,20 @@ import { M_STEPS } from './model';
 import type { Ctx, Meter, Panel } from '../ui';
 
 type Tab = 'table' | 'mao' | 'gwas';
-const TABS: Array<{ key: Tab; label: string }> = [
-  { key: 'table', label: 'Gen × çevre tablosu' },
-  { key: 'mao', label: 'MAO-A ve çocukluk' },
-  { key: 'gwas', label: 'Çok gen, küçük etki' },
-];
+const TAB_KEYS: Tab[] = ['table', 'mao', 'gwas'];
 
-const TEMPLATE = (id: string) => `
+const TEMPLATE = (id: string) => {
+  const V = L().view;
+  const TABS = TAB_KEYS.map((key) => ({ key, label: V.tabs[key] }));
+  return `
 <div class="sim sim-gc">
-  <p class="lede">Bir özellik "yüzde kaç genetik"? Bu soru yanlış sorulmuş: genler ve ortam toplanmaz, birbirine çarpılır; cevap hangi ortamlara baktığına göre değişir.</p>
+  <p class="lede">${V.lede}</p>
 
-  <div class="tabs" role="tablist" aria-label="Simülasyon bölümleri">
+  <div class="tabs" role="tablist" aria-label="${V.tabsLabel}">
     ${TABS.map((t, i) => `<button class="tab" role="tab" id="${id}-tab-${t.key}" data-pane="${t.key}" aria-controls="${id}-pane-${t.key}" aria-selected="${i === 0}" ${i ? 'tabindex="-1"' : ''} type="button">${t.label}</button>`).join('')}
   </div>
 
-  <div class="sim-bar" role="group" aria-label="Anlık açıklama" data-ref="bar"><div class="sim-bar-in">
+  <div class="sim-bar" role="group" aria-label="${V.barLabel}" data-ref="bar"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
     <div class="meters" data-ref="meters"></div>
   </div></div>
@@ -31,6 +31,7 @@ const TEMPLATE = (id: string) => `
 
   ${TABS.map((t, i) => `<section class="pane" role="tabpanel" id="${id}-pane-${t.key}" data-pane="${t.key}" aria-labelledby="${id}-tab-${t.key}" ${i ? 'hidden' : ''}></section>`).join('')}
 </div>`;
+};
 
 export function mount(container: HTMLElement): () => void {
   const scope = new Scope();
@@ -96,44 +97,16 @@ export function mount(container: HTMLElement): () => void {
   const poke = scope.announcer($('live'), () => lastSay);
 
   /* ---- Rehberli tur ---- */
-  const tour = createTour(scope, [
-    {
-      title: 'Tek ortamda bakınca',
-      text: 'Üç gen varyantı (A, B, C) tek bir ortamda ölçülmüş. Bu tabloya bakan biri farkın büyük kısmını genlere yazar: kalıtılabilirlik (h²) yüksek çıkar.',
-      look: 'Alttaki çubukta genetik payın büyüklüğü.',
-      apply: () => { showTab('table'); tablePanel.setPreset('none'); tablePanel.setParams({ n: 1 }); },
-    },
-    {
-      title: 'Aynı genler, daha çok ortam',
-      text: 'Aynı üç varyant, ama altı farklı ortam. Çizgiler paralel, yani gen etkisi hiç değişmedi. Yine de ortamlar arası fark toplam çeşitliliğe girince h² düşüyor.',
-      look: '"Aynı genler, daha çok ortam" eğrisinin aşağı inişi.',
-      apply: () => { showTab('table'); tablePanel.setPreset('none'); tablePanel.setParams({ n: 6 }); },
-    },
-    {
-      title: 'Aynı fare, üç laboratuvar',
-      text: 'Crabbe\'nin deneyi: aynı fare suşları, özenle eşitlenmiş koşullar. Yine de bir suşta kokainin etkisi Oregon ve Albany\'de 700 cm civarında kaldı, Alberta\'da 5.000 cm\'yi aştı. B ve C üç yerde benzerdi. Çizgiler kesişince "hangisi daha iyi" ortamsız cevaplanamaz.',
-      look: 'A çizgisinin Alberta\'daki sıçraması ve ortam içi h² satırı.',
-      apply: () => { showTab('table'); tablePanel.setPreset('crabbe'); },
-    },
-    {
-      title: 'Bir gen, çocukluğa bağlı etki',
-      text: 'Düşük aktiviteli MAO-A varyantı tek başına bir şey öngörmedi; ağır çocukluk istismarı geçmişi olanlarda antisosyal davranış olasılığını yaklaşık üç kat artırdı. Ama bu bulgu büyük çalışmalarda karışık biçimde tekrarlandı: oranı 1\'e çekince çizgiler paralel olur.',
-      look: 'Kötü muamele yokken iki çizginin üst üste binmesi, ağır uçta ayrılması.',
-      apply: () => { showTab('mao'); maoPanel.set({ level: 1, ratio: 3, share: 0.1 }); },
-    },
-    {
-      title: 'Tek gen: üç küme',
-      text: 'Boy tek bir gene bağlı olsaydı, insanlar birkaç belirgin kümeye ayrılırdı. Tek varyant boy farkının büyük kısmını açıklar ve sivri tepeler görülür.',
-      look: 'Histogramdaki üç sivri tepe.',
-      apply: () => { showTab('gwas'); gwasPanel.set({ mIdx: 0, env: 0.2, sample: 'y2010' }); },
-    },
-    {
-      title: 'Yüzlerce küçük etki ve çevre',
-      text: 'Gerçek boy dağılımı düzgün bir çan eğrisidir: çok sayıda küçük etkili varyant ve çevre. 183.727 kişilik tarama yüzlerce varyant buldu; en güçlüsü farkın yalnızca %0,4\'ünü açıkladı. Genler eğilim sunar; ne anlama geldikleri çevreye bağlıdır.',
-      look: '"En güçlü tek varyant" ile "Bulunanların toplamı" arasındaki fark.',
-      apply: () => { showTab('gwas'); gwasPanel.set({ mIdx: M_STEPS.length - 1, env: 0.2, sample: 'y2010' }); },
-    },
-  ], { onExit: () => poke() });
+  const TS = L().view.tour;
+  const stepApply: Array<() => void> = [
+    () => { showTab('table'); tablePanel.setPreset('none'); tablePanel.setParams({ n: 1 }); },
+    () => { showTab('table'); tablePanel.setPreset('none'); tablePanel.setParams({ n: 6 }); },
+    () => { showTab('table'); tablePanel.setPreset('crabbe'); },
+    () => { showTab('mao'); maoPanel.set({ level: 1, ratio: 3, share: 0.1 }); },
+    () => { showTab('gwas'); gwasPanel.set({ mIdx: 0, env: 0.2, sample: 'y2010' }); },
+    () => { showTab('gwas'); gwasPanel.set({ mIdx: M_STEPS.length - 1, env: 0.2, sample: 'y2010' }); },
+  ];
+  const tour = createTour(scope, TS.map((st, i) => ({ ...st, apply: stepApply[i] })), { onExit: () => poke() });
   root.querySelector('.lede')!.after(tour.el);
 
   /* ---- Döngü: yalnızca durum değiştiğinde çizer; ekran dışında durur ---- */

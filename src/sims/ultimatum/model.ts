@@ -1,3 +1,5 @@
+import { L } from './text';
+
 // Nitel Ultimatum oyunu modeli: yanıtlayıcının bir teklifi reddetme olasılığı,
 // birkaç beyin bölgesinin etkinliğinden (insula, amigdala, dlPFC, vmPFC/OFC, kaudat) toplanır.
 // Sayılar ölçüm değildir; kitaptaki bulguların YÖNÜNÜ ve sırasını yeniden üretir:
@@ -78,14 +80,15 @@ export function evaluate(offer: number, c: Conditions): Evaluation {
   const dlpfc = c.tmsRight ? 0.04 : clamp01(0.1 + 0.9 * (human ? s : 0));
   const vm = clamp01(0.1 + 0.9 * (1 - unfair));
 
+  const T = L().parts;
   const parts: Part[] = [
-    { id: 'insula', label: 'İnsula', v: W.insula * insula },
-    { id: 'amy', label: 'Amigdala', v: W.amy * amy },
-    { id: 'caud', label: 'Kaudat', v: W.caud * caud },
-    { id: 'dlpfc', label: 'dlPFC', v: W.dlpfc * dlpfc },
-    { id: 'vm', label: 'vmPFC/OFC', v: W.vm * vm },
-    { id: 'ser', label: 'Serotonin düşük', v: W.ser * ser * s },
-    { id: 'base', label: 'Taban', v: W.base },
+    { id: 'insula', label: T.insula, v: W.insula * insula },
+    { id: 'amy', label: T.amy, v: W.amy * amy },
+    { id: 'caud', label: T.caud, v: W.caud * caud },
+    { id: 'dlpfc', label: T.dlpfc, v: W.dlpfc * dlpfc },
+    { id: 'vm', label: T.vm, v: W.vm * vm },
+    { id: 'ser', label: T.ser, v: W.ser * ser * s },
+    { id: 'base', label: T.base, v: W.base },
   ];
   const drive = parts.reduce((a, p) => a + p.v, 0);
   return { offer: o, unfair, act: { insula, amy, caud, dlpfc, vm }, parts, drive, pReject: sigmoid(TEMP * drive), judge: unfair, satisfaction: caud, trpActive: ser === 1 };
@@ -108,17 +111,16 @@ export function threshold(c: Conditions): number {
 export const DECK: readonly number[] = [5, 4, 3, 2, 1, 5, 3, 2];
 
 export function describe(offer: number, c: Conditions, e: Evaluation): string {
-  const who = c.proposer === 'human' ? 'İnsan' : 'Bilgisayar';
+  const T = L();
   const p = Math.round(e.pReject * 100);
-  const head = `${who} ${POT} ₺'dan ${offer} ₺ öneriyor`;
   const notes: string[] = [];
-  if (c.tmsRight) notes.push('sağ dlPFC susturulmuş');
-  if (c.tmsLeft) notes.push('sol dlPFC susturulmuş');
-  if (c.amyLesion) notes.push('amigdala hasarlı');
-  if (trpActive(c)) notes.push('serotonin düşük');
-  else if (c.trp) notes.push('triptofan etkisi ilk oturumda kalmıştı');
-  const tail = notes.length ? ` (${notes.join(', ')})` : '';
-  if (e.unfair === 0) return `${head}${tail}: eşit pay, ortalama bir kişi neredeyse hiç reddetmez (%${p}).`;
-  const feel = e.act.insula > 0.5 ? 'insula belirgin etkin' : e.act.insula > 0.25 ? 'insula orta düzeyde etkin' : 'insula sönük';
-  return `${head}${tail}: ${feel}, ortalama kişi %${p} olasılıkla reddeder.`;
+  if (c.tmsRight) notes.push(T.noteTmsR);
+  if (c.tmsLeft) notes.push(T.noteTmsL);
+  if (c.amyLesion) notes.push(T.noteLesion);
+  if (trpActive(c)) notes.push(T.noteTrpOn);
+  else if (c.trp) notes.push(T.noteTrpOff);
+  const human = c.proposer === 'human';
+  if (e.unfair === 0) return T.describeFair(human, POT, offer, notes, p);
+  const level = e.act.insula > 0.5 ? 2 : e.act.insula > 0.25 ? 1 : 0;
+  return T.describeUnfair(human, POT, offer, notes, level, p);
 }

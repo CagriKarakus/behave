@@ -1,0 +1,326 @@
+{
+ "summary": "The chapter shows how quickly and automatically the human brain draws the “Us” versus “Them” distinction. Minimal group experiments reveal that ingroup favoritism can arise even from meaningless markers. Emotion and automatic processes underlie these distinctions, while logical justifications that come afterward are produced to defend those feelings. The chapter also covers how groups are perceived along the axes of warmth and competence, and how factors such as contact, individuation and hierarchy can increase or decrease prejudice.",
+ "keyConcepts": [
+  {
+   "term": "Us/Them dichotomy",
+   "explanation": "The brain's rapid sorting of people into ingroup and outgroup; the book calls this tendency “Us/Them-ing.” It reacts within milliseconds to cues such as face, sex and status."
+  },
+  {
+   "term": "Implicit Association Test (IAT)",
+   "explanation": "An experimental method that measures in which pairings people respond more slowly to pictures and words, thereby revealing automatic prejudice that a person does not consciously report."
+  },
+  {
+   "term": "Minimal group paradigm",
+   "explanation": "The finding that even grouping based on a trivial difference, such as counting dots, produces ingroup favoritism in the allocation of resources. This approach, developed by Tajfel in the 1970s, shows how easily groupism is triggered."
+  },
+  {
+   "term": "Arbitrary marker",
+   "explanation": "The process by which markers that initially have no meaning, such as clothing, ornaments or accent, become tied to differences in values and beliefs and turn into powerful symbols of identity. Flags and cultural symbols gain importance through this process."
+  },
+  {
+   "term": "Warmth and competence (stereotype content model)",
+   "explanation": "The evaluation of groups along two independent axes: how well-intentioned and how competent they are seen to be. Each combination evokes a different emotion, such as pride, envy, pity or disgust."
+  },
+  {
+   "term": "Essentialism",
+   "explanation": "The tendency to define an outgroup by a homogeneous, unchanging and usually negative essence. It ignores individual exceptions and is fueled by troubled historical relations."
+  },
+  {
+   "term": "Rationalization",
+   "explanation": "Supporting a judgment made on emotional grounds with logical justifications after the fact. Cognitive biases such as confirmation bias serve this process."
+  },
+  {
+   "term": "Recategorization",
+   "explanation": "Viewing an outgroup individual through another shared identity, such as rooting for the same team or thinking about what food the person would like. This can shift the boundary between Us and Them."
+  },
+  {
+   "term": "Contact theory",
+   "explanation": "The idea that bringing groups together can reduce prejudice, but works only under narrow conditions such as equal numbers, equal treatment, prolonged contact and a shared superordinate goal."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Tajfel's minimal group studies (1970s)",
+   "finding": "Even when groups were formed on the basis of a trivial difference in dot counts, participants allocated more resources to anonymous ingroup members. Groupism emerged even without any meaningful conflict."
+  },
+  {
+   "name": "Train station experiment",
+   "finding": "When two young Mexican men dressed conservatively chatted in Spanish near commuters every morning for two weeks, the commuters' attitudes hardened toward reducing immigration and making English the official language. The same effect was not seen for Asian Americans, African Americans or Middle Easterners."
+  },
+  {
+   "name": "Wheeler and Fiske's amygdala study",
+   "finding": "The amygdala response to faces of another race decreased when participants looked at the faces and thought about food preferences, and increased when they categorized age. This shows that the category being thought about can change the racial response."
+  },
+  {
+   "name": "Navarrete's ovulation study",
+   "finding": "White women who were ovulating were found to hold more negative attitudes toward African American men. This suggests that hormones can subtly tune the Us/Them response."
+  },
+  {
+   "name": "Clark and Clark's doll studies (1940s)",
+   "finding": "African American children described white dolls with more positive traits and preferred them. The effect was most pronounced among Black children in segregated schools. This finding was used as evidence of the harms of segregation in Brown v. Board of Education."
+  },
+  {
+   "name": "Fiske's 37-country comparison",
+   "finding": "In countries with high income inequality, condescending perceptions by higher-status groups of lower-status groups as warm but incompetent (evoking pity) were more common. This is presented as an example of the status quo being preserved through perceptions."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Switching Category Priority",
+   "shows": "Shows how the same people are sorted depending on which identity marker is emphasized, and how the perception of the outgroup changes; it animates the shift among categories such as race, sex and shirt color.",
+   "inputs": [
+    "Emphasized category (race, sex, age, shirt color, shared goal)",
+    "Degree of overlap among categories",
+    "Presence of a shared superordinate goal"
+   ],
+   "outputs": [
+    "Location of the Us/Them boundary",
+    "Estimated level of prejudice",
+    "Probability of helping"
+   ]
+  },
+  {
+   "title": "Warmth-Competence Map",
+   "shows": "Shows which emotion (pride, envy, pity, disgust) and which behavioral tendency (help, exclusion, affiliation, attack) emerge depending on where a group falls on the two axes and in which direction its position changes.",
+   "inputs": [
+    "Warmth score",
+    "Competence score",
+    "Previous position (for the direction of transition)",
+    "Relative position in the hierarchy"
+   ],
+   "outputs": [
+    "Dominant emotion",
+    "Likely behavioral tendency",
+    "Emotional change that accompanies the transition (for example, resentment and gloating after a fall from a higher position)"
+   ]
+  },
+  {
+   "title": "Contact Conditions Simulation",
+   "shows": "Shows under which conditions intergroup contact reduces prejudice and under which it backfires; it also makes visible the effects of individuation and of a hierarchy difference.",
+   "inputs": [
+    "Balance of group sizes",
+    "Level of equal treatment",
+    "Duration and setting of the contact",
+    "Presence of a shared superordinate goal",
+    "Hierarchy difference"
+   ],
+   "outputs": [
+    "Change in the level of prejudice",
+    "Probability of backlash",
+    "Reducing effect of individuation"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "The concept of cognitive load is used in this chapter to explain why frontal cortex performance drops in interactions with outgroups."
+  },
+  {
+   "why": "Topics such as the IAT, the amygdala response and the train station experiment were also covered in Chapter 3; this chapter extends them in an Us/Them context."
+  },
+  {
+   "why": "Oxytocin's favoring of the ingroup and exclusion of the outgroup is cited in this chapter as a biological basis for the Us/Them tendency."
+  },
+  {
+   "why": "Adorno's discussion of the authoritarian personality was covered in Chapter 7; this chapter revisits it in the context of prejudice against multiple outgroups."
+  },
+  {
+   "why": "The discussion of the green-beard effect and kin selection forms the evolutionary origin of the Us/Them mechanism in this chapter."
+  },
+  {
+   "why": "The relationship between authoritarian structure and prejudice is stated to be covered in more detail in the next chapter."
+  },
+  {
+   "why": "The relationship between disgust sensitivity and attitudes toward the outgroup is stated to be revisited in Chapter 15."
+  },
+  {
+   "why": "The details of strategies for reducing prejudice are left to the closing chapters, referred to in the chapter as “the last two chapters.”"
+  },
+  {
+   "why": "The World War I Christmas truce is stated to be covered in detail in the final chapter."
+  }
+ ],
+ "verifyNotes": [
+  "The phrase “the last two chapters” was interpreted as ch16–ch17."
+ ],
+ "experiments": {
+  "ch11-e1": {
+   "name": "Implicit Association Test (IAT)",
+   "researchers": "A. Greenwald et al.",
+   "question": "Can automatic racial and group prejudices, which people do not consciously report, be measured?",
+   "method": "Pictures of people or (in the book's imaginary example) “trolls” appear on the screen together with positive or negative words. In one round the rule is “press one key for a human or a positive word, and the other key for a troll or a negative word,” and in another round the pairings are reversed. Reaction times in the two conditions are compared.",
+   "finding": "Responses are delayed by a few milliseconds in pairings that conflict with a person's implicit prejudice (for example, when the group toward which prejudice is felt and a positive word share a key); when enough rounds are completed, this pattern of delay reveals an automatic prejudice of which the person is unaware.",
+   "roleInChapter": "Shows that the Us/Them distinction operates before consciousness and quickly. It ties the chapter's first claim, that the distinction is automatic, to a measurable method.",
+   "replication": {
+    "note": "Average group-level effects on the IAT replicate in large samples; however, test-retest reliability is low and its power to predict individual discriminatory behavior turned out to be weak in meta-analyses. Forscher et al. (2019) showed that interventions that change implicit measures do not change behavior.",
+    "refs": [
+     "Oswald et al. 2013 (JPSP)",
+     "Forscher et al. 2019 (JPSP)"
+    ]
+   }
+  },
+  "ch11-e2": {
+   "name": "Implicit intergroup bias in macaques",
+   "researchers": "N. Mahajan et al.",
+   "question": "Do nonhuman primates also form automatic positive and negative associations between their own group and a neighboring group?",
+   "method": "Rhesus macaques were shown photographs of members of their own group and of a neighboring group in succession with positive (for example, fruit) or negative (for example, spider) images; the monkeys' looking time at each pairing was measured.",
+   "finding": "The monkeys looked longer at incongruent pairings (for example, own-group members with spiders); according to the book, this shows that they associate the neighboring group with negative things and their own group with positive things.",
+   "roleInChapter": "Shows that the Us/Them tendency is not unique to humans and is present at an automatic level in primates as well. It therefore supports the claim that the distinction has deeper origins than culture.",
+   "replication": {
+    "note": "The paper was retracted in 2014 at the authors' request: when laboratory effects could not be reproduced, it emerged that the coding by one of the authors who coded the looking times did not agree with that of the other coders. Although the retraction notice attributes the error mainly to the attention findings (Experiments 1-5), because the entire paper was retracted this finding should not be relied upon.",
+    "refs": [
+     "Mahajan et al. 2011, retraction notice 2014 (JPSP)"
+    ]
+   }
+  },
+  "ch11-e3": {
+   "name": "Tajfel's minimal group experiments",
+   "researchers": "H. Tajfel et al.",
+   "question": "Does a trivial group distinction alone, without any meaningful conflict of interest, give rise to ingroup favoritism?",
+   "method": "Participants were divided into one of two groups on a trivial criterion, such as overestimating or underestimating the number of dots in a picture. They then allocated resources (rewards) to ingroup and outgroup members whose names they did not know.",
+   "finding": "Even when the groups were based on a meaningless criterion, participants distributed resources in favor of anonymous ingroup members, and cooperation within the ingroup increased. According to the book, minimal group setups generally work more toward exalting the ingroup than toward denigrating the outgroup.",
+   "roleInChapter": "Shows how easily group identity is triggered. It forms the basis of the idea that the Us/Them distinction can be established even with meaningless markers.",
+   "replication": {
+    "note": "The minimal group effect has been replicated many times over decades, across different cultures and in children. The meta-analysis by Balliet et al. (2014) showed that ingroup favoritism is strong especially where there is an expectation of reciprocity.",
+    "refs": [
+     "Tajfel et al. 1971",
+     "Balliet, Wu and De Dreu 2014 (Psychological Bulletin)"
+    ]
+   }
+  },
+  "ch11-e4": {
+   "name": "Imitation and helping experiment",
+   "researchers": "B. C. Müller et al.",
+   "question": "Does unconsciously imitating a person's movements increase the likelihood of helping that person?",
+   "method": "Participants chatted with a researcher. The researcher either imitated the participants' movements (for example, crossing the legs) without being noticed or did not. Afterward, it was observed whether they helped with a pen the researcher dropped.",
+   "finding": "Participants whose movements were imitated were more likely to pick up the pen the researcher dropped. The book also notes that being imitated is pleasant and activates the mesolimbic dopamine system (this part is based on Losin et al. 2012).",
+   "roleInChapter": "Shows that a feeling of Us can arise even from a shared behavior that has no meaning. It is presented as the psychological counterpart of a green-beard-like marker.",
+   "replication": {
+    "note": "The finding of helping after imitation was first reported by van Baaren et al. (2004) and has been replicated in various studies; however, no large preregistered replication is known, and effect sizes vary across studies.",
+    "refs": [
+     "van Baaren et al. 2004 (Psychological Science)",
+     "Müller et al. 2012"
+    ]
+   }
+  },
+  "ch11-e5": {
+   "name": "Fans' reaction to the rival team (Cikara et al.)",
+   "researchers": "M. Cikara et al.",
+   "question": "How does team identity change the brain's response to misfortunes befalling a rival group?",
+   "method": "Fans of two arch-rival baseball teams (the Red Sox and the Yankees) watched dramatizations of game moments in an fMRI scanner: successful and unsuccessful plays by their own team and by their rivals, as well as failures of the rival team against a third team.",
+   "finding": "Their own team winning and the hated rival losing to a third team produced similar mesolimbic dopamine (ventral striatum) activation; that is, the rival's pain felt like a gain to the fan (schadenfreude). The strength of this activation was also related to fans' reports of the likelihood that they would harm rival fans.",
+   "roleInChapter": "Shows that intergroup relations can be perceived like a zero-sum game and that the outgroup's pain can be a source of pleasure for the ingroup.",
+   "replication": {
+    "note": "A small-sample fMRI study; no direct replication is known. The re-demonstration of intergroup schadenfreude at the behavioral and physiological level (for example, Cikara et al. 2014) is consistent with the finding.",
+    "refs": [
+     "Cikara et al. 2011",
+     "Cikara et al. 2014 (JESP)"
+    ]
+   }
+  },
+  "ch11-e6": {
+   "name": "Train station experiment",
+   "researchers": "R. D. Enos",
+   "question": "Does brief exposure to the presence of an outgroup change commuters' attitudes toward immigration and language?",
+   "method": "At train stations in predominantly white suburbs, morning commuters filled out a survey about their political views. At half of the stations, for two weeks every morning, two young Mexican men dressed conservatively spoke quietly in Spanish among themselves before boarding the train. A second survey was then given to the commuters.",
+   "finding": "After two weeks of exposure, commuters more strongly supported reducing legal immigration from Mexico and making English the official language; opposition to amnesty for undocumented immigrants increased. The same effect was not seen for Asian Americans, African Americans or Middle Easterners.",
+   "roleInChapter": "Shows that conscious judgments can also be shifted by subliminal and indirect cues. It exemplifies that the boundaries of Us/Them can be manipulated through environmental markers.",
+   "replication": {
+    "note": "A randomized field experiment, but the sample was small and no direct replication is known. Enos's own data also suggested that exclusionary attitudes softened somewhat with longer exposure.",
+    "refs": [
+     "Enos 2014"
+    ]
+   }
+  },
+  "ch11-e7": {
+   "name": "Racial bias during ovulation",
+   "researchers": "C. D. Navarrete et al.",
+   "question": "Does white women's attitude toward African American men change with the phase of the menstrual cycle?",
+   "method": "The probability of conception across the menstrual cycle was estimated for white female participants, and its relationship to measures of racial bias toward African American men was examined.",
+   "finding": "During the period when the probability of conception was high (around ovulation), white women showed more negative attitudes toward African American men. According to the book, this shows that the intensity of the Us/Them distinction can be tuned by hormones.",
+   "roleInChapter": "Shows that the Us/Them response can be influenced by biological factors of which the person is unaware.",
+   "replication": {
+    "note": "No large direct replication of this finding is known. Across the literature on menstrual-cycle-related shifts in preference more broadly, preregistered, large-sample studies failed to replicate many effects; therefore the finding should be approached with caution.",
+    "refs": [
+     "Navarrete et al. 2009",
+     "Jones et al. 2018 (Psychological Science)"
+    ]
+   }
+  },
+  "ch11-e8": {
+   "name": "Recategorization by shirt color",
+   "researchers": "R. Kurzban et al.",
+   "question": "Can the seemingly strong racial category be displaced by a trivial and temporary marker such as shirt color?",
+   "method": "Participants saw photographs of people, each Black or white and each paired with a sentence, and then tried to remember who had said which sentence. In the second phase, half of the Black and white individuals wore the same salient yellow shirt and the other half wore gray shirts.",
+   "finding": "In the first phase, when participants attributed a sentence to the wrong person, the face they chose was mostly of the same race as the correct person; that is, there was automatic categorization by race. When shirt colors were added, the confusions mostly followed shirt color.",
+   "roleInChapter": "Shows that even an Us/Them boundary that seems permanent, such as race, can shift with a new classification. It supports the idea that multiple Us/Them distinctions exist at the same time.",
+   "replication": {
+    "note": "A preregistered replication (Voorspoels et al. 2014) confirmed that the encoding of race decreased when another coalition marker was present, but found the effect smaller than in the original. Pietraszewski et al. (2014) also extended the finding; race is not entirely “erased,” but it is markedly reduced.",
+    "refs": [
+     "Voorspoels et al. 2014 (Frontiers in Psychology)",
+     "Pietraszewski et al. 2014 (PLoS ONE)"
+    ]
+   }
+  },
+  "ch11-e9": {
+   "name": "Amygdala and the category being thought about (Wheeler and Fiske)",
+   "researchers": "M. E. Wheeler and S. T. Fiske",
+   "question": "Does the amygdala response to faces of another race vary with the target the participant is thinking about at that moment?",
+   "method": "Participants were shown faces of another race and given different tasks in three groups: in one, finding a distinctive dot in the picture; in one, deciding whether the face looked older than a certain age; and in one, deciding whether the person would like a vegetable shown before each face. Amygdala responses were measured with fMRI.",
+   "finding": "In the dot-search task, faces of another race did not activate the amygdala. In the age judgment, that is, when thinking categorically, the amygdala response grew. When thinking about vegetable preference, the amygdala again did not respond.",
+   "roleInChapter": "Shows that the racial response, while automatic, can be modified by mental framing. It lays the groundwork for the idea that individuating thought, seeing an outgroup member as an individual, can reduce prejudice.",
+   "caveats": "Sapolsky gives two interpretations of the result in the vegetable condition: distraction of attention, or thinking of the person as an individual (recategorization); he notes that the latter is the generally accepted interpretation.",
+   "replication": {
+    "note": "The fMRI sample was very small (according to secondary sources, only a few participants) and no direct replication is known. The general idea that social goals alter the amygdala response to racial faces is consistent with other studies.",
+    "refs": [
+     "Wheeler and Fiske 2005"
+    ]
+   }
+  },
+  "ch11-e10": {
+   "name": "Warmth-competence and the brain response (Harris and Fiske)",
+   "researchers": "L. T. Harris and S. T. Fiske",
+   "question": "How does the brain respond to groups that stand at different places on the axes of warmth and competence?",
+   "method": "In an fMRI scanner, participants looked at photographs of groups falling in the four corners of the stereotype content model (for example, homeless people and addicts for low warmth and low competence), and brain activity was compared.",
+   "finding": "Images of groups low in warmth and low in competence activated the amygdala and insula; the fusiform face area, related to face perception, and the emotional vmPFC did not respond. This pattern resembled the response to disgusting objects. In groups with high warmth and low competence, or low warmth and high competence, the vmPFC was activated.",
+   "roleInChapter": "Shows that the emotions felt toward groups (pride, envy, pity, disgust) depend on the combination of warmth and competence, and that they also produce different responses in the brain.",
+   "caveats": "Sapolsky notes that the brain response to the same group can change when participants are directed to think of a group member as an individual (for example, thinking about what food a homeless man likes).",
+   "replication": {
+    "note": "Small-sample fMRI studies; no direct replication is known. The warmth-competence structure of the stereotype content model, however, has been widely supported by cross-cultural studies (Cuddy et al. 2009).",
+    "refs": [
+     "Harris and Fiske 2006",
+     "Cuddy et al. 2009"
+    ]
+   }
+  },
+  "ch11-e11": {
+   "name": "Clark and Clark's doll studies",
+   "researchers": "K. B. Clark and M. P. Clark",
+   "question": "How do African American children perceive their own race in an environment where discrimination is widespread, and which doll do they prefer?",
+   "method": "In studies beginning in the 1940s, children were shown Black and white dolls; they were asked which one they wanted to play with and which one they attributed positive traits such as “nice” and “pretty” to.",
+   "finding": "African American children, like white children, preferred to play with white dolls and attributed more positive traits to them. The fact that the effect was most pronounced in Black children in segregated schools was cited as evidence in Brown v. Board of Education. In the same context, the book reports that today about 40-50 percent of African Americans, gay people and women show automatic bias on the IAT in favor of whites, heterosexuals and men, respectively.",
+   "roleInChapter": "Shows that prejudice can be internalized not only on the discriminating side but also on the side that is discriminated against. It is presented as historical evidence for the chapter's pattern of the self-loathing outgroup member.",
+   "replication": {
+    "note": "Doll-preference tests produced different results in subsequent decades: in the 1970s there were studies finding that Black children preferred Black dolls (for example, Hraba and Grant 1970), whereas more recent informal repetitions showed that the preference for white dolls persisted. Whether the method measures prejudice or familiarity is debated; outgroup favoritism, however, is consistently seen in IAT data.",
+    "refs": [
+     "Hraba and Grant 1970 (JPSP)",
+     "Jost et al. 2004"
+    ]
+   }
+  },
+  "ch11-e12": {
+   "name": "Income inequality and stereotype perception in 37 countries (Durante et al.)",
+   "researchers": "F. Durante et al.",
+   "question": "Does a country's income inequality increase the warm but incompetent (pity-evoking) perception that higher-status groups hold of lower-status groups?",
+   "method": "In samples from 37 countries, how various social groups are perceived in terms of warmth and competence was measured and compared with the countries' level of income inequality (Gini).",
+   "finding": "In countries with high income inequality, ambivalent perception of groups as “warm but incompetent” or “competent but cold” was more common. The book presents this as support for the idea that those on top seeing those at the bottom in a high warmth-low competence (pity) frame serves to preserve the status quo.",
+   "roleInChapter": "Shows at the country level how hierarchy becomes embedded in perceptions and how the status quo is maintained through those perceptions.",
+   "replication": {
+    "note": "Durante et al. (2017) extended the finding to 38 countries and showed that ambivalent stereotypes are related to the level of peace-conflict as well as to inequality. The relationship is correlational; there are outlier cases such as Israel and Northern Ireland.",
+    "refs": [
+     "Durante et al. 2017 (PNAS)"
+    ]
+   }
+  }
+ }
+}

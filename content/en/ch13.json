@@ -1,0 +1,332 @@
+{
+ "summary": "The chapter asks whether moral decisions are made through reasoning or through intuition. The text first shows the share of reasoning in moral decisions, then presents the evidence for social intuitionism (Haidt) and argues that most moral decisions are made emotionally first and justified afterward. It describes primitive traces of fairness and reciprocity in infants, capuchin monkeys and chimpanzees, and how the sense of fairness and punishment varies across cultures with market integration, community size and religion. The last part discusses the contexts in which intuition and reasoning substitute for each other, especially through the trolley problem and lying experiments. The chapter closes with Greene's distinction: in 'Me versus Us' problems (the tragedy of the commons) fast moral intuitions work well; in 'Us versus Them' problems, where the intuitions of different groups clash (the tragedy of commonsense morality), slow, conscious reasoning is needed. It is also argued that the most honest behavior is often not a struggle of willpower but an automatized habit.",
+ "keyConcepts": [
+  {
+   "term": "Social intuitionism",
+   "explanation": "The view that moral decisions are first made through fast, emotional intuitions, and that reasoning only afterward justifies the decision; Jonathan Haidt is the leading proponent of this school."
+  },
+  {
+   "term": "Moral dumbfounding",
+   "explanation": "People strongly believe a moral judgment yet cannot explain why, and then make up a justification."
+  },
+  {
+   "term": "Commission vs omission",
+   "explanation": "Doing a harmful act is judged more harshly than failing to act when that produces the same outcome; this tendency is also seen in infants."
+  },
+  {
+   "term": "Inequity aversion",
+   "explanation": "An individual reacts negatively on noticing that they are rewarded less or that someone else is better off; in capuchin monkeys this reaction takes the form of refusing to cooperate."
+  },
+  {
+   "term": "Trolley problem and personal force",
+   "explanation": "The difference between pushing a person in front of the train on the track and flipping a switch to change its course leads emotional intuitions and the dlPFC to be engaged in different ways."
+  },
+  {
+   "term": "Antisocial punishment",
+   "explanation": "An individual punishes a more generous person out of fear that norms will rise; this behavior is more common in societies with low social capital."
+  },
+  {
+   "term": "Market integration",
+   "explanation": "As a society's dependence on economic exchange grows, it is associated with fairer offers in games; the author evaluates this with the interpretation that these games measure an artificial prosociality rather than true reciprocity."
+  },
+  {
+   "term": "Shame vs guilt",
+   "explanation": "Shame is the group's negative evaluation from the outside and requires an audience; guilt is an internal judgment of one's own act that comes from the individual's own conscience."
+  },
+  {
+   "term": "Self-serving bias",
+   "explanation": "People tend to explain their own moral failures by situational causes while attributing others' failures to bad intent; for this reason the deterrence of prohibitions weakens."
+  },
+  {
+   "term": "Grace vs will",
+   "explanation": "Some honest people do the right thing without experiencing conflict in the dlPFC, even over repeated opportunities; this is closer to habit than to a constant struggle of willpower."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Greene and Paxton's coin-flip cheating experiment (fMRI)",
+   "finding": "About one third of participants cheated clearly and one sixth were borderline. The cheaters activated the dlPFC at the moment of cheating; in those who never cheated, however, the dlPFC, vlPFC and ACC were hardly engaged at all. This suggested that honesty may be an automatic habit rather than a struggle."
+  },
+  {
+   "name": "Trolley problem (Greene and colleagues, neuroimaging)",
+   "finding": "Moral judgments about pushing a person or flipping a switch appear to rely on different brain circuits. While 60-70% of respondents said 'yes' to flipping the switch, only about 30% accepted killing by pushing a person. In the loop scenario, which requires an intentional killing, the 'yes' rate again stayed around 60-70%; this showed that the judgment depends on how explicit the intentionality is."
+  },
+  {
+   "name": "Capuchin monkeys: the 'unequal pay' experiment (Brosnan and de Waal, 2003)",
+   "finding": "Capuchins refused to cooperate when their partner got a grape while they got a cucumber. The reaction depended on the partner's reward; it was not seen when both got cucumbers or when the monkey was tested alone. Sapolsky interprets this less as a full sense of fairness than as a self-interested reaction to inequity."
+  },
+  {
+   "name": "Henrich and colleagues' game study in 25 small-scale cultures",
+   "finding": "As market integration and community size increased, fair offers and willingness to punish rose. The hunter-gatherer Hadza kept an average of 73% of the money for themselves in the Dictator Game and accepted almost every offer above zero in the Ultimatum Game. Third-party punishment also increased with adherence to world religions."
+  },
+  {
+   "name": "Herrmann and colleagues' public goods game (2008)",
+   "finding": "In some societies, individuals spent money to punish more generous people; this 'antisocial punishment' was almost absent in the US and Australia, whereas in Oman and Greece punishing generosity led to more spending than punishing selfishness. As a society's social capital decreased, antisocial punishment increased."
+  },
+  {
+   "name": "Cohn and colleagues' study of bank employees (2014)",
+   "finding": "When participants were asked a survey about banking, the cheating rate in the coin-flip game rose by about 20%. When employees in the manufacturing sector were given a similar reminder of their occupation, no increase was seen. This showed that different identities can bring different ethical rules into play."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Trolley Scenarios: Which Circuit Is Engaged?",
+   "shows": "Shows how personal force, intentionality and physical proximity change the decision in three scenarios that lead to the same outcome (switch, direct push, loop). In the model, the shift in the balance between dlPFC and emotion weights can be followed as the user changes the scenario.",
+   "inputs": [
+    "Physical contact with the person (yes/no)",
+    "Level of intentionality of the death (side effect or means)",
+    "Loop scenario (yes/no)",
+    "Distance of the person who will be harmed"
+   ],
+   "outputs": [
+    "Estimated range of the 'yes' rate",
+    "Balance of intuitive and reasoning weights",
+    "Scenario comparison"
+   ]
+  },
+  {
+   "title": "Fair Offer Game: Market, Community and Punishment",
+   "shows": "Shows how offer, acceptance and punishment behaviors shift as a community's size and market integration change. It becomes visible that fairness is not a universal constant but varies with structure.",
+   "inputs": [
+    "Market integration percentage (share of calories coming from the market)",
+    "Community size",
+    "Share of the offer (0 to 100)",
+    "Option of third-party punishment (yes/no)"
+   ],
+   "outputs": [
+    "Acceptance rate of the offer",
+    "Probability of rejection and punishment",
+    "Average fair share level"
+   ]
+  },
+  {
+   "title": "Dice Rolling and Honesty: Reporting the Highest Outcome",
+   "shows": "Shows how the distribution of reported outcomes is skewed in a dice setup where the die is rolled twice and only the first result is rewarded. Under honest reporting each number occurs one sixth of the time, while the behavior of merely 'reporting the higher one' shifts the distribution to the right.",
+   "inputs": [
+    "Number of rolls",
+    "Honest reporting rate",
+    "Rate of reporting the highest roll",
+    "Cultural honesty level (fictional)"
+   ],
+   "outputs": [
+    "Distribution of reported numbers (1-6)",
+    "Average payoff level",
+    "Honesty deviation (deviation from expected)"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "How decision mechanisms such as the somatic marker hypothesis (Damasio) and the dlPFC operate in moral judgment rests on ch2."
+  },
+  {
+   "why": "Kohlberg's moral development and Piaget's logical operations describe how moral reasoning forms in childhood."
+  },
+  {
+   "why": "Cultural rules, cultures of honor, the punishing gods of religions and social capital are taken up again here."
+  },
+  {
+   "why": "ch10 describes how people with vmPFC damage readily endorse sacrificing a relative to save five strangers; the question of how cooperation can be started and sustained also rests on ch10."
+  },
+  {
+   "why": "The Us/Them distinction and intergroup moral judgment are reused in this chapter as a framework for telling apart one's own moral judgments from others'."
+  },
+  {
+   "why": "Conformity, obedience to authority and diffusion of responsibility are directly connected to ch12, which describes group pressure during moral decision making."
+  },
+  {
+   "why": "The text leaves the answers about how cooperation can be achieved to the final chapter (ch17: open-book game, third-party punishment)."
+  }
+ ],
+ "experiments": {
+  "ch13-e1": {
+   "name": "Side-effect effect: the chairman scenario (Knobe)",
+   "researchers": "J. Knobe",
+   "question": "How do people morally distinguish between an unintended side effect of an action and an intended outcome, and what determines the judgment of intention?",
+   "method": "Participants read a short scenario in which an employee proposes a plan to make a profit. In both scenarios the boss replied, “I don't care about the environment, just do it.” In the first scenario the plan harmed the environment; in the second it helped.",
+   "finding": "In the harm scenario, 85% of subjects said the boss intentionally harmed the environment for profit; in the help scenario, only 23% said the boss intentionally helped the environment for profit.",
+   "roleInChapter": "Shows that bad outcomes are attributed to intention more readily, while good outcomes are not attributed to intention to the same degree. This asymmetry supports the claim that moral judgment is shaped by intuitive biases before reasoning.",
+   "replication": {
+    "note": "The side-effect (Knobe) effect has been replicated in many languages and cultures; it was also reproduced in the large-scale replication project of experimental philosophy studies (Cova et al. 2021). How the effect should be interpreted (a matter of the concept of intention or of moral evaluation) is still contested.",
+    "refs": [
+     "Knobe 2003",
+     "Cova et al. 2021 (XPhi Replicability Project)"
+    ]
+   }
+  },
+  "ch13-e2": {
+   "name": "Social evaluation by preverbal infants: preference for good and bad characters (Hamlin, Wynn, Bloom)",
+   "researchers": "J. K. Hamlin, K. Wynn and P. Bloom",
+   "question": "Do very young children distinguish helpful and bad characters and respond to them differently?",
+   "method": "Infants aged six to twelve months watched a triangle that helped a circle climb a hill and a square that blocked it; then which shape they reached for was recorded. Older infants and toddlers were shown puppets that shared and did not share; then, with each puppet standing by a pile of treats, they were asked to decide who should lose treats and who should win.",
+   "finding": "Infants chose the helpful triangle; helpers were preferred over neutral shapes, and neutral shapes over blockers. Children wanted the bad puppet to lose treats and the good puppet to win. At a second level, toddlers also preferred those who were nice to the good puppet and those who punished the bad puppet.",
+   "roleInChapter": "Shows that the primitive components of the sense of fairness and the desire for punishment emerge at a very early age, before cultural learning. Supports the claim that the roots of morality may be older than cultural institutions.",
+   "replication": {
+    "note": "Some laboratories replicated the effect while others could not. The ManyBabies 4 multi-laboratory replication (Lucca et al. 2025), covering 567 infants from 37 laboratories, found no tendency to prefer the helper over the hinderer (about 49%, chance level); it concluded that the effect may be weaker than thought or may develop later.",
+    "refs": [
+     "Hamlin et al. 2007",
+     "Lucca et al. 2025, Developmental Science 28: e13581"
+    ]
+   }
+  },
+  "ch13-e3": {
+   "name": "Monkeys Reject Unequal Pay: capuchin response to unequal reward",
+   "researchers": "S. F. Brosnan and F. B. M. de Waal",
+   "question": "Do animals stop cooperating when they see a partner who does the same work receive a different reward?",
+   "method": "Two capuchins were worked side by side. Each handed a pebble to a human in return for a reward. When one monkey received a grape and the other a cucumber, whether the monkey that got the cucumber kept working was measured. In control conditions, no reaction was seen when both monkeys received cucumbers or when the monkey worked alone.",
+   "finding": "Capuchins that received a cucumber often threw the cucumber at the human or angrily banged around; the most consistent reaction was not handing over the pebble in the next round. Later studies showed that the reaction depends on the partner getting a better reward; capuchins prefer grapes to cucumbers 90% of the time.",
+   "roleInChapter": "Shows that a reaction to inequity is also found in nonhuman social species. The author, however, emphasizes that this reaction is based on self-interest rather than a sense of fairness; this supports the idea that the roots of intuitive morality have a cross-species past.",
+   "caveats": "Sapolsky reports that the criticism leveled at the first study, that the monkeys refuse because the grape is visible, was answered by later control experiments; he still interprets this reaction not as a sense of fairness on behalf of someone else but as a self-interest-based reaction of the 'I am being wronged' kind.",
+   "replication": {
+    "note": "The inequity reaction has been replicated in some species and laboratories, but some replications failed in capuchins and chimpanzees; criticisms such as Wynne 2004 and Roma et al. 2006 proposed that the reaction could be explained by a frustration/expectation effect. The Brosnan and de Waal 2014 review acknowledges that the result varies with species, sex and task conditions.",
+    "refs": [
+     "Wynne 2004",
+     "Roma et al. 2006",
+     "Brosnan and de Waal 2014"
+    ]
+   }
+  },
+  "ch13-e4": {
+   "name": "Trolley problem fMRI experiment (Greene et al.)",
+   "researchers": "J. Greene et al.",
+   "question": "In moral dilemmas that require intentionally killing a person, does judgment proceed intuitively or rationally, and how does the brain separate these two judgments?",
+   "method": "Subjects considered trolley dilemmas in an fMRI scanner: pulling a lever to divert the trolley onto another track with a single person in order to save five people, or pushing one person onto the tracks by hand. In later studies Greene added variables: pushing the person with a pole, the lever being right next to the victim, accidentally bumping someone off while running to a switch, and a 'loop' scenario in which the trolley returns to the main track through a loop.",
+   "finding": "60-70% of people accepted pulling the lever and dlPFC activity was dominant; only 30% accepted pushing the person by hand, and the more vmPFC and amygdala activity increased, the higher the probability of refusal. Pushing with a pole also did not reduce the resistance; the accidental-bump scenario on the way to the switch was approved by about 80%. In the loop scenario, where about 30% would logically be expected, the approval rate stayed in the 60-70% range.",
+   "roleInChapter": "Shows in which context moral judgment relies on intuition and in which on reasoning. Reveals that intentionality and how local the problem is can completely change the moral decision.",
+   "caveats": "Sapolsky points to the large variability between individuals, noting that about 30% of subjects are consistently deontologists, 30% are consistently utilitarians, and the rest vary depending on the scenario.",
+   "replication": {
+    "note": "The behavioral pattern (the difference between pulling a lever and pushing, and the personal force effect) has been replicated in many countries; the Psychological Science Accelerator's 45-country study (Bago et al. 2022) largely confirmed the personal force effect. The interpretation of the 2001 fMRI findings, however, has been criticized: McGuire et al. 2009 showed that the effect arose from a few dilemma items, and the dual-process model continues to be debated.",
+    "refs": [
+     "Greene et al. 2001",
+     "McGuire et al. 2009",
+     "Bago et al. 2022, Nature Human Behaviour"
+    ]
+   }
+  },
+  "ch13-e5": {
+   "name": "Business culture and dishonesty in the banking industry: professional identity and cheating (Cohn et al.)",
+   "researchers": "A. Cohn et al.",
+   "question": "Do people become more prone to cheating when their professional identity is made salient in their minds?",
+   "method": "A team from the University of Zurich had employees of an unnamed international bank play a coin-flip game in which correct predictions were rewarded with money; the setup allowed cheating, and the researchers could detect the cheating. The control group first answered ordinary questions about everyday life, whereas the experimental group's survey was about banking work (this group chose more banking-related words in a word-completion task). Surveys reminding people of their own work or of banking were also given to other occupational groups (e.g., manufacturing).",
+   "finding": "When banker identity was made salient, the cheating rate rose by 20%. In employees from other occupations, reminding them of their own jobs or of banking did not increase cheating.",
+   "roleInChapter": "Shows that moral rules are not fixed and that people bring different ethical rules into play depending on their different identities. The same person may act according to the moral standards of whichever identity they bring to the forefront of their mind.",
+   "replication": {
+    "note": "In a replication with bankers in the Middle East and Asia-Pacific, Rahwan, Yoeli and Fasolo (2019, Nature) did not find that banker identity increased cheating; an increase in honesty was observed in some groups. The effect is thought to depend on the institution and culture.",
+    "refs": [
+     "Cohn et al. 2014",
+     "Rahwan et al. 2019, Nature 575: 345"
+    ]
+   }
+  },
+  "ch13-e6": {
+   "name": "Stress and moral decision making (Starcke, Youssef et al.)",
+   "researchers": "K. Starcke et al.; F. Youssef et al.",
+   "question": "Does experimentally induced stress lead people to give more selfish and justifying judgments in emotional moral dilemmas?",
+   "method": "Participants who were experimentally stressed in the laboratory (Starcke et al. used the Trier Social Stress Test) answered everyday and emotional moral dilemmas; the dilemmas were separated according to whether they involved a personal moral matter. The stress hormone (cortisol) response was measured.",
+   "finding": "The judgments of stressed subjects became more selfish and justifying. Utilitarian judgments decreased only when the dilemma involved a personal moral problem. The larger the glucocorticoid response, the more pronounced this effect became.",
+   "roleInChapter": "Shows that moral judgment is influenced by the momentary emotional state. Reveals that the tendency to be lenient toward one's own behavior is strengthened by stress.",
+   "replication": {
+    "note": "In Starcke et al. 2011, no direct difference emerged between the stress and control groups; the finding rested mainly on the correlation between the cortisol response and selfish responses. Later studies of stress and moral judgment gave results in different directions and were conducted with small samples.",
+    "refs": [
+     "Starcke et al. 2011",
+     "Youssef et al. 2012",
+     "Starcke et al. 2012, Judgment and Decision Making 7: 61"
+    ]
+   }
+  },
+  "ch13-e7": {
+   "name": "Antisocial Punishment Across Societies: public goods game (Herrmann et al.)",
+   "researchers": "B. Herrmann et al.",
+   "question": "Do people in different societies punish those who contribute to a public good, and how common is it to punish generous people?",
+   "method": "Urban university students from different parts of the world took part in a public goods game. In each round, players could put part of their tokens into a common pool and keep the rest for themselves; the total in the pool was multiplied and shared equally. Players could punish other players' contributions by paying. The countries compared included the US, Australia, Oman and Greece.",
+   "finding": "In the US and Australia, punishment directed at generous behavior was hardly seen at all. In Oman and Greece, however, the money subjects spent to punish generosity was greater than what they spent to punish selfishness. As a society's social capital decreased, antisocial punishment increased.",
+   "roleInChapter": "Shows that norms of fairness and cooperation can differ greatly across cultures, and that this difference is related to social trust and a sense of effectiveness.",
+   "caveats": "Sapolsky stresses that all of the participants were urban university students and presents the relationship between social capital and antisocial punishment as a correlation.",
+   "replication": {
+    "note": "The phenomenon of antisocial punishment was also observed in other countries in later studies, and its relationship to indicators of rule violation/rule of law in a society was supported in reviews; however, the fact that the sample was limited to university students restricts generalization at the country level.",
+    "refs": [
+     "Herrmann et al. 2008",
+     "Gächter and Herrmann 2011",
+     "Sylwester et al. 2013"
+    ]
+   }
+  },
+  "ch13-e8": {
+   "name": "Economic games in 25 small-scale cultures (Henrich et al.)",
+   "researchers": "J. Henrich et al.",
+   "question": "How do market integration, community size and religious affiliation affect people's fair behavior and their willingness to punish those who violate fairness?",
+   "method": "According to the book, thousands of participants from twenty-five small-scale cultures (nomadic herders, hunter-gatherers, settled horticulturalists, subsistence farmers/wage workers), together with urban control groups from Missouri and Accra (Ghana), played three games: the Dictator Game, the Ultimatum Game (paying to punish someone who treats you unfairly) and a third-party punishment game. Market integration was measured as the percentage of calories obtained by purchase.",
+   "finding": "As market integration increased (from 0% among the Hadza to about 90% in settled fishing communities), offers became fairer in all three games and willingness to punish increased: in the Dictator Game the Hadza kept an average of 73% of the share for themselves, whereas the Sanquianga fishers and the urban groups approached 50:50. As the community grew, second- and third-party punishment increased (in Hadza groups smaller than 50 people almost every offer above zero was accepted; in communities of 5000+ people unfair offers were rejected). As the rate of belonging to a world religion rose, third-party punishment increased.",
+   "roleInChapter": "Shows that fairness is not a single universal and innate feeling, and that the understanding of fairness changes form with economic interaction and large communities.",
+   "caveats": "Sapolsky says he finds the findings on market integration and community size challenging for himself; he discusses how the finding conflicts with intuitive expectations about our hunter-gatherer past.",
+   "replication": {
+    "note": "Although the findings are influential, the Henrich et al. 2010 paper covers 15 societies (the number 'twenty-five' in the book may stem from combining more than one study). Lamba and Mace 2011 questioned culture-level interpretations by showing that villages of a single ethnic group differ as much as cultures do; the religion finding is not consistent across all measures.",
+    "refs": [
+     "Henrich et al. 2010",
+     "Lamba and Mace 2011, PNAS"
+    ]
+   }
+  },
+  "ch13-e9": {
+   "name": "Spontaneous giving and calculated greed: decision time and cooperation in the public goods game (Rand, Greene et al.)",
+   "researchers": "D. G. Rand, J. Greene et al.",
+   "question": "Does deciding quickly and intuitively or thinking carefully increase contribution to a public good?",
+   "method": "Subjects played a one-shot public goods game; players chose between putting money into the common pool and keeping their own money. Different groups were told to make the decision within different time periods. In addition, some participants were asked to recall a memory in which their intuition led to a good decision, and others a memory in which careful thinking paid off.",
+   "finding": "The shorter the decision time, the more cooperatively participants behaved. A reminder to value intuition also brought greater contributions. The instruction to “think carefully” or valuing reflection, on the other hand, led to more selfish decisions; what the authors call “calculated greed” emerged.",
+   "roleInChapter": "Shows that unselfish cooperation relies on intuition, while thinking feeds justifications of the “yes, cooperation is good, but this time I'm the exception” kind.",
+   "caveats": "Sapolsky notes that the game was never played with a very different outgroup member; he only predicts that in such a case fast intuitions would shift toward selfishness.",
+   "replication": {
+    "note": "The finding that time pressure increases cooperation could not be replicated in a 21-laboratory registered replication report (Bouwmeester et al. 2017) when those who did not follow the instructions were included. Although Rand et al. defend a small effect under certain conditions in later meta-analyses, the effect is contested.",
+    "refs": [
+     "Rand et al. 2012",
+     "Bouwmeester et al. 2017, Perspectives on Psychological Science"
+    ]
+   }
+  },
+  "ch13-e10": {
+   "name": "Die-roll reporting: honesty experiment in 23 countries (Gächter and Schulz)",
+   "researchers": "S. Gächter and J. F. Schulz",
+   "question": "Do people distort the result of a private die roll in their own favor, and how do they justify it?",
+   "method": "More than 2,500 university students from 23 countries rolled the die in secret and reported the result themselves; different numbers earned different amounts of money. The die was rolled twice and only the first counted; they were told the second was to test that the die worked properly. If everyone were honest, each number would be expected to be reported about one sixth of the time.",
+   "finding": "Lying was widespread; as the rate of corruption, tax evasion and election fraud in a country rose, the rate of lying also rose. In all cultures people rarely made up the highest-paying number; they mostly reported the higher of the two rolls.",
+   "roleInChapter": "Shows how the line between honesty and cheating is blurred by people's self-justification. Making a small distortion instead of open cheating allows a person to feel honest.",
+   "replication": {
+    "note": "The pattern of partial lying in the die paradigm (reporting not the highest number but an outcome one can justify to oneself) was robustly seen in meta-analyses combining hundreds of studies (Abeler et al. 2019). The country-level relationship between rule violation and lying itself has fewer independent replications.",
+    "refs": [
+     "Gächter and Schulz 2016",
+     "Abeler et al. 2019, Econometrica"
+    ]
+   }
+  },
+  "ch13-e11": {
+   "name": "The neural circuitry of a broken promise: Trust Game fMRI experiment (Baumgartner, Fehr et al.)",
+   "researchers": "T. Baumgartner, E. Fehr et al.",
+   "question": "Which processes come into play in the brain of a person who makes a promise and then breaks it, before the promise is broken?",
+   "method": "In an economic trust game that subjects played in an fMRI scanner, participants told the other party their cooperation strategies before each round: they said they would cooperate always, sometimes or never. Brain activity was measured before each decision, and whether there was a break between the promise given and the behavior carried out was monitored.",
+   "finding": "In subjects who promised to always cooperate and broke their promise at least once, the dlPFC, ACC and amygdala were activated at the moment of breaking. The pattern of activity before the decision (including insula activity alongside the ACC) could predict promise breaking in advance.",
+   "roleInChapter": "Shows the role of mental conflict and post hoc justification in moral action. The decision to break a promise is often legitimized with emotional excuses such as disliking the other party.",
+   "caveats": "Sapolsky notes that the meaning of insula activity is uncertain. It is not clear whether it indicates that subjects were condemning themselves or looking down on the other party; although the author finds the second interpretation more likely, he adds that this is a guess.",
+   "replication": {
+    "note": "It is a single fMRI study; there is no known direct replication, and it is open to the general replicability problems of neuroimaging findings with small samples.",
+    "refs": [
+     "Baumgartner et al. 2009"
+    ]
+   }
+  },
+  "ch13-e12": {
+   "name": "Coin-flip prediction cheating fMRI experiment (Greene and Paxton)",
+   "researchers": "J. D. Greene and J. M. Paxton",
+   "question": "By which patterns do honest and dishonest moral decisions differ in the brain, and why do people who never cheat appear resistant in this respect?",
+   "method": "Subjects played a game in the scanner in which they predicted the outcome of a coin flip and won money for correct predictions. In some rounds, under the pretext of a fake “paranormal ability,” the prediction could be merely thought and reported afterward, without being stated in advance; this created an opportunity to cheat. Because success in the forced-honest rounds was about 50%, high success in the opportunity rounds pointed statistically to cheating.",
+   "finding": "By the statistical criterion, about one third of subjects were clear cheaters and one sixth were borderline. While cheating, the cheaters activated the dlPFC but not the ACC, and showed no response delay; in the moments when they avoided cheating, the dlPFC, vlPFC and ACC worked harder and response time lengthened. In those who never cheated, these regions were hardly activated at all at the moment of opportunity.",
+   "roleInChapter": "Shows that honesty is often not a constant struggle but an internalized automatic behavior. People who never cheat have almost no conflict; this suggests that virtue works in the form of “not doing.”",
+   "replication": {
+    "note": "There is no known direct replication; although Greene and Paxton's interpretation of “grace” instead of “will” was partly supported by later studies (e.g., Abe and Greene 2014), it is a small-sample fMRI finding.",
+    "refs": [
+     "Greene and Paxton 2009",
+     "Abe and Greene 2014, J Neurosci"
+    ]
+   }
+  }
+ }
+}

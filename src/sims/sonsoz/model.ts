@@ -2,7 +2,9 @@
 // Sekme 1: aynı ortalamaya sahip iki popülasyonda eşiği aşan pay (dağılımın kuyrukları).
 // Sekme 2: "biz" sayılanların ayarlarla (ortak hedef, etiket, temas, tehdit, zaman) yeniden çizilmesi.
 // Kitapta sayısal veri yok; bütün büyüklükler modelin varsayımıdır, yalnızca yönler kitaptandır.
+import { num, percent, pct } from '../../i18n/fmt';
 import { normal, type Rng } from '../rng';
+import { L } from './text';
 
 export const clamp = (v: number, lo = 0, hi = 1): number => Math.min(hi, Math.max(lo, v));
 
@@ -74,18 +76,19 @@ export function histogram(xs: number[], bins: number): number[] {
 
 /** Küçük payları okunur yazar: "<%0,01", "%0,3", "%12". */
 export function share(v: number): string {
-  if (v < 0.0001) return '<%0,01';
-  if (v < 0.01) return `%${(v * 100).toFixed(2).replace('.', ',')}`;
-  if (v < 0.1) return `%${(v * 100).toFixed(1).replace('.', ',')}`;
-  return `%${Math.round(v * 100)}`;
+  if (v < 0.0001) return L().model.shareLt(percent(num(0.01, 2)));
+  if (v < 0.01) return percent(num(v * 100, 2));
+  if (v < 0.1) return percent(num(v * 100, 1));
+  return pct(v);
 }
 
 export function describeOrt(i: OrtInputs, r: OrtResult): string {
-  if (r.b < 0.0001 && r.a < 0.0001) return 'Ortalama aynı; ama eşik iki popülasyonun da çok uzağında, kimse aşmıyor. Eşiği indir ya da bağlamı kaydır.';
+  const T = L().model.ort;
+  if (r.b < 0.0001 && r.a < 0.0001) return T.none;
   const big = r.fromB >= 0.5 ? 'B' : 'A', f = Math.max(r.fromB, 1 - r.fromB);
-  const tail = f > 0.995 ? `eşiği aşanların neredeyse hepsi ${big}'den` : `eşiği aşanların %${Math.round(f * 100)}'i ${big}'den`;
-  const need = r.matchShift > 1 ? ` A'nın B'ye yetişmesi için ortalamasının ${Math.round(r.matchShift)} puan artması gerekir.` : '';
-  return `Ortalama aynı (${Math.round(i.mean + i.ctx)}) ama eşiği aşan A'da ${share(r.a)}, B'de ${share(r.b)}: ${tail}.${need}`;
+  const tail = f > 0.995 ? T.tailAll(big) : T.tailPct(big, pct(f));
+  const need = r.matchShift > 1 ? T.need(Math.round(r.matchShift)) : '';
+  return T.main(Math.round(i.mean + i.ctx), share(r.a), share(r.b), tail, need);
 }
 
 /* ======================= 2) Biz/Onlar kaydırıcısı ======================= */
@@ -169,9 +172,10 @@ export function timeline(people: Person[], ego: number, i: BizInputs, steps = 24
 }
 
 export function describeBiz(v: BizView): string {
-  const head = `Seçili kişi için ${v.nBiz} / ${N_PEOPLE - 1} kişi "biz"${v.nAra ? `, ${v.nAra} kişi arada` : ''}.`;
-  if (v.bizNew === 0 && v.bizOld === v.nIn) return `${head} Sınır eski gruptan geçiyor: kendi grubu "biz", öbürü "onlar".`;
-  if (v.bizNew > 0 && v.bizOld < v.nIn) return `${head} Sınır yeniden çizildi: eski dış gruptan ${v.bizNew} kişi biz sayıldı, eski grubundan ${v.nIn - v.bizOld} kişi artık "biz" değil.`;
-  if (v.bizNew > 0) return `${head} Sınır genişledi: eski dış gruptan ${v.bizNew} kişi de "biz" sayıldı.`;
-  return `${head} Eski grubundan ${v.nIn - v.bizOld} kişi "biz"in dışına çıktı.`;
+  const T = L().model.biz;
+  const head = T.head(v.nBiz, N_PEOPLE - 1, v.nAra);
+  if (v.bizNew === 0 && v.bizOld === v.nIn) return T.same(head);
+  if (v.bizNew > 0 && v.bizOld < v.nIn) return T.redrawn(head, v.bizNew, v.nIn - v.bizOld);
+  if (v.bizNew > 0) return T.widened(head, v.bizNew);
+  return T.narrowed(head, v.nIn - v.bizOld);
 }

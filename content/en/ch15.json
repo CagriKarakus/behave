@@ -1,0 +1,320 @@
+{
+ "summary": "The chapter argues that the capacity for symbols and metaphor did not arise in the brain as a new circuit but through the reuse of older systems. As a result, the brain often confuses metaphor with reality: physical sensations such as pain, cleanliness, warmth and weight influence abstract judgments. Because moral disgust is linked to the anterior insula, language that describes a group as 'insects' or 'disease' can lay the groundwork for that group to be treated as less than human; the Rwandan genocide is discussed as a tragic example of this mechanism. On the other hand, symbolic gestures that respect sacred values can open a door in negotiations where material offers alone are not enough; the examples of Mandela and Northern Ireland show this.",
+ "keyConcepts": [
+  {
+   "term": "Symbolic thought and metaphor",
+   "explanation": "The capacity to let one thing stand in for another. Language is the most obvious form of this ability; even words like 'grasp' (to understand) rest on a physical metaphor."
+  },
+  {
+   "term": "Literal-metaphorical confusion",
+   "explanation": "The brain's tendency to process expressions that are 'just a figure of speech' as if they were physical reality. The link between a warm cup and the perception of a warm personality is an example."
+  },
+  {
+   "term": "Embodied cognition",
+   "explanation": "The shaping of thoughts and judgments together with bodily sensations. Finding a résumé attached to a heavy clipboard more serious is part of this effect."
+  },
+  {
+   "term": "Macbeth effect",
+   "explanation": "Recalling a moral transgression or telling a lie increases the desire for cleaning products. This suggests that physical cleansing eases the feeling of moral impurity."
+  },
+  {
+   "term": "Visceral to moral disgust",
+   "explanation": "The way nausea can lead one to judge an act or a group as morally bad as well. The anterior insula links these two kinds of disgust."
+  },
+  {
+   "term": "Exaptation and neural reuse",
+   "explanation": "A structure evolves for one function and then begins to be used for another purpose. The human brain appears to have built new abilities not from scratch but by extending older circuits."
+  },
+  {
+   "term": "Sacred values",
+   "explanation": "Values that define a group's identity and are defended independently of material gain. Settlements made without respecting these values often fail."
+  },
+  {
+   "term": "Pseudospeciation and dehumanization",
+   "explanation": "The process of loosening moral constraints toward a group by describing it as a different species or as a nonhuman entity."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Metaphor-Sensation Confusion",
+   "shows": "Shows how a physical sensation (warmth, weight, hardness) shifts a judgment about a person.",
+   "inputs": [
+    "Temperature of the object (hot / cold)",
+    "Weight of the object",
+    "Description of the person being evaluated"
+   ],
+   "outputs": [
+    "Mean shift in personality ratings",
+    "Judgments of generosity and trust",
+    "Size of the shift in judgment"
+   ]
+  },
+  {
+   "title": "Sacred Value and Symbolic Settlement",
+   "shows": "Shows why material offers alone are not enough, and how symbolic recognition can raise the likelihood of a settlement.",
+   "inputs": [
+    "Size of the material offer",
+    "Level of symbolic recognition (apology, gesture of respect)",
+    "Weight of the sacred value"
+   ],
+   "outputs": [
+    "Likelihood of settlement",
+    "Rate at which the offer is rejected",
+    "How long the conflict lasts"
+   ]
+  },
+  {
+   "title": "Psychological Distance and Level of Analysis",
+   "shows": "Shows how the latest drop in a data series is interpreted differently depending on whether the data are near or far.",
+   "inputs": [
+    "Distance of the data (near / far)",
+    "Size of the drop at the last point",
+    "Length of the preceding trend"
+   ],
+   "outputs": [
+    "Importance score given to the last point",
+    "Ratio of detailed (micro) to general (macro) analysis",
+    "Forecast of the future"
+   ]
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Exclusion and the anterior cingulate cortex (Cyberball)",
+   "finding": "In participants who felt excluded by the other players, the anterior cingulate cortex (ACC) was activated. This activation was not seen when the exclusion was attributed to a computer malfunction; the meaning of social pain seemed to be processed in the same place in the brain as real pain."
+  },
+  {
+   "name": "Watching a loved one in pain",
+   "finding": "During a mild shock delivered to the person themselves, both pain-sensing regions and the ACC were activated. When they watched a loved one receive the same shock, the pain-sensing regions stayed quiet while the ACC continued to be activated."
+  },
+  {
+   "name": "Moral transgression and the Macbeth effect (Zhong and Liljenquist and subsequent studies)",
+   "finding": "In Zhong and Liljenquist's study, those who recalled their own moral transgression chose an antiseptic wipe more often than a pencil as a gift. In another study, those who told a verbal lie preferred mouthwash and those who told a written lie preferred hand soap; in imaging, mouth-related sensory-motor cortex regions were activated in verbal liars and hand-related regions in written liars."
+  },
+  {
+   "name": "Hand washing and helpfulness",
+   "finding": "People who washed their hands after recalling their own moral transgression responded less to a subsequent request for help. Watching someone else wash their hands also slightly reduced helpfulness. In addition, those who watched a disgusting film and then washed their hands judged more leniently on moral questions."
+  },
+  {
+   "name": "Physical sensations and judgment (Bargh and colleagues)",
+   "finding": "Participants found a résumé attached to a heavier clipboard more serious. Those holding a warm cup rated a person as warmer and behaved more generously. Those sitting in a hard chair perceived people as more rigid and unfeeling."
+  },
+  {
+   "name": "Sacred values and the Middle East conflict (Atran et al., 2007)",
+   "finding": "In the interviews, the parties emphasized symbolic demands such as apology, recognition and identity alongside material issues. The authors argued that symbolic gestures with no material equivalent (apology, recognition) are key to lasting peace, whereas material offers can backfire when sacred values are at stake."
+  }
+ ],
+ "links": [
+  {
+   "why": "The ACC's processing of the meaning of pain, and the bell becoming rewarding in its own right in reward conditioning, are mentioned again in this chapter."
+  },
+  {
+   "why": "The Cyberball exclusion experiment is one of this chapter's first examples because it shows how social pain is processed in the ACC."
+  },
+  {
+   "why": "Exaptation and kin-recognition mechanisms; the ideas of pseudokinship and speciation are discussed within an evolutionary framework."
+  },
+  {
+   "why": "Paul Rozin's observation that 'disgust is a marker of out-groups' is used in this chapter in the Us/Them context."
+  },
+  {
+   "why": "The relationship of political attitudes to the disgust threshold, and system justification, lay the groundwork for this chapter's political interpretations."
+  },
+  {
+   "why": "Sacred values are a direct continuation of Greene's example in ch13 of herder communities with different moral visions looking at a shared pasture (the 'tragedy of commonsense morality')."
+  },
+  {
+   "why": "The role of the ACC in empathy and social pain is carried over in this chapter into the discussion of disgust and symbols."
+  },
+  {
+   "why": "The chapter itself prepares the transition to the book's final chapter; how the idea of symbolic settlement is treated in the final chapter should be read within ch17."
+  }
+ ],
+ "experiments": {
+  "ch15-e1": {
+   "name": "Cyberball social exclusion experiment (Eisenberger)",
+   "researchers": "N. Eisenberger, M. Lieberman and K. Williams",
+   "question": "Does social exclusion activate the anterior cingulate cortex (ACC), the brain region that processes physical pain?",
+   "method": "Participants in the scanner believed they were tossing a virtual ball (Cyberball) with two other players; at some point the other two players stopped throwing the ball to them. In one condition, the participant was told that failing to receive the ball was due to a fault in the computer connection.",
+   "finding": "The ACC was activated in participants who felt excluded. This activation was not seen in the condition where the exclusion was attributed to a malfunction. According to this finding, social pain appears to be processed in the same brain region as physical pain.",
+   "roleInChapter": "The chapter uses its first example to show that the brain does not separate social and physical pain. The ACC's role in making sense of events, and the influence of social meaning on this region, can be read from here.",
+   "replication": {
+    "note": "The negative emotional effects of exclusion in Cyberball have been replicated robustly in many studies. However, the claim that social and physical pain are processed in the same dACC region has been questioned by meta-analyses and multivariate analyses (e.g., Woo et al. 2014); the neural patterns of the two kinds of pain appear to be distinguishable.",
+    "refs": [
+     "Eisenberger et al. 2003",
+     "Woo et al. 2014, Nature Communications"
+    ]
+   }
+  },
+  "ch15-e2": {
+   "name": "Watching a loved one in pain (Singer et al.)",
+   "researchers": "T. Singer et al.",
+   "question": "Which brain regions are activated when a person experiences their own pain and when they watch a loved one experience the same pain?",
+   "method": "While in the scanner, participants sometimes received a mild electric shock themselves, and at other times saw a signal indicating that their partner next to them was receiving the same shock; brain activity in the two situations was compared.",
+   "finding": "When they received the shock themselves, both the sensory pain regions and the ACC were activated. When their partners received the shock, the sensory pain regions stayed quiet, but the ACC was again activated.",
+   "roleInChapter": "Shows that, for some regions such as the ACC, another person's pain is not an analogy but real pain. Argues that the neural basis of empathy rests on this region, which processes the meaning of pain.",
+   "replication": {
+    "note": "The finding that the anterior insula and ACC are activated when witnessing another's pain has been replicated in many studies and confirmed by meta-analyses (Lamm et al. 2011). Whether this overlap is specific to pain or reflects a general salience/arousal signal is debated.",
+    "refs": [
+     "Singer et al. 2004",
+     "Lamm et al. 2011, NeuroImage"
+    ]
+   }
+  },
+  "ch15-e3": {
+   "name": "Schadenfreude and a rival's misfortune (Takahashi)",
+   "researchers": "H. Takahashi et al.",
+   "question": "Which reward circuits does pleasure at the failure of an envied rival engage in the brain?",
+   "method": "In the scanner, participants read scenarios in which they compared themselves with people who were or were not worth envying; they then learned that misfortunes had befallen these people. Brain activity was measured during envy and during pleasure at another's misfortune (schadenfreude).",
+   "finding": "The ACC was activated in response to the superiority/success of the envied person; when that person ran into trouble, dopaminergic reward regions (striatum) were activated. In the book's phrase, another's pain can be one's gain.",
+   "roleInChapter": "Shows the reverse side of empathy. The brain can take pleasure in another's pain as much as it feels it; this supports the idea that the brain processes another's pain as a literal gain.",
+   "replication": {
+    "note": "This is a single fMRI study with a small sample (19 people); a link between schadenfreude and the reward system has been reported in other studies as well, but a direct replication of this study is not known.",
+    "refs": [
+     "Takahashi et al. 2009"
+    ]
+   }
+  },
+  "ch15-e4": {
+   "name": "Moral transgression and taste perception",
+   "researchers": "C. Chan et al.; K. J. Eskine et al.",
+   "question": "Does thinking about a moral transgression or a virtuous act change taste in the mouth and eating behavior?",
+   "method": "After thinking about or reading about morally disgusting or virtuous acts, participants tasted and rated a neutral sweet drink; in another study, how much they ate and drank after a moral transgression was measured.",
+   "finding": "Thinking about a morally disgusting act reduced eating afterward and led to the neutral drink tasting worse; hearing about virtuous acts made the drink taste better.",
+   "roleInChapter": "Shows that moral judgment leaks into bodily processes such as taste and eating. It is evidence of a two-way link between visceral disgust and moral disgust.",
+   "replication": {
+    "note": "The title of Eskine et al. 2012 states that it is virtue that makes the drink taste nice, and that vice does not make the taste markedly worse; so the book's summary goes beyond part of the source. A multi-laboratory replication (Ghelfi et al. 2020) of the opposite-direction finding that 'taste disgust makes moral judgment harsher' (Eskine et al. 2011) failed.",
+    "refs": [
+     "Eskine et al. 2012",
+     "Chan et al. 2014",
+     "Ghelfi et al. 2020, AMPPS"
+    ]
+   }
+  },
+  "ch15-e5": {
+   "name": "Germ warning and anti-immigration attitudes (Landau)",
+   "researchers": "M. Landau et al.",
+   "question": "Does reading about contagion and the threat of disease affect thinking of America as an organism and attitudes toward immigration?",
+   "method": "Some participants read an article on the health risks of airborne bacteria; others did not. All then read a history text describing the United States as a growing living organism, and their attitudes toward immigration and toward an economic issue were measured.",
+   "finding": "Those who first read the germ warning reported more negative attitudes toward immigration. Attitudes on the economy did not change; the effect was seen only on immigration.",
+   "roleInChapter": "Shows that visceral disgust can turn into moral and political judgment. A feeling of threat feeds an exclusionary attitude toward outsiders.",
+   "replication": {
+    "note": "The broader 'behavioral immune system' literature, in which disease threat affects attitudes toward out-groups and immigration, has been partly supported; however, a direct replication of this metaphor-framing study is not known, and similar priming effects have turned out weak in the replication crisis.",
+    "refs": [
+     "Landau et al. 2009"
+    ]
+   }
+  },
+  "ch15-e6": {
+   "name": "Unfair offers and the insula (Ultimatum Game)",
+   "researchers": "A. G. Sanfey et al.",
+   "question": "In an economic game, is the reaction to an unfair offer associated with visceral disgust regions such as the insula?",
+   "method": "In the scanner, participants accepted or rejected offers to split money made to them in the Ultimatum Game; the offers sometimes came from a human and sometimes from a computer.",
+   "finding": "Unfair offers from humans activated the insula (those from the computer activated it less); the higher the insula activity, the more likely the offer was to be rejected.",
+   "roleInChapter": "Shows the limits of the distinction between moral disgust and visceral disgust. That the insula is engaged even though the offer is not physically disgusting supports the idea that the two kinds of disgust are mixed up with each other.",
+   "replication": {
+    "note": "Anterior insula activity for unfair offers, and its predicting rejection, have been supported in many later studies and meta-analyses (e.g., Gabay et al. 2014; Feng et al. 2015); whether the insula here reflects 'disgust' or a general violation of expectation is debated.",
+    "refs": [
+     "Sanfey et al. 2003",
+     "Gabay et al. 2014",
+     "Feng et al. 2015"
+    ]
+   }
+  },
+  "ch15-e7": {
+   "name": "Cleansing and washing away one's own moral transgression (Zhong and Liljenquist)",
+   "researchers": "C. B. Zhong and K. Liljenquist",
+   "question": "When people recall a moral transgression, do they seek moral cleansing by turning to physical cleansing?",
+   "method": "Participants were asked to describe a moral or immoral act from their past; they then chose between a pencil and a pack of antiseptic wipes as a thank-you gift. In another study (Harkrider et al.), participants were asked to tell a lie and the weight of the lie's consequences was varied.",
+   "finding": "Those who described their own ethical failures chose the antiseptic wipe more often. In the lie study, the more negatively the consequences of the lie were presented, the more participants cleansed themselves. This phenomenon was named the 'Macbeth effect'.",
+   "roleInChapter": "The key example showing that metaphorical impurity and physical impurity are confused in the brain. The feeling of moral impurity turns into a desire for bodily cleansing.",
+   "replication": {
+    "note": "Direct replications of the Macbeth effect (e.g., Gámez et al. 2011; Earp et al. 2014) failed; a meta-analysis (Siev et al. 2018) showed the effect to be very small and vulnerable to publication bias.",
+    "refs": [
+     "Zhong and Liljenquist 2006",
+     "Earp et al. 2014",
+     "Siev et al. 2018"
+    ]
+   }
+  },
+  "ch15-e8": {
+   "name": "Lying by mouth versus by hand and choice of cleansing product",
+   "researchers": "S. W. S. Lee and N. Schwarz (original behavioral finding); M. Schaefer et al.; C. Denke et al. (imaging)",
+   "question": "Does whether we tell a lie by mouth or by writing it with the hand change the later choice of cleansing product and the brain map?",
+   "method": "Participants were asked either to tell a lie by mouth or to write it by hand; a control group communicated something true. They then rated how much they wanted cleansing products such as mouthwash and hand soap; in the imaging studies, brain activity was measured while they thought about these products.",
+   "finding": "Those who lied by mouth wanted mouthwash more, and those who lied by writing wanted hand soap more. In imaging, mouth-related regions of the sensorimotor cortex were activated in verbal liars and hand-related regions in written liars.",
+   "roleInChapter": "Shows that the metaphor is embodied. The idea of moral cleansing turns to whichever part of the body is involved in producing the transgression.",
+   "caveats": "In the notes, Sapolsky points to a debate over the cleansing-morality findings and lists the direct replication of Schnall et al. 2008 (Johnson et al. 2014) and the response to it (Huang 2014); he gives no details in the text.",
+   "replication": {
+    "note": "Schaefer et al. 2015 and Denke et al. 2016 partly reproduced Lee and Schwarz's finding of body-region specificity; however, the general Macbeth effect and cleansing-moral judgment findings (Johnson et al. 2014) largely failed in direct replications.",
+    "refs": [
+     "Lee and Schwarz 2010",
+     "Schaefer et al. 2015",
+     "Johnson et al. 2014"
+    ]
+   }
+  },
+  "ch15-e9": {
+   "name": "Hand washing after a moral transgression and helpfulness (Zhong and Liljenquist; Xu et al.)",
+   "researchers": "C. B. Zhong and K. Liljenquist; H. Xu et al.",
+   "question": "Does washing one's hands after one's own moral transgression affect the response to subsequent requests for help?",
+   "method": "In the second experiment of Zhong and Liljenquist's original study, participants recalled an immoral act of their own and then did or did not get the chance to clean their hands; their response to a request for help staged as part of the experiment was then measured. Xu et al., in turn, tested the effect of watching someone else wash their hands (or write).",
+   "finding": "Those who washed their hands responded less to the request for help. Watching someone else wash their hands also slightly reduced helpfulness, but this effect was smaller than that of washing one's own hands.",
+   "roleInChapter": "Shows that helpfulness is often a 'compensatory' behavior. When metaphorical impurity is cleansed, the need to compensate also decreases.",
+   "replication": {
+    "note": "This finding, which is part of the Macbeth effect, also remained weak in replications (Earp et al. 2014; the Siev et al. 2018 meta-analysis); an independent replication of the vicarious cleansing finding (Xu et al.) is not known.",
+    "refs": [
+     "Zhong and Liljenquist 2006",
+     "Xu et al. 2014",
+     "Siev et al. 2018"
+    ]
+   }
+  },
+  "ch15-e10": {
+   "name": "Heavy clipboard, rough puzzle and hard chair (Ackerman / Bargh)",
+   "researchers": "J. M. Ackerman, C. C. Nocera and J. A. Bargh",
+   "question": "Do incidental physical sensations (weight, texture, hardness) change social judgments about people?",
+   "method": "Participants evaluated job-application résumés attached to a light or a heavy clipboard. In other experiments, after working with smooth puzzle pieces or rough, sandpaper-like ones, they evaluated an ambiguous social interaction; sitting in a hard or soft chair, they evaluated people and made an economic negotiation.",
+   "finding": "Those holding the heavy clipboard found the candidates more 'serious' (other traits were not affected). Those handling the rough pieces found the interaction less coordinated and less successful. Those sitting in the hard chair perceived people as more stable and unfeeling and were less flexible in the negotiation.",
+   "roleInChapter": "Shows that physical sensations leak into abstract judgments. The metaphorical 'gravity' and 'hardness' and real weight and hardness are processed by the same circuits in the brain.",
+   "replication": {
+    "note": "Such 'embodied' sensory priming effects are among the findings most questioned in the replication crisis; a preregistered replication at the University of Amsterdam (Journal of Articles in Support of the Null Hypothesis, 2018) found no difference between the heavy and light clipboard conditions; strong independent replication of the other haptic effects is not known.",
+    "refs": [
+     "Ackerman et al. 2010",
+     "JASNH 14(2), 2018 preregistered replication"
+    ]
+   }
+  },
+  "ch15-e11": {
+   "name": "Warm cup and warm personality (Williams and Bargh)",
+   "researchers": "L. Williams and J. Bargh",
+   "question": "Does a hot or cold object held in the hand change judgments about a person's personality and trusting behavior?",
+   "method": "The experimenter, who appeared to have her hands full, asked the participant to hold a cup of coffee briefly; half held hot coffee and half held iced coffee. Participants then evaluated a described person. In the second part of the study, the effect of the held object's temperature on generosity was examined, and a follow-up study (Kang et al.) looked at the Trust Game and insula activity.",
+   "finding": "Those holding the warm cup found the person to have a 'warmer' personality (other traits did not change). The temperature of the held object affected generosity and level of trust; in the follow-up study, insula activity accompanied this effect.",
+   "roleInChapter": "Shows that the real sensation of warmth gets mixed into the abstract judgment of a 'warm person.' Metaphor and physical sensation are processed intertwined in the brain.",
+   "replication": {
+    "note": "Direct replications with larger samples (Lynott et al. 2014; Chabris et al. 2019) found that physical warmth did not affect judgments of interpersonal warmth or prosocial choice.",
+    "refs": [
+     "Williams and Bargh 2008",
+     "Lynott et al. 2014, Social Psychology",
+     "Chabris et al. 2019"
+    ]
+   }
+  },
+  "ch15-e12": {
+   "name": "Sacred values and the Middle East conflict (Atran et al.)",
+   "researchers": "S. Atran, R. Axelrod and R. Davis",
+   "question": "In conflicts where material offers fall short, do symbolic gestures that respect sacred values increase the likelihood of a settlement?",
+   "method": "The researchers conducted interviews in the Israeli-Palestinian conflict with people ranging from ordinary people on the street to top-level leaders (including Ghazi Hamad of Hamas and Israeli Prime Minister Benjamin Netanyahu) and examined the role of sacred values in the conditions for peace.",
+   "finding": "Sacred values were decisive at every level: alongside material concessions, the parties saw symbolic gestures, such as an apology and the other side's recognition of their own rights/symbols, as a necessary condition for peace. The authors argued that these gestures, which have no material equivalent, could be the key to a settlement.",
+   "roleInChapter": "Shows the constructive use of the destructive power of metaphor and symbol. Recognizing sacred values means acknowledging the humanity of the enemy.",
+   "replication": {
+    "note": "This is an interview and case study and is not suited to experimental replication. The finding that making material offers for sacred values intensifies the reaction has been supported in related survey experiments (Ginges et al. 2007).",
+    "refs": [
+     "Atran et al. 2007",
+     "Ginges et al. 2007, PNAS"
+    ]
+   }
+  }
+ }
+}

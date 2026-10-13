@@ -1,0 +1,335 @@
+{
+ "summary": "The chapter opens with the claim that violence has declined historically, and it discusses this optimism through both Pinker's argument and the criticisms directed at it. It then turns to mechanisms that feed humanity's best and worst behaviors at the same time, such as religion, intergroup contact, forgiveness, reconciliation and cooperation. It describes a natural inhibition against killing and how this inhibition changes with distance and individuation, through soldiers' firing rates and the trauma of drone pilots. The chapter closes by arguing that Us/Them boundaries can shift with context, and that individual examples such as Abe, Thompson and Newton, as well as the spontaneous truces in the trenches of war, show this possibility.",
+ "keyConcepts": [
+  {
+   "term": "Rate correction",
+   "explanation": "Comparing death tolls by dividing them by the total population and by the duration of the event allows a fairer ranking of large but short events against small but long ones. With this correction, World War II moves to the top of the ranking."
+  },
+  {
+   "term": "Intergroup contact",
+   "explanation": "Contact reduces prejudice only when there is equal status, equal numbers, a shared goal and institutional oversight. Otherwise the same contact can increase hostility."
+  },
+  {
+   "term": "Pseudospeciation",
+   "explanation": "This is the process of legitimizing violence by presenting the other group as nonhuman or inferior. In this context the chapter mentions the fabricated story of babies being taken out of incubators, circulated before the Gulf War."
+  },
+  {
+   "term": "Open-book game and indirect reciprocity",
+   "explanation": "This is a form of cooperation in which reputation works like a currency and one person's kindness is repaid by others in a chain."
+  },
+  {
+   "term": "Third-party punishment",
+   "explanation": "This is when someone who is not directly involved in an event punishes the norm violator despite the cost to themselves. It stands out as a mechanism that strongly increases cooperation in humans."
+  },
+  {
+   "term": "Live and Let Live system",
+   "explanation": "This is a silent truce arrangement, based on mutual restraint, that developed spontaneously in the trenches of World War I without official orders. It is sustained by ritualized, repeated signals."
+  },
+  {
+   "term": "Inhibition against close-range killing",
+   "explanation": "People have a strong natural resistance to killing an individuated target at close range. This resistance weakens as distance increases and responsibility is spread across a group."
+  },
+  {
+   "term": "Forgiveness and reappraisal",
+   "explanation": "Forgiveness is described as not being forgetting, and it often proceeds by seeing the other party again as an identity. Forgiveness remains a subjective declaration and cannot be proven from the outside."
+  },
+  {
+   "term": "Sacred values",
+   "explanation": "Resolutely defending symbolic values, more than material concessions, makes negotiation difficult. Lasting peace depends on understanding the intensity of these values."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Pinker, The Better Angels of Our Nature (the decline of violence)",
+   "finding": "Pinker argues that there has been a long-term decline in rates of violence historically and that Europe has enjoyed a long peace since 1945. Sapolsky shows that when the duration of the event is corrected for in addition to Pinker's population correction, the ranking changes: World War II rises to first place and the Rwandan genocide to seventh."
+  },
+  {
+   "name": "Religious and secular sentence-unscrambling (priming) studies",
+   "finding": "Participants who unscrambled sentences with religious words behaved more generously afterward. Secular words of oversight such as jury, police and contract produced the same effect, which suggests that the effect may be largely about the feeling of being watched."
+  },
+  {
+   "name": "Forest commons and costly punishment in Ethiopia",
+   "finding": "In Ethiopian villages that cut wood from the local forest and sell it as charcoal, villages with a high average willingness for costly punishment in an economic game hired more patrols against overcutting and had healthier forests."
+  },
+  {
+   "name": "Divine sanction and noise punishment experiment",
+   "finding": "Participants who read a text in which God sanctioned violence increased the noise punishment they gave their opponents. The effect was similar in strength among devout Mormon students and among students of a liberal Dutch university, and it was also seen, though weaker, in those who did not believe in the Bible."
+  },
+  {
+   "name": "Grossman and resistance to killing (Gettysburg and drone pilots)",
+   "finding": "Most of the rifles found at Gettysburg had been loaded but not fired; in World War II only 15-20% of riflemen fired. The trauma rate in pilots operating drones remotely turned out to be similar to that of soldiers on the battlefield."
+  },
+  {
+   "name": "The Garbage Dump baboon troop",
+   "finding": "A tuberculosis outbreak occurred in the troop that fed at the garbage dump, and most of the males who went to the dump died. In the surviving troop, the less stressed and more approachable behavior of the resident females is reported as the most likely explanation for why males arriving from outside gradually adapted to the new culture."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Live and Let Live Trenches",
+   "shows": "Shows how mutual restraint in the trenches of World War I evolved from ceasing fire at mealtimes to ritualized sniper signals; how a rule of 'two bullets in return' for accidental shots kept the truce going; and how command interventions (unit rotation, raid orders) collapsed it.",
+   "inputs": [
+    "How long the same units face each other (weeks)",
+    "Regularity of the ritual signal",
+    "Probability of accidental shots",
+    "Frequency of command interventions (rotation, raid orders)"
+   ],
+   "outputs": [
+    "Probability that the truce persists",
+    "Moment of transition into a retaliation cycle",
+    "Number of mutual shots per day"
+   ]
+  },
+  {
+   "title": "Reputation and Punishment Game",
+   "shows": "Shows how cooperation changes in finite and infinitely repeated interactions, and the role of reputation visibility and third-party punishment.",
+   "inputs": [
+    "Whether the number of rounds is known",
+    "Visibility of reputation information",
+    "Cost of third-party punishment",
+    "Proportion of punishers"
+   ],
+   "outputs": [
+    "Course of the cooperation rate over time",
+    "Length of indirect reciprocity chains",
+    "Effect of punishments on overall cooperation"
+   ]
+  },
+  {
+   "title": "Killing Distance Simulator",
+   "shows": "Shows how the tendency to fire changes as the target's level of individuation, the distance, and whether responsibility is individual or collective vary. Even when physical distance is large, as with drone pilots, the psychological cost of killing remains high as the target becomes individuated.",
+   "inputs": [
+    "Target's level of individuation",
+    "Distance",
+    "Individual or group fire",
+    "Level of training"
+   ],
+   "outputs": [
+    "Probability of firing",
+    "Proportion of responsibility diffused",
+    "Probability of subsequent trauma (conceptual indicator)"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "By saying 'the previous chapter' and 'the last chapter', the text connects the relationship between the amygdala and insula and punishment to ch16."
+  },
+  {
+   "why": "The Pinker discussion, religion and the Us/Them distinction are revisited in this chapter with explicit reference to ch9."
+  },
+  {
+   "why": "The evolution of cooperation and repeated games are expanded with reference to ch10."
+  },
+  {
+   "why": "Pseudospeciation and intergroup contact are presented through concepts introduced in ch11."
+  },
+  {
+   "why": "The idea that compassion involves self-interest is raised in the forgiveness discussion with reference to ch14."
+  },
+  {
+   "why": "Demagogue rhetoric, sacred values and the animalization of the enemy are repeated with reference to ch15."
+  },
+  {
+   "why": "The neural plasticity expected in the Newton example connects to the plasticity discussion in ch5."
+  },
+  {
+   "why": "The influence of pictures of eyes on social behavior is mentioned with reference to the finding in ch3."
+  },
+  {
+   "why": "The 'imagine' in the introduction is revisited in this chapter with a contrasting thought experiment."
+  },
+  {
+   "why": "The conclusions of the chapter are summarized in short points in the epilogue."
+  }
+ ],
+ "verifyNotes": [
+  "The text cites a 2006 meta-analysis, a 2010 Science study and some statistics with footnote numbers; since the file contains no bibliography, these details were not independently verified."
+ ],
+ "experiments": {
+  "ch17-e1": {
+   "name": "God Is Watching You: religious and secular word priming (Shariff and Norenzayan)",
+   "researchers": "A. Shariff and A. Norenzayan",
+   "question": "Does activating the concept of God in the mind increase generosity in an anonymous economic game?",
+   "method": "In one condition, participants built sentences from scrambled word strings containing religious words (spirit, divine, sacred); in the control condition the strings contained none; in another condition, secular words of oversight such as ‘jury’, ‘police’ and ‘contract’ were used. Then the amount of money they shared with a stranger in an anonymous economic game (the Dictator Game) was measured.",
+   "finding": "Those who built sentences with religious words behaved more generously afterward. Secular words of oversight produced the same effect, which suggests that the effect is largely about the feeling of being watched.",
+   "roleInChapter": "Shows how the feeling of being watched, religion included, produces moral behavior. Prosociality depends in part on the possibility of being watched.",
+   "caveats": "Sapolsky interprets the fact that secular words of oversight also produce the same effect as an indication that the result has more to do with the feeling of being watched than with religion in particular.",
+   "replication": {
+    "note": "A preregistered direct replication of Experiment 2 with about 650 people (Gomes and McCullough 2015) found no significant religious priming effect; a 2017 replication in Japan and Billingsley et al. 2018 also supported a null effect. The 2016 meta-analysis by Shariff et al. noted that the effect may be seen only in religious people and is open to publication bias.",
+    "refs": [
+     "Shariff and Norenzayan 2007",
+     "Gomes and McCullough 2015, JEP: General",
+     "Billingsley et al. 2018",
+     "Shariff et al. 2016, PSPR"
+    ]
+   }
+  },
+  "ch17-e2": {
+   "name": "When God Sanctions Killing: the noise-punishment experiment (Bushman et al.)",
+   "researchers": "B. J. Bushman, R. D. Ridge et al.",
+   "question": "Does reading in a text that God sanctions violence increase the violence participants direct at their opponents?",
+   "method": "Participants read a Bible passage in which a woman is killed by a crowd from another tribe and her husband takes revenge together with his tribe; in the version told to half of the participants, God approved of this revenge. They then played a competitive game in which the loser of each round was punished with a loud noise at an intensity chosen by the opponent.",
+   "finding": "Those who read the version in which God sanctioned violence gave their opponents louder noise punishments; the effect was larger in men than in women. The effect was equally strong among devout Mormon (Brigham Young) students and among students of a liberal Dutch university. It was also seen, though weaker, in those who did not believe in the Bible (1% of the Brigham Young students, 73% of the Dutch).",
+   "roleInChapter": "Shows that religious sanction can loosen norms against violence. That the effect does not depend entirely on the level of belief suggests that sacred sanction can also work independently of personal belief.",
+   "replication": {
+    "note": "There is no known direct replication; the validity of the noise-blast measure of aggression (the Competitive Reaction Time Task) and flexibility in its analysis have been criticized in later years.",
+    "refs": [
+     "Bushman et al. 2007"
+    ]
+   }
+  },
+  "ch17-e3": {
+   "name": "Meta-analytic test of intergroup contact theory (Pettigrew and Tropp)",
+   "researchers": "T. Pettigrew and L. Tropp",
+   "question": "Does intergroup contact reduce prejudice in general, and under what conditions?",
+   "method": "The authors combined, through meta-analysis, about 500 studies covering more than 250,000 participants from 38 countries; they compared groups defined by race, religion, ethnicity and sexual orientation.",
+   "finding": "Intergroup contact sustained under appropriate conditions (equal status, institutional support, a shared goal) generally reduced prejudice in a marked, generalizing and lasting way; the effects were roughly equal for groups based on race, religion, ethnicity and sexual orientation. For example, in a 1957 study, the more voyages white merchant seamen made with African Americans, the more favorable their racial attitudes became; time spent with Black partners had a similar effect in white police officers.",
+   "roleInChapter": "Shows that the relationship between prejudice and contact depends on conditions: without equal status, a shared goal and institutional support, contact can increase hostility.",
+   "caveats": "Sapolsky notes that the effects of peace programs bringing together youth from conflicting groups are mostly temporary: in one survey, 91% of Palestinian and Israeli youth had not kept in touch after the program.",
+   "replication": {
+    "note": "The average effect of contact reducing prejudice was also seen in later meta-analyses; however, when Paluck, Green and Green (2019) examined only randomized studies with delayed measurement, they reported that the effect was smaller, variable and weak for racial/ethnic prejudice, and that there were also signs of publication bias.",
+    "refs": [
+     "Pettigrew and Tropp 2006",
+     "Paluck, Green and Green 2019, Behavioural Public Policy"
+    ]
+   }
+  },
+  "ch17-e4": {
+   "name": "Ethiopian forest communities: willingness to punish and forest health (Rustagi et al.)",
+   "researchers": "D. Rustagi, S. Engel and M. Kosfeld",
+   "question": "Does the proportion of people in villages who are willing to engage in costly punishment affect the protection of the shared forest resource and the health of the forests?",
+   "method": "In rural Ethiopian communities (49 forest user groups) that make a living by selling charcoal made from wood taken from local forests, participants' tendencies toward cooperation and costly punishment were measured with economic games. Village averages were compared with the frequency of forest patrols and the condition of the forest.",
+   "finding": "Villages with a high average willingness for costly punishment were those that organized the most patrols to prevent overcutting of trees and had the healthiest forests.",
+   "roleInChapter": "Shows that third-party and local punishment can solve the tragedy of the commons. This makes concrete the idea that cooperation is supported by the enforcement of moral norms.",
+   "replication": {
+    "note": "This is a single field study and is correlational; the paper mainly emphasizes the proportion of conditional cooperators and costly monitoring. There are other field studies showing that laboratory game behavior predicts real common-resource management, but a direct replication of this finding is not known.",
+    "refs": [
+     "Rustagi et al. 2010"
+    ]
+   }
+  },
+  "ch17-e5": {
+   "name": "Shared social responsibility: pay-what-you-want pricing and charitable giving field experiment (Gneezy et al.)",
+   "researchers": "A. Gneezy, U. Gneezy, L. Nelson and A. Brown",
+   "question": "How do sales and donations change when buyers can set their own price and part of the sale goes to charity?",
+   "method": "About 113,000 people buying souvenir photos at an amusement park were assigned to one of four conditions: a fixed price; pay what you want; a fixed price at which it was known that a percentage of revenue went to charity; and a condition in which half of the freely chosen amount paid went to charity.",
+   "finding": "In the pay-what-you-want condition, sales shot up, but people paid very small amounts and the sales turned into a loss. Fixed-price sales with a charity share increased sales somewhat, but the company lost money. In the condition where half of the freely chosen amount paid was donated, both sales and the voluntarily paid price increased; the company made a profit and a large donation was raised.",
+   "roleInChapter": "Shows that social responsibility is more effective when shared between the individual and the business. Cooperation and generosity are strengthened by the feeling of making one's own decision.",
+   "replication": {
+    "note": "This is a large-scale field experiment; the effects of combining ‘pay what you want’ and donation have given different results depending on context in later studies. A direct replication of this study is not known.",
+    "refs": [
+     "Gneezy et al. 2010"
+    ]
+   }
+  },
+  "ch17-e6": {
+   "name": "South African Truth and Reconciliation Commission (TRC) surveys",
+   "researchers": "B. Hamber et al.; IDASA and HSRC surveys",
+   "question": "Is the Truth and Reconciliation Commission fair and successful in the eyes of victims, and how is reconciliation perceived separately from remorse and forgiveness?",
+   "method": "This is not an experiment but a summary of monitoring research: interviews with victims who took part in the TRC, conducted by the Centre for the Study of Violence and Reconciliation in South Africa (Hamber et al.), and national surveys (IDASA 1994, HSRC 1995) are reported.",
+   "finding": "Victims thought the TRC was more successful at the national level than at the local level; most were angry that no apology or compensation had come, that many perpetrators remained in their jobs, and that symbols celebrating apartheid persisted. A large majority of Black South Africans (not whites) found the commission fair and successful.",
+   "roleInChapter": "Shows that reconciliation is not the same as remorse and forgiveness, and that it can aim at the sustainability of the nation's functioning.",
+   "caveats": "Sapolsky notes that the aim of the commission was not to transform perpetrators but to make the country function: more than six thousand perpetrators testified and applied for amnesty, and 13% were granted amnesty; remorse was not required, and very few perpetrators showed remorse.",
+   "replication": {
+    "note": "This is not an experimental study but a historical process and survey/interview data; the concept of replication does not apply directly.",
+    "refs": [
+     "Hamber et al. 2000"
+    ]
+   }
+  },
+  "ch17-e7": {
+   "name": "When Apologies Work: apology form and forgiveness (Fehr and Gelfand)",
+   "researchers": "R. Fehr and M. Gelfand",
+   "question": "Does an apology make forgiveness easier when it is made in line with how the victim perceives themselves?",
+   "method": "The book does not elaborate on the method; the study compares the effect of different components of an apology on forgiveness according to how victims define themselves (as part of a collective system, within relationships, or as independent individuals).",
+   "finding": "Victims who saw themselves as part of a collective system responded most to apologies acknowledging the failure of the system, relationship-focused victims to apologies containing empathy, and independence-focused victims to apologies offering compensation.",
+   "roleInChapter": "Shows that the effect of an apology depends on its content and the recipient's perception of identity. An apology made sincerely and in an appropriate form contributes to recognition and peace.",
+   "replication": {
+    "note": "There is no known direct replication; the idea of matching apology content to the recipient's self-construal has been used in later organizational behavior studies but has not been tested systematically and independently.",
+    "refs": [
+     "Fehr and Gelfand 2010"
+    ]
+   }
+  },
+  "ch17-e8": {
+   "name": "Forgiveness therapy and health (Reed and Enright; Witvliet et al.)",
+   "researchers": "G. L. Reed and R. D. Enright; C. vanOyen Witvliet et al.",
+   "question": "Does forgiveness have a positive effect on mental and physical health compared with holding on to anger?",
+   "method": "Reed and Enright compared forgiveness therapy with ‘anger validation’ therapy in women who had suffered emotional abuse by a spouse. Witvliet et al. examined how forgiving or holding a grudge relates to emotional and physiological responses. The book summarizes these findings.",
+   "finding": "In women who received forgiveness therapy, symptoms of depression, anxiety and posttraumatic stress decreased more than with ‘anger validation’ therapy. In the study by Witvliet et al., vividly imagining holding a grudge increased physiological stress indicators such as heart rate and blood pressure; forgiving thoughts reduced this response. The book summarizes that forgiveness also shows positive effects on general health and cardiovascular function.",
+   "roleInChapter": "Shows that forgiveness is not forgetting but can be beneficial for the victim's own well-being. The bodily and emotional benefits of forgiveness point to a self-interest component in it.",
+   "caveats": "Sapolsky notes that when he says some victims ‘claim’ to have forgiven their perpetrator, he is not expressing doubt but emphasizing that forgiveness is a subjective state.",
+   "replication": {
+    "note": "That forgiveness-focused interventions reduce depression, anxiety and hopelessness was supported in meta-analyses (e.g., Wade et al. 2014); however, the evidence on direct physical health effects is mostly correlational and based on small samples.",
+    "refs": [
+     "Reed and Enright 2006",
+     "Witvliet et al. 2001",
+     "Wade et al. 2014, Journal of Consulting and Clinical Psychology"
+    ]
+   }
+  },
+  "ch17-e9": {
+   "name": "Gettysburg rifles and not firing (Grossman)",
+   "researchers": "D. Grossman (for World War II rates, based on the data of S. L. A. Marshall)",
+   "question": "To what extent do people resist shooting a human being at close range in war?",
+   "method": "Grossman brought together records on the loading and firing status of the single-shot rifles collected from the battlefield after the Battle of Gettysburg, and data on how many riflemen actually fired in World War II (S. L. A. Marshall's postwar interviews).",
+   "finding": "Of about 27,000 rifles collected at Gettysburg, about 24,000 were loaded and unfired; 12,000 had been loaded more than once, and 6,000 had been loaded three to ten times. In World War II only 15-20% of riflemen fired their weapons; by contrast, almost all crew-served weapons (e.g., machine guns) were fired.",
+   "roleInChapter": "Shows the existence of a natural inhibition against killing. This inhibition is strongest against a close and personalized target; distance and group responsibility reduce it.",
+   "replication": {
+    "note": "Marshall's ‘firing rate’ data were later seriously questioned: Spiller (1988) showed that there is no evidence Marshall conducted a systematic survey and that the rates were most likely baseless. Grossman's thesis of a natural resistance to close-range killing is contested among military historians; the Gettysburg rifle counts also rest on a single historical source.",
+    "refs": [
+     "Marshall 1947",
+     "Spiller 1988, RUSI Journal",
+     "Grossman 1995"
+    ]
+   }
+  },
+  "ch17-e10": {
+   "name": "Trauma in drone pilots (killing from a distance)",
+   "researchers": "J. L. Otto and B. J. Webber; also M. Power (pilot account)",
+   "question": "Is the trauma rate in drone pilots, who are not themselves in danger but watch their target up close and kill it, similar to that of soldiers on the battlefield?",
+   "method": "Otto and Webber compared the mental health diagnoses and counseling records of remotely piloted aircraft pilots in the U.S. Air Force with those of manned aircraft pilots. The book also includes an interview in which a drone pilot describes his first ‘kill’.",
+   "finding": "According to the book, PTSD rates in drone pilots, who are themselves in no danger, are as high as those of soldiers on the battlefield. Sapolsky attributes this to the traumatic effect of personalized killing, in which the target is watched up close for weeks.",
+   "roleInChapter": "The trauma of killing arises less from fear of death than from the act of killing by knowing and closely watching the target. Although distance removes physical danger, it does not remove the psychological cost.",
+   "replication": {
+    "note": "Otto and Webber 2013 found the rates of mental health diagnoses in drone pilots to be similar to those of manned aircraft pilots; the study does not compare them directly with soldiers on the battlefield. Later U.S. Air Force screenings (e.g., Chappelle et al. 2014) found the rate of probable PTSD in drone operators to be a few percent, below the rates reported in soldiers returning from combat; the book's phrase ‘equally high’ rests on a press report and appears exaggerated.",
+    "refs": [
+     "Otto and Webber 2013",
+     "Chappelle et al. 2014"
+    ]
+   }
+  },
+  "ch17-e11": {
+   "name": "The Garbage Dump baboon troop (culture change)",
+   "researchers": "R. Sapolsky and L. Share (outbreak: R. Tarara et al.; R. Sapolsky and J. Else)",
+   "question": "After an outbreak that fed on a garbage dump and caused heavy deaths, does the troop's social culture change, and do males arriving from outside adapt to this culture?",
+   "method": "In the ‘Garbage Dump’ baboon troop in Kenya, which fed from a tourist lodge's garbage dump, a bovine-derived tuberculosis outbreak was monitored and its source (diseased beef approved through bribery) was identified. About six years later the troop was revisited, and the sex ratio, aggression, grooming, stress hormones and the behavior of adolescent males who joined the troop afterward were observed.",
+   "finding": "Most of the troop, and all of the males who went to the dump (the most aggressive, least social), died. In the surviving troop the female-to-male ratio rose to 2:1; aggression and displaced aggression directed at the innocent decreased, sitting together and grooming increased, and stress hormones were low. Males who joined after the outbreak also adopted this low-aggression, high-affiliation culture in about six months; the resident females approached newcomers within days to weeks, whereas in typical troops this takes more than two months.",
+   "roleInChapter": "Shows that social culture can change even within the same species and that human violence is not inevitable. The baboon example offers an animal counterpart to the plasticity of human “culture”.",
+   "caveats": "Sapolsky notes that the newly arrived males were not self-selected and that there is no evidence of direct social teaching; the most likely explanation is the behavior of the less stressed resident females.",
+   "replication": {
+    "note": "This is a natural experiment in a single troop; independent replication has not been possible and is not known. The finding is seen as important but single-case evidence for the flexibility of primate culture.",
+    "refs": [
+     "Sapolsky and Share 2004"
+    ]
+   }
+  },
+  "ch17-e12": {
+   "name": "Spontaneous truces in the trenches: the Live and Let Live system (Ashworth)",
+   "researchers": "T. Ashworth",
+   "question": "How and why did truces based on mutual restraint develop in the trenches of World War I without official orders?",
+   "method": "The historian Ashworth documented the spontaneously emerging ‘Live and Let Live’ truces in the trenches by examining the diaries and letters of World War I soldiers: how they began, how they were signaled, how violations were answered, and how soldiers' view of the enemy changed.",
+   "finding": "Truces began passively: at mealtimes and in very bad weather the guns fell silent, and food carts and latrines were not fired on. They were also established actively: snipers repeatedly fired at the same harmless spot every day, giving the message ‘we could hit you but we are not’. The most common response to a violation was two bullets in return, after which the peace continued. In letters, soldiers at the front showed very little hostility toward the enemy, and hostility grew with distance from the front.",
+   "roleInChapter": "Shows that repeated interaction with an enemy can produce cooperation and a sense of responsibility. Despite sacred or systematic demonization, the concept of “Them” can shift with context.",
+   "caveats": "Sapolsky notes that these truces were repeatedly disrupted by commanders behind the lines through rotation of units, threats of court-martial, and raid orders requiring hand-to-hand fighting.",
+   "replication": {
+    "note": "This is a historical documentation, not an experiment; Axelrod (1984) used this case as a real-world example of the repeated Prisoner's Dilemma and the ‘Tit for Tat’ strategy. The concept of replication does not apply directly.",
+    "refs": [
+     "Ashworth 1980",
+     "Axelrod 1984, The Evolution of Cooperation"
+    ]
+   }
+  }
+ }
+}

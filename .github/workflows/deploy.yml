@@ -37,8 +37,9 @@ jobs:
       # .book CI'da yoktur (gitignore), bu adım orada yalnızca dosya adı denetimi yapar; yerelde metin de aranır.
       - name: dist denetimi (kitap metni sızıntısı)
         run: node scripts/check-dist.mjs
+      # İki dil: İngilizce bölüm/sim parçaları ayrı dosyalardır ve yalnızca etkin dil indirilir; toplam dist TR'nin ~1,4 katıdır.
       - name: dist boyut bütçesi (yazı tipleri dahil)
-        run: test "$(du -sk dist | cut -f1)" -lt 2500 || { echo "dist beklenenden büyük"; exit 1; }
+        run: test "$(du -sk dist | cut -f1)" -lt 4000 || { echo "dist beklenenden büyük"; exit 1; }
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

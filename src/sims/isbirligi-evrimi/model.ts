@@ -3,6 +3,8 @@
 //     evrimsel dinamik (kopyalayıcı denklemi ve sonlu nüfus).
 //  2) Akraba seçilimi: Hamilton kuralı (r·B > C) ve özgecil genin sonlu nüfusta yayılması.
 import { mulberry32 } from '../rng';
+import { num, pct as pctFmt } from '../../i18n/fmt';
+import { L } from './text';
 
 export const clamp = (v: number, lo: number, hi: number): number => Math.min(hi, Math.max(lo, v));
 
@@ -20,14 +22,16 @@ export type StratId = 'allc' | 'alld' | 'tft' | 'gtft' | 'ctft' | 'pavlov' | 'ra
 export const STRATS: StratId[] = ['allc', 'alld', 'tft', 'gtft', 'ctft', 'pavlov', 'random'];
 
 export interface StratInfo { id: StratId; name: string; short: string; rule: string }
+/** Metin okuma anında `L()` ile gelir (modül yüklenirken hesaplanmaz). */
+const stratInfo = (id: StratId): StratInfo => ({
+  id,
+  get name() { return L().strat[id].name; },
+  get short() { return L().strat[id].short; },
+  get rule() { return L().strat[id].rule; },
+});
 export const INFO: Record<StratId, StratInfo> = {
-  allc: { id: 'allc', name: 'Her zaman işbirliği', short: 'Hep işbirliği', rule: 'Ne olursa olsun işbirliği yapar.' },
-  alld: { id: 'alld', name: 'Her zaman ihanet', short: 'Hep ihanet', rule: 'Ne olursa olsun ihanet eder.' },
-  tft: { id: 'tft', name: 'Tit for Tat (karşılık ver)', short: 'Tit for Tat', rule: 'İlk turda işbirliği yapar, sonra rakibin son hamlesini tekrarlar.' },
-  gtft: { id: 'gtft', name: 'Affedici Tit for Tat (generous)', short: 'Affedici TfT', rule: 'Tit for Tat gibidir; ama rakip ihanet etse de üçte bir olasılıkla işbirliği yapar.' },
-  ctft: { id: 'ctft', name: 'Pişman Tit for Tat (contrite)', short: 'Pişman TfT', rule: 'Kendi haksız ihanetinden sonra bir tur işbirliği yapıp karşılığını sineye çeker; rakibin haksız ihanetine ise karşılık verir.' },
-  pavlov: { id: 'pavlov', name: 'Pavlov (kazan-kal, kaybet-değiş)', short: 'Pavlov', rule: 'Son turda iyi getiri aldıysa (3 ya da 5) hamlesini korur, kötü aldıysa (0 ya da 1) değiştirir.' },
-  random: { id: 'random', name: 'Rastgele', short: 'Rastgele', rule: 'Her tur yazı tura atar.' },
+  allc: stratInfo('allc'), alld: stratInfo('alld'), tft: stratInfo('tft'), gtft: stratInfo('gtft'),
+  ctft: stratInfo('ctft'), pavlov: stratInfo('pavlov'), random: stratInfo('random'),
 };
 
 /** Affedici TfT'nin affetme olasılığı: min(1 − (T−R)/(R−S), (R−P)/(T−P)) = 1/3. */
@@ -116,17 +120,15 @@ export function matchStats(m: Match): MatchStats {
   return { firstError, errors, recoveredAt, brokenRounds: broken, mutualCoop: mc, mutualDefect: md, avgA: m.scoreA / n, avgB: m.scoreB / n };
 }
 
-/** Kısa Türkçe açıklama (canlı çubuk). */
+/** Kısa açıklama (canlı çubuk). */
 export function describeMatch(m: Match, s: MatchStats = matchStats(m)): string {
-  const A = INFO[m.a].short, B = INFO[m.b].short;
-  const tail = `Toplam: ${A} ${m.scoreA}, ${B} ${m.scoreB}.`;
-  if (m.noise > 0 && !s.errors) return `${m.rounds} turda hiç hata çıkmadı. ${tail}`;
-  if (!s.errors) return `Hata yok. Karşılıklı işbirliği ${s.mutualCoop}/${m.rounds} tur. ${tail}`;
-  if (s.recoveredAt === 0 && s.mutualCoop < m.rounds / 2)
-    return `İlk hata ${s.firstError}. turda; sonrasında işbirliği bir daha oturmadı (${s.brokenRounds} tur bozuk). ${tail}`;
-  if (s.recoveredAt)
-    return `İlk hata ${s.firstError}. turda; ${s.recoveredAt - s.firstError} tur sonra işbirliği geri döndü. ${tail}`;
-  return `İlk hata ${s.firstError}. turda; ${s.errors} hata oldu. ${tail}`;
+  const T = L();
+  const tail = T.matchTail(INFO[m.a].short, INFO[m.b].short, m.scoreA, m.scoreB);
+  if (m.noise > 0 && !s.errors) return T.matchNoErrorsNoisy(m.rounds, tail);
+  if (!s.errors) return T.matchNoErrors(s.mutualCoop, m.rounds, tail);
+  if (s.recoveredAt === 0 && s.mutualCoop < m.rounds / 2) return T.matchLost(s.firstError, s.brokenRounds, tail);
+  if (s.recoveredAt) return T.matchRecovered(s.firstError, s.recoveredAt - s.firstError, tail);
+  return T.matchErrors(s.firstError, s.errors, tail);
 }
 
 /**
@@ -231,24 +233,24 @@ export const NICE: StratId[] = ['tft', 'gtft', 'ctft', 'pavlov'];
 
 /** Evrimsel dinamiğin kısa açıklaması. */
 export function describeEvolution(x0: number[], xEnd: number[], gens: number): string {
+  const T = L();
   const lead = leader(xEnd);
-  const pct = (v: number) => Math.round(v * 100);
-  const top = pct(xEnd[STRATS.indexOf(lead)]);
+  const top = pctFmt(xEnd[STRATS.indexOf(lead)]);
   const alive = STRATS.filter((_, i) => xEnd[i] >= 0.02);
   const cs = NICE.reduce((s, id) => s + xEnd[STRATS.indexOf(id)], 0);
   const d0 = x0[STRATS.indexOf('alld')], d1 = xEnd[STRATS.indexOf('alld')];
-  if (alive.length === 1) return `${gens}. kuşakta tek strateji kaldı: ${INFO[lead].short}.`;
-  if (d1 > 0.5) return `${gens}. kuşakta ihanet baskın (%${pct(d1)}): karşılık verenler yetersiz kaldı ya da gelecek gölgesi çok kısa.`;
-  if (cs > 0.6) return `${gens}. kuşakta karşılık veren stratejiler %${pct(cs)}; önde ${INFO[lead].short} (%${top}).${d1 < d0 ? ' İhanet geriledi.' : ''}`;
-  return `${gens}. kuşakta önde ${INFO[lead].short} (%${top}); ayakta kalan strateji sayısı: ${alive.length}.`;
+  if (alive.length === 1) return T.evoSingle(gens, INFO[lead].short);
+  if (d1 > 0.5) return T.evoDefectors(gens, pctFmt(d1));
+  if (cs > 0.6) return T.evoReciprocators(gens, pctFmt(cs), INFO[lead].short, top, d1 < d0);
+  return T.evoLeader(gens, INFO[lead].short, top, alive.length);
 }
 
 /** Hazır başlangıç karışımları (STRATS sırasıyla; yüzde). */
 export const MIXES: { name: string; x: number[] }[] = [
-  { name: 'Eşit karışım', x: [14, 14, 15, 14, 14, 15, 14] },
-  { name: 'Çoğunluk hain', x: [4, 70, 6, 6, 6, 6, 2] },
-  { name: 'Saf Tit for Tat dünyası', x: [0, 2, 94, 2, 0, 2, 0] },
-  { name: 'Saf iyiler arasında 1 hain', x: [97, 3, 0, 0, 0, 0, 0] },
+  { get name() { return L().mixNames[0]; }, x: [14, 14, 15, 14, 14, 15, 14] },
+  { get name() { return L().mixNames[1]; }, x: [4, 70, 6, 6, 6, 6, 2] },
+  { get name() { return L().mixNames[2]; }, x: [0, 2, 94, 2, 0, 2, 0] },
+  { get name() { return L().mixNames[3]; }, x: [97, 3, 0, 0, 0, 0, 0] },
 ];
 
 /* ===================== Akraba seçilimi ===================== */
@@ -256,14 +258,17 @@ export const MIXES: { name: string; x: number[] }[] = [
 export interface Kin { id: string; name: string; r: number; frac: string; dogPct?: number }
 /** Soy bağı katsayıları r: standart popülasyon genetiği değerleri.
  *  dogPct: kitaptaki köpek/yabancı ahlaki ikilem anketinde köpeği seçenlerin yüzdesi (ch10-e10). */
+const kin = (id: keyof ReturnType<typeof L>['kinNames'], r: number, frac: string, dogPct?: number): Kin => ({
+  id, get name() { return L().kinNames[id]; }, r, frac, dogPct,
+});
 export const KINS: Kin[] = [
-  { id: 'kardes', name: 'Kardeş', r: 1 / 2, frac: '1/2', dogPct: 1 },
-  { id: 'yarim', name: 'Yarı kardeş', r: 1 / 4, frac: '1/4' },
-  { id: 'yegen', name: 'Yeğen', r: 1 / 4, frac: '1/4' },
-  { id: 'buyuk', name: 'Büyükanne-büyükbaba', r: 1 / 4, frac: '1/4', dogPct: 2 },
-  { id: 'kuzen', name: 'Birinci kuzen', r: 1 / 8, frac: '1/8', dogPct: 16 },
-  { id: 'kuzen2', name: 'İkinci kuzen', r: 1 / 32, frac: '1/32' },
-  { id: 'yabanci', name: 'Yabancı', r: 0, frac: '0', dogPct: 26 },
+  kin('kardes', 1 / 2, '1/2', 1),
+  kin('yarim', 1 / 4, '1/4'),
+  kin('yegen', 1 / 4, '1/4'),
+  kin('buyuk', 1 / 4, '1/4', 2),
+  kin('kuzen', 1 / 8, '1/8', 16),
+  kin('kuzen2', 1 / 32, '1/32'),
+  kin('yabanci', 0, '0', 26),
 ];
 
 /** Hamilton kuralı: özgecil gen, r·B − C > 0 iken yayılır. */
@@ -337,9 +342,9 @@ export function replicateKin(P: KinParams, seed: number, runs: number): KinRun[]
 }
 
 export function describeKin(kin: Kin, B: number, C: number, meanEnd: number, p0: number): string {
+  const T = L();
   const lhs = kin.r * B;
-  const f = (v: number) => v.toFixed(2).replace('.', ',');
-  const verdict = lhs > C + 1e-9 ? 'yayılır' : lhs < C - 1e-9 ? 'yayılmaz' : 'denge sınırında, rastlantıya kalır';
-  const pc = (v: number) => Math.round(v * 100);
-  return `${kin.name} (r = ${kin.frac}): r·B = ${f(lhs)}, C = ${f(C)}; özgecil gen ${verdict}. Ortalama frekans %${pc(p0)} → %${pc(meanEnd)}.`;
+  const f = (v: number) => num(v, 2);
+  const say = lhs > C + 1e-9 ? T.kinSpreads : lhs < C - 1e-9 ? T.kinFails : T.kinTie;
+  return say(kin.name, kin.frac, f(lhs), f(C), pctFmt(p0), pctFmt(meanEnd));
 }

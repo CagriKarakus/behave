@@ -1,0 +1,328 @@
+{
+ "timescale": "Evolutionary time (roughly a million years ago and before)",
+ "summary": "The chapter builds the evolution of behavior on three basic principles: individual selection, kin selection and reciprocal altruism. It describes how the idea of group selection, the assumption that animals behave for the good of the species, was refuted by observations of infanticide in langur monkeys and by the work of Hamilton and Williams. How cooperation among unrelated individuals begins and persists is discussed through game theory and the Tit for Tat strategy. The chapter also addresses the aspects of human behavior that deviate from these models, as well as the debates over the pace of evolution and adaptationism; as the close of the first part, it emphasizes the importance of context and feedback loops.",
+ "keyConcepts": [
+  {
+   "term": "Individual selection",
+   "explanation": "The idea that behavior is shaped by the individual's effort to pass on as many of its own genes as possible to the next generation. The killing of the previous male's infants by a new male in langurs is explained by this logic."
+  },
+  {
+   "term": "Kin selection",
+   "explanation": "Because copies of genes are shared among relatives, helping a relative also serves gene transmission. Hamilton developed an equation that weighs the cost and benefit of such help by degree of relatedness."
+  },
+  {
+   "term": "Reciprocal altruism",
+   "explanation": "Unrelated individuals giving each other costly help in expectation of being repaid later. It requires sociality, frequent encounters and the ability to recognize one another."
+  },
+  {
+   "term": "Group selection and neo-group selection",
+   "explanation": "The idea that traits that are individually maladaptive but beneficial at the group level can be selected. Its old form is rejected; however, under limited conditions, especially in humans, it is again regarded as important."
+  },
+  {
+   "term": "Green-beard effect",
+   "explanation": "The idea that genes can spread if they carry a conspicuous marker and also cause the bearer to recognize that same marker and help those who have it. It is interpreted as a primitive form of local discrimination and xenophobia."
+  },
+  {
+   "term": "Tit for Tat strategy",
+   "explanation": "A simple strategy that cooperates in the first round and thereafter copies the opponent's previous move. It wins the tournament, but when there is signal error it can lock into a cycle of mutual retaliation."
+  },
+  {
+   "term": "Pair-bonded and tournament species",
+   "explanation": "Two social systems in which traits such as size difference between the sexes, male paternal investment, competition and testis size cluster together. This classification of species makes it possible to predict many behavioral traits."
+  },
+  {
+   "term": "Parent-offspring conflict",
+   "explanation": "The tension between the parent's future reproduction and the offspring's present need. Weaning and the insulin tug-of-war between mother and fetus are examples of this conflict."
+  },
+  {
+   "term": "Punctuated equilibrium",
+   "explanation": "A paleontological proposal that evolution proceeds through long periods of stasis and short, abrupt leaps. It stands against gradualist sociobiology: if evolution is mostly static, the assumption that every small difference in fit among individuals has evolutionary consequences, and many of the optimization explanations in the chapter, may be less important than thought."
+  },
+  {
+   "term": "Adaptationism and spandrels",
+   "explanation": "The tendency to assume that every trait is an adaptation, and the critique of this. The idea that some traits are not adaptations but byproducts carried along with other traits."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Hrdy's langur monkey study (1977)",
+   "finding": "In langurs in India, newly arrived males killed the infants of the resident male. Because the male's period of dominance was shorter than the interval between births, this strategy served to pass on the male's genes by bringing females back into ovulation. Females, for their part, tried to deceive the new male by showing false estrus."
+  },
+  {
+   "name": "Axelrod's iterated prisoner's dilemma tournament",
+   "finding": "The simple Tit for Tat strategy gave the best result among various complex strategies. When signal error was added, two Tit for Tat players locked into a cycle of retaliation; this led to the development of more forgiving strategies."
+  },
+  {
+   "name": "E. coli toxin experiment",
+   "finding": "It was shown that three bacterial strains, one producing a toxin, one sensitive to the toxin and one unaffected by the toxin, could coexist in balance by limiting one another. Each strain had a strength and a weakness."
+  },
+  {
+   "name": "Stickleback mirror experiment",
+   "finding": "When a fish that was made to seem to have a second fish beside it, via a mirror, saw its reflection lagging behind, it believed its partner was not making a move and stopped darting forward. Behavior tracked the perceived control of reciprocity."
+  },
+  {
+   "name": "Cheney and Seyfarth's vervet and baboon playback experiments",
+   "finding": "Monkeys could tell from sound recordings who was related to whom and could detect changes in rank. A rank reversal between relatives was not found interesting and drew no looking at all."
+  },
+  {
+   "name": "Icelandic marriage data",
+   "finding": "In about 160 years of records, the highest reproductive success was seen in marriages between third and fourth cousins. This shows a balance between help given to kin and the harms of inbreeding."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Tit for Tat Tournament and Signal Error",
+   "shows": "Shows how different strategies spread in the iterated prisoner's dilemma, how cycles of retaliation arise when there is signal error, and how forgiving strategies break them.",
+   "inputs": [
+    "Strategy set (always cooperate, always defect, Tit for Tat, forgiving Tit for Tat)",
+    "Signal error rate",
+    "Uncertainty about the number of rounds",
+    "Strategy costs"
+   ],
+   "outputs": [
+    "Change in each strategy's population share over time",
+    "Rate of mutual cooperation",
+    "Frequency of mutual retaliation lock-in"
+   ]
+  },
+  {
+   "title": "Kin Selection Calculator",
+   "shows": "Shows whether an altruistic act increases gene transmission, depending on degree of relatedness and benefit-to-cost ratio; compares different degrees of relatedness such as sibling, half-sibling and cousin.",
+   "inputs": [
+    "Degree of relatedness (sibling, half-sibling, cousin, stranger)",
+    "Benefit of help to gene transmission",
+    "Individual cost of help"
+   ],
+   "outputs": [
+    "Whether altruism spreads",
+    "Critical relatedness threshold",
+    "Curve of how the decision to help changes with degree of relatedness"
+   ]
+  },
+  {
+   "title": "Pair-Bonded or Tournament?",
+   "shows": "From a few inputs such as size difference between the sexes and paternal investment, predicts a species' social system and its co-clustering traits; it is like an interactive version of the comparison table in the chapter.",
+   "inputs": [
+    "Body size difference between the sexes",
+    "Male paternal investment",
+    "Level of competition among males"
+   ],
+   "outputs": [
+    "Predicted social system (pair-bonded or tournament)",
+    "Expected traits (testis size, cuckoldry rate, distribution of reproductive success)",
+    "Fit score of the prediction"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "The prisoner's dilemma was introduced in Chapter 3; this chapter elaborates on it in the context of game theory and evolution."
+  },
+  {
+   "why": "Oxytocin and the pair-bonding behavior of the prairie vole are directly related to the distinction between pair-bonded and tournament species."
+  },
+  {
+   "why": "That genes do not “cause” behavior one by one and the gene-phenotype distinction were covered in Chapter 8; this chapter places evolutionary models on that foundation."
+  },
+  {
+   "why": "The caution in Chapter 9 about the validity of the cooperativeness of hunter-gatherer societies applies again to the human comparisons in this chapter."
+  },
+  {
+   "why": "The green-beard effect and local discrimination are taken up again in Chapter 11 as the basic mechanism of the Us/Them distinction."
+  },
+  {
+   "why": "The concept of pseudospeciation is mentioned in the chapter, and it is noted that it will be elaborated in Chapter 15."
+  },
+  {
+   "why": "The question of how reciprocal cooperation first begins is left as a topic to be returned to in the “last chapter.”"
+  }
+ ],
+ "experiments": {
+  "ch10-e1": {
+   "name": "Hrdy's observations of infanticide in langur monkeys",
+   "researchers": "S. B. Hrdy",
+   "question": "Why do male langur monkeys in India kill the infants of the previous male?",
+   "method": "Langur monkeys in the Mount Abu region of India were observed. Females lived with a single breeding male, while all-male bands occasionally drove this male out, after which one of them took up residence in the group. Hrdy tested “pathology” explanations for infanticide, such as hunger, overcrowding or spillover aggression, and compared the male's tenure in the group with the interbirth interval.",
+   "finding": "Incoming males killed the infants of the previous male. Because a breeding male's average tenure (about twenty-seven months) was shorter than the interbirth interval, the females, whose nursing was cut short, ovulated again, which gave this male a chance to reproduce. Females had developed counterstrategies by defending their infants and showing false estrus. According to the book, competitive infanticide has been documented in 119 species under similar conditions.",
+   "roleInChapter": "Presented as the key observation in refuting the group-selection explanation: animals behave not for the good of the species but to spread their own genes; it is the foundation of the idea of individual selection.",
+   "caveats": "Sapolsky recounts that the finding was initially met with skepticism and that people tried to explain infanticide as a pathological condition (overcrowding, hunger); Hrdy ruled out these explanations.",
+   "replication": {
+    "note": "Competitive infanticide by males was later documented in lions, chimpanzees, gorillas and many other mammal species; the comparative analysis by Lukas and Huchard (2014) supported the sexual selection explanation. Although some anthropologists, such as Sussman, still criticize the interpretation in langurs, the phenomenon itself is widely accepted.",
+    "refs": [
+     "Lukas and Huchard 2014 (Science)",
+     "Sussman et al. 1995"
+    ]
+   }
+  },
+  "ch10-e2": {
+   "name": "Cheney and Seyfarth's vervet and baboon playback experiments",
+   "researchers": "D. Cheney and R. Seyfarth; T. Bergman et al.",
+   "question": "Can monkeys distinguish kinship relationships and rank changes from sound recordings?",
+   "method": "The vocalizations of every individual in a vervet group were recorded, and while the group was sitting, an infant's distress call was played from a speaker hidden in the bushes. In baboons, when two unrelated females sat near the speaker, one of three recordings was played: a fight between relatives of the two females, a fight between a relative of one and a third female, or a fight between two unrelated females. In another study, recordings were cut and spliced so that it sounded as if the rank order between two baboons had reversed.",
+   "finding": "When vervet females heard the call, they looked at the infant's mother; that is, they recognized the voices and knew whose infant was whose. Baboon females looked longer at the speaker if their relatives were in the fight; if the relatives of the two females were fighting each other, the higher-ranking female displaced the lower-ranking one. A rank change between families drew everyone's attention, whereas a reversal within the same family did not: baboons classified others by both rank and kinship.",
+   "roleInChapter": "Shows that primates cognitively track kinship relationships and that this shapes behavior patterns; provides a cognitive basis for kin selection.",
+   "replication": {
+    "note": "Using the playback method, it has been shown again by different teams, in baboons and other species, that primates recognize individuals by voice and track kinship and rank relationships among third parties. Although the samples of individual experiments are small, the overall finding is consistent.",
+    "refs": [
+     "Bergman et al. 2003",
+     "Cheney and Seyfarth 2007 (Baboon Metaphysics)"
+    ]
+   }
+  },
+  "ch10-e3": {
+   "name": "Kin-based sperm clustering in deer mice",
+   "researchers": "H. Fisher and H. Hoekstra",
+   "question": "Do the sperm of polyandrous females compete with the sperm of related males or with random sperm?",
+   "method": "In a deer mouse species in which females mate with multiple males, the study examined, according to relatedness, which sperm come together when sperm cluster in the female reproductive tract and can swim faster.",
+   "finding": "Sperm clustered only with sperm from the same individual or from a close relative.",
+   "roleInChapter": "A striking example showing that kin selection can operate beyond primates, even at the cellular level.",
+   "replication": {
+    "note": "No independent replication is known. Later studies from the same laboratory, which examined sperm differences between polyandrous and monogamous deer mouse species at the genetic level, gave results consistent with the finding.",
+    "refs": [
+     "Fisher and Hoekstra 2010"
+    ]
+   }
+  },
+  "ch10-e4": {
+   "name": "Icelandic marriage and fertility records",
+   "researchers": "A. Helgason et al.",
+   "question": "What is the effect of consanguineous marriages on reproductive success in humans?",
+   "method": "Using records spanning about 160 years that cover every couple in Iceland, the degree of kinship between spouses was compared with the couple's number of children and grandchildren. Iceland was chosen as a suitable population for this kind of analysis because of its genetic and socioeconomic homogeneity.",
+   "finding": "The highest reproductive success was seen in marriages between third and fourth cousins. The book presents this together with the finding that women prefer the odor of moderately related men over that of unrelated men (Jacob et al. 2002).",
+   "roleInChapter": "Uses human data to show the balance between kin selection and the harms of inbreeding; points to a biological tendency independent of cultural prohibitions.",
+   "replication": {
+    "note": "An observational finding based on record data; no replication at the same scale in other countries is known, and socioeconomic confounders cannot be completely excluded. The literature on MHC-based odor preferences gives mixed results.",
+    "refs": [
+     "Helgason et al. 2008",
+     "Havlíček and Roberts 2009 (Psychoneuroendocrinology)"
+    ]
+   }
+  },
+  "ch10-e5": {
+   "name": "Kerr et al. E. coli toxin experiment (rock-paper-scissors)",
+   "researchers": "B. Kerr et al.",
+   "question": "How can three bacterial strains that limit one another coexist in a toxin cycle?",
+   "method": "Three E. coli strains were created: the first secretes a toxin (it can kill competitors, but making the toxin is energetically costly); the second collects nutrients well thanks to a membrane transporter that takes up nutrients, but because the toxin also enters through this transporter, it is sensitive to the toxin; the third lacks the transporter, is resistant to the toxin and does not make toxin, but takes up fewer nutrients. The strains were allowed to grow together.",
+   "finding": "The strains were able to coexist in balance, each limiting the growth of another; the structure resembled a rock-paper-scissors game.",
+   "roleInChapter": "Shows that a cyclical balance like rock-paper-scissors can also arise in real living systems; exemplifies an evolutionary constraint mechanism for cooperation.",
+   "caveats": "Sapolsky notes that this balance does not fit our intuitions about cooperation well, and that it resembles mutual deterrence (peace based on nuclear weapons) more than cooperation.",
+   "replication": {
+    "note": "The rock-paper-scissors dynamics and the maintenance of diversity by local interaction have been supported by later experiments in the same system and in different microbial setups (e.g., Nahum et al. 2011).",
+    "refs": [
+     "Kerr et al. 2002",
+     "Nahum et al. 2011"
+    ]
+   }
+  },
+  "ch10-e6": {
+   "name": "Iterated prisoner's dilemma tournament (Axelrod)",
+   "researchers": "R. Axelrod (winning strategy by A. Rapoport); R. Axelrod and W. D. Hamilton; M. Nowak, K. Sigmund, R. Boyd",
+   "question": "What is the best strategy in a prisoner's dilemma repeated for an unknown number of rounds?",
+   "method": "Axelrod asked colleagues from different fields for strategies for the iterated prisoner's dilemma in which the number of rounds is unknown; he programmed the submitted strategies and compared them in a large computer tournament in which everyone played everyone. In later studies, signal errors (misunderstood moves) were added to the game.",
+   "finding": "The winner was the simplest strategy, proposed by Anatol Rapoport: Tit for Tat (cooperate in the first round, then repeat the opponent's previous move). Although it won almost none of the individual encounters, it produced the best result overall. When signal error was added, two Tit for Tat players locked into an endless cycle of mutual retaliation; this led to the development of solutions such as “contrite” and “forgiving” Tit for Tat.",
+   "roleInChapter": "Makes the evolutionary logic of reciprocal altruism concrete; forms the basis for discussing when and how cooperation persists.",
+   "caveats": "Sapolsky says he is not convinced that strict Tit for Tat-type reciprocity has been clearly demonstrated in other species, but notes that animals have reciprocity systems that are sensitive to cheating.",
+   "replication": {
+    "note": "The tournament result is a historical fact, and the power of Tit for Tat to initiate cooperation has been confirmed in many simulations. However, later theoretical work showed that its superiority depends on conditions: in noisy environments, strategies such as “win-stay, lose-shift” can do better, and no strategy is best in every environment.",
+    "refs": [
+     "Nowak and Sigmund 1993",
+     "Press and Dyson 2012 (PNAS)"
+    ]
+   }
+  },
+  "ch10-e7": {
+   "name": "Stickleback mirror experiment (Milinski)",
+   "researchers": "M. Milinski",
+   "question": "Do sticklebacks perceive whether their partners are cooperating and act accordingly?",
+   "method": "A stickleback inspected a larger and dangerous cichlid beyond a glass partition with short forward darts. When a mirror was placed in the aquarium perpendicular to the axis of the two fish, the reflection made it look as if a “partner” stickleback were beside it. The mirror was then placed at an angle so that the reflection appeared to lag behind.",
+   "finding": "With the parallel mirror, the fish kept darting forward together with its “partner.” When the reflection appeared to lag behind, that is, when the partner seemed to be defecting, the fish stopped darting forward.",
+   "roleInChapter": "Shows that reciprocal altruism also operates in animals and that reciprocity is monitored and punished; a possible animal counterpart of Tit for Tat logic.",
+   "caveats": "Sapolsky says he himself is not convinced that Tit for Tat-style reciprocity has been clearly demonstrated in animals, but that animals have reciprocity systems that are sensitive to punishment.",
+   "replication": {
+    "note": "Whether the mirror setup really measures reciprocity or only social facilitation has been questioned (e.g., Lazarus and Metcalfe 1990); whether Tit for Tat operates in fish during predator inspection has remained contested. This is consistent with Sapolsky's own doubt.",
+    "refs": [
+     "Lazarus and Metcalfe 1990 (Animal Behaviour)",
+     "Dugatkin 1997 (Cooperation Among Animals)"
+    ]
+   }
+  },
+  "ch10-e8": {
+   "name": "Stepparents and child abuse (Cinderella effect)",
+   "researchers": "M. Daly and M. Wilson",
+   "question": "Are children abused and killed more often by stepparents than by biological parents?",
+   "method": "Cases of child abuse and killing were compared according to whether the perpetrator was a biological parent or a stepparent.",
+   "finding": "Children were abused and killed far more often by stepparents than by their biological parents. This finding was named the “Cinderella effect” and was interpreted as a parallel to infanticide.",
+   "roleInChapter": "Questions the trace of individual selection in humans through an observation resembling competitive infanticide; shows how kinship and family structure interact in human behavior.",
+   "caveats": "Sapolsky notes that the finding has been criticized: socioeconomic status may not have been adequately controlled (stepfamilies tend to have lower incomes and more stress), there may be detection bias, and the finding was replicated in some studies but not in others. Sapolsky thinks the jury is still out on this.",
+   "replication": {
+    "note": "The stepparent risk was found again in Canadian and US data (e.g., Weekes-Shackelford and Shackelford 2004), but not in Swedish data (Temrin et al. 2000; Nordlund and Temrin 2007). The debate over socioeconomic confounders and detection bias continues.",
+    "refs": [
+     "Weekes-Shackelford and Shackelford 2004",
+     "Temrin et al. 2000",
+     "van IJzendoorn et al. 2009"
+    ]
+   }
+  },
+  "ch10-e9": {
+   "name": "Kibbutz children and the Westermarck effect",
+   "researchers": "J. Shepher",
+   "question": "Can children raised together on a kibbutz marry their age-group peers, or does shared childhood make them sexually unattracted to one another?",
+   "method": "In Israeli kibbutzim, children grew up living with their peers in communal dormitories, although they saw their parents for a few hours a day. The anthropologist Joseph Shepher examined the records of all marriages between people from the same kibbutz and looked at whether the spouses had been in the same age group in childhood.",
+   "finding": "Among about three thousand marriages, there was not a single case in which two people who had spent their first six years in the same age group married. Even though people from the same group maintained close and affectionate relationships, they felt no sexual interest in one another.",
+   "roleInChapter": "Shows that humans recognize kinship not through genetic cues but cognitively, by treating those who “feel like kin” as kin, and not always rationally.",
+   "replication": {
+    "note": "The Westermarck effect has been supported by other data, such as the “sim-pua” marriages in Taiwan (Wolf 1995). However, Shor and Simchai (2009), re-examining the kibbutz data, reported that sexual interest within the same age group is more common than assumed and that there were marriages, albeit few (14 of about 2,769 couples); that is, the claim of “none at all” may be exaggerated.",
+    "refs": [
+     "Wolf 1995",
+     "Shor and Simchai 2009 (American Journal of Sociology)"
+    ]
+   }
+  },
+  "ch10-e10": {
+   "name": "Dog or stranger (moral dilemma)",
+   "researchers": "R. Topolski et al.",
+   "question": "How do people decide whom to rescue in a danger, depending on whose relative it is and which one is a dog?",
+   "method": "Participants were given a scenario in which a bus was approaching a person and a dog and they could save only one. Who the person was (a sibling, a grandparent, a distant cousin, someone from a foreign country) and whose dog it was (an ordinary dog or the person's own dog) were varied.",
+   "finding": "The proportion choosing the dog increased as relatedness decreased: 1% against a sibling, 2% against a grandparent, 16% against a distant cousin, and 26% against a foreign tourist. When the dog was the person's own dog, 46% of women chose to save their dog instead of the foreign tourist.",
+   "roleInChapter": "Shows that people define kinship not rationally but by perceived closeness; this kind of “pseudo-kinship” tendency exemplifies the contradictions in the last part of the chapter.",
+   "replication": {
+    "note": "A single survey study; no large-scale replication is known. It is also unclear how well preferences in hypothetical scenarios reflect real behavior.",
+    "refs": [
+     "Topolski et al. 2013"
+    ]
+   }
+  },
+  "ch10-e11": {
+   "name": "Kinship ratios in hunter-gatherer bands",
+   "researchers": "K. Hill et al.",
+   "question": "Is cooperation in hunter-gatherer groups based on kin selection or on reciprocal altruism among unrelated individuals?",
+   "method": "Records of more than five thousand people from 32 hunter-gatherer societies around the world were examined to calculate what proportion of individuals within a group were blood relatives.",
+   "finding": "Only about 40% of the individuals within groups turned out to be blood relatives. Therefore, hunter-gatherer cooperation rests at least as much on reciprocal altruism among unrelated individuals as on kin selection.",
+   "roleInChapter": "Shows that the human capacity to cooperate among unrelated individuals is extraordinary and that this capacity was fundamental for most of human evolution.",
+   "caveats": "Sapolsky reminds us that this result rests on the assumption that present-day hunter-gatherers are good representatives of our ancestors (the caution in Chapter 9).",
+   "replication": {
+    "note": "The finding that a significant share of hunter-gatherer groups consists of non-relatives was supported by the Agta and Mbendjele data of Dyble et al. (2015); this study linked low relatedness to equality between women and men in residence decisions.",
+    "refs": [
+     "Hill et al. 2011",
+     "Dyble et al. 2015 (Science)"
+    ]
+   }
+  },
+  "ch10-e12": {
+   "name": "Siberian silver fox domestication experiment (Belyaev)",
+   "researchers": "D. Belyaev and L. Trut",
+   "question": "If selection is carried out by reducing fear of humans, can domestication occur within a few generations?",
+   "method": "In the 1950s, the Russian geneticist Dmitri Belyaev bred captive Siberian silver foxes by selecting those most willing to stay close to humans, and he continued this selection across generations.",
+   "finding": "Within thirty-five generations, domesticated foxes that could be picked up and petted were obtained; according to the book, this shows that evolutionary change can be very rapid.",
+   "roleInChapter": "Presented as real-time evidence of rapid evolutionary change in the debate over whether evolutionary change is gradualist or punctuated equilibrium.",
+   "caveats": "Sapolsky stresses that this is artificial, not natural, selection; as an example closer to natural selection, he mentions Moscow's street dogs, which avoid humans and have stopped wagging their tails.",
+   "replication": {
+    "note": "That domestication emerges rapidly under selection is accepted as a historical fact. However, Lord et al. (2020) questioned the interpretation of the experiment as evidence for a “domestication syndrome,” showing that the experiment's founding foxes came from Canadian fur farms and were already partly domesticated.",
+    "refs": [
+     "Trut et al. 2009 (BioEssays)",
+     "Lord et al. 2020 (Trends in Ecology & Evolution)"
+    ]
+   }
+  }
+ }
+}

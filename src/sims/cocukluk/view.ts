@@ -6,23 +6,22 @@ import { createAcePanel } from './ace-panel';
 import { createMarshPanel } from './marsh-panel';
 import { createMoralPanel } from './moral-panel';
 import type { Ctx, Meter, Panel } from '../ui';
+import { L } from './text';
 
 type Tab = 'marsh' | 'ace' | 'moral';
-const TABS: Array<{ key: Tab; label: string }> = [
-  { key: 'marsh', label: 'Marshmallow testi' },
-  { key: 'ace', label: 'Çocukluk adversitesi' },
-  { key: 'moral', label: 'Ahlaki gelişim' },
-];
+const TAB_KEYS: Tab[] = ['marsh', 'ace', 'moral'];
 
-const TEMPLATE = (id: string) => `
+const TEMPLATE = (id: string, T: ReturnType<typeof L>) => {
+  const TABS = TAB_KEYS.map((key) => ({ key, label: T.tabs[key] }));
+  return `
 <div class="sim sim-ck">
-  <p class="lede">Erken yaşantılar yetişkinlikteki davranışın zeminini nasıl hazırlar, ve bu ne kadar kaderdir?</p>
+  <p class="lede">${T.lede}</p>
 
-  <div class="tabs" role="tablist" aria-label="Simülasyon bölümleri">
+  <div class="tabs" role="tablist" aria-label="${T.tablistAria}">
     ${TABS.map((t, i) => `<button class="tab" role="tab" id="${id}-tab-${t.key}" data-pane="${t.key}" aria-controls="${id}-pane-${t.key}" aria-selected="${i === 0}" ${i ? 'tabindex="-1"' : ''} type="button">${t.label}</button>`).join('')}
   </div>
 
-  <div class="sim-bar" role="group" aria-label="Anlık açıklama" data-ref="bar"><div class="sim-bar-in">
+  <div class="sim-bar" role="group" aria-label="${T.barAria}" data-ref="bar"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
     <div class="meters" data-ref="meters"></div>
   </div></div>
@@ -30,13 +29,15 @@ const TEMPLATE = (id: string) => `
 
   ${TABS.map((t, i) => `<section class="pane" role="tabpanel" id="${id}-pane-${t.key}" data-pane="${t.key}" aria-labelledby="${id}-tab-${t.key}" ${i ? 'hidden' : ''}></section>`).join('')}
 
-  <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan gelenler: marshmallow grubunda yaklaşık üçte birinin 15 dakikayı tamamlaması ve ortalamanın ~11 dakika olması, stratejilerin ve deneyciye güvenin yönü, uzun vadeli öngörünün karışık replikasyonu (Watts ve ark. 2018), SES / kurumda bakım / anne ilgisinin yönleri, Kohlberg düzeylerinin yaş örüntüsü ve Blake'in yaş aralıkları. Bunların dışındaki bütün büyüklükler modelin varsayımıdır; kesin risk yüzdesi ya da "kader" iddiası taşımaz.</p>
+  <p class="foot">${T.foot}</p>
 </div>`;
+};
 
 export function mount(container: HTMLElement): () => void {
   const scope = new Scope();
   const id = uid('ck');
-  container.innerHTML = TEMPLATE(id);
+  const T = L();
+  container.innerHTML = TEMPLATE(id, T);
   const root = container.firstElementChild as HTMLElement;
   const $ = <T extends Element = HTMLElement>(name: string) => ref<T>(root, name);
 
@@ -96,39 +97,39 @@ export function mount(container: HTMLElement): () => void {
   /* ---- Rehberli tur (kaydırma yok: tur kartı yerinde kalır, çıktı çubuğu sonucu gösterir) ---- */
   const tour = createTour(scope, [
     {
-      title: 'Bir marshmallow, on beş dakika',
-      text: 'Beş yaşında bir çocuk, önünde marshmallow, deneyci odadan çıkmış. Kitaba göre grubun yaklaşık üçte biri 15 dakikayı tamamlar, ortalama 11 dakikaya yakın bekler; birkaçı hemen yer.',
-      look: 'Grafiğin sağ ucundaki mavi sütun (tamamlayanlar) ve çubuktaki yüzde.',
+      title: T.tour[0].title,
+      text: T.tour[0].text,
+      look: T.tour[0].look,
       apply: () => { showTab('marsh'); marsh.set({ age: 5, strategy: 'look', trust: true, mode: 'raw' }); },
     },
     {
-      title: 'Strateji beklemeyi uzatır',
-      text: 'Aynı çocuklar, bu kez marshmallow\'u bulut gibi "soğuk" düşünüyor. Dikkati dağıtmak ve ödülü soğuk özellikleriyle düşünmek beklemeyi uzatır; lezzetini düşünmek kısaltır. Deneyciye güven de önemlidir.',
-      look: 'Mavi sütunun büyümesi. Sonra "Deneyci sözünü tutmamış" seçeneğini dene.',
+      title: T.tour[1].title,
+      text: T.tour[1].text,
+      look: T.tour[1].look,
       apply: () => { showTab('marsh'); marsh.set({ age: 5, strategy: 'cold', trust: true, mode: 'raw' }); },
     },
     {
-      title: 'Yıllar sonrası: karışık',
-      text: 'Ham veride uzun bekleyenler sonradan daha iyi gidiyor gibi görünür. Ancak aile geçmişi kontrol edilince ilişki büyük ölçüde eriyor; kitaptaki replikasyon durumu "karışık" (Watts ve ark. 2018).',
-      look: 'İkinci kutuda kırmızı çizginin yatıklaşması ve r değerinin düşmesi.',
+      title: T.tour[2].title,
+      text: T.tour[2].text,
+      look: T.tour[2].look,
       apply: () => { showTab('marsh'); marsh.set({ age: 5, strategy: 'look', trust: true, mode: 'ctrl' }); },
     },
     {
-      title: 'Adversite birikir, kader olmaz',
-      text: 'Beş olumsuz deneyim, korumasız. Risk dağılımı sağa kayar: deneyim sayısı arttıkça depresyon, dürtü kontrolü güçlüğü ve aşırı stres tepkisi eğilimi yükselir. Ama dağılımlar geniş ve çakışıyor.',
-      look: 'Dağılımın kayması ve "yüksek eğilim bölgesi" dışında kalan büyük alan.',
+      title: T.tour[3].title,
+      text: T.tour[3].text,
+      look: T.tour[3].look,
       apply: () => { showTab('ace'); ace.set({ n: 5, out: 'dep' }); },
     },
     {
-      title: 'Koruyucu etkenler eğriyi düzleştirir',
-      text: 'Aynı beş deneyim, ama güvenli bağlanma, destekleyici bir yetişkin ve iyi kaynaklar var. Eğri düzleşir; stres tepkisinde fark en belirgindir (anne ilgisi ve epigenetik iz, Meaney).',
-      look: 'Düz çizginin (mevcut koruma) kesikli çizginin (korumasız) altında kalması.',
+      title: T.tour[4].title,
+      text: T.tour[4].text,
+      look: T.tour[4].look,
       apply: () => { showTab('ace'); ace.set({ n: 5, attach: 1, adult: 0.8, ses: 0.7, out: 'str' }); },
     },
     {
-      title: 'Gerekçe ahlakı basamaklandırır, ama eylemi pek öngörmez',
-      text: 'Kohlberg\'e göre yetişkinlerin çoğu geleneksel düzeyde; 5. ve 6. aşamada tutarlı neredeyse kimse yok. Üstelik aşama, ahlaki eylemi zayıf öngörür ve model kültür ile cinsiyet açısından eleştirilmiştir.',
-      look: 'Orta sütunların yüksekliği ve eylem olasılığındaki düz eğim.',
+      title: T.tour[5].title,
+      text: T.tour[5].text,
+      look: T.tour[5].look,
       apply: () => { showTab('moral'); moral.set({ age: 30, stance: 'yes', stage: 3, crit: 'action' }); },
     },
   ], { onExit: () => poke() });

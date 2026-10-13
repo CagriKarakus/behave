@@ -1,0 +1,328 @@
+{
+ "timescale": "Childhood and the womb (decades ago)",
+ "summary": "The chapter argues that to find the origins of a behavior, one must look to childhood and even to the prenatal period. In childhood, cognitive, moral and empathic development proceed through defined stages, and these stages run in parallel with the myelination and pruning of the brain. A lack of maternal care, poverty, abuse and witnessing violence can, through glucocorticoids, BDNF and epigenetic changes, raise the risk of depression, problems with impulse control and violence in adulthood. During the prenatal period, hormones such as testosterone organize the brain permanently, but these effects are small and variable. The author stresses that childhood and womb experiences are not destiny on their own, but that they durably shift behavioral tendencies.",
+ "keyConcepts": [
+  {
+   "term": "Cognitive stages",
+   "explanation": "According to Piaget's model, children follow a fixed sequence from the sensorimotor to the abstract operational stage of thought; achievements such as object permanence and conservation are part of this sequence."
+  },
+  {
+   "term": "Theory of Mind",
+   "explanation": "The grasp that others may hold knowledge and beliefs different from your own; it is measured with false-belief tests at around three to four years of age."
+  },
+  {
+   "term": "Development of empathy",
+   "explanation": "Empathy progresses from sharing pain bodily toward understanding the other person's feelings; it matures as the frontal cortex and Theory of Mind regions come online."
+  },
+  {
+   "term": "Kohlberg stages",
+   "explanation": "Moral reasoning extends from an initial focus on punishment and reward to a relational and then a principled level; most adolescents and adults are at the relational “conventional” level."
+  },
+  {
+   "term": "Delayed gratification",
+   "explanation": "The ability to wait for a reward rather than take it immediately; it develops with age through distraction and reappraisal strategies."
+  },
+  {
+   "term": "Childhood adversity",
+   "explanation": "The cumulative effect of experiences such as abuse, poverty, loss of family and witnessing violence; it is associated in adulthood with depression, addiction and problems with impulse control."
+  },
+  {
+   "term": "Stress hyporesponsive period",
+   "explanation": "The period in newborn rats during which glucocorticoid secretion from the adrenal glands is temporarily suppressed for several weeks. During this period a pup in its mother's presence develops attachment rather than avoidance, even to an aversive stimulus; attachment is established regardless of the quality of care."
+  },
+  {
+   "term": "Epigenetic programming",
+   "explanation": "Maternal behavior changes the switching on and off of the genes that regulate the pup's stress response, and this change can persist into adulthood and into the next generation."
+  },
+  {
+   "term": "Prenatal androgen exposure",
+   "explanation": "Testosterone in the fetus organizes the brain permanently and creates a predisposition to male-typical behaviors; in humans, however, this effect is small and variable."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Mischel's marshmallow test",
+   "finding": "About a third of three- to six-year-old children managed to wait for fifteen minutes; those who were more patient at age five were later found to have higher SAT scores, better social adjustment and stronger frontal cortex function at around age forty."
+  },
+  {
+   "name": "Harlow's surrogate mother experiments",
+   "finding": "Infant monkeys preferred a wire mother covered with warm cloth to the wire mother that provided milk; they clung even more tightly to the wire mother that punished them with a jet of air."
+  },
+  {
+   "name": "Sullivan's infant rat study",
+   "finding": "Pups younger than ten days were drawn to an odor after it was paired with shock, whereas in pups ten days and older the same pairing led to fear and avoidance. This suggested that attachment in early life is strengthened independently of the quality of care."
+  },
+  {
+   "name": "Farah and Boyce's socioeconomic status studies",
+   "finding": "At age five, children of low socioeconomic status had higher glucocorticoid levels, a thinner frontal cortex and weaker executive function; they needed more frontal cortex activity to perform the same task."
+  },
+  {
+   "name": "Charles Nelson's Romanian institution study",
+   "finding": "Children raised early in institutions showed low IQ, attachment problems, and reduced brain volume, connectivity and frontal cortex metabolism in adulthood; the amygdala, by contrast, was enlarged."
+  },
+  {
+   "name": "Meaney and colleagues' epigenetic study",
+   "finding": "The pups of more attentive rat mothers, who licked and nursed their young often, showed lower stress hormones, less anxiety and better learning in adulthood; this difference was associated with epigenetic changes in the switching on and off of a gene that regulates the stress response, and the pups in turn gave their own young similar care."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Childhood Adversity Accumulation Model",
+   "shows": "Shows how many different adverse experiences occurred in childhood, and how protective factors that offset them affect the risk of depression, impulse control problems and violence in adulthood. The outputs are illustrative.",
+   "inputs": [
+    "Number of types of adverse experience",
+    "Intensity of the experiences",
+    "Protective factors (love, stability, social support)"
+   ],
+   "outputs": [
+    "Depression risk",
+    "Impulse control indicator",
+    "Violence risk"
+   ]
+  },
+  {
+   "title": "Marshmallow Waiting Simulator",
+   "shows": "Shows how long a child waits for the reward depending on the child's age, distraction strategy and trust in the experimenter. Shows how the difference between hot and cold thinking changes waiting time.",
+   "inputs": [
+    "Age",
+    "Distraction strategy (hot or cold thinking)",
+    "Level of trust in the experimenter"
+   ],
+   "outputs": [
+    "Estimated waiting time",
+    "Delayed gratification score"
+   ]
+  },
+  {
+   "title": "Stages of Moral Reasoning",
+   "shows": "Shows, for a moral dilemma, at which Kohlberg level reasoning remains, depending on age, experience of punishment and reward, and social context.",
+   "inputs": [
+    "Age",
+    "Experience of punishment and reward",
+    "Peer and cultural context"
+   ],
+   "outputs": [
+    "Estimated Kohlberg stage",
+    "Probability of moral action (illustrative)"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "Empathy circuits and the role of the frontal cortex in impulse control were introduced in Chapter 2; childhood development explains how these circuits come to be formed."
+  },
+  {
+   "why": "The harmful effects of glucocorticoids on brain development and the organizing effects of hormones were covered in Chapter 4; this chapter applies them to childhood and the prenatal period."
+  },
+  {
+   "why": "The idea that neural plasticity is most intense in childhood and that every experience leaves a trace in the brain continues from Chapter 5."
+  },
+  {
+   "why": "Continuing the developmental perspective, this chapter shows how adolescence can be read as a continuation of childhood."
+  },
+  {
+   "why": "The role of genes and the details of epigenetic changes are covered in Chapter 8."
+  },
+  {
+   "why": "The influence of culture in childhood, individualist and collectivist cultures, and styles of parenting are covered in detail in Chapter 9."
+  },
+  {
+   "why": "The relationship of Kohlberg's stages to political leanings and the intuitive view of morality are taken up again in Chapter 12."
+  },
+  {
+   "why": "Why moral courage and doing the right thing are not always hard is discussed in Chapter 13."
+  }
+ ],
+ "experiments": {
+  "ch07-e1": {
+   "name": "Disruption of the right TPJ with TMS and moral judgment",
+   "researchers": "L. Young, J. Camprodon, M. Hauser, A. Pascual-Leone and R. Saxe",
+   "question": "When the right temporoparietal junction (TPJ), which is linked to Theory of Mind, is temporarily disrupted, do people still take the agent's intent into account in moral judgments?",
+   "method": "The function of volunteers' right TPJ was temporarily disrupted with transcranial magnetic stimulation (TMS); another region was stimulated as a control. Participants then judged morally scenarios in which the agent's belief/intent and the outcome of the action were varied separately.",
+   "finding": "When the right TPJ was disrupted, participants gave less weight to the agent's intent; in particular, they condemned less the actions of people who tried to cause harm but failed, that is, their judgments relied more on the outcome.",
+   "roleInChapter": "Shows that Theory of Mind depends on specific cortical regions and that this ability is necessary for intent-based moral judgment.",
+   "replication": {
+    "note": "The role of the right TPJ in intent-based moral judgment is consistent with fMRI studies; however, no direct, large-scale replication of this small-sample TMS experiment is known, and results of brain stimulation studies are generally variable.",
+    "refs": [
+     "Young and Saxe 2008"
+    ]
+   }
+  },
+  "ch07-e2": {
+   "name": "The child brain while watching another's pain",
+   "researchers": "J. Decety et al.; J. Decety and K. Michalska",
+   "question": "How does the brain's response to another person's physical pain change from childhood to adolescence?",
+   "method": "Children, adolescents and adults of different ages were scanned with fMRI while watching scenes in which someone was in pain (e.g., a needle being stuck into a finger); the activity of regions and their coupling with one another were compared by age.",
+   "finding": "In seven-year-olds, the strongest activity was in concrete regions (periaqueductal gray (PAG), sensory and motor cortex) and was coupled with weak vmPFC activity. In older children the vmPFC became increasingly coupled with limbic structures, and in adolescence with Theory of Mind regions. Intentional harm also began to activate the amygdala and insula with age.",
+   "roleInChapter": "Shows empathy maturing from a concrete “my finger hurts too” type of response to an understanding focused on the other person's feelings and experience.",
+   "replication": {
+    "note": "The findings come from successive cross-sectional studies by the same laboratory; independent and longitudinal replications are limited.",
+    "refs": [
+     "Decety et al. 2012"
+    ]
+   }
+  },
+  "ch07-e3": {
+   "name": "The development of fairness in seven societies",
+   "researchers": "P. Blake, K. McAuliffe et al.",
+   "question": "At what age do children begin to react to unfair divisions, and is this development similar across cultures?",
+   "method": "Pairs of children aged 4-15 from seven different societies (Canada, India, Mexico, Peru, Senegal, Uganda, USA) were compared in a task that let them accept or reject an offered division, facing unequal distributions in which they themselves received less or more.",
+   "finding": "From about age 4-6, children in every society reacted negatively to inequality when they themselves received less. A reaction to the situation in which they received more and the other child less appeared only at about age 8-10 and only in some societies.",
+   "roleInChapter": "Shows that children's sense of fairness is initially largely self-interested, and that fairness toward others develops late and variably depending on culture.",
+   "caveats": "Sapolsky stresses that whether the second stage appears at all in some cultures is itself variable.",
+   "replication": {
+    "note": "It is itself a large-sample, cross-cultural study; no independent repetition in the same societies is known. The finding that the reaction to disadvantageous inequity is early and universal is consistent with other studies.",
+    "refs": [
+     "McAuliffe et al. 2017"
+    ]
+   }
+  },
+  "ch07-e4": {
+   "name": "Kohlberg's stages of moral development",
+   "researchers": "Lawrence Kohlberg",
+   "question": "As children grow older, how do the reasons they give for moral dilemmas change?",
+   "method": "Children and adolescents were presented with moral dilemmas (e.g., should a man steal the only drug that could save a poor woman if it is too expensive, and why?). Rather than the answers given, the reasoning behind them was classified.",
+   "finding": "Kohlberg described three levels, each made up of two substages: preconventional, focused on punishment/reward; conventional, focused on relationships and rules; and postconventional, focused on conscience and principle. Children generally remain at the first level until age 8-10; most adolescents and adults are at the conventional level; almost no one reasons consistently at stage 5 or 6.",
+   "roleInChapter": "Represents the view that moral judgment develops cognitively, stage by stage; the limits of this view are then discussed.",
+   "caveats": "Sapolsky's criticisms: stage models should not be taken rigidly, transitions are not sharp, and the stage can vary with context; the original sample consisted of American males, and Gilligan argued that women emphasize care rather than justice; morality also rests on intuition and emotion; the level of moral reasoning rarely predicts moral action.",
+   "replication": {
+    "note": "The order of the stages has been largely supported in longitudinal and cross-cultural studies (Colby et al. 1983). However, the universality of the higher stages has been criticized, as have cultural and gender bias; the social intuitionist approach (Haidt 2001) has questioned the primary role of reasoning in moral judgment.",
+    "refs": [
+     "Colby et al. 1983",
+     "Gilligan 1982",
+     "Haidt 2001"
+    ]
+   }
+  },
+  "ch07-e5": {
+   "name": "Marshmallow test",
+   "researchers": "Walter Mischel et al.; 40-year follow-up: B. J. Casey et al.",
+   "question": "How do preschool children manage to delay gratification, and does this ability predict outcomes years later?",
+   "method": "Hundreds of children aged three to six were given a marshmallow; they were told that if they did not eat it until the experimenter returned they would get a second one, and the experimenter left the room. The children were observed from behind a one-way mirror; in later experiments the children were given suggestions about how to think about the reward. The same children were followed through adolescence and adulthood.",
+   "finding": "A few children ate the marshmallow before the experimenter had even left, about a third waited the full 15 minutes, and the rest held out for an average of 11 minutes. Distraction and thinking about the reward's “cold” features lengthened waiting, whereas thinking about its taste shortened it; trust in the experimenter also mattered. Those who waited long at age five obtained higher SAT scores in high school, were socially more successful and less aggressive; 40 years later they performed better on frontal tasks, had stronger prefrontal activity and had lower body mass index.",
+   "roleInChapter": "Shows the role of the maturing frontal cortex in regulating impulse and emotion, and the trace this ability leaves from childhood into adulthood.",
+   "caveats": "Sapolsky describes with sarcasm how anxious middle-class parents seize on these findings with obsession; he also reports that children waited less when the experimenter had not kept earlier promises (in note 20, C. Kidd, H. Palmeri and R. Aslin 2013; the first author, Kidd, is missing from the note).",
+   "replication": {
+    "note": "That children wait longer with distraction strategies is a robust finding. However, the long-term predictive power was markedly weaker in a conceptual replication with a larger and more diverse sample, and largely disappeared once family background and early cognitive skills were controlled (Watts, Duncan and Quan 2018).",
+    "refs": [
+     "Watts, Duncan and Quan 2018",
+     "Kidd, Palmeri and Aslin 2013"
+    ]
+   }
+  },
+  "ch07-e6": {
+   "name": "Harlow's surrogate mother experiments",
+   "researchers": "Harry Harlow",
+   "question": "Does an infant monkey's attachment to its mother depend on feeding, or on contact and closeness? Does attachment to a punishing mother persist?",
+   "method": "Infant rhesus monkeys raised without a mother were given two “surrogate mothers”: both had wire mesh bodies and plastic heads; one carried a milk bottle, the other was covered in terry cloth. In another experiment, devices that blew an unpleasant puff of air when the infant clung were fitted to the bodies of the wire surrogates.",
+   "finding": "The infants chose the cloth-covered mother over the wire mother that gave milk. Infants punished with blown air clung to the surrogate more tightly rather than fleeing.",
+   "roleInChapter": "Shows that attachment cannot be explained by feeding alone and that contact and warmth are a basic need; it leads into the phenomenon of attachment even to a caregiver who behaves badly (Sullivan's studies).",
+   "caveats": "Sapolsky counts Harlow's isolation experiments, in which infants were raised in complete solitude, among the most controversial research in the history of psychology; he also recalls the experiment with the air-blowing devices as a study that is painful to think about.",
+   "replication": {
+    "note": "The importance of contact comfort for attachment has been widely supported by later primate and human attachment research. The experiments are today heavily criticized on ethical grounds and are not repeated.",
+    "refs": [
+     "Harlow 1958",
+     "Blum 2002"
+    ]
+   }
+  },
+  "ch07-e7": {
+   "name": "Legalized abortion and crime rates",
+   "researchers": "J. Donohue III and S. Levitt",
+   "question": "Did the legalization of abortion affect crime rates about twenty years later?",
+   "method": "In the US, the timing of state-by-state liberalization of abortion laws and abortion rates were compared with the demographics of the crime decline in the 1990s.",
+   "finding": "In places where abortion became easily accessible, crimes committed by young adults declined about twenty years later.",
+   "roleInChapter": "In Sapolsky's reading, it prompts reflection, at the societal scale, on how fundamental it is for a child's future that the mother is glad of the child's existence.",
+   "caveats": "Sapolsky notes that the finding is highly contested; the interpretation concerning the mother's wishes is his own.",
+   "replication": {
+    "note": "Foote and Goetz (2008) found a coding error in the analysis and showed that the effect weakened markedly with the correction; Donohue and Levitt argued in their responses and in their 2020 updated analyses that the effect persists. The debate among economists has not been closed.",
+    "refs": [
+     "Foote and Goetz 2008",
+     "Donohue and Levitt 2008",
+     "Donohue and Levitt 2020"
+    ]
+   }
+  },
+  "ch07-e8": {
+   "name": "Odor-shock conditioning in infant rats",
+   "researchers": "R. Sullivan et al.; S. Moriceau et al.",
+   "question": "Do very young pups avoid a stimulus paired with a bad experience, or become attached to it; and what determines this?",
+   "method": "Rat pups were taught by pairing a neutral odor with electric shock; conditioning was done in pups either younger or older than ten days. In additional experiments, glucocorticoid was given to the amygdala of the younger pups, glucocorticoid secretion was blocked in the older ones, or conditioning was done in the presence of the mother.",
+   "finding": "In pups ten days old and older, the odor produced amygdala activity, glucocorticoid secretion and avoidance. Younger pups, however, approached the odor. When glucocorticoid was given to the amygdala of the younger pups, avoidance developed; when glucocorticoid was blocked in the older pups, or when conditioning was done in the mother's presence, attraction to the odor developed.",
+   "roleInChapter": "Suggests that attachment in infancy can be established independently of the quality of care, and offers a biological explanation for why people who were abused later turn toward abusive relationships.",
+   "caveats": "Sapolsky says, in a conditional tone, that if applied to humans this might help explain cycles of abuse.",
+   "replication": {
+    "note": "This attraction learning in infancy and the determining role of glucocorticoid have been shown consistently across many studies from Sullivan's laboratory. Most of the findings come from a single research group, and their transfer to humans is hypothetical.",
+    "refs": [
+     "Moriceau et al. 2006",
+     "Barr et al. 2009"
+    ]
+   }
+  },
+  "ch07-e9": {
+   "name": "Socioeconomic status and the frontal cortex in children",
+   "researchers": "M. Farah, W. T. Boyce et al. (M. Sheridan et al.; J. Hanson et al.)",
+   "question": "How do the stress system, frontal cortex structure and executive functions differ in children growing up in poverty?",
+   "method": "In children from different socioeconomic levels, glucocorticoid levels, frontal cortex structure and activity, and executive functions such as working memory, impulse control and emotion regulation were measured and compared.",
+   "finding": "According to the book's summary, by age five, as socioeconomic level falls, glucocorticoid level or response rises on average, the frontal cortex becomes thinner and its metabolism lower, and executive functions weaken. Low-income children need more frontal activity to achieve the same regulation; poverty also impairs the maturation of the corpus callosum.",
+   "roleInChapter": "Shows how poverty gets “under the skin” and that children start at a disadvantage on self-control tests even in kindergarten.",
+   "caveats": "Sapolsky notes that part of this link runs through pathways specific to humans: environmental toxins, dangerous neighborhoods, school quality, parents' time and community resources.",
+   "replication": {
+    "note": "The relationship between socioeconomic status and brain structure and executive functions has been replicated in large samples (e.g., Noble et al. 2015, 1,099 people). However, the effects are small on average and causality is contested; the brain findings of the cash-transfer experiment (Troller-Renfree et al. 2022) have also been criticized methodologically.",
+    "refs": [
+     "Noble et al. 2015",
+     "Troller-Renfree et al. 2022"
+    ]
+   }
+  },
+  "ch07-e10": {
+   "name": "Children raised in Romanian orphanages (Bucharest Early Intervention Project)",
+   "researchers": "Charles Nelson, Nathan Fox, Charles Zeanah et al. (M. Sheridan et al.; N. Tottenham et al.)",
+   "question": "How does early childhood spent in institutions lacking care, contact and stimulation affect brain development?",
+   "method": "Children left in institutions during the Ceausescu era were followed as those adopted by Western families, those returned to their families, and those who remained in the institution. In the Bucharest Early Intervention Project, some of the institutionalized children were randomly selected and placed with high-quality foster families; brain structure (MRI) and function (EEG) were measured.",
+   "finding": "According to the book, these children later showed low IQ, attachment problems, anxiety and depression; outcomes worsened as time spent in the institution lengthened. In their brains, total volume, gray and white matter, frontal metabolism and connectivity between regions were reduced; the amygdala, by contrast, was enlarged.",
+   "roleInChapter": "Shows the extreme effect on the brain of a childhood in which everything went wrong, through the opposite-direction changes of the frontal cortex and the amygdala.",
+   "caveats": "Sapolsky stresses that outcomes worsen as the time spent in the institution lengthens.",
+   "replication": {
+    "note": "The harm of early institutional deprivation to cognitive and brain development has been confirmed by the randomized Bucharest project and by the adult follow-up of the English and Romanian Adoptees study (Mackes et al. 2020). The amygdala enlargement finding, however, is inconsistent; some studies have reported no difference or a reduction.",
+    "refs": [
+     "Nelson et al. 2007",
+     "Mackes et al. 2020",
+     "Mehta et al. 2009"
+    ]
+   }
+  },
+  "ch07-e11": {
+   "name": "Prenatal testosterone and female rhesus monkeys",
+   "researchers": "Robert Goy; Kim Wallen et al.",
+   "question": "Does prenatal testosterone permanently organize the behavior of female monkeys toward the male type?",
+   "method": "Pregnant rhesus monkeys were given testosterone and their female offspring were compared with control females. In later studies, lower doses were given only in the last third of gestation.",
+   "finding": "Females exposed to testosterone throughout gestation looked male externally; they engaged in more rough-and-tumble play, were more aggressive, and showed male-typical mounting behavior and vocalizations. Still, not every behavior was masculinized; their interest in infants was as great as that of control females. When a low dose was given in the last third, genital structure remained normal while behavior was masculinized.",
+   "roleInChapter": "Shows that prenatal hormones organize the brain permanently and that this effect extends selectively to some behaviors; reveals that behavioral masculinization can be dissociated from genital masculinization.",
+   "replication": {
+    "note": "The organizing effect of prenatal androgen on behavior in primates has been consistently supported by Wallen and colleagues' later studies and by findings on congenital adrenal hyperplasia in humans.",
+    "refs": [
+     "Thornton et al. 2009",
+     "Wallen and Hassett 2009",
+     "Pasterski et al. 2007"
+    ]
+   }
+  },
+  "ch07-e12": {
+   "name": "Epigenetic imprint of maternal care on offspring genes",
+   "researchers": "M. Meaney, I. Weaver, M. Szyf et al.; D. Francis et al.",
+   "question": "Does the mother's licking and grooming behavior create lasting epigenetic change in a gene that regulates the pup's stress response, and is this style of care passed on to the next generation?",
+   "method": "The adult offspring of rat mothers that licked and groomed their pups often or rarely were compared; DNA methylation in the regulatory region of the glucocorticoid receptor gene in the hippocampus was examined. Francis and colleagues observed how female offspring cared for their own pups.",
+   "finding": "The offspring of attentive mothers had, in adulthood, lower glucocorticoid levels, less anxiety, better learning and later brain aging. The 2004 study showed that these differences were associated with epigenetic change in the on-off switch of a gene related to the stress response. These offspring in turn became more attentive mothers in adulthood.",
+   "roleInChapter": "Shows that early experience can leave a lasting trace in the brain by changing the regulation of genes, and that behavior can be transmitted from generation to generation by non-genetic means.",
+   "caveats": "Sapolsky says the excitement over epigenetics needs to be restrained: findings have been overinterpreted, and the quality of studies has fallen as the rush into the field has grown; most effects of childhood experiences are probably not epigenetic, and most epigenetic changes are transient.",
+   "replication": {
+    "note": "That maternal care affects the pup's stress system is a robust finding in rodents. However, the size and reproducibility of the methylation differences in the glucocorticoid receptor gene have been debated, similar findings transferred to humans have been inconsistent, and claims of transgenerational epigenetic transmission have been criticized (Heard and Martienssen 2014).",
+    "refs": [
+     "Heard and Martienssen 2014",
+     "McGowan et al. 2009"
+    ]
+   }
+  }
+ }
+}

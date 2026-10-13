@@ -2,6 +2,7 @@
 // Kitaptan (chapters.json, Ek 1): dinlenme ~-70 mV; eşiğe ulaşınca tam ya da hiç; tek girdi sönüp gider, birçok girdi birlikte
 // gerekir; salım -> reseptör -> geri alım / enzim; geri bildirim sinyali kısaltır, ileri beslemeli zamanda, yanal inhibisyon
 // uzayda keskinleştirir. Diğer bütün sayılar (eşik, tepe, süreler, genlikler, hız sabitleri) modelin varsayımıdır.
+import { num } from '../../i18n/fmt';
 import { mulberry32 } from '../rng';
 
 export const clamp = (v: number, lo = 0, hi = 1): number => Math.min(hi, Math.max(lo, v));
@@ -267,5 +268,5 @@ export function tStats(out: number[], inp: number[]): TStats {
   return { peak, dur: c * DT_C, tail: out[Math.max(0, end - 1)] };
 }
 
-export const f1 = (x: number): string => x.toFixed(1).replace('.', ',');
-export const f2 = (x: number): string => x.toFixed(2).replace('.', ',');
+export const f1 = (x: number): string => num(x, 1);
+export const f2 = (x: number): string => num(x, 2);

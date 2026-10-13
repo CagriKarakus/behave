@@ -7,6 +7,7 @@
 // Müttefikin, gizli cevabın, sorumluluk dağılımının ve akran direnişinin büyüklükleri kitaptan değil,
 // yalnızca yönü kitaba dayanan nitel varsayımlardır.
 import { mulberry32, type Rng } from '../rng';
+import { L } from './text';
 
 export function gauss(rng: Rng): number {
   const u = Math.max(rng(), 1e-12), v = rng();
@@ -106,11 +107,8 @@ export function aschTrial(u: AschInputs, rng: Rng): AschTrial {
 }
 
 export function describeAsch(u: AschInputs, c: AschCohort): string {
-  const r = Math.round(c.rate * 100);
-  const who = u.ally ? `${u.n} ortak yanlış, bir müttefik doğru söylüyor` : `${u.n} ortak oybirliğiyle yanlış söylüyor`;
-  const how = u.open ? 'cevap açıkça veriliyor' : 'cevap gizlice yazılıyor';
-  const tail = c.rate > 0.25 ? 'Denemelerin yaklaşık üçte biri ya da fazlasında uyuluyor.' : c.rate > 0.1 ? 'Uyma var ama sınırlı.' : 'Uyma belirgin biçimde az.';
-  return `${who}; ${how}. Denemelerin ~%${r}'sinde yanlışa uyuluyor. ${tail}`;
+  const tier = c.rate > 0.25 ? 2 : c.rate > 0.1 ? 1 : 0;
+  return L().asch.say(u.n, u.ally, u.open, Math.round(c.rate * 100), tier);
 }
 
 // ---------------------------------------------------------------- Milgram
@@ -200,15 +198,9 @@ export function stillGoing(run: MilgramRun, d: number): number {
 }
 
 export function describeMilgram(u: MilgramInputs, r: MilgramRun): string {
-  const full = Math.round(r.full * 100);
-  const bits: string[] = [];
-  if (u.authority < 0.5) bits.push('otorite uzak');
-  if (u.prestige < 0.5) bits.push('kurum sıradan');
-  if (u.learner === 1) bits.push('öğrenci aynı odada');
-  if (u.learner === 2) bits.push('öğrenci eli tutulacak kadar yakın');
-  if (u.diffused) bits.push('şoku başkası basıyor');
-  if (u.peer) bits.push('bir akran itaat etmiyor');
-  const cond = bits.length ? bits.join(', ') : 'temel koşul';
-  const med = r.median === 0 ? 'hiç şok vermeden' : `${volts(r.median)} V'ta`;
-  return `${cond[0].toUpperCase() + cond.slice(1)}: katılımcıların %${full}'i 450 V'a kadar çıkıyor; ortanca katılımcı ${med} bırakıyor.`;
+  const cond = {
+    authorityFar: u.authority < 0.5, institutionOrdinary: u.prestige < 0.5, learner: u.learner,
+    diffused: u.diffused, peer: u.peer,
+  };
+  return L().mil.say(cond, Math.round(r.full * 100), r.median === 0 ? 0 : volts(r.median));
 }

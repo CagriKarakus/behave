@@ -3,6 +3,8 @@
 // 2) Ekoloji -> kültür eğilimleri (Talhelm, Masuda ve Nisbett, onur kültürü)
 // 3) Koridor hakaret deneyi ve kamu malı oyununda antisosyal ceza (Nisbett ve Cohen; Herrmann ve ark.)
 import { mulberry32, normal } from '../rng';
+import { pct as pctS, percent } from '../../i18n/fmt';
+import { L } from './text';
 
 const clamp = (v: number, lo = 0, hi = 1) => Math.max(lo, Math.min(hi, v));
 
@@ -211,21 +213,22 @@ export function riverFence(w: World): void {
 
 export function describeGrid(m: Metrics, pref: number, fenced: boolean): string {
   const km = Math.round(m.meanKm);
-  const where = km < ISLAND_KM.lo ? 'çok küçük parçalar: kişiler karışık yaşıyor' : km <= ISLAND_KM.hi ? 'orta büyüklükte adalar: kitaptaki 20-60 km ölçeği' : 'büyük, net bölgeler: tek tek ada kalmadı';
+  const T = L();
+  const where = T.gridWhere[km < ISLAND_KM.lo ? 0 : km <= ISLAND_KM.hi ? 1 : 2];
   const r = m.risk;
-  const lvl = r < 0.25 ? 'düşük' : r < 0.6 ? 'orta' : 'yüksek';
-  return `Ortalama parça yaklaşık ${km} km çapında (${where}). Çatışma riski göstergesi ${lvl} (%${Math.round(r * 100)})${fenced ? '; çit ve özerklik teması azaltıyor' : ''}${pref === 0 ? ' (tercih 0: kimse taşınmıyor)' : ''}.`;
+  const lvl = T.gridLvl[r < 0.25 ? 0 : r < 0.6 ? 1 : 2];
+  return T.grid(km, where, lvl, pctS(r), fenced ? T.gridFence : '', pref === 0 ? T.gridPref0 : '');
 }
 
 // ===================== 2. Ekoloji -> kültür =====================
-export interface Eco { id: string; name: string; L: number; V: number; book: boolean }
+export interface Eco { id: string; L: number; V: number; book: boolean }
 /** L: ortak emek bağımlılığı (sulama gibi), V: çalınabilir mal ve itibar kırılganlığı (hareketli sürü, zayıf devlet). Değerler modelin varsayımıdır. */
 export const ECOS: Eco[] = [
-  { id: 'rice', name: 'Pirinç (ortak sulama)', L: 0.9, V: 0.15, book: true },
-  { id: 'wheat', name: 'Buğday (bireysel)', L: 0.2, V: 0.2, book: true },
-  { id: 'herd', name: 'Göçebe çobanlık', L: 0.3, V: 0.9, book: true },
-  { id: 'desert', name: 'Çöl çobanlığı', L: 0.25, V: 0.8, book: false },
-  { id: 'forest', name: 'Yağmur ormanı', L: 0.5, V: 0.1, book: false },
+  { id: 'rice', L: 0.9, V: 0.15, book: true },
+  { id: 'wheat', L: 0.2, V: 0.2, book: true },
+  { id: 'herd', L: 0.3, V: 0.9, book: true },
+  { id: 'desert', L: 0.25, V: 0.8, book: false },
+  { id: 'forest', L: 0.5, V: 0.1, book: false },
 ];
 
 export interface Culture {
@@ -353,6 +356,6 @@ export function describePgg(r: PggResult): string {
   const last = r.coop[r.coop.length - 1];
   const a = Math.round(r.antiShare * 100);
   const total = r.pro + r.anti;
-  if (!total) return `Son turda katkı oranı %${Math.round(last * 100)}; cezalandırma neredeyse hiç yok.`;
-  return `Son turda katkı oranı %${Math.round(last * 100)}. Ceza puanlarının %${a}'i cömert oyunculara gitti (antisosyal), %${100 - a}'i hile yapanlara.`;
+  if (!total) return L().pggNone(pctS(last));
+  return L().pggSome(pctS(last), percent(String(a)), percent(String(100 - a)));
 }

@@ -5,5 +5,6 @@ export const meta: SimMeta = {
   chapter: 'ch02',
   title: 'Ultimatum oyunu',
   blurb: 'Adaletsiz teklif: insula, amigdala, dlPFC',
+  en: { title: 'Ultimatum Game', blurb: 'Unfair offer: insula, amygdala, dlPFC' },
   order: 2,
 };

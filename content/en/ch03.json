@@ -1,0 +1,309 @@
+{
+ "timescale": "Seconds to minutes before",
+ "summary": "The chapter examines the stimuli that reach the brain from a few seconds to a few minutes before a behavior. Sensory cues such as sight, sound and smell, along with the body's internal state, subliminal words and the social and physical environment, often shift behavior without being noticed. Some of these effects, as with race and status cues, run through a fast but low-accuracy route via the amygdala and determine the decision when the frontal cortex is slow. Because the brain can also tune the sensitivity of the sense organs, the influence of the outside world is variable. The overall conclusion is that, just before the most important and most consequential behaviors, people decide far less rationally and autonomously than is assumed.",
+ "keyConcepts": [
+  {
+   "term": "Subliminal cuing",
+   "explanation": "Stimuli that are shown very briefly or go unnoticed can change attitudes and behavior without conscious awareness."
+  },
+  {
+   "term": "Thalamus–amygdala shortcut",
+   "explanation": "Sensory information can reach the amygdala before the cortex has analyzed it in detail; this speed comes at the cost of accuracy."
+  },
+  {
+   "term": "Face and eye cues",
+   "explanation": "Faces carry the most information about emotion, sex, status and attractiveness; the eyes in particular are decisive for reading emotion."
+  },
+  {
+   "term": "Smell and fear pheromones",
+   "explanation": "The smell of people sweating with fear can increase amygdala activity and the fear response in the person smelling it; this happens without conscious discrimination."
+  },
+  {
+   "term": "Interoception and emotion",
+   "explanation": "Bodily signals such as heartbeat or muscle relaxation contribute to the interpretation of emotion; pain also strengthens an existing tendency toward aggression."
+  },
+  {
+   "term": "Language and framing",
+   "explanation": "The name of a game, the words used and moral labels can change cooperation, judgment and decision preferences."
+  },
+  {
+   "term": "Group membership and social context",
+   "explanation": "Which group we belong to, a reminder of the relevant identity and the presence of the other sex shift behavior within a short time."
+  },
+  {
+   "term": "Broken windows theory",
+   "explanation": "Small norm violations such as litter, graffiti and disorder can increase the likelihood of other norm violations."
+  },
+  {
+   "term": "Tuning of sensory sensitivity",
+   "explanation": "By changing the sensitivity of the sense organs in states such as hunger or stress, the brain determines which stimuli will be effective."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Correll and the shooter task",
+   "finding": "In a task in which people holding a gun or a cell phone were shown rapidly and participants were asked to shoot only the armed ones, Black faces produced a stronger P200 (threat) wave and a weaker N200 (frontal “stop, think”) wave in white participants; the larger the P200/N200 ratio, the greater the likelihood of shooting an unarmed Black person."
+  },
+  {
+   "name": "Face presentation and the response to race",
+   "finding": "Even when faces were shown for less than 100 milliseconds, amygdala activation to Black faces increased in white participants; this was also related to their score on a prejudice test."
+  },
+  {
+   "name": "Fear sweat sniffing study",
+   "finding": "Participants could not consciously tell the two types of sweat apart, but smelling sweat from tandem skydiving fear increased amygdala activity, the startle response and the tendency to read ambiguous faces as fearful."
+  },
+  {
+   "name": "Keizer's norm violation experiments",
+   "finding": "The presence of a norm violation such as a bicycle, graffiti or litter roughly doubled the likelihood that the same or another norm would be violated."
+  },
+  {
+   "name": "Reassessment of the Kitty Genovese case",
+   "finding": "The 1964 narrative that “thirty-eight witnesses did nothing” does not reflect the facts: there were fewer witnesses, no one saw the whole incident and the windows were closed. The bystander effect appears in non-dangerous situations; in dangerous emergencies, the likelihood of intervention increases as the crowd grows."
+  },
+  {
+   "name": "Train station experiment (Boston suburbs)",
+   "finding": "In predominantly white Boston suburbs, conservatively dressed Hispanic pairs quietly speaking Spanish at train stations for several days led white commuters to report more exclusionary attitudes toward Hispanic immigrants (but not toward other groups)."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Fast Route versus Thought Race",
+   "shows": "Shows how the amygdala response can be braked by the frontal cortex as the presentation time of a face or signal increases.",
+   "inputs": [
+    "Presentation time (milliseconds)",
+    "Threat level of the stimulus",
+    "Attentional capacity of the frontal cortex"
+   ],
+   "outputs": [
+    "Probability of a fast response",
+    "Correct recognition rate",
+    "Braking success"
+   ]
+  },
+  {
+   "title": "The Name of the Game and Cooperation",
+   "shows": "Shows how the tendency to cooperate shifts when the label, word list or group framing of the same prisoner's dilemma game changes.",
+   "inputs": [
+    "Game label (competitive or community)",
+    "Word list read beforehand (prosocial or harsh)",
+    "Group identity reminder"
+   ],
+   "outputs": [
+    "Cooperation rate",
+    "Level of trust in the other party",
+    "Payoff and punishment preferences"
+   ]
+  },
+  {
+   "title": "Spread of Norm Violations",
+   "shows": "Shows on a grid how small norm violations in an area (litter, graffiti, bicycles) increase the likelihood of other violations.",
+   "inputs": [
+    "Density of litter and graffiti",
+    "Initial violation rate",
+    "Level of visible monitoring"
+   ],
+   "outputs": [
+    "Average violation probability",
+    "Rate of violation spread",
+    "Number of cells with violations"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "This chapter draws on the amygdala circuit and threat response described in the previous chapter."
+  },
+  {
+   "why": "The book notes that it will return to men's generosity as a sexual signal in the next chapter."
+  },
+  {
+   "why": "How culture influences the direction of attention and math–gender stereotypes is examined in a later chapter."
+  },
+  {
+   "why": "How the amygdala response to faces of another race can be changed is discussed in a later chapter."
+  },
+  {
+   "why": "The relationships of status, attractiveness and smell with conservatism are revisited in a later chapter."
+  },
+  {
+   "why": "The debate between behaviorism and ethology and the Wellesley effect are mentioned in the introduction."
+  }
+ ],
+ "experiments": {
+  "ch03-e1": {
+   "name": "Early processing of race in briefly presented faces",
+   "researchers": "T. Ito and G. Urland; E. Phelps et al.; W. Cunningham et al.",
+   "question": "Even when a face is shown too briefly to be consciously recognized, how quickly and in what way does the brain process its race?",
+   "method": "Ito and Urland showed white participants photographs of Black and white individuals and recorded event-related potentials (EEG). In the same paragraph, the book reports that when faces were shown for less than 100 milliseconds the amygdala was activated and that this activity increased with the score on the implicit race prejudice test; these fMRI findings come from other studies.",
+   "finding": "The difference in attention to Black faces appeared in electrical brain responses about 100 milliseconds after the image appeared on screen. According to the book, Black faces activate the amygdala in white participants, and this activity is stronger in those with high implicit prejudice scores; when the face is shown long enough for conscious perception, the anterior cingulate cortex (ACC) and dlPFC come into play and suppress the amygdala.",
+   "roleInChapter": "Illustrates the idea of unconscious speed: the race cue reaches the brain without being noticed and sets the emotional circuit in motion.",
+   "caveats": "The main citation in the notes (Ito and Urland) is EEG-based; it does not directly support the book's sentence about the relationship between the amygdala and implicit prejudice, so the relevant fMRI studies were added as additional sources. Sapolsky also emphasizes that individual differences are large and that some people do not show this amygdala response.",
+   "replication": {
+    "note": "Early ERP differences by race and amygdala responses to outgroup faces have been observed in many studies, but the effects are small and highly sensitive to context. Critical reviews argue that the amygdala response reflects culturally learned threat associations rather than “racism”; the power of the Implicit Association Test to predict behavior has also been found weak in meta-analyses.",
+    "refs": [
+     "Chekroud et al. 2014 (Front Hum Neurosci)",
+     "Oswald et al. 2013 (JPSP)",
+     "Forscher et al. 2019 (JPSP)"
+    ]
+   }
+  },
+  "ch03-e2": {
+   "name": "Shooter task (Correll)",
+   "researchers": "J. Correll, G. Urland and T. Ito",
+   "question": "In a fast decision, how does whether the target is armed or unarmed change the interaction between race cues, threat perception and cognitive control?",
+   "method": "Participants were rapidly shown photographs of people holding a gun or a phone and were asked to shoot only those carrying a gun. Meanwhile, event-related electrical responses (ERP) were recorded with EEG.",
+   "finding": "In white participants, seeing a Black person, whether armed or not, evoked the early wave associated with threat perception (P200) more strongly than seeing a white person; the stopping wave (N200) arising from the frontal lobe, which comes a few milliseconds later, was weaker. As the P200/N200 ratio increased, the likelihood of shooting an unarmed Black person also rose.",
+   "roleInChapter": "Shows that prejudice is not only an attitude but a problem of perception and decision that unfolds within seconds; also underscores the importance of the stopping role of the frontal lobe.",
+   "replication": {
+    "note": "Racial bias in the shooter task (faster shooting of Black targets, a later “don't shoot” decision for unarmed Black targets and a more lenient shooting threshold) was found consistently in a meta-analysis covering more than 40 studies. Details of the ERP mechanism rest on fewer studies, and generalizing the laboratory task to real police decisions is contested.",
+    "refs": [
+     "Mekawi and Bresin 2015 (JESP)"
+    ]
+   }
+  },
+  "ch03-e3": {
+   "name": "Masked fearful eye whites and the amygdala",
+   "researchers": "P. Whalen et al.",
+   "question": "Do fearful eye whites that cannot be consciously seen affect the human amygdala?",
+   "method": "Participants were shown fearful or happy eye images consisting only of eye whites, very briefly and followed by a mask; amygdala activity was measured with fMRI during this time. The book does not elaborate on this study; it cites it as a source while saying that emotion in faces is read mostly from the eyes.",
+   "finding": "Although participants were not consciously aware of the images, fearful eye whites activated the amygdala more than happy eye whites. This provides a neural basis for the idea that the eyes are the most emotionally informative part of the face.",
+   "roleInChapter": "Shows that eye cues can trigger the amygdala unconsciously and supports the claim that “the eyes carry the most information.”",
+   "replication": {
+    "note": "We are not aware of a direct replication of this study. It has been questioned because of general debates over whether unconscious (masked) stimuli reliably activate the amygdala and whether masking truly prevents awareness.",
+    "refs": [
+     "Pessoa 2005 (Curr Opin Neurobiol)"
+    ]
+   }
+  },
+  "ch03-e4": {
+   "name": "Watching eyes effect (images of eyes)",
+   "researchers": "M. Bateson, D. Nettle and G. Roberts; D. Francey and R. Bergmüller",
+   "question": "Does a small cue that we are being watched change helping and honest behavior in real life?",
+   "method": "In a university coffee room, in an honesty-box system where money for drinks was left in a box, a picture of a pair of eyes or of flowers was hung above the box on alternating weeks, and the money collected was divided by the amount of milk consumed. The book also reports similar studies, such as litter collection at a bus stop and economic games played with an image of eyes on a computer screen.",
+   "finding": "When the eye picture was hung, payments in the coffee room roughly tripled. According to the book, the eye picture also increased people's likelihood of clearing away litter and generosity in online economic games when an image of eyes was on the screen.",
+   "roleInChapter": "Shows that even an unconscious “being watched” cue can shift ordinary everyday behavior.",
+   "replication": {
+    "note": "Two meta-analyses found that eye images do not reliably increase generosity in economic games. On the other hand, a meta-analysis of antisocial behaviors such as littering reported that eye cues clearly reduced these behaviors; that is, the effect seems to vary by type of behavior.",
+    "refs": [
+     "Northover et al. 2017 (Evol Hum Behav)",
+     "Dear, Dutton and Fox 2019 (Evol Hum Behav)"
+    ]
+   }
+  },
+  "ch03-e5": {
+   "name": "Background music and amygdala response (Forbes)",
+   "researchers": "C. Forbes, C. Cox, T. Schmader and L. Ryan",
+   "question": "Does a genre of music playing in the background strengthen the amygdala response to subliminally presented Black faces?",
+   "method": "White participants with egalitarian attitudes were shown Black and white faces either very quickly (subliminally) or slowly. Meanwhile, violent rap music, death metal or no music played in the background; activity of the amygdala and prefrontal regions was measured with fMRI.",
+   "finding": "While rap music played, the amygdala response to Black faces increased and persisted even when the faces were shown for a long time; with death metal, when negative white stereotypes were evoked in the book's wording, the opposite was seen.",
+   "roleInChapter": "Shows that auditory cues entering the subconscious can also tune the amygdala response, and thus that racial reactions can vary with context.",
+   "replication": {
+    "note": "This is a single fMRI study with a small sample; we are not aware of a direct replication. The general caveats about the relationship between race and the amygdala apply to this study as well.",
+    "refs": []
+   }
+  },
+  "ch03-e6": {
+   "name": "Fear sweat sniffing study",
+   "researchers": "L. Mujica-Parodi et al.",
+   "question": "Does smelling another person's fear sweat change a person's amygdala and fear perception without conscious awareness?",
+   "method": "Underarm sweat was collected from volunteers in two conditions: after a relaxed run and after their first tandem skydive. Participants smelled both sweats; even though they could not tell them apart, amygdala activity, the startle response and the perception of facial expressions were measured.",
+   "finding": "The two sweats could not be consciously distinguished; however, smelling the fear sweat increased amygdala activity and the startle response, and made it easier to read ambiguous faces as fearful and to detect subliminal angry faces.",
+   "roleInChapter": "Shows that smells can transmit fear through the sensory pathway that connects directly to the amygdala.",
+   "replication": {
+    "note": "It has been reported in small-sample studies from several different laboratories that fear sweat increases fear-related responses in others. However, we are not aware of a large, preregistered replication; therefore the size of the effect is uncertain.",
+    "refs": [
+     "de Groot et al. 2012 (Psychol Sci)"
+    ]
+   }
+  },
+  "ch03-e7": {
+   "name": "Ego depletion and glucose (self-control)",
+   "researchers": "M. Gailliot, R. Baumeister et al.",
+   "question": "After a demanding cognitive task that requires self-control, does a drop in energy (glucose) reduce people's honesty, empathy and patience?",
+   "method": "Participants first performed a task requiring self-control, such as the Stroop task or thought suppression, and their blood glucose was measured; then some were given lemonade with sugar and others lemonade with a calorie-free sweetener, and a second self-control task was administered. Other studies in the notes tested the same setup with measures of aggression, honesty and helpfulness.",
+   "finding": "Blood glucose dropped after tasks requiring self-control, and low glucose predicted poor performance on the subsequent task; the sugared drink eliminated this impairment. According to the book, after a frontally taxing task people become more aggressive and less empathic, generous and honest; when hungry, they also behave less helpfully and more punitively.",
+   "roleInChapter": "Shows that the energy needs of the frontal cortex affect whether we choose the behavior that is “right but hard.”",
+   "caveats": "Sapolsky notes that it is contested whether these findings indicate a deficit of “capacity” or a deficit of “motivation” for self-control; the notes cite Inzlicht et al. (2014) for this reinterpretation.",
+   "replication": {
+    "note": "The ego depletion effect came out near zero in the 23-laboratory preregistered replication (Hagger et al. 2016) and in the second large study with 36 laboratories (Vohs et al. 2021). The glucose explanation has also been criticized on the grounds that the brain does not consume measurably more glucose during self-control, and reanalyses pointing to publication bias have been carried out.",
+    "refs": [
+     "Hagger et al. 2016 (Perspect Psychol Sci)",
+     "Vohs et al. 2021 (Psychol Sci)",
+     "Kurzban 2010 (Evol Psychol)"
+    ]
+   }
+  },
+  "ch03-e8": {
+   "name": "The Name of the Game: game labels and the prisoner's dilemma",
+   "researchers": "V. Liberman, S. Samuels and L. Ross; A. Kay and L. Ross",
+   "question": "Do the label given to a prisoner's dilemma game, or words read before the game, change cooperative moves?",
+   "method": "Participants played an iterated prisoner's dilemma; the same game was introduced to some groups as the “Wall Street Game” and to others as the “Community Game” (the Liberman et al. study was conducted with U.S. university students and Israeli pilots). Kay and Ross, on the other hand, had participants read, before the game, innocent-looking word lists in which words evoking cooperation or competition were embedded.",
+   "finding": "The “Wall Street” label reduced cooperation and the “Community” label increased it; the effect of the label was much stronger than predictions based on the players' reputations. Words such as help and harmony increased cooperation, while words evoking power and toughness had the opposite effect.",
+   "roleInChapter": "Shows that words and labels steer behavior unconsciously, making the chapter's idea of “language and framing” concrete.",
+   "replication": {
+    "note": "That the game label changes cooperation in the prisoner's dilemma was also seen in later economics experiments, but the same labels had no effect in the Dictator Game, and the effect was explained through expectations about the other party's behavior rather than preferences. Behavioral priming studies with word lists, on the other hand, are generally among the areas most affected by the replication crisis.",
+    "refs": [
+     "Ellingsen et al. 2012 (Games Econ Behav)"
+    ]
+   }
+  },
+  "ch03-e9": {
+   "name": "Boston train station Spanish-speakers experiment (Enos)",
+   "researchers": "R. Enos",
+   "question": "Does a brief, ordinary group cue change white commuters' exclusionary attitudes toward immigrants?",
+   "method": "At train stations in Boston's predominantly white suburbs, over several days during the morning rush hour, two conservatively dressed Hispanic individuals quietly spoke Spanish among themselves. Commuters at randomly selected stations were given surveys asking about their attitudes toward immigration before and after this period; results were compared with control stations.",
+   "finding": "In the presence of the Spanish-speaking pairs, white commuters reported more exclusionary attitudes toward Hispanic immigrants; no similar effect was seen for other immigrant groups.",
+   "roleInChapter": "Shows that group membership cues can shift attitudes even within a short period of a few days.",
+   "replication": {
+    "note": "This is a single randomized field experiment and we are not aware of an independent replication. Enos himself has suggested that repeated contact may soften this initial negative reaction over time; the superficiality of the contact has also been criticized.",
+    "refs": []
+   }
+  },
+  "ch03-e10": {
+   "name": "Identity salience and the math test (Shih)",
+   "researchers": "M. Shih, T. Pittinsky and N. Ambady",
+   "question": "Does math performance change depending on which identity (race or gender) a person is thinking about at that moment?",
+   "method": "Asian American women college students were directed, through a brief questionnaire before a math test, to think about either their ethnic identity or their gender identity (one group received no identity emphasis and served as a control); they then took the same math test.",
+   "finding": "Participants who were directed to think about their racial identity performed better than those who thought about their gender. The book does not give the size of this difference numerically.",
+   "roleInChapter": "Shows that the same person carries multiple group identities and that which one comes to the fore can change performance within a few minutes.",
+   "caveats": "Sapolsky notes that he questions the premise on which this study rests, namely the assumption that women are worse than men at math, and that he will explain in Chapter 9 that this premise is not very accurate.",
+   "replication": {
+    "note": "Of the two preregistered replications in 2014, one reported that the effect appeared only when participants who did not know the stereotypes were excluded, and the other found no effect at all. The samples of the original studies were small; publication bias and weakening effects are also debated in the broader stereotype threat literature.",
+    "refs": [
+     "Gibson, Losee and Vitiello 2014 (Soc Psychol)",
+     "Moon and Roeder 2014 (Soc Psychol)"
+    ]
+   }
+  },
+  "ch03-e11": {
+   "name": "The Genovese case and the bystander effect (meta-analysis)",
+   "researchers": "P. Fischer et al.",
+   "question": "How does the number of bystanders affect the likelihood of helping in an emergency, and does this effect vary with the level of danger?",
+   "method": "Studies on the bystander effect were combined by meta-analysis (more than 100 independent effect sizes, more than 7,700 participants); dangerous and non-dangerous emergencies were examined separately.",
+   "finding": "As the number of bystanders increased, the likelihood of helping generally decreased, but this effect weakened markedly in dangerous situations, in situations where the perpetrator was present and in situations where the cost of intervening was physical. The book summarizes this as help increasing as the crowd grows in dangerous situations and suggests explaining it through reputational concern.",
+   "roleInChapter": "Shows that the bystander effect does not operate the same way in every situation and that social context, such as danger and reputation, is decisive.",
+   "caveats": "The newspaper account of the incident was exaggerated: the number of witnesses was fewer than thirty-eight, no one had seen the whole incident, the windows were closed and many people had assumed the sounds were a lovers' quarrel.",
+   "replication": {
+    "note": "The finding that the bystander effect weakens in dangerous situations was supported by later studies using camera recordings of real incidents: in about nine out of ten conflicts in public spaces in three countries, at least one person intervened, and the likelihood of intervention rose as the number of bystanders increased. The falsity of the legendary account of the Genovese case has also been separately documented.",
+    "refs": [
+     "Philpot et al. 2020 (Am Psychol)",
+     "Manning, Levine and Collins 2007 (Am Psychol)"
+    ]
+   }
+  },
+  "ch03-e12": {
+   "name": "The Spreading of Disorder (Keizer)",
+   "researchers": "K. Keizer, S. Lindenberg and L. Steg",
+   "question": "Does a sign of one norm violation increase the likelihood that another norm will be violated?",
+   "method": "In a series of field experiments in Groningen, the Netherlands, an environment was either left orderly or a sign of a norm violation was added. For example, the behaviors observed were taking a shortcut through a forbidden gap when bicycles were locked to the fence despite a prohibition sign, throwing flyers on the ground when walls were covered in graffiti, and taking an envelope hanging out of a mailbox with a 5-euro bill visible inside when litter was scattered around.",
+   "finding": "A sign of a norm violation roughly doubled the likelihood of the same or another norm violation.",
+   "roleInChapter": "Shows that small disorders (broken windows) can have large behavioral consequences and that part of this operates unconsciously.",
+   "replication": {
+    "note": "A large replication covering 84 field experiments in 33 neighborhoods in the Netherlands found an effect of disorder cues, but showed that the absolute effect was smaller than in the original study and varied with neighborhood and individual characteristics. The overall effect of broken windows theory on crime also remains contested.",
+    "refs": [
+     "Volker 2017 (Sociological Science)"
+    ]
+   }
+  }
+ }
+}

@@ -2,6 +2,8 @@
 // kontrollerin üstüne binmesin diye okuyucu çubuğu tek satıra indirebilir (tercih oturum boyunca hatırlanır).
 // Sayfa bölümü simülasyonu bağladıktan sonra çağırır; böylece her simülasyon (yenileri de) aynı davranışı alır.
 
+import { t } from '../i18n/t';
+
 const KEY = 'behave-sim-bar';
 let seq = 0;
 
@@ -26,7 +28,7 @@ export function enhanceSimBar(host: HTMLElement): () => void {
   const apply = (collapsed: boolean): void => {
     bar.dataset.collapsed = String(collapsed);
     btn.setAttribute('aria-expanded', String(!collapsed));
-    const label = collapsed ? 'Çıktı çubuğunu büyüt' : 'Çıktı çubuğunu küçült';
+    const label = collapsed ? t('bar.expand') : t('bar.collapse');
     btn.setAttribute('aria-label', label);
     btn.title = label;
   };

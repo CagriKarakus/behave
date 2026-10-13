@@ -2,10 +2,12 @@
 // Sayılar ölçüm değildir; ilişkilerin yönünü ve zamanlamasını gösterir.
 // Kaynak: reference/artifacts/bir-saniye-once.html (davranış değişmeden taşındı).
 
+import { L } from './text';
+
 export type RegionId = 'ofc' | 'acc' | 'dlpfc' | 'vmpfc' | 'bla' | 'itc' | 'cea' | 'vta' | 'nacc';
 export type Group = 'pfc' | 'amy' | 'dop';
 
-export interface NodeDef { id: RegionId; ab: string; cap: string; grp: Group; x: number; y: number; tau: number; b: number }
+export interface NodeDef { id: RegionId; ab: string; grp: Group; x: number; y: number; tau: number; b: number }
 export interface EdgeDef { from: RegionId; to: RegionId; w: number; bend: number }
 export interface Inputs { threat: number; cue: number; prob: number; effort: number; frontal: number; stress: number }
 export type Activity = Record<RegionId, number>;
@@ -13,15 +15,15 @@ export type Lesion = Partial<Record<RegionId, boolean>>;
 export interface NetPart { from: RegionId | 'dış girdi'; v: number }
 
 export const NODES: NodeDef[] = [
-  { id: 'ofc',   ab: 'OFC',   cap: 'orbitofrontal',   grp: 'pfc', x: 70,  y: 60,  tau: 0.6,  b: 0.2 },
-  { id: 'acc',   ab: 'ACC',   cap: 'ön singulat',     grp: 'pfc', x: 180, y: 60,  tau: 0.5,  b: 0.2 },
-  { id: 'dlpfc', ab: 'dlPFC', cap: 'dorsolateral',    grp: 'pfc', x: 290, y: 60,  tau: 0.8,  b: 0.25 },
-  { id: 'vmpfc', ab: 'vmPFC', cap: 'ventromedial',    grp: 'pfc', x: 180, y: 170, tau: 0.7,  b: 0.1 },
-  { id: 'bla',   ab: 'BLA',   cap: 'bazolateral',     grp: 'amy', x: 70,  y: 290, tau: 0.3,  b: 0.15 },
-  { id: 'itc',   ab: 'ITC',   cap: 'ardışık hücre',   grp: 'amy', x: 180, y: 290, tau: 0.4,  b: 0.1 },
-  { id: 'cea',   ab: 'CeA',   cap: 'merkezi',         grp: 'amy', x: 290, y: 290, tau: 0.35, b: 0.1 },
-  { id: 'vta',   ab: 'VTA',   cap: 'dopamin kaynağı', grp: 'dop', x: 70,  y: 420, tau: 0.3,  b: 0.2 },
-  { id: 'nacc',  ab: 'NAcc',  cap: 'akumbens',        grp: 'dop', x: 290, y: 420, tau: 0.4,  b: 0.15 },
+  { id: 'ofc',   ab: 'OFC',     grp: 'pfc', x: 70,  y: 60,  tau: 0.6,  b: 0.2 },
+  { id: 'acc',   ab: 'ACC',       grp: 'pfc', x: 180, y: 60,  tau: 0.5,  b: 0.2 },
+  { id: 'dlpfc', ab: 'dlPFC',    grp: 'pfc', x: 290, y: 60,  tau: 0.8,  b: 0.25 },
+  { id: 'vmpfc', ab: 'vmPFC',    grp: 'pfc', x: 180, y: 170, tau: 0.7,  b: 0.1 },
+  { id: 'bla',   ab: 'BLA',       grp: 'amy', x: 70,  y: 290, tau: 0.3,  b: 0.15 },
+  { id: 'itc',   ab: 'ITC',     grp: 'amy', x: 180, y: 290, tau: 0.4,  b: 0.1 },
+  { id: 'cea',   ab: 'CeA',           grp: 'amy', x: 290, y: 290, tau: 0.35, b: 0.1 },
+  { id: 'vta',   ab: 'VTA',   grp: 'dop', x: 70,  y: 420, tau: 0.3,  b: 0.2 },
+  { id: 'nacc',  ab: 'NAcc',         grp: 'dop', x: 290, y: 420, tau: 0.4,  b: 0.15 },
 ];
 
 // from, to, ağırlık (+ uyarır, − engeller), bend (çizimde eğrilik, px)
@@ -95,18 +97,19 @@ export function settle(u: Inputs, lesion: Lesion, seconds = 12, dt = 0.02, x0?: 
 
 export const controlOf = (x: Activity): number => (x.dlpfc + x.vmpfc) / 2;
 
-// Durumu Türkçe tek cümleye çevirir
+// Durumu tek cümleye çevirir (metin text.tr.ts / text.en.ts'den, çağrı anında okunur)
 export function describe(x: Activity, u: Inputs, lesion: Lesion): string {
+  const T = L().say;
   const ctl = controlOf(x);
   const thr = u.threat;
-  if (lesion.bla && lesion.cea) return 'Amigdala devre dışı: tehdit olsa bile alarm üretilmiyor ("evcilleşme etkisi").';
-  if (lesion.bla && thr > 0.3) return 'BLA yok: tehdit bilgisi merkezi amigdalaya ulaşmıyor, tepki çok zayıf.';
-  if (lesion.vmpfc && x.cea > 0.3) return 'vmPFC yok: amigdalayı yatıştıran fren eksik, alarm uzuyor.';
-  if (x.cea > 0.55 && ctl < 0.4) return 'Amigdala baskın, frontal fren zayıf: tepki dizginlenemiyor.';
-  if (x.cea > 0.55) return 'Amigdala yüksek; frontal korteks devrede ama tehdit çok güçlü.';
-  if (thr > 0.3 && x.cea < 0.3 && ctl >= 0.4) return 'Tehdit var, ama frontal korteks ve ITC kapısı amigdalayı yatıştırıyor.';
-  if (x.nacc > 0.55 && x.bla >= 0.45) return 'İsteme yüksek ve amigdala devrede: arzunun içindeki gerginlik.';
-  if (x.nacc > 0.55) return 'Ödül devresi açık, amigdala sakin: pasif ilgi ve haz.';
-  if (x.vta > 0.55) return 'Dopamin yüksek: ödülün kendisinden çok beklenti ve belirsizlik sürüyor.';
-  return 'Dinlenme hâli: tüm devreler düşük, frontal korteks denetimde.';
+  if (lesion.bla && lesion.cea) return T.amyOff;
+  if (lesion.bla && thr > 0.3) return T.noBla;
+  if (lesion.vmpfc && x.cea > 0.3) return T.noVm;
+  if (x.cea > 0.55 && ctl < 0.4) return T.amyDom;
+  if (x.cea > 0.55) return T.amyHigh;
+  if (thr > 0.3 && x.cea < 0.3 && ctl >= 0.4) return T.calmed;
+  if (x.nacc > 0.55 && x.bla >= 0.45) return T.wantTense;
+  if (x.nacc > 0.55) return T.wantCalm;
+  if (x.vta > 0.55) return T.dopHigh;
+  return T.rest;
 }

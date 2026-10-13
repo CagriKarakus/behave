@@ -4,6 +4,8 @@
 //  3) Zar ve dürüstlük (Gächter ve Schulz).
 // Kitaptan gelen sayılar BOOK nesnesinde; modelin kendi varsayımları "ASSUME" ile işaretli.
 import { mulberry32 } from '../rng';
+import { num, pct } from '../../i18n/fmt';
+import { L } from './text';
 
 export const clamp = (x: number, lo = 0, hi = 1): number => Math.min(hi, Math.max(lo, x));
 const sigmoid = (z: number): number => 1 / (1 + Math.exp(-z));
@@ -33,21 +35,17 @@ export interface Scenario {
   book: [number, number] | null;
 }
 
+const scText = (id: ScenarioId) => L().sc[id];
 export const SCENARIOS: Scenario[] = [
-  { id: 'anahtar', short: 'Anahtar', ask: 'Anahtarı çevirir misin?',
-    text: 'Kontrolsüz bir tramvay beş kişiye gidiyor. Anahtarı çevirirsen yan raya geçer ve orada duran bir kişiyi öldürür.',
+  { id: 'anahtar', get short() { return scText('anahtar').short; }, get ask() { return scText('anahtar').ask; }, get text() { return scText('anahtar').text; },
     dims: { force: 0, prox: 0, intent: 'yan' }, book: [0.6, 0.7] },
-  { id: 'kazara', short: 'Kazara itme', ask: 'Bu kazara itmeyi onaylar mısın?',
-    text: 'Anahtara koşarken yoldaki birini kazara itip düşürürsün. O raylara düşer ve tramvay beş kişiden döner.',
+  { id: 'kazara', get short() { return scText('kazara').short; }, get ask() { return scText('kazara').ask; }, get text() { return scText('kazara').text; },
     dims: { force: 1, prox: 1, intent: 'kaza' }, book: [0.8, 0.8] },
-  { id: 'kopru', short: 'Köprüden itme', ask: 'Adamı iter misin?',
-    text: 'Köprüde yanındaki iri adamı elinle raylara itersen tramvay onda durur ve beş kişi kurtulur.',
+  { id: 'kopru', get short() { return scText('kopru').short; }, get ask() { return scText('kopru').ask; }, get text() { return scText('kopru').text; },
     dims: { force: 1, prox: 1, intent: 'arac' }, book: [0.3, 0.3] },
-  { id: 'sopa', short: 'Sopayla itme', ask: 'Adamı sopayla iter misin?',
-    text: 'Aynı köprü, aynı adam; ama onu uzun bir sopayla itersin. Kasın yine bir kişiyi araç yapmak için kullanılıyor.',
+  { id: 'sopa', get short() { return scText('sopa').short; }, get ask() { return scText('sopa').ask; }, get text() { return scText('sopa').text; },
     dims: { force: 1, prox: 0, intent: 'arac' }, book: null },
-  { id: 'dongu', short: 'Döngü', ask: 'Anahtarı çevirir misin?',
-    text: 'Anahtar tramvayı, ana raya geri dönen bir döngüye sokar. Döngüdeki bir kişinin bedeni tramvayı durdurmazsa tramvay geri dönüp beş kişiyi ezer.',
+  { id: 'dongu', get short() { return scText('dongu').short; }, get ask() { return scText('dongu').ask; }, get text() { return scText('dongu').text; },
     dims: { force: 0, prox: 0, intent: 'arac' }, book: [0.6, 0.7] },
 ];
 
@@ -80,14 +78,14 @@ export const dimsOf = (s: Scenario, saved = 5): Dims => ({ ...s.dims, saved });
 export const scenarioP = (s: Scenario, saved = 5): number => systems(dimsOf(s, saved)).pYes;
 
 export function describeTrolley(d: Dims): string {
+  const T = L().trolley;
   const s = systems(d);
-  const p = Math.round(s.pYes * 100);
-  const lead = s.net > 0.15 ? 'Soğuk hesap ağır basıyor' : s.net < -0.15 ? 'Sıcak sezgi ağır basıyor' : 'İki sistem başa baş';
-  const why = d.intent === 'kaza' ? 'zarar seçilmiş bir eylem değil, sezgi neredeyse sessiz'
-    : d.force && d.intent === 'arac' ? 'kişisel güçle bir kişiyi araç yapmak alarmı en yükseğe çıkarıyor'
-      : d.intent === 'arac' ? 'kişisel güç yok, sezgi aracı olmayı pek ayırt etmiyor'
-        : 'zarar yan etki, kişisel güç yok';
-  return `${lead}: ${why}. Ortalama biri için "evet" olasılığı yaklaşık %${p}.`;
+  const lead = s.net > 0.15 ? T.lead.cold : s.net < -0.15 ? T.lead.hot : T.lead.even;
+  const why = d.intent === 'kaza' ? T.why.accident
+    : d.force && d.intent === 'arac' ? T.why.force
+      : d.intent === 'arac' ? T.why.means
+        : T.why.side;
+  return T.say(lead, why, pct(s.pYes));
 }
 
 export type Answers = Partial<Record<ScenarioId, boolean>>;
@@ -209,12 +207,13 @@ export function totals(run: Run, upTo = run.rounds.length): { pro: number; anti:
 }
 
 export function describePG(none: Run, pun: Run, upTo: number, s: Society): string {
+  const T = L().pgSay;
   const last = pun.rounds[upTo - 1], base = none.rounds[upTo - 1];
   const a = Math.round(avgContribution(last)), b = Math.round(avgContribution(base));
   const af = Math.round(antiFraction(pun, upTo) * 100);
   const civic = (s.capital + s.law) / 2;
-  const tag = civic >= 0.6 ? 'Ceza çoğunlukla bedava binenlere gidiyor' : civic >= 0.4 ? 'Ceza karışık hedefleniyor' : 'Ceza giderek işbirlikçilere de yöneliyor';
-  return `${upTo}. tur: cezalı oyunda ortalama katkı ${a}/${PG.E}, cezasızda ${b}/${PG.E}. ${tag} (cezanın %${af}'i antisosyal).`;
+  const tag = civic >= 0.6 ? T.tag.high : civic >= 0.4 ? T.tag.mid : T.tag.low;
+  return T.say(upTo, a, b, PG.E, tag, af);
 }
 
 /* =====================================================================
@@ -292,17 +291,18 @@ export function sampleByType(seed: number, n: number, m0: Mix): number[][] {
 export const sampleReports = (seed: number, n: number, m: Mix): number[] =>
   FACES.map((_, i) => sampleByType(seed, n, m).reduce((x, row) => x + row[i], 0));
 /** ASSUME: toplum karışımları. Kitaptan yalnızca yön: ihlal arttıkça yalan artar; tam yalan her yerde nadir. */
+const mixName = (id: 'durust' | 'dusuk' | 'yuksek' | 'yalan'): string => L().mixes[id];
 export const MIXES: { id: string; name: string; mix: Mix }[] = [
-  { id: 'durust', name: 'Herkes dürüst', mix: { justified: 0, liar: 0 } },
-  { id: 'dusuk', name: 'Düşük ihlalli toplum', mix: { justified: 0.25, liar: 0.02 } },
-  { id: 'yuksek', name: 'Yüksek ihlalli toplum', mix: { justified: 0.65, liar: 0.05 } },
-  { id: 'yalan', name: 'Herkes tam yalancı', mix: { justified: 0, liar: 1 } },
+  { id: 'durust', get name() { return mixName('durust'); }, mix: { justified: 0, liar: 0 } },
+  { id: 'dusuk', get name() { return mixName('dusuk'); }, mix: { justified: 0.25, liar: 0.02 } },
+  { id: 'yuksek', get name() { return mixName('yuksek'); }, mix: { justified: 0.65, liar: 0.05 } },
+  { id: 'yalan', get name() { return mixName('yalan'); }, mix: { justified: 0, liar: 1 } },
 ];
 
-const f2 = (x: number): string => x.toFixed(2).replace('.', ',');
 export function describeDice(m0: Mix): string {
+  const T = L().dice;
   const m = normMix(m0), d = expectedDist(m);
-  if (m.justified + m.liar < 0.005) return 'Herkes dürüst: her sayı altıda bir (%17) civarında, dağılım düz.';
-  if (m.liar > 0.995) return 'Herkes hep 5 bildiriyor: tek sütun, dağılım tamamen çarpık.';
-  return `Beklenen ödeme ${f2(expectedPay(d))} (dürüstken 2,50). 5 bildirenler %${Math.round(d[4] * 100)}, 6 bildirenler %${Math.round(d[5] * 100)}: haklı dürüstlük sağ uçtaki 5'i şişirir.`;
+  if (m.justified + m.liar < 0.005) return T.allHonest(pct(1 / 6));
+  if (m.liar > 0.995) return T.allLiar;
+  return T.mix(num(expectedPay(d), 2), num(2.5, 2), pct(d[4]), pct(d[5]));
 }

@@ -4,6 +4,9 @@ import { createTour } from '../tour';
 import { makeSlider, pc, type Ctx, type Meter, type Panel } from '../ui';
 import { TROOP_DEFAULT, meanD, meanH, newTroop, rankMean, ratExperiment, stepTroop, type Ev, type Troop, type TroopParams } from './model';
 import { bars } from './bars';
+import { L } from './text';
+import { decimalSep } from '../../i18n/locale';
+import { percent } from '../../i18n/fmt';
 
 const N = 8, STEP_S = 0.4, AX = (k: number): number => 28 + k * 43.4, Y_BASE = 176, H_MAX = 70, ARCS = 24;
 const reduced = (): boolean => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -11,29 +14,30 @@ const reduced = (): boolean => typeof matchMedia === 'function' && matchMedia('(
 export interface YerPanel extends Panel { setup(p: Partial<TroopParams>, warm: number): void }
 
 export function createYerPanel(ctx: Ctx, host: HTMLElement): YerPanel {
+  const X = L().yer;
   const P: TroopParams = { ...TROOP_DEFAULT };
   let seed = 7, troop: Troop = newTroop(seed);
   let running = !reduced(), dirty = true, acc = 0, last = 0;
   let evs: Array<{ e: Ev; ttl: number }> = [];
 
   host.innerHTML =
-    `<div class="row"><button type="button" class="btn" data-ref="run" aria-pressed="${running}">${running ? 'Duraklat' : 'Başlat'}</button><button type="button" class="btn" data-ref="step">Bir adım</button><button type="button" class="btn" data-ref="new">Yeni topluluk</button></div>` +
-    `<div class="stage"><svg viewBox="0 0 360 202" role="img" aria-label="Sekiz babunluk hiyerarşi: rütbe sırasıyla daireler, altlarında stres hormonu çubukları, üstlerinde saldırı okları" data-ref="troop"></svg>` +
-    `<div class="legend"><span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M1 5 H25" stroke="var(--edge)" stroke-width="2" stroke-dasharray="4 3" fill="none"/></svg>statü yenilgisi (üstten alta)</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M1 5 H25" stroke="var(--amy)" stroke-width="2.6" fill="none"/></svg>yer değiştirme saldırısı</span><span><i style="background:var(--gld)"></i>stres hormonu (çizgi: zaman ortalaması)</span></div></div>` +
-    `<div class="card"><h3 class="sim-h">Saldırının ardından stres hormonu</h3>` +
-    `<svg viewBox="0 0 360 112" class="chart" role="img" aria-label="Yer değiştirenler ve tutanlar için olay sonrası ortalama stres hormonu, zamana göre" data-ref="chart"></svg>` +
-    `<div class="legend"><span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M1 5 H25" stroke="var(--amy)" stroke-width="2.6" fill="none"/></svg>yenilgiden sonra saldıranlar</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M1 5 H25" stroke="var(--pfc)" stroke-width="2.6" stroke-dasharray="5 3" fill="none"/></svg>saldırmayıp tutanlar</span></div></div>` +
-    `<div class="card"><h3 class="sim-h">Şoklanan sıçan (200 sanal sıçan)</h3><div class="sys" data-ref="rat"></div><p class="note">Şok şiddeti, yenilgi stresi kaydırıcısıyla orantılıdır. Sıçanın ısırma olasılığı yer değiştirme eğilimine eşittir.</p></div>` +
-    `<section><h3 class="sim-h">Girdiler</h3><div class="sliders" data-ref="sl"></div></section>` +
+    `<div class="row"><button type="button" class="btn" data-ref="run" aria-pressed="${running}">${running ? X.pause : X.start}</button><button type="button" class="btn" data-ref="step">${X.step}</button><button type="button" class="btn" data-ref="new">${X.newTroop}</button></div>` +
+    `<div class="stage"><svg viewBox="0 0 360 202" role="img" aria-label="${X.troopLabel}" data-ref="troop"></svg>` +
+    `<div class="legend"><span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M1 5 H25" stroke="var(--edge)" stroke-width="2" stroke-dasharray="4 3" fill="none"/></svg>${X.legendTroop[0]}</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M1 5 H25" stroke="var(--amy)" stroke-width="2.6" fill="none"/></svg>${X.legendTroop[1]}</span><span><i style="background:var(--gld)"></i>${X.legendTroop[2]}</span></div></div>` +
+    `<div class="card"><h3 class="sim-h">${X.afterHeading}</h3>` +
+    `<svg viewBox="0 0 360 112" class="chart" role="img" aria-label="${X.chartLabel}" data-ref="chart"></svg>` +
+    `<div class="legend"><span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M1 5 H25" stroke="var(--amy)" stroke-width="2.6" fill="none"/></svg>${X.legendChart[0]}</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M1 5 H25" stroke="var(--pfc)" stroke-width="2.6" stroke-dasharray="5 3" fill="none"/></svg>${X.legendChart[1]}</span></div></div>` +
+    `<div class="card"><h3 class="sim-h">${X.ratHeading}</h3><div class="sys" data-ref="rat"></div><p class="note">${X.ratNote}</p></div>` +
+    `<section><h3 class="sim-h">${X.inputsHeading}</h3><div class="sliders" data-ref="sl"></div></section>` +
     `<div class="notes" data-notes="n3"></div>`;
   const $ = <T extends Element = HTMLElement>(n: string) => ref<T>(host, n);
 
   /* ---- Sahne ---- */
   const T = $<SVGElement>('troop');
   svg('line', { x1: 10, x2: 350, y1: Y_BASE, y2: Y_BASE, class: 'base' }, T);
-  svgText(T, { x: 6, y: 96, class: 'ax-t' }, 'Stres hormonu');
-  svgText(T, { x: 6, y: 197, class: 'ax-t' }, 'En üst rütbe');
-  svgText(T, { x: 354, y: 197, class: 'ax-t', 'text-anchor': 'end' }, 'En alt rütbe');
+  svgText(T, { x: 6, y: 96, class: 'ax-t' }, X.stressAxis);
+  svgText(T, { x: 6, y: 197, class: 'ax-t' }, X.topRank);
+  svgText(T, { x: 354, y: 197, class: 'ax-t', 'text-anchor': 'end' }, X.bottomRank);
   const arcs = Array.from({ length: ARCS }, () => {
     const g = svg('g', { class: 'arc', opacity: 0 }, T);
     return { g, p: svg('path', { fill: 'none' }, g), c: svg('circle', { r: 3.2 }, g) };
@@ -54,23 +58,23 @@ export function createYerPanel(ctx: Ctx, host: HTMLElement): YerPanel {
   svg('line', { x1: CX0, x2: CX1, y1: CY1, y2: CY1, class: 'grid' }, C);
   svgText(C, { x: 30, y: CY0 + 3, 'text-anchor': 'end' }, '0');
   const topLbl = svgText(C, { x: 30, y: CY1 + 3, 'text-anchor': 'end' }, '');
-  svgText(C, { x: CX1, y: 108, 'text-anchor': 'end' }, 'zaman →');
+  svgText(C, { x: CX1, y: 108, 'text-anchor': 'end' }, X.timeAxis);
   const lnD = svg('polyline', { class: 'ln', stroke: 'var(--amy)' }, C);
   const lnH = svg('polyline', { class: 'ln', stroke: 'var(--pfc)', 'stroke-dasharray': '6 4' }, C);
-  const noData = svgText(C, { x: 190, y: 54, 'text-anchor': 'middle' }, 'Henüz veri yok: Başlat ya da Bir adım');
+  const noData = svgText(C, { x: 190, y: 54, 'text-anchor': 'middle' }, X.noData);
 
-  const ratSet = bars($('rat'), [{ label: 'Yanında küçük sıçan var', color: 'var(--gld)' }, { label: 'Yanında kimse yok', color: 'var(--gld)' }]);
+  const ratSet = bars($('rat'), [{ label: X.ratBars[0], color: 'var(--gld)' }, { label: X.ratBars[1], color: 'var(--gld)' }]);
 
   /* ---- Kaydırıcılar ---- */
-  const sFreq = makeSlider(ctx, $('sl'), 'f', 'Yenilgi sıklığı', 'Her adımda kaç çatışma yaşanıyor.', 1, 4, P.freq, (v) => { P.freq = v; dirty = true; }, (v) => `${v} / adım`, 'var(--ink)');
-  const sHit = makeSlider(ctx, $('sl'), 'h', 'Yenilgi stresi', 'Bir yenilginin stres hormonunu ne kadar yükselttiği; sıçan kartındaki şok da bununla orantılı.', 3, 20, Math.round(P.hit * 100), (v) => { P.hit = v / 100; dirty = true; }, (v) => `%${v}`, 'var(--gld)');
-  const sDis = makeSlider(ctx, $('sl'), 'd', 'Yer değiştirme eğilimi', 'Yenilenin kendinden zayıf birine saldırma olasılığı.', 0, 100, Math.round(P.displace * 100), (v) => { P.displace = v / 100; dirty = true; }, (v) => `%${v}`, 'var(--amy)');
-  const sRel = makeSlider(ctx, $('sl'), 'r', 'Saldırının rahatlatma etkisi', 'Saldıran bireyin stres hormonunun ne kadarı düşüyor. Sıfırda saldırmak stresi değiştirmez (modelin varsayımı).', 0, 100, Math.round(P.relief * 100), (v) => { P.relief = v / 100; dirty = true; }, (v) => `%${v}`, 'var(--pfc)');
+  const sFreq = makeSlider(ctx, $('sl'), 'f', X.sliders.freq.name, X.sliders.freq.hint, 1, 4, P.freq, (v) => { P.freq = v; dirty = true; }, X.perStep, 'var(--ink)');
+  const sHit = makeSlider(ctx, $('sl'), 'h', X.sliders.hit.name, X.sliders.hit.hint, 3, 20, Math.round(P.hit * 100), (v) => { P.hit = v / 100; dirty = true; }, (v) => percent(String(v)), 'var(--gld)');
+  const sDis = makeSlider(ctx, $('sl'), 'd', X.sliders.displace.name, X.sliders.displace.hint, 0, 100, Math.round(P.displace * 100), (v) => { P.displace = v / 100; dirty = true; }, (v) => percent(String(v)), 'var(--amy)');
+  const sRel = makeSlider(ctx, $('sl'), 'r', X.sliders.relief.name, X.sliders.relief.hint, 0, 100, Math.round(P.relief * 100), (v) => { P.relief = v / 100; dirty = true; }, (v) => percent(String(v)), 'var(--pfc)');
   const syncSl = (): void => { sFreq.set(P.freq); sHit.set(Math.round(P.hit * 100)); sDis.set(Math.round(P.displace * 100)); sRel.set(Math.round(P.relief * 100)); };
 
   /* ---- Düğmeler ---- */
   const runBtn = $<HTMLButtonElement>('run');
-  const setRun = (on: boolean): void => { running = on; runBtn.setAttribute('aria-pressed', String(on)); runBtn.textContent = on ? 'Duraklat' : 'Başlat'; last = 0; };
+  const setRun = (on: boolean): void => { running = on; runBtn.setAttribute('aria-pressed', String(on)); runBtn.textContent = on ? X.pause : X.start; last = 0; };
   ctx.scope.on(runBtn, 'click', () => { setRun(!running); ctx.touch(); });
   const advance = (): void => { evs = evs.filter((x) => --x.ttl > 0); for (const e of stepTroop(troop, P)) evs.push({ e, ttl: 2 }); dirty = true; };
   ctx.scope.on($('step'), 'click', () => { advance(); ctx.touch(); });
@@ -107,7 +111,7 @@ export function createYerPanel(ctx: Ctx, host: HTMLElement): YerPanel {
     let mx = 0.2;
     for (const v of [...sd, ...sh]) if (!Number.isNaN(v) && v > mx) mx = v;
     mx = Math.min(1, Math.ceil(mx * 10) / 10);
-    topLbl.textContent = String(mx).replace('.', ',');
+    topLbl.textContent = String(mx).replace('.', decimalSep());
     const pts = (a: number[]): string => a.map((v, i) => (Number.isNaN(v) ? '' : `${(CX0 + (n > 1 ? i / (n - 1) : 0) * (CX1 - CX0)).toFixed(1)},${(CY0 - v / mx * (CY0 - CY1)).toFixed(1)}`)).filter(Boolean).join(' ');
     lnD.setAttribute('points', pts(sd)); lnH.setAttribute('points', pts(sh));
     noData.setAttribute('opacity', n > 1 && !Number.isNaN(lastVal(sd)) ? '0' : '1');
@@ -118,20 +122,20 @@ export function createYerPanel(ctx: Ctx, host: HTMLElement): YerPanel {
 
   const say = (): string => {
     const d = meanD(troop), h = meanH(troop);
-    if (!troop.step) return 'Henüz veri yok. Başlat ya da Bir adım: yenilen birey kendinden aşağıdakine saldırabilir ya da tutabilir.';
-    if (Number.isNaN(d) || Number.isNaN(h)) return `Adım ${troop.step}: ${Number.isNaN(d) ? 'kimse alttakine saldırmıyor' : 'herkes saldırıyor'}; stres hormonu en alt rütbede %${Math.round(troop.gc[N - 1] * 100)}, en üst rütbede %${Math.round(troop.gc[0] * 100)}.`;
+    const low = pc(troop.gc[N - 1]), top = pc(troop.gc[0]);
+    if (!troop.step) return X.sayEmpty;
+    if (Number.isNaN(d) || Number.isNaN(h)) return Number.isNaN(d) ? X.sayNoAttack(troop.step, low, top) : X.sayAllAttack(troop.step, low, top);
     const diff = h - d;
-    return `Adım ${troop.step}: yenilgiden sonra saldıranların stres hormonu %${Math.round(d * 100)}, tutanlarınki %${Math.round(h * 100)} ` +
-      (diff > 0.02 ? '(saldıranda daha düşük).' : diff < -0.02 ? '(saldıranda daha yüksek).' : '(fark yok).') + ` En alt rütbede %${Math.round(troop.gc[N - 1] * 100)}.`;
+    return (diff > 0.02 ? X.sayLower : diff < -0.02 ? X.sayHigher : X.sayEqual)(troop.step, pc(d), pc(h), low);
   };
   const panel: YerPanel = {
     say,
     meters(): Meter[] {
       const d = meanD(troop), h = meanH(troop), z = (v: number): number => (Number.isNaN(v) ? 0 : v);
       return [
-        { label: 'Saldıranın stresi', value: Number.isNaN(d) ? '—' : pc(d), frac: z(d), color: 'var(--amy)' },
-        { label: 'Tutanın stresi', value: Number.isNaN(h) ? '—' : pc(h), frac: z(h), color: 'var(--pfc)' },
-        { label: 'En alt rütbe', value: pc(troop.gc[N - 1]), frac: troop.gc[N - 1], color: 'var(--gld)' },
+        { label: X.meters[0], value: Number.isNaN(d) ? '—' : pc(d), frac: z(d), color: 'var(--amy)' },
+        { label: X.meters[1], value: Number.isNaN(h) ? '—' : pc(h), frac: z(h), color: 'var(--pfc)' },
+        { label: X.meters[2], value: pc(troop.gc[N - 1]), frac: troop.gc[N - 1], color: 'var(--gld)' },
       ];
     },
     draw(now = 0): boolean {
@@ -148,18 +152,11 @@ export function createYerPanel(ctx: Ctx, host: HTMLElement): YerPanel {
     setup,
   };
 
-  const tour = createTour(ctx.scope, [
-    { title: 'Yer değiştirme yok', text: 'Sekiz babun, rütbe sırasıyla. Yenilgi stresi rastgele düşer; yenilen kimse alttakine saldırmıyor. Alt rütbeler daha sık yenilir, stres hormonları daha yüksektir.',
-      look: 'Sağa doğru yükselen çubuklar.', apply: () => setup({ displace: 0, relief: 0.4 }, 250) },
-    { title: 'Yenilen alttakine saldırıyor', text: 'Yenilen birey kendinden aşağıdakini kovalıyor (beta erkek, en alttaki omega erkeği). Saldırabilen bireyin stres hormonu daha az yükselir.',
-      look: 'Kırmızı çizginin (saldıranlar) mavi kesikli çizginin altında kalması.', apply: () => setup({ displace: 0.6, relief: 0.4 }, 250) },
-    { title: 'Fark nereden geliyor?', text: 'Rahatlatma etkisi sıfırlanırsa iki çizgi birleşir. Yani fark, saldırmanın stresi düşürdüğü varsayımından gelir; kitapta bu, hayvan çalışmalarının bulgusudur.',
-      look: 'İki çizginin üst üste binmesi.', apply: () => setup({ displace: 0.6, relief: 0 }, 250) },
-    { title: 'Şoklanan sıçan', text: 'Ayağına şok verilen sıçanın yanında küçük bir sıçan varsa ısırabilir ve stres yanıtı daha az yükselir. Yanında kimse yoksa stres olduğu gibi kalır.',
-      look: 'Aşağıdaki sıçan kartında iki çubuk arasındaki fark.', apply: () => setup({ displace: 0.8, relief: 0.4, hit: 0.1 }, 100) },
-    { title: 'Stres ortadan kalkmıyor, aşağı akıyor', text: 'Her saldırı alttakine yeni bir yenilgi yükler. Yer değiştirme eğilimi tam olunca ortadakilerin stresi düşer, en alttakinin stresi artar.',
-      look: 'En sağdaki çubuk ve zaman ortalaması çizgisi.', apply: () => setup({ displace: 1, relief: 0.4 }, 250) },
-  ]);
+  const setups: Array<[Partial<TroopParams>, number]> = [
+    [{ displace: 0, relief: 0.4 }, 250], [{ displace: 0.6, relief: 0.4 }, 250], [{ displace: 0.6, relief: 0 }, 250],
+    [{ displace: 0.8, relief: 0.4, hit: 0.1 }, 100], [{ displace: 1, relief: 0.4 }, 250],
+  ];
+  const tour = createTour(ctx.scope, X.tour.map((st, k) => ({ ...st, apply: () => setup(setups[k][0], setups[k][1]) })));
   host.prepend(tour.el);
   return panel;
 }

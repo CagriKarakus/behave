@@ -2,6 +2,7 @@
 // Kitaptan gelenler: türlerin ayrımı (ch01), bağlama duyarlı ortak devre (King ve ark., ch01-e3), yer değiştirme
 // saldırganlığının stresi düşürmesi (ch01-e1). Konumlar, ağırlıklar ve sayılar modelin varsayımıdır.
 import { mulberry32, normal, type Rng } from '../rng';
+import { L } from './text';
 
 const clamp = (v: number, lo = 0, hi = 1): number => Math.max(lo, Math.min(hi, v));
 
@@ -9,11 +10,13 @@ const clamp = (v: number, lo = 0, hi = 1): number => Math.max(lo, Math.min(hi, v
 /** a: reaktif 0 ... proaktif 1; b: sıcakkanlı 0 ... soğukkanlı 1; c: dürtüsel 0 ... planlı 1. */
 export interface Axes { a: number; b: number; c: number }
 export type AxisKey = keyof Axes;
-export const AXIS_INFO: Array<{ key: AxisKey; lo: string; hi: string; name: string }> = [
-  { key: 'a', lo: 'Reaktif', hi: 'Proaktif', name: 'Tetikleniş' },
-  { key: 'b', lo: 'Sıcakkanlı', hi: 'Soğukkanlı', name: 'Duygu' },
-  { key: 'c', lo: 'Dürtüsel', hi: 'Planlı', name: 'Planlama' },
-];
+export interface AxisInfo { key: AxisKey; readonly lo: string; readonly hi: string; readonly name: string }
+export const AXIS_INFO: AxisInfo[] = (['a', 'b', 'c'] as AxisKey[]).map((key, i) => ({
+  key,
+  get lo() { return L().axes[i].lo; },
+  get hi() { return L().axes[i].hi; },
+  get name() { return L().axes[i].name; },
+}));
 
 export interface Scenario {
   key: string;
@@ -28,31 +31,33 @@ export interface Scenario {
   where: Array<[string, string]>;
 }
 
-export const SCENARIOS: Scenario[] = [
-  { key: 'savunma', name: 'Savunma', desc: 'Tehdit altında anında verilen karşılık.', axes: { a: 0.08, b: 0.1, c: 0.12 }, stat: 0.1, stress: 0.8,
-    where: [['ch02', 'amigdala ve tehdit devresi'], ['ch03', 'hızlı ama düşük doğruluklu amigdala yolu']] },
-  { key: 'avcilik', name: 'Avcılık', desc: 'Sakin, hedefe yönelik; öfke ya da korku yok.', axes: { a: 0.92, b: 0.9, c: 0.6 }, stat: 0, stress: 0.1,
-    where: [['ch02', 'korku ve saldırganlık her zaman birbirine bağlı değil']] },
-  { key: 'statu', name: 'Statü kavgası', desc: 'Rütbe için girişilen, öfkeyle karışık ama kasıtlı çatışma.', axes: { a: 0.6, b: 0.2, c: 0.5 }, stat: 0.95, stress: 0.45,
-    where: [['ch04', 'testosteron statü mücadelesinde güçlendirici'], ['ch12', 'statü hiyerarşisi']] },
-  { key: 'yer', name: 'Yer değiştirme', desc: 'Stresli canlı, kendinden zayıf ulaşılabilir hedefe saldırır.', axes: { a: 0.3, b: 0.22, c: 0.22 }, stat: 0.4, stress: 0.95,
-    where: [['ch04', 'stres ve yer değiştirme saldırganlığı'], ['ch12', 'hiyerarşide aşağıya akan stres']] },
-  { key: 'planli', name: 'Planlı soğukkanlı', desc: 'Önceden tasarlanmış, duygusuz ve araçsal şiddet.', axes: { a: 0.95, b: 0.95, c: 0.96 }, stat: 0.2, stress: 0.12,
-    where: [['ch02', 'prefrontal korteks ve dopamin'], ['ch17', 'mesafe ve öldürme engeli']] },
-  { key: 'spor', name: 'Spor', desc: 'Kurallı, kasıtlı ama duygu da yüklü karşılaşma.', axes: { a: 0.72, b: 0.4, c: 0.78 }, stat: 0.6, stress: 0.3,
-    where: [['ch04', 'zorluk hipotezi ve testosteron']] },
-  { key: 'kurgu', name: 'Kurgu', desc: 'Film ya da oyunda şiddet; gerçek bir mağdur yok.', axes: { a: 0.55, b: 0.5, c: 0.85 }, stat: 0, stress: 0.05,
-    where: [['ch01', 'bağlam kapısı (sanal oda deneyi)']] },
+const SC: Array<Pick<Scenario, 'key' | 'axes' | 'stat' | 'stress'> & { ch: string[] }> = [
+  { key: 'savunma', axes: { a: 0.08, b: 0.1, c: 0.12 }, stat: 0.1, stress: 0.8, ch: ['ch02', 'ch03'] },
+  { key: 'avcilik', axes: { a: 0.92, b: 0.9, c: 0.6 }, stat: 0, stress: 0.1, ch: ['ch02'] },
+  { key: 'statu', axes: { a: 0.6, b: 0.2, c: 0.5 }, stat: 0.95, stress: 0.45, ch: ['ch04', 'ch12'] },
+  { key: 'yer', axes: { a: 0.3, b: 0.22, c: 0.22 }, stat: 0.4, stress: 0.95, ch: ['ch04', 'ch12'] },
+  { key: 'planli', axes: { a: 0.95, b: 0.95, c: 0.96 }, stat: 0.2, stress: 0.12, ch: ['ch02', 'ch17'] },
+  { key: 'spor', axes: { a: 0.72, b: 0.4, c: 0.78 }, stat: 0.6, stress: 0.3, ch: ['ch04'] },
+  { key: 'kurgu', axes: { a: 0.55, b: 0.5, c: 0.85 }, stat: 0, stress: 0.05, ch: ['ch01'] },
 ];
+export const SCENARIOS: Scenario[] = SC.map((s, i) => ({
+  key: s.key, axes: s.axes, stat: s.stat, stress: s.stress,
+  get name() { return L().scenarios[i].name; },
+  get desc() { return L().scenarios[i].desc; },
+  get where(): Array<[string, string]> { return s.ch.map((ch, j) => [ch, L().scenarios[i].where[j]]); },
+}));
 
 export interface Systems { amy: number; pfc: number; dop: number; test: number; gc: number }
-export const SYSTEM_INFO: Array<{ key: keyof Systems; name: string; ch: string; color: string }> = [
-  { key: 'amy', name: 'Amigdala, tehdit devresi', ch: 'ch02', color: '--amy' },
-  { key: 'pfc', name: 'Frontal korteks, frenleme ve planlama', ch: 'ch02', color: '--pfc' },
-  { key: 'dop', name: 'Dopamin, ödül beklentisi', ch: 'ch02', color: '--dop' },
-  { key: 'test', name: 'Testosteron, statü bağlamı', ch: 'ch04', color: '--pit' },
-  { key: 'gc', name: 'Glukokortikoid, stres', ch: 'ch04', color: '--gld' },
+const SYS: Array<{ key: keyof Systems; ch: string; color: string }> = [
+  { key: 'amy', ch: 'ch02', color: '--amy' },
+  { key: 'pfc', ch: 'ch02', color: '--pfc' },
+  { key: 'dop', ch: 'ch02', color: '--dop' },
+  { key: 'test', ch: 'ch04', color: '--pit' },
+  { key: 'gc', ch: 'ch04', color: '--gld' },
 ];
+export const SYSTEM_INFO: Array<{ key: keyof Systems; readonly name: string; ch: string; color: string }> = SYS.map((x, i) => ({
+  ...x, get name() { return L().systems[i]; },
+}));
 
 /** Eksen konumundan sistem yükü: yönler kitaptandır, ağırlıklar modelin varsayımıdır. */
 export function systems(ax: Axes, sc: Pick<Scenario, 'stat' | 'stress'>): Systems {
@@ -74,19 +79,20 @@ export function coherence(ax: Axes): number {
 }
 
 /** Eksendeki uç adı; orta bölge "orta". */
-export function pole(info: (typeof AXIS_INFO)[number], v: number): string {
-  return v < 0.35 ? info.lo.toLowerCase() : v > 0.65 ? info.hi.toLowerCase() : 'orta';
+export function pole(info: AxisInfo, v: number): string {
+  const t = L().axes[AXIS_INFO.indexOf(info)];
+  return v < 0.35 ? t.loL : v > 0.65 ? t.hiL : L().poleMid;
 }
 export const profile = (ax: Axes): string => AXIS_INFO.map((i) => pole(i, ax[i.key])).join(', ');
 
 /** Eksenler aynı yönü göstermiyorsa hangi çiftin ayrıştığını söyler; uyumluysa boş döner. */
 export function blur(ax: Axes): string {
   const hot: string[] = [], cold: string[] = [];
-  for (const i of AXIS_INFO) {
-    const h = 1 - ax[i.key];
-    if (h > 0.65) hot.push(i.lo.toLowerCase()); else if (h < 0.35) cold.push(i.hi.toLowerCase());
-  }
-  return hot.length && cold.length ? `${hot.join(' ve ')} ama ${cold.join(' ve ')}` : '';
+  AXIS_INFO.forEach((i, k) => {
+    const h = 1 - ax[i.key], t = L().axes[k];
+    if (h > 0.65) hot.push(t.loL); else if (h < 0.35) cold.push(t.hiL);
+  });
+  return hot.length && cold.length ? L().blurPair(hot, cold) : '';
 }
 
 export const dist = (p: Axes, q: Axes): number => Math.hypot(p.a - q.a, p.b - q.b, p.c - q.c);
@@ -102,31 +108,32 @@ export interface Context { need: number; threat: number; consent: number; auth: 
 export type ActionKey = 'kes' | 'tetik' | 'sar' | 'bandaj';
 interface W { need: number; threat: number; consent: number; auth: number; bias: number }
 export interface Action {
-  key: ActionKey; name: string; motor: string;
-  w: W; good: string; mid: string; bad: string;
+  key: ActionKey; readonly name: string; readonly motor: string;
+  w: W; readonly good: string; readonly mid: string; readonly bad: string;
   /** Motor kalıbın göreli yükü: bağlamdan bağımsız. */
   motorLoad: number;
-  presets: Array<{ name: string; c: Context }>;
+  presets: Array<{ readonly name: string; c: Context }>;
 }
 
-export const ACTIONS: Action[] = [
-  { key: 'kes', name: 'Bıçakla kesmek', motor: 'Bıçak tutan el, kesme hareketi', motorLoad: 0.7,
-    w: { need: 2.2, threat: 1.2, consent: 1.6, auth: 1.0, bias: -2.6 },
-    good: 'Ameliyat: şifa', mid: 'Belirsiz: acil müdahale mi, saldırı mı?', bad: 'Saldırı: yaralama',
-    presets: [{ name: 'Cerrah', c: { need: 0.9, threat: 0, consent: 1, auth: 1 } }, { name: 'Saldırgan', c: { need: 0, threat: 0, consent: 0, auth: 0 } }, { name: 'Yoldan geçen, acil durum', c: { need: 1, threat: 0, consent: 0, auth: 0 } }] },
-  { key: 'tetik', name: 'Tetiği çekmek', motor: 'Silah tutan el, parmağı bükme', motorLoad: 0.5,
-    w: { need: -1.2, threat: 2.6, consent: 0.3, auth: 1.6, bias: -2.8 },
-    good: 'Görev ya da meşru savunma', mid: 'Tartışmalı: orantılılık ve yetki belirsiz', bad: 'Cinayet',
-    presets: [{ name: 'Asker, düşmana karşı', c: { need: 0, threat: 0.9, consent: 0, auth: 1 } }, { name: 'Katil', c: { need: 0, threat: 0, consent: 0, auth: 0 } }, { name: 'Sivil, kendini savunan', c: { need: 0, threat: 1, consent: 0, auth: 0 } }] },
-  { key: 'sar', name: 'Sarılmak', motor: 'İki kol karşıdakini saran hareket', motorLoad: 0.4,
-    w: { need: 1.4, threat: -1.5, consent: 2.8, auth: 0.2, bias: -1.8 },
-    good: 'Teselli', mid: 'Belirsiz: istek ya da rıza net değil', bad: 'İstenmeyen temas',
-    presets: [{ name: 'Yas tutan arkadaş', c: { need: 0.8, threat: 0, consent: 1, auth: 0.3 } }, { name: 'Yabancı, istemiyor', c: { need: 0.2, threat: 0, consent: 0, auth: 0 } }] },
-  { key: 'bandaj', name: 'Bandaj sarmak', motor: 'Sarma hareketi, el gövdeye uzanır', motorLoad: 0.45,
-    w: { need: 3.0, threat: -0.8, consent: 0.8, auth: 0.3, bias: -2.0 },
-    good: 'Yardım', mid: 'Belirsiz: yardım gerekli mi?', bad: 'Yersiz müdahale',
-    presets: [{ name: 'Yaralı insan', c: { need: 0.95, threat: 0, consent: 0.8, auth: 0.9 } }, { name: 'Düşman uzaylı', c: { need: 0, threat: 0.95, consent: 0, auth: 0.9 } }] },
+const ACT: Array<{ key: ActionKey; motorLoad: number; w: W; presets: Context[] }> = [
+  { key: 'kes', motorLoad: 0.7, w: { need: 2.2, threat: 1.2, consent: 1.6, auth: 1.0, bias: -2.6 },
+    presets: [{ need: 0.9, threat: 0, consent: 1, auth: 1 }, { need: 0, threat: 0, consent: 0, auth: 0 }, { need: 1, threat: 0, consent: 0, auth: 0 }] },
+  { key: 'tetik', motorLoad: 0.5, w: { need: -1.2, threat: 2.6, consent: 0.3, auth: 1.6, bias: -2.8 },
+    presets: [{ need: 0, threat: 0.9, consent: 0, auth: 1 }, { need: 0, threat: 0, consent: 0, auth: 0 }, { need: 0, threat: 1, consent: 0, auth: 0 }] },
+  { key: 'sar', motorLoad: 0.4, w: { need: 1.4, threat: -1.5, consent: 2.8, auth: 0.2, bias: -1.8 },
+    presets: [{ need: 0.8, threat: 0, consent: 1, auth: 0.3 }, { need: 0.2, threat: 0, consent: 0, auth: 0 }] },
+  { key: 'bandaj', motorLoad: 0.45, w: { need: 3.0, threat: -0.8, consent: 0.8, auth: 0.3, bias: -2.0 },
+    presets: [{ need: 0.95, threat: 0, consent: 0.8, auth: 0.9 }, { need: 0, threat: 0.95, consent: 0, auth: 0.9 }] },
 ];
+export const ACTIONS: Action[] = ACT.map((a, i) => ({
+  key: a.key, motorLoad: a.motorLoad, w: a.w,
+  get name() { return L().actions[i].name; },
+  get motor() { return L().actions[i].motor; },
+  get good() { return L().actions[i].good; },
+  get mid() { return L().actions[i].mid; },
+  get bad() { return L().actions[i].bad; },
+  presets: a.presets.map((c, j) => ({ get name() { return L().actions[i].presets[j]; }, c })),
+}));
 export const action = (k: ActionKey): Action => ACTIONS.find((a) => a.key === k)!;
 
 /** Bağlamsal uygunluk (0-1): motor kalıptan bağımsız, bağlamın ağırlıklı toplamının lojistiği. */
@@ -142,10 +149,10 @@ export const meaning = (k: ActionKey, f: number): string => action(k)[verdict(f)
 export const circuit = (f: number): number => 0.15 + 0.85 * f;
 
 /** Sanal oda deneyindeki iki hedef (King ve ark.). */
-export const ROOM_TARGETS: Array<{ name: string; c: Context }> = [
-  { name: 'Yaralı insan', c: { need: 0.95, threat: 0, consent: 0.8, auth: 0.9 } },
-  { name: 'Düşman uzaylı', c: { need: 0, threat: 0.95, consent: 0, auth: 0.9 } },
-];
+export const ROOM_TARGETS: Array<{ readonly name: string; c: Context }> = [
+  { c: { need: 0.95, threat: 0, consent: 0.8, auth: 0.9 } },
+  { c: { need: 0, threat: 0.95, consent: 0, auth: 0.9 } },
+].map((t, i) => ({ get name() { return L().roomTargets[i]; }, c: t.c }));
 export const ROOM_ACTIONS: ActionKey[] = ['bandaj', 'tetik'];
 
 /* =============================== 3) Yer değiştirme saldırganlığı =============================== */

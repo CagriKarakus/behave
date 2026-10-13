@@ -4,6 +4,8 @@
 //  3) Sıcaklık-yetkinlik (Fiske): konumdan duygu ve davranış eğilimi; Durante: eşitsizlik ve karışık stereotip.
 // Kitaptan gelen yönler testlerde kalibrasyon noktasıdır; büyüklükler modelin varsayımıdır.
 import { mulberry32 } from '../rng';
+import { pct as fpct } from '../../i18n/fmt';
+import { L } from './text';
 
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const gauss = (r: () => number) => Math.sqrt(-2 * Math.log(1 - r())) * Math.cos(2 * Math.PI * r());
@@ -117,10 +119,10 @@ export function userProfile(picks: Array<number | null>): { kind: 'none' | 'diff
   const md = done.filter((x) => { const k = classify(x.m, x.c); return k.favors && k.sacrifices; }).length;
   const fair = done.filter((x) => classify(x.m, x.c).fair).length;
   const gain = done.filter((x) => { const s = strategyCols(x.m); return x.c === s.mip || x.c === s.mjp; }).length;
-  if (md > 0 && md >= half) return { kind: 'diff', text: 'iç grubun mutlak kazancından vazgeçip farkı büyüttü' };
-  if (fair >= half) return { kind: 'fair', text: 'çoğunlukla eşit dağıttı' };
-  if (gain >= half) return { kind: 'gain', text: 'kazancı büyütmeye baktı, farkı değil' };
-  return { kind: 'mixed', text: 'karma bir örüntü izledi' };
+  if (md > 0 && md >= half) return { kind: 'diff', text: L().profile.diff };
+  if (fair >= half) return { kind: 'fair', text: L().profile.fair };
+  if (gain >= half) return { kind: 'gain', text: L().profile.gain };
+  return { kind: 'mixed', text: L().profile.mixed };
 }
 
 // ======================================================================= 2) Kurzban
@@ -198,7 +200,6 @@ export function simulateMemory(u: KurzbanInputs, seed: number, people = 40): Kur
 export interface Pos { w: number; c: number }
 export type Emotion = 'gurur' | 'kiskanclik' | 'acima' | 'tiksinme';
 export const EMOTIONS: Emotion[] = ['gurur', 'kiskanclik', 'acima', 'tiksinme'];
-export const EMO_NAME: Record<Emotion, string> = { gurur: 'Gurur', kiskanclik: 'Kıskançlık', acima: 'Acıma', tiksinme: 'Tiksinme' };
 /** Çift doğrusal üyelik: toplamı 1; köşede o duygu, ortada karışık. */
 export function emotions(p: Pos): Record<Emotion, number> {
   return { gurur: p.w * p.c, kiskanclik: (1 - p.w) * p.c, acima: p.w * (1 - p.c), tiksinme: (1 - p.w) * (1 - p.c) };
@@ -243,19 +244,17 @@ export function corr(ps: Pos[]): number {
   return sxy / Math.sqrt(sxx * syy || 1);
 }
 
-const pc = (v: number) => Math.round(v * 100);
 export function describeTajfel(u: TajfelInputs, r: TajfelResult): string {
-  if (u.control) return `İki alıcı da iç grupta: ayrım etiketi yok. İç grup lehine seçim %${pc(r.favorShare)}, eşit dağıtım %${pc(r.fairShare)}.`;
-  return `Sanal katılımcıların %${pc(r.favorShare)}'i iç grup lehine seçti; A türü matrislerde %${pc(r.sacrificeShare)}'i iç grubun mutlak kazancından vazgeçip farkı seçti.`;
+  const T = L().say;
+  return u.control ? T.tajfelControl(fpct(r.favorShare), fpct(r.fairShare)) : T.tajfel(fpct(r.favorShare), fpct(r.sacrificeShare));
 }
 export function describeKurzban(u: KurzbanInputs, s: KurzbanShares): string {
-  return u.shirts
-    ? `Hatalı atıfların %${pc(s.sameShirt)}'i aynı formaya, %${pc(s.sameRace)}'i aynı ırka gitti (şans %43). Forma koalisyon ipucuysa ırka göre kümelenme azalır.`
-    : `Forma yokken hatalı atıfların %${pc(s.sameRace)}'i aynı ırktan kişiye gitti (şans %43): ırk kodlanıyor.`;
+  const T = L().say, chance = fpct(CHANCE.same);
+  return u.shirts ? T.kurzbanShirts(fpct(s.sameShirt), fpct(s.sameRace), chance) : T.kurzbanPlain(fpct(s.sameRace), chance);
 }
 export function describePos(name: string, p: Pos): string {
   const d = dominant(p), e = emotions(p), b = behaviors(p);
   const top = (['yardim', 'iliski', 'dislama', 'saldiri'] as const).reduce((x, y) => (b[y] > b[x] ? y : x));
-  const T = { yardim: 'yardım (aktif)', iliski: 'ilişki kurma (pasif)', dislama: 'dışlama (pasif)', saldiri: 'saldırı (aktif)' };
-  return `${name}: baskın duygu ${EMO_NAME[d].toLowerCase()} (%${pc(e[d])}); en güçlü eğilim ${T[top]}.`;
+  const T = L();
+  return T.say.pos(name, T.emo[d], fpct(e[d]), T.behLow[top]);
 }

@@ -1,4 +1,9 @@
 import { repBadge } from '../ui';
+import { t } from '../../i18n/t';
+import type { MsgKey } from '../../i18n/messages';
+import { percent, pct as pctS } from '../../i18n/fmt';
+import { L } from './text';
+import type { BK, RP, RS, Strings } from './text.tr';
 import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, uid } from '../kit';
@@ -9,136 +14,135 @@ import {
   type Metrics, type PggResult,
 } from './model';
 
-const TABS = ['Parçalar ve sınırlar', 'Pirinç ve buğday', 'Onur kültürü ve eşitsizlik'] as const;
 const CELL = 12;
 const STEP_S = 0.12;
 
-interface Scen { id: string; name: string; pref: number; mob: number; river?: boolean }
+interface Scen { id: string; pref: number; mob: number; river?: boolean }
 const SCEN: Scen[] = [
-  { id: 'mixed', name: 'Karışık yaşam', pref: 0.12, mob: 0.5 },
-  { id: 'mid', name: 'Ayrışma başlıyor', pref: 0.4, mob: 0.5 },
-  { id: 'stuck', name: 'Düşük hareketlilik', pref: 0.5, mob: 0.1 },
-  { id: 'sep', name: 'Net ayrışma', pref: 0.5, mob: 1 },
-  { id: 'river', name: 'Nehir çiti', pref: 0.4, mob: 0.5, river: true },
+  { id: 'mixed', pref: 0.12, mob: 0.5 },
+  { id: 'mid', pref: 0.4, mob: 0.5 },
+  { id: 'stuck', pref: 0.5, mob: 0.1 },
+  { id: 'sep', pref: 0.5, mob: 1 },
+  { id: 'river', pref: 0.4, mob: 0.5, river: true },
 ];
-const TOOLS = [['look', 'Gözle'], ['wall', 'Çit çiz'], ['erase', 'Çit sil'], ['aut', 'Özerklik ver']] as const;
-type Tool = (typeof TOOLS)[number][0];
+const TOOLS = ['look', 'wall', 'erase', 'aut'] as const;
+type Tool = (typeof TOOLS)[number];
 
-const PGG_PRESETS = [
-  { id: 'hi', name: 'Yüksek güven (Avustralya örüntüsü)', ineq: 0.2, trust: 0.85 },
-  { id: 'lo', name: 'Düşük güven (Yunanistan, Umman örüntüsü)', ineq: 0.7, trust: 0.25 },
+const PGG_PRESETS: Array<{ id: 'hi' | 'lo'; ineq: number; trust: number }> = [
+  { id: 'hi', ineq: 0.2, trust: 0.85 },
+  { id: 'lo', ineq: 0.7, trust: 0.25 },
 ];
 
-const BOOK = (id: string, label: string) => `<a href="#/bolum/ch09?deney=${id}">${label}</a>`;
+const ecoName = (id: string): string => L().eco[id as keyof Strings['eco']];
+const RS: RS = (s) => t(`repl.${s}` as MsgKey);
+const RP: RP = (s, bold) => (bold ? `<span class="rep">${t('repl.badge', { s: `<b>${RS(s)}</b>` })}</span>` : repBadge(s));
+const BOOK: BK = (id, label) => `<a href="#/bolum/ch09?deney=${id}">${label}</a>`;
 
-const slider = (k: string, name: string, min: number, max: number, stp: number, hint: string, cls = '') =>
-  `<div class="sl ${cls}"><div class="sl-top"><label class="sl-name" for="@${k}">${name}</label><span class="sl-val" data-ref="v-${k}"></span></div>` +
+const slider = (k: keyof Strings['sl'], min: number, max: number, stp: number, cls = '') => {
+  const { name, hint } = L().sl[k];
+  return `<div class="sl ${cls}"><div class="sl-top"><label class="sl-name" for="@${k}">${name}</label><span class="sl-val" data-ref="v-${k}"></span></div>` +
   `<input type="range" id="@${k}" data-k="${k}" min="${min}" max="${max}" step="${stp}"><p class="sl-hint">${hint}</p></div>`;
+};
 
 const meterHtml = (k: number) =>
   `<div class="m" data-ref="mm${k}"><div class="m-top"><span data-ref="ml${k}"></span><b data-ref="mv${k}">0%</b></div><div class="track"><b data-ref="mb${k}"></b></div></div>`;
 
-const TEMPLATE = (id: string) => `
+const TEMPLATE = (id: string) => {
+  const T = L();
+  return `
 <div class="sim sim-ke">
-  <p class="lede">Ekoloji ve tarih, kültürleri nasıl biçimlendirir ve kültür bugünkü davranışımıza nasıl yansır?</p>
+  <p class="lede">${T.lede}</p>
   <div data-ref="tourHost"></div>
-  <div class="tabs" role="tablist" aria-label="Üç bakış">
-    ${TABS.map((t, i) => `<button type="button" class="tab" role="tab" id="${id}-t${i}" aria-controls="${id}-p${i}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">${i + 1}. ${t}</button>`).join('')}
+  <div class="tabs" role="tablist" aria-label="${T.tabsLabel}">
+    ${T.tabs.map((tab, i) => `<button type="button" class="tab" role="tab" id="${id}-t${i}" aria-controls="${id}-p${i}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">${i + 1}. ${tab}</button>`).join('')}
   </div>
-  <div class="sim-bar" role="group" aria-label="Anlık çıktılar"><div class="sim-bar-in">
+  <div class="sim-bar" role="group" aria-label="${T.barLabel}"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
     <div class="meters">${[0, 1, 2].map(meterHtml).join('')}</div>
   </div></div>
   <p class="sr-only" aria-live="polite" data-ref="live"></p>
 
   <section role="tabpanel" id="${id}-p0" aria-labelledby="${id}-t0" class="panel" data-ref="p0">
-    <div class="chips" data-ref="scen" role="group" aria-label="Hazır senaryolar">${SCEN.map((s) => `<button type="button" class="chip" data-s="${s.id}" aria-pressed="false">${s.name}</button>`).join('')}</div>
+    <div class="chips" data-ref="scen" role="group" aria-label="${T.scenLabel}">${SCEN.map((s, i) => `<button type="button" class="chip" data-s="${s.id}" aria-pressed="false">${T.scen[i]}</button>`).join('')}</div>
     <div class="stage">
-      <canvas data-ref="grid" role="img" aria-label="Izgara: mavi kareler A grubu, turuncu daireler B grubu. Kırmızı çizgiler riskli temas hatları."></canvas>
+      <canvas data-ref="grid" role="img" aria-label="${T.gridAria}"></canvas>
       <div class="legend">
-        <span><i class="sq" style="background:var(--pfc)"></i>A grubu</span>
-        <span><i style="background:var(--dop)"></i>B grubu</span>
-        <span><i class="sq" style="background:var(--edge)"></i>çit</span>
-        <span><i class="sq" style="background:var(--gld);opacity:.45"></i>özerk bölge</span>
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--red)" stroke-width="3"/></svg>riskli temas</span>
+        <span><i class="sq" style="background:var(--pfc)"></i>${T.legA}</span>
+        <span><i style="background:var(--dop)"></i>${T.legB}</span>
+        <span><i class="sq" style="background:var(--edge)"></i>${T.legWall}</span>
+        <span><i class="sq" style="background:var(--gld);opacity:.45"></i>${T.legAut}</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--red)" stroke-width="3"/></svg>${T.legRisk}</span>
       </div>
     </div>
-    <div class="row" data-ref="tools" role="group" aria-label="Sınır araçları">${TOOLS.map(([k, n]) => `<button type="button" class="btn" data-tool="${k}" aria-pressed="${k === 'look'}">${n}</button>`).join('')}</div>
+    <div class="row" data-ref="tools" role="group" aria-label="${T.toolsLabel}">${TOOLS.map((k) => `<button type="button" class="btn" data-tool="${k}" aria-pressed="${k === 'look'}">${T.tools[k]}</button>`).join('')}</div>
     <div class="row">
-      <button type="button" class="btn" data-ref="play" aria-pressed="true">Duraklat</button>
-      <button type="button" class="btn" data-ref="step">Adım</button>
-      <button type="button" class="btn" data-ref="fast">+40 adım</button>
-      <button type="button" class="btn" data-ref="restart">Yeniden başlat</button>
-      <button type="button" class="btn" data-ref="allaut">Tüm parçalara özerklik</button>
-      <button type="button" class="btn" data-ref="noborder">Sınırları kaldır</button>
+      <button type="button" class="btn" data-ref="play" aria-pressed="true">${T.pause}</button>
+      <button type="button" class="btn" data-ref="step">${T.step}</button>
+      <button type="button" class="btn" data-ref="fast">${T.fast}</button>
+      <button type="button" class="btn" data-ref="restart">${T.restart}</button>
+      <button type="button" class="btn" data-ref="allaut">${T.allAut}</button>
+      <button type="button" class="btn" data-ref="noborder">${T.noBorder}</button>
     </div>
-    <section class="chart" aria-label="Risk eğrisi">
-      <h3 class="sim-h">Parça büyüdükçe çatışma riski</h3>
-      <svg viewBox="0 0 360 150" role="img" aria-label="Yatay eksen ortalama parça çapı (km, logaritmik), dikey eksen çatışma riski" data-ref="chart"></svg>
+    <section class="chart" aria-label="${T.riskSection}">
+      <h3 class="sim-h">${T.riskH}</h3>
+      <svg viewBox="0 0 360 150" role="img" aria-label="${T.riskAria}" data-ref="chart"></svg>
     </section>
     <div class="sliders">
-      ${slider('pref', 'Benzerlik tercihi', 0, 80, 1, 'Komşularının en az bu kadarı kendi grubundan değilse kişi taşınır.', 'sl-pfc')}
-      ${slider('mob', 'Hareketlilik', 0, 100, 1, 'Kişi bir adımda ne kadar uzağa taşınabilir.', 'sl-dop')}
-      ${slider('ratio', 'A grubunun payı', 30, 70, 1, 'Dengesiz oranlarda küçük grup daha çok ada oluşturur.')}
+      ${slider('pref', 0, 80, 1, 'sl-pfc')}
+      ${slider('mob', 0, 100, 1, 'sl-dop')}
+      ${slider('ratio', 30, 70, 1)}
     </div>
   </section>
 
   <section role="tabpanel" id="${id}-p1" aria-labelledby="${id}-t1" class="panel" data-ref="p1" hidden>
-    <div class="chips" data-ref="eco" role="group" aria-label="Ekoloji">${ECOS.map((e) => `<button type="button" class="chip" data-e="${e.id}" aria-pressed="false">${e.name}</button>`).join('')}</div>
+    <div class="chips" data-ref="eco" role="group" aria-label="${T.ecoLabel}">${ECOS.map((e) => `<button type="button" class="chip" data-e="${e.id}" aria-pressed="false">${ecoName(e.id)}</button>`).join('')}</div>
     <div class="stage">
-      <svg viewBox="0 0 360 214" role="group" aria-label="Ekoloji, geçim biçimi, kültürel eğilim haritası" data-ref="map"></svg>
-      <div class="legend"><span>Çizgi kalınlığı: etkinin gücü</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--edge)" stroke-width="2" stroke-dasharray="5 3"/></svg>azaltır</span></div>
+      <svg viewBox="0 0 360 214" role="group" aria-label="${T.mapAria}" data-ref="map"></svg>
+      <div class="legend"><span>${T.legStroke}</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--edge)" stroke-width="2" stroke-dasharray="5 3"/></svg>${T.legReduce}</span></div>
     </div>
     <div class="sliders">
-      ${slider('L', 'Ortak emek bağımlılığı', 0, 100, 1, 'Pirinçte sulama kanalı komşularla birlikte yönetilir.', 'sl-gld')}
-      ${slider('V', 'Mal ve itibar kırılganlığı', 0, 100, 1, 'Çalınabilir sürü, zayıf devlet: itibarını sert savunmak gerekir.', 'sl-amy')}
+      ${slider('L', 0, 100, 1, 'sl-gld')}
+      ${slider('V', 0, 100, 1, 'sl-amy')}
     </div>
     <div class="tests" data-ref="tests"></div>
   </section>
 
   <section role="tabpanel" id="${id}-p2" aria-labelledby="${id}-t2" class="panel" data-ref="p2" hidden>
-    <h3 class="sim-h">Koridor hakaret deneyi</h3>
-    <div class="chips" data-ref="cchips" role="group" aria-label="Katılımcı kökeni">
-      <button type="button" class="chip" data-c="north" aria-pressed="false">Kuzeyli katılımcı</button>
-      <button type="button" class="chip" data-c="south" aria-pressed="true">Güneyli katılımcı</button>
-      <button type="button" class="chip" data-c="ins" aria-pressed="true">Hakaret edildi</button>
-      <button type="button" class="chip" data-c="rerun">Yeniden çalıştır</button>
+    <h3 class="sim-h">${T.hallH}</h3>
+    <div class="chips" data-ref="cchips" role="group" aria-label="${T.originLabel}">
+      <button type="button" class="chip" data-c="north" aria-pressed="false">${T.chipNorth}</button>
+      <button type="button" class="chip" data-c="south" aria-pressed="true">${T.chipSouth}</button>
+      <button type="button" class="chip" data-c="ins" aria-pressed="true">${T.chipInsult}</button>
+      <button type="button" class="chip" data-c="rerun">${T.chipRerun}</button>
     </div>
-    <div class="stage"><svg viewBox="0 0 360 96" role="img" aria-label="Dar koridorda katılımcıya omuz atıp hakaret eden iri yapılı işbirlikçi" data-ref="hall"></svg></div>
+    <div class="stage"><svg viewBox="0 0 360 96" role="img" aria-label="${T.hallAria}" data-ref="hall"></svg></div>
     <div class="tests" data-ref="ctests"></div>
-    ${slider('h', 'Onur kültürü gücü', 0, 100, 1, 'Hakareti kişisel bir saldırı sayma ve karşılık vermenin meşruluğu.', 'sl-amy')}
-    <h3 class="sim-h">Eşitsizlik, güven ve antisosyal ceza</h3>
-    <div class="chips" data-ref="pchips" role="group" aria-label="Toplum örüntüsü">${PGG_PRESETS.map((p) => `<button type="button" class="chip" data-p="${p.id}" aria-pressed="false">${p.name}</button>`).join('')}<button type="button" class="chip" data-p="rerun">Yeniden oyna</button></div>
+    ${slider('h', 0, 100, 1, 'sl-amy')}
+    <h3 class="sim-h">${T.pggH}</h3>
+    <div class="chips" data-ref="pchips" role="group" aria-label="${T.pattLabel}">${PGG_PRESETS.map((p) => `<button type="button" class="chip" data-p="${p.id}" aria-pressed="false">${T.presets[p.id]}</button>`).join('')}<button type="button" class="chip" data-p="rerun">${T.replay}</button></div>
     <div class="tests" data-ref="ptests"></div>
-    <section class="chart"><h3 class="sim-h">Tur tur: katkı ve güven</h3><svg viewBox="0 0 360 130" role="img" aria-label="Turlara göre ortalama katkı oranı ve güven" data-ref="pchart"></svg></section>
-    <section class="chart"><h3 class="sim-h">Gelir eşitsizliği arttıkça</h3><svg viewBox="0 0 360 130" role="img" aria-label="Gelir eşitsizliğine göre sosyal sermaye ve antisosyal ceza payı" data-ref="schart"></svg></section>
+    <section class="chart"><h3 class="sim-h">${T.roundH}</h3><svg viewBox="0 0 360 130" role="img" aria-label="${T.roundAria}" data-ref="pchart"></svg></section>
+    <section class="chart"><h3 class="sim-h">${T.ineqH}</h3><svg viewBox="0 0 360 130" role="img" aria-label="${T.ineqAria}" data-ref="schart"></svg></section>
     <div class="sliders">
-      ${slider('ineq', 'Gelir eşitsizliği', 0, 100, 1, 'Oyuncuların başlangıç gelirleri ne kadar dağınık.', 'sl-dop')}
-      ${slider('trust', 'Güven ve hukukun üstünlüğü', 0, 100, 1, 'Kurallara ve yabancılara güven; sosyal sermayenin başlangıç düzeyi.', 'sl-gld')}
-      ${slider('cost', 'Cezalandırma maliyeti', 1, 3, 0.5, 'Ceza vermek cezalandırana ne kadar pahalıya mal olur.')}
+      ${slider('ineq', 0, 100, 1, 'sl-dop')}
+      ${slider('trust', 0, 100, 1, 'sl-gld')}
+      ${slider('cost', 1, 3, 0.5)}
     </div>
   </section>
 
-  <details class="how"><summary>Model nasıl çalışıyor?</summary>
-    <p><b>Parçalar.</b> Izgarada iki grup ve boş hücreler var. Komşularının benzerlik tercihi kadarı kendi grubundan değilse kişi, hareketlilik yarıçapı içinde tercihini karşılayan boş bir hücreye taşınır; memnun olanlar da nadiren sınırı düzleştirir. Aynı gruptan bitişik hücreler bir parça sayılır. "Ortalama parça", bir kişinin yaşadığı parçanın büyüklüğüdür. Risk, her parçanın çapına bağlı bir çan eğrisi (20-60 km civarı tepe) ile diğer grupla temas oranının çarpımından gelir; çit temas hattını keser, özerklik temasın ağırlığını %20'ye indirir. Bir hücre 4 km sayılır. Bunlar modelin varsayımıdır.</p>
-    <p><b>Ekoloji.</b> İki girdi (ortak emek bağımlılığı, mal ve itibar kırılganlığı) doğrusal formüllerle kollektivizm, bütüncül dikkat ve onur duyarlılığına dönüşür; test çıktıları bu üç eğilimin sadeleştirilmiş yansımasıdır.</p>
-    <p><b>Koridor.</b> Her katılımcının onur duyarlılığı ortalama çevresinde dağılır; hakaretin hormon ve şiddet etkisi bu duyarlılığın karesiyle büyür, yani yalnızca onur kültürü güçlüyse görünür.</p>
-    <p><b>Kamu malı.</b> 24 oyuncu, 4'lü gruplar, 10 tur. Katkı grubun ortalamasına yaklaşır. Cezalandırıcı, hile yapanı (prososyal) ya da kendinden fazla katkı vereni (antisosyal) cezalandırabilir; antisosyal ceza olasılığı güven azaldıkça ve gelir eşitsizliği arttıkça yükselir. Güven, katkı ve cezalarla yavaşça değişir.</p>
+  <details class="how"><summary>${t('sim.how')}</summary>
+    ${T.how.map((p) => `<p>${p}</p>`).join('\n    ')}
   </details>
 
-  <aside class="book" aria-label="Kitapta">
-    <h3 class="sim-h">Kitapta</h3>
+  <aside class="book" aria-label="${t('sim.book')}">
+    <h3 class="sim-h">${t('sim.book')}</h3>
     <ul>
-      <li>${BOOK('ch09-e9', 'Lim ve ark. 2007; Rutherford ve ark. 2014')}: ayrışma sürerken önce ada ve yarımadalar belirir; 20-60 km çaplı adalar 1990 Yugoslavya'sında çatışma yerlerini öngördü, net sınırlar barışı destekledi. Replikasyon: bilinmiyor (geriye dönük uyarlama, ileriye dönük sınama yok).</li>
-      <li>${BOOK('ch09-e3', 'Talhelm ve ark. 2014')}: pirinç bölgeleri daha kollektivist; buğday bölgelerinde bireycilik, boşanma ve patent daha yüksek. Replikasyon: <b>karışık</b>.</li>
-      <li>${BOOK('ch09-e2', 'Masuda ve Nisbett 2001')}: Doğu Asyalılar bağlamı, Amerikalılar merkezdeki nesneyi daha iyi hatırlar. Replikasyon: <b>karışık</b> (göz izleme farkı bazı çalışmalarda bulunamadı).</li>
-      <li>${BOOK('ch09-e5', 'Nisbett ve Cohen 1996')}: hakarete uğrayan Güneyli erkeklerde testosteron ve glukokortikoid yükselir, Kuzeylilerde yükselmez. Replikasyon: bilinmiyor (örneklem küçük).</li>
-      <li>${BOOK('ch09-e6', 'Herrmann ve ark. 2008')}: Yunanistan ve Umman'da cömert oyuncular cezalandırılır, Avustralya'da antisosyal ceza neredeyse yoktur. Replikasyon: sağlam. ${BOOK('ch09-e7', 'DeCelles ve Norton 2016')} (uçakta eşitsizlik ve hava öfkesi): bilinmiyor.</li>
-      <li>${BOOK('ch09-e11', 'Chagnon ve Yanomamö')}: öldüren erkeklerin daha çok çocuğu olduğu bulgusu yaş farkı nedeniyle sorgulandı; başka toplumlarda tekrarlanmadı. Replikasyon: <b>tartışmalı</b>. ${BOOK('ch09-e12', 'Fry ve Söderberg 2013')}: 21 saf göçebe avcı-toplayıcı grubun çoğunda savaş görülmedi, %86'sında ölümcül şiddet vardı. Replikasyon: <b>tartışmalı</b> ("Hobbes mu Rousseau mu?" sorusu açık).</li>
+      ${T.book.map((f) => `<li>${f(BOOK, RP, RS)}</li>`).join('\n      ')}
     </ul>
   </aside>
-  <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan gelenler: Lim'in 20-60 km ada ölçeği, Rutherford'un net sınır sonucu, Talhelm ve Masuda yönleri, koridor deneyindeki Güneyli/Kuzeyli örüntüsü, Herrmann'ın Yunanistan/Umman ve Avustralya karşıtlığı, eşitsizlikle azalan sosyal sermaye. Hücre boyu, çan eğrisi, özerklik ağırlığı, çöl çobanlığı ve yağmur ormanı örnekleri, tüm yüzdeler ve katsayılar modelin varsayımıdır. Hukukun üstünlüğü bağı kitap dışından, Herrmann'ın makalesinden gelir.</p>
+  <p class="foot">${T.foot}</p>
 </div>`;
+};
 
 const bar = (label: string, v: number, text: string, color: string) =>
   `<div class="bar" style="--c:${color}"><div class="bar-top"><span>${label}</span><b>${text}</b></div><div class="track"><b style="width:${pct(Math.max(0, Math.min(1, v)))}%"></b></div></div>`;
@@ -189,9 +193,10 @@ export function mount(container: HTMLElement): () => void {
 
   // ---------- Kaydırıcılar ----------
   const inputs = Array.from(root.querySelectorAll<HTMLInputElement>('input[data-k]'));
+  const pv = (v: number) => percent(String(v));
   const fmt: Record<string, (v: number) => string> = {
-    pref: (v) => `%${v}`, mob: (v) => `${Math.round(v)} (yarıçap ${1 + Math.round(v / 11.1)} hücre)`, ratio: (v) => `%${v} / %${100 - v}`,
-    L: (v) => `%${v}`, V: (v) => `%${v}`, h: (v) => `%${v}`, ineq: (v) => `%${v}`, trust: (v) => `%${v}`, cost: (v) => `${v}:1`,
+    pref: pv, mob: (v) => L().mobVal(Math.round(v), 1 + Math.round(v / 11.1)), ratio: (v) => `${pv(v)} / ${pv(100 - v)}`,
+    L: pv, V: pv, h: pv, ineq: pv, trust: pv, cost: (v) => `${v}:1`,
   };
   function syncSliders(): void {
     const vals: Record<string, number> = {
@@ -222,7 +227,7 @@ export function mount(container: HTMLElement): () => void {
     S.m = analyze(S.w, S.pref); dirty = true;
   }
   const playBtn = $<HTMLButtonElement>('play');
-  function setPlaying(v: boolean): void { S.playing = v; playBtn.setAttribute('aria-pressed', String(v)); playBtn.textContent = v ? 'Duraklat' : 'Oynat'; }
+  function setPlaying(v: boolean): void { S.playing = v; playBtn.setAttribute('aria-pressed', String(v)); playBtn.textContent = v ? L().pause : L().play; }
   function setScen(id: string | null): void {
     S.scen = id;
     root.querySelectorAll<HTMLElement>('[data-s]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.s === id)));
@@ -300,17 +305,18 @@ export function mount(container: HTMLElement): () => void {
       `<polyline points="${pts}" class="ln" stroke="var(--amy)" stroke-width="2"/>` +
       `<circle cx="${px(cur[0]).toFixed(1)}" cy="${py(cur[1]).toFixed(1)}" r="5" fill="var(--ink)" stroke="var(--panel)" stroke-width="2"/>` +
       [5, 10, 20, 40, 80].map((k) => `<text x="${px(k)}" y="130" text-anchor="middle">${k}</text>`).join('') +
-      `<text x="350" y="141" text-anchor="end">ortalama parça çapı (km)</text>` +
-      `<text x="${(a + b) / 2}" y="11" text-anchor="middle" class="bandlab">20-60 km (kitap)</text>` +
-      `<text x="30" y="20" text-anchor="end">risk</text><text x="30" y="116" text-anchor="end">0</text>`;
+      `<text x="350" y="141" text-anchor="end">${L().axisKm}</text>` +
+      `<text x="${(a + b) / 2}" y="11" text-anchor="middle" class="bandlab">${L().bandLab}</text>` +
+      `<text x="30" y="20" text-anchor="end">${L().axisRisk}</text><text x="30" y="116" text-anchor="end">0</text>`;
   }
 
   // ---------- 2. Ekoloji haritası ----------
   const ecoNode = (i: number) => ({ x: 4, y: 6 + i * 41, w: 96, h: 30 });
-  const MECH = [{ k: 'L', n: 'Ortak emek', x: 138, y: 34 }, { k: 'V', n: 'Mal savunma', x: 138, y: 134 }];
-  const CULT = [{ k: 'K', n: 'Kollektivizm', y: 14 }, { k: 'Hol', n: 'Bütüncül dikkat', y: 84 }, { k: 'O', n: 'Onur duyarlılığı', y: 154 }];
+  const MECH = [{ k: 'L', x: 138, y: 34 }, { k: 'V', x: 138, y: 134 }];
+  const CULT = [{ k: 'K', y: 14 }, { k: 'Hol', y: 84 }, { k: 'O', y: 154 }];
   const mapSvg = $('map');
   function drawMap(): void {
+    const T = L();
     const cu = cultureOf(S.L, S.V);
     const val: Record<string, number> = { L: S.L, V: S.V, K: cu.K, Hol: cu.Hol, O: cu.O };
     let h = '';
@@ -324,28 +330,29 @@ export function mount(container: HTMLElement): () => void {
       + ln(218, MECH[0].y + 18, 258, CULT[2].y + 18, S.L * 0.5, 0.5, true) + ln(218, MECH[1].y + 18, 258, CULT[0].y + 18, S.V * 0.3, 0.5, true);
     ECOS.forEach((e, i) => {
       const n = ecoNode(i), sel = S.eco === e.id;
-      h += `<g class="node" data-e="${e.id}" role="button" tabindex="0" aria-pressed="${sel}" aria-label="${e.name}"><rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="8" class="nb${sel ? ' sel' : ''}"/><text x="${n.x + 8}" y="${n.y + 19}" class="nt">${e.name.split(' (')[0]}${e.book ? '' : ' *'}</text></g>`;
+      h += `<g class="node" data-e="${e.id}" role="button" tabindex="0" aria-pressed="${sel}" aria-label="${ecoName(e.id)}"><rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="8" class="nb${sel ? ' sel' : ''}"/><text x="${n.x + 8}" y="${n.y + 19}" class="nt">${ecoName(e.id).split(' (')[0]}${e.book ? '' : ' *'}</text></g>`;
     });
     const box = (x: number, y: number, w: number, name: string, k: string, color: string) => {
       const v = val[k];
       return `<g><rect x="${x}" y="${y}" width="${w}" height="36" rx="8" class="nb"/><rect x="${x + 1}" y="${y + 1}" width="${((w - 2) * v).toFixed(1)}" height="34" rx="7" fill="${color}" fill-opacity=".28"/>` +
-        `<text x="${x + 8}" y="${y + 15}" class="nt">${name}</text><text x="${x + 8}" y="${y + 29}" class="nv nvv">%${pct(v)}</text></g>`;
+        `<text x="${x + 8}" y="${y + 15}" class="nt">${name}</text><text x="${x + 8}" y="${y + 29}" class="nv nvv">${pctS(v)}</text></g>`;
     };
-    MECH.forEach((m) => { h += box(m.x, m.y, 80, m.n, m.k, m.k === 'L' ? 'var(--gld)' : 'var(--amy)'); });
-    CULT.forEach((c) => { h += box(258, c.y, 100, c.n, c.k, c.k === 'K' ? 'var(--pfc)' : c.k === 'Hol' ? 'var(--pit)' : 'var(--amy)'); });
-    h += `<text x="4" y="212" class="nv">* kitapta ayrıntısı yok, modelin örneği</text>`;
+    MECH.forEach((m, i) => { h += box(m.x, m.y, 80, T.mech[i], m.k, m.k === 'L' ? 'var(--gld)' : 'var(--amy)'); });
+    CULT.forEach((c, i) => { h += box(258, c.y, 100, T.cult[i], c.k, c.k === 'K' ? 'var(--pfc)' : c.k === 'Hol' ? 'var(--pit)' : 'var(--amy)'); });
+    h += `<text x="4" y="212" class="nv">${T.mapNote}</text>`;
     mapSvg.innerHTML = h;
   }
-  const rep = repBadge('karışık');
   function drawTests(): void {
+    const T = L();
+    const rep = repBadge('karışık');
     const c = cultureOf(S.L, S.V);
-    const dv = (x: number) => (x >= 1 ? `+%${Math.round((x - 1) * 100)}` : `-%${Math.round((1 - x) * 100)}`);
+    const dv = (x: number) => (x >= 1 ? `+${percent(String(Math.round((x - 1) * 100)))}` : `-${percent(String(Math.round((1 - x) * 100)))}`);
     $('tests').innerHTML =
-      `<div class="tc"><h4>Sosyogram ${rep}</h4>${bar('Kendini arkadaştan büyük çizme', (c.self - 0.7) / 0.7, c.self >= 1.03 ? `${dv(c.self)} büyük` : c.self <= 0.97 ? `${dv(c.self)} küçük` : 'eşit', 'var(--pfc)')}</div>` +
-      `<div class="tc"><h4>Tavşan, köpek, havuç ${rep}</h4>${bar('Tavşan ile havucu eşleştirme (ilişkisel)', c.rel, `%${pct(c.rel)}`, 'var(--pit)')}${bar('Tavşan ile köpeği eşleştirme (kategori)', 1 - c.rel, `%${pct(1 - c.rel)}`, 'var(--edge)')}</div>` +
-      `<div class="tc"><h4>Bölge göstergeleri ${rep}</h4>${bar('Boşanma oranı (göreli)', c.divorce / 2, dv(c.divorce), 'var(--dop)')}${bar('Patent başvurusu (göreli)', c.patent / 2, dv(c.patent), 'var(--gld)')}</div>` +
-      `<div class="tc"><h4>Resim bağlamı (Masuda ve Nisbett) ${rep}</h4>${bar('Arka planı hatırlama', c.ctx, `%${pct(c.ctx)}`, 'var(--pit)')}${bar('Merkezdeki nesneyi hatırlama', c.ctr, `%${pct(c.ctr)}`, 'var(--pfc)')}</div>` +
-      `<p class="sl-hint">Göreli değerler, kollektivizm orta düzeydeyken 0 kabul edilir. Pirinç ve buğday değerleri kitaptaki yönü izler; sayılar modelindir.</p>`;
+      `<div class="tc"><h4>${T.tSocio} ${rep}</h4>${bar(T.tSelf, (c.self - 0.7) / 0.7, c.self >= 1.03 ? T.selfBig(dv(c.self)) : c.self <= 0.97 ? T.selfSmall(dv(c.self)) : T.selfEq, 'var(--pfc)')}</div>` +
+      `<div class="tc"><h4>${T.tTriad} ${rep}</h4>${bar(T.tRel, c.rel, pctS(c.rel), 'var(--pit)')}${bar(T.tCat, 1 - c.rel, pctS(1 - c.rel), 'var(--edge)')}</div>` +
+      `<div class="tc"><h4>${T.tRegion} ${rep}</h4>${bar(T.tDivorce, c.divorce / 2, dv(c.divorce), 'var(--dop)')}${bar(T.tPatent, c.patent / 2, dv(c.patent), 'var(--gld)')}</div>` +
+      `<div class="tc"><h4>${T.tPicture} ${rep}</h4>${bar(T.tBack, c.ctx, pctS(c.ctx), 'var(--pit)')}${bar(T.tCenter, c.ctr, pctS(c.ctr), 'var(--pfc)')}</div>` +
+      `<p class="sl-hint">${T.testsNote}</p>`;
   }
   function pickEco(id: string): void {
     const e = ECOS.find((x) => x.id === id)!;
@@ -362,43 +369,48 @@ export function mount(container: HTMLElement): () => void {
   // ---------- 3. Koridor ve kamu malı ----------
   const hall = $('hall');
   function drawHall(): void {
+    const T = L();
     hall.innerHTML =
       `<rect x="4" y="22" width="352" height="52" rx="6" fill="none" stroke="var(--edge)" stroke-width="1.5"/>` +
-      `<rect x="318" y="34" width="28" height="28" rx="4" fill="var(--panel)" stroke="var(--edge)" stroke-width="1.5"/><text x="332" y="52" text-anchor="middle" class="nv">anket</text>` +
-      `<circle cx="70" cy="48" r="11" fill="var(--pfc)"/><text x="70" y="86" text-anchor="middle" class="nv">katılımcı</text>` +
-      `<circle cx="${S.insult ? 150 : 200}" cy="48" r="17" fill="var(--edge)"/><text x="${S.insult ? 150 : 200}" y="86" text-anchor="middle" class="nv">iri yapılı işbirlikçi</text>` +
-      (S.insult ? `<path d="M108,34 L126,40 L116,48 L128,56 L108,62 L112,48 Z" fill="var(--red)"/><rect x="170" y="2" width="120" height="22" rx="8" fill="var(--panel)" stroke="var(--red)" stroke-width="1.5"/><text x="230" y="17" text-anchor="middle" class="nt">omuz atar, hakaret eder</text>` : `<text x="230" y="17" text-anchor="middle" class="nv">olaysız geçiş</text>`);
+      `<rect x="318" y="34" width="28" height="28" rx="4" fill="var(--panel)" stroke="var(--edge)" stroke-width="1.5"/><text x="332" y="52" text-anchor="middle" class="nv">${T.hallSurvey}</text>` +
+      `<circle cx="70" cy="48" r="11" fill="var(--pfc)"/><text x="70" y="86" text-anchor="middle" class="nv">${T.hallPart}</text>` +
+      `<circle cx="${S.insult ? 150 : 200}" cy="48" r="17" fill="var(--edge)"/><text x="${S.insult ? 150 : 200}" y="86" text-anchor="middle" class="nv">${T.hallConf}</text>` +
+      (S.insult ? `<path d="M108,34 L126,40 L116,48 L128,56 L108,62 L112,48 Z" fill="var(--red)"/><rect x="170" y="2" width="120" height="22" rx="8" fill="var(--panel)" stroke="var(--red)" stroke-width="1.5"/><text x="230" y="17" text-anchor="middle" class="nt">${T.hallBump}</text>` : `<text x="230" y="17" text-anchor="middle" class="nv">${T.hallCalm}</text>`);
   }
   function drawCor(): void {
+    const T = L();
     const ctl = corridor(S.h, false, 200, S.cseed), ins = corridor(S.h, true, 200, S.cseed + 50);
     const row = (name: string, a: number, b: number, color: string) =>
-      `<div class="pair"><span class="pl">${name}</span><div class="bar" style="--c:${color}"><div class="bar-top"><span>Kontrol</span><b>${pct(a)}</b></div><div class="track"><b style="width:${pct(a)}%"></b></div></div><div class="bar" style="--c:${color}"><div class="bar-top"><span>Hakaret</span><b>${pct(b)}</b></div><div class="track"><b style="width:${pct(b)}%"></b></div></div></div>`;
+      `<div class="pair"><span class="pl">${name}</span><div class="bar" style="--c:${color}"><div class="bar-top"><span>${T.ctl}</span><b>${pct(a)}</b></div><div class="track"><b style="width:${pct(a)}%"></b></div></div><div class="bar" style="--c:${color}"><div class="bar-top"><span>${T.ins}</span><b>${pct(b)}</b></div><div class="track"><b style="width:${pct(b)}%"></b></div></div></div>`;
     const dots = corridor(S.h, S.insult, 40, S.cseed + 7).dots;
     $('ctests').innerHTML =
-      row('Testosteron yükselişi', ctl.dT, ins.dT, 'var(--eff)') + row('Glukokortikoid yükselişi', ctl.dC, ins.dC, 'var(--amy)') + row('Hikâyeyi şiddetle bitirenler (%)', ctl.violent, ins.violent, 'var(--red)') +
-      `<div class="dots" role="img" aria-label="40 katılımcının hikâye sonu: dolu kare şiddetle biten">${dots.map((d) => `<i class="${d ? 'v' : ''}"></i>`).join('')}</div><p class="sl-hint">Her işaret bir katılımcı; dolu kare hikâyeyi şiddetle bitirdi (${S.insult ? 'hakaret' : 'kontrol'} koşulu, tohum ${S.cseed}). Replikasyon: bilinmiyor.</p>`;
+      row(T.rowT, ctl.dT, ins.dT, 'var(--eff)') + row(T.rowC, ctl.dC, ins.dC, 'var(--amy)') + row(T.rowV, ctl.violent, ins.violent, 'var(--red)') +
+      `<div class="dots" role="img" aria-label="${T.dotsAria}">${dots.map((d) => `<i class="${d ? 'v' : ''}"></i>`).join('')}</div><p class="sl-hint">${(S.insult ? T.dotsNoteIns : T.dotsNoteCtl)(S.cseed, t('repl.badge', { s: t('repl.bilinmiyor') }))}</p>`;
   }
+  let sweepKey = '';
   function runPgg(): void {
     S.pg = playPgg({ ineq: S.ineq, trust: S.trust, cost: S.cost, seed: S.pseed });
-    S.sweep = pggSweep(S.trust, S.cost);
+    const key = `${S.trust}|${S.cost}`;
+    if (key !== sweepKey) { S.sweep = pggSweep(S.trust, S.cost); sweepKey = key; }
   }
   function drawPgg(): void {
+    const T = L();
     const r = S.pg, tot = r.pro + r.anti;
     $('ptests').innerHTML =
-      `<div class="tc"><h4>Ceza kime gitti?</h4><div class="stack" role="img" aria-label="Ceza puanlarının dağılımı"><b class="s1" style="width:${tot ? pct(r.pro / tot) : 0}%"></b><b class="s2" style="width:${tot ? pct(r.anti / tot) : 0}%"></b></div>` +
-      `<div class="legend"><span><i class="sq" style="background:var(--gld)"></i>hile yapana (prososyal): ${Math.round(r.pro)} puan</span><span><i class="sq" style="background:var(--red)"></i>cömert olana (antisosyal): ${Math.round(r.anti)} puan</span></div></div>`;
+      `<div class="tc"><h4>${T.punWho}</h4><div class="stack" role="img" aria-label="${T.punAria}"><b class="s1" style="width:${tot ? pct(r.pro / tot) : 0}%"></b><b class="s2" style="width:${tot ? pct(r.anti / tot) : 0}%"></b></div>` +
+      `<div class="legend"><span><i class="sq" style="background:var(--gld)"></i>${T.punPro(Math.round(r.pro))}</span><span><i class="sq" style="background:var(--red)"></i>${T.punAnti(Math.round(r.anti))}</span></div></div>`;
     const px = (t: number, n: number) => 34 + (t / Math.max(1, n - 1)) * 316, py = (v: number) => 112 - v * 96;
     const line = (a: number[], cls: string, col: string) => `<polyline points="${a.map((v, t) => `${px(t, a.length).toFixed(1)},${py(v).toFixed(1)}`).join(' ')}" class="ln ${cls}" stroke="${col}"/>`;
     $('pchart').innerHTML = `<line class="grid" x1="34" y1="112" x2="350" y2="112"/><line class="grid" x1="34" y1="16" x2="34" y2="112"/>` +
       line(r.coop, '', 'var(--pfc)') + line(r.trust, 'dash', 'var(--gld)') +
-      `<text x="350" y="126" text-anchor="end">tur (1-10)</text><text x="30" y="20" text-anchor="end">1</text><text x="30" y="112" text-anchor="end">0</text>` +
-      `<text x="346" y="${py(r.coop[r.coop.length - 1]) - 5}" text-anchor="end" class="gl">katkı oranı</text><text x="346" y="${py(r.trust[r.trust.length - 1]) + 12}" text-anchor="end" class="gl">güven</text>`;
+      `<text x="350" y="126" text-anchor="end">${T.axisRound}</text><text x="30" y="20" text-anchor="end">1</text><text x="30" y="112" text-anchor="end">0</text>` +
+      `<text x="346" y="${py(r.coop[r.coop.length - 1]) - 5}" text-anchor="end" class="gl">${T.labCoop}</text><text x="346" y="${py(r.trust[r.trust.length - 1]) + 12}" text-anchor="end" class="gl">${T.labTrust}</text>`;
     const sx = (v: number) => 34 + v * 316, n = S.sweep;
     const sl = (key: 'capital' | 'antiShare', cls: string, col: string) => `<polyline points="${n.map((p) => `${sx(p.ineq).toFixed(1)},${py(p[key]).toFixed(1)}`).join(' ')}" class="ln ${cls}" stroke="${col}"/>`;
     $('schart').innerHTML = `<line class="grid" x1="34" y1="112" x2="350" y2="112"/><line class="grid" x1="34" y1="16" x2="34" y2="112"/>` +
       sl('capital', '', 'var(--gld)') + sl('antiShare', 'dash', 'var(--red)') +
       `<line x1="${sx(S.ineq)}" y1="16" x2="${sx(S.ineq)}" y2="112" stroke="var(--ink)" stroke-width="1.4" stroke-dasharray="2 3"/>` +
-      `<text x="350" y="126" text-anchor="end">gelir eşitsizliği</text><text x="40" y="${py(n[0].capital) - 6}" class="gl">sosyal sermaye</text><text x="346" y="${py(n[n.length - 1].antiShare) - 6}" text-anchor="end" class="gl">antisosyal ceza payı</text>`;
+      `<text x="350" y="126" text-anchor="end">${T.axisIneq}</text><text x="40" y="${py(n[0].capital) - 6}" class="gl">${T.labCapital}</text><text x="346" y="${py(n[n.length - 1].antiShare) - 6}" text-anchor="end" class="gl">${T.labAntiShare}</text>`;
   }
 
   // ---------- Çubuk ve çizim ----------
@@ -406,35 +418,35 @@ export function mount(container: HTMLElement): () => void {
     if (S.tab === 0) {
       drawGrid(); drawChart();
       const m = S.m;
-      meter(0, 'Ortalama parça', Math.min(1, m.meanKm / 100), `${Math.round(m.meanKm)} km`, 'var(--pfc)');
-      meter(1, 'Çatışma riski', m.risk, `%${pct(m.risk)}`, 'var(--red)');
-      meter(2, 'Mutsuz kişi', m.unhappy, `%${pct(m.unhappy)}`, 'var(--lesion)');
+      meter(0, L().mAvgPatch, Math.min(1, m.meanKm / 100), `${Math.round(m.meanKm)} km`, 'var(--pfc)');
+      meter(1, L().mRisk, m.risk, pctS(m.risk), 'var(--red)');
+      meter(2, L().mUnhappy, m.unhappy, pctS(m.unhappy), 'var(--lesion)');
     } else if (S.tab === 1) {
       drawMap(); drawTests();
       const c = cultureOf(S.L, S.V);
-      meter(0, 'Kollektivizm', c.K, `%${pct(c.K)}`, 'var(--pfc)'); meter(1, 'Bütüncül dikkat', c.Hol, `%${pct(c.Hol)}`, 'var(--pit)'); meter(2, 'Onur duyarlılığı', c.O, `%${pct(c.O)}`, 'var(--amy)');
+      meter(0, L().mK, c.K, pctS(c.K), 'var(--pfc)'); meter(1, L().mHol, c.Hol, pctS(c.Hol), 'var(--pit)'); meter(2, L().mO, c.O, pctS(c.O), 'var(--amy)');
     } else {
       drawHall(); drawCor(); drawPgg();
       const ins = corridor(S.h, true, 200, S.cseed + 50);
-      meter(0, 'Hakaret sonrası şiddet', ins.violent, `%${pct(ins.violent)}`, 'var(--red)');
-      meter(1, 'Antisosyal ceza payı', S.pg.antiShare, `%${pct(S.pg.antiShare)}`, 'var(--amy)');
-      meter(2, 'Sosyal sermaye', S.pg.capital, `%${pct(S.pg.capital)}`, 'var(--gld)');
+      meter(0, L().mViolence, ins.violent, pctS(ins.violent), 'var(--red)');
+      meter(1, L().mAnti, S.pg.antiShare, pctS(S.pg.antiShare), 'var(--amy)');
+      meter(2, L().mCapital, S.pg.capital, pctS(S.pg.capital), 'var(--gld)');
     }
     sayEl.textContent = say();
   }
   function say(): string {
     if (S.tab === 0) {
       const base = describeGrid(S.m, S.pref, S.fenced);
-      return S.calm >= 5 ? `${base} Hareket durdu: denge.` : base;
+      return S.calm >= 5 ? L().gridCalm(base) : base;
     }
     if (S.tab === 1) {
       const c = cultureOf(S.L, S.V);
-      const kind = c.K > 0.55 ? 'kollektivist ve bütüncül' : c.O > 0.5 ? 'bireyci, onurunu sert savunan' : 'bireyci ve analitik';
-      return `Bu ekolojide eğilim: ${kind}. Kollektivizm %${pct(c.K)}, bütüncül dikkat %${pct(c.Hol)}, onur duyarlılığı %${pct(c.O)}.`;
+      const kind = c.K > 0.55 ? 'coll' : c.O > 0.5 ? 'honor' : 'indiv';
+      return L().ecoSay[kind](pctS(c.K), pctS(c.Hol), pctS(c.O));
     }
     if (S.last === 'pgg') return describePgg(S.pg);
     const c0 = corridor(S.h, S.insult, 200, S.cseed + (S.insult ? 50 : 0));
-    return `Onur kültürü %${pct(S.h)}: ${S.insult ? 'hakaretten sonra' : 'hakaret olmadan'} hikâyeyi şiddetle bitirenler %${pct(c0.violent)}.`;
+    return (S.insult ? L().corSayIns : L().corSayCtl)(pctS(S.h), pctS(c0.violent));
   }
   const announce = scope.announcer($('live'), () => sayEl.textContent ?? '', 700);
 
@@ -513,20 +525,16 @@ export function mount(container: HTMLElement): () => void {
   }
 
   // ---------- Rehberli tur ----------
-  const tour = createTour(scope, [
-    { title: 'Karışık yaşam', text: 'İki grup iç içe yaşıyor, parçalar küçük. Henüz çatışmaya elverişli büyüklükte bir ada yok.', look: 'Ortalama parça yaklaşık 10 km, risk göstergesi düşük.',
-      apply: () => { selectTab(0); applyScen(SCEN[0]); setPlaying(false); } },
-    { title: 'Orta büyüklükte adalar', text: 'Benzerlik tercihi komşuluğu ayrıştırır, parçalar büyür. Kitaptaki gibi 20-60 km çaplı adalar oluşunca çatışma riski tepe yapar (Lim ve ark.).', look: 'Grafikte kırmızı çizginin sarı bandın içinde yükselmesi; kırmızı temas çizgileri.',
-      apply: () => { selectTab(0); applyScen(SCEN[1], 7); setPlaying(false); } },
-    { title: 'Net sınır', text: 'Hareketlilik düşükse orta adalar kalıcı olur. Sınırlar net ve tanınan (özerk) olunca temas çatışmaya dönüşmez (Rutherford: iyi çitler). "Sınırları kaldır" ile karşılaştırılabilir.', look: 'Yeşil özerk bölgeler ve risk çubuğunun düşüşü.',
-      apply: () => { selectTab(0); applyScen(SCEN[2], 60); grantAll(S.w, S.m); S.fenced = true; S.m = analyze(S.w, S.pref); dirty = true; setPlaying(false); } },
-    { title: 'Pirinç ve buğday', text: 'Pirinç, komşularla ortak sulama emeği ister; buğday bireysel çalışılır. Pirinç bölgelerinde kollektivist, bütüncül eğilim daha belirgin (Talhelm, Masuda ve Nisbett). Her iki replikasyon da karışık.', look: 'Haritada kalın çizgiler; "Buğday" düğmesine geçince kollektivizmin düşmesi.',
-      apply: () => { selectTab(1); pickEco('rice'); } },
-    { title: 'Onur kültürü', text: 'Hırsızlığa açık sürü ekolojisinden gelen onur kültüründe hakaret, kişisel saldırı sayılır. Koridor deneyinde hakarete uğrayan Güneyli erkeklerde hormonlar ve hayal edilen şiddet artar, Kuzeylilerde artmaz.', look: 'Güneyli ve Kuzeyli seçince "Hakaret" sütunundaki farklar.',
-      apply: () => { selectTab(2); setCor(0.8, true); } },
-    { title: 'Antisosyal ceza', text: 'Güven ve hukuk zayıf, gelir eşitsizliği yüksekse ceza hile yapana değil, cömert olana da gider (Yunanistan ve Umman). Avustralya örüntüsünde bu neredeyse yoktur.', look: 'Ceza çubuğunda kırmızı pay ve eşitsizlik eğrisinde sosyal sermayenin düşüşü.',
-      apply: () => { selectTab(2); setPgg('lo'); } },
-  ]);
+  const TS = L().tour;
+  const applies = [
+    () => { selectTab(0); applyScen(SCEN[0]); setPlaying(false); },
+    () => { selectTab(0); applyScen(SCEN[1], 7); setPlaying(false); },
+    () => { selectTab(0); applyScen(SCEN[2], 60); grantAll(S.w, S.m); S.fenced = true; S.m = analyze(S.w, S.pref); dirty = true; setPlaying(false); },
+    () => { selectTab(1); pickEco('rice'); },
+    () => { selectTab(2); setCor(0.8, true); },
+    () => { selectTab(2); setPgg('lo'); },
+  ];
+  const tour = createTour(scope, TS.map((s, i) => ({ ...s, apply: applies[i] })));
   $('tourHost').appendChild(tour.el);
 
   // ---------- Başlangıç ----------

@@ -1,5 +1,8 @@
 import { mulberry32 } from '../rng';
-import { lazyNotes, slider } from '../ui';
+import { lazyNotes, pc, f1, f2, slider } from '../ui';
+import { decimalSep } from '../../i18n/locale';
+import { percent } from '../../i18n/fmt';
+import { L } from './text';
 import '../sim.css';
 import './view.css';
 import { Scope, ref, svg, svgText, uid } from '../kit';
@@ -12,24 +15,25 @@ import {
 } from './model';
 
 type Tab = 'tro' | 'pg' | 'dice';
-const f1 = (x: number): string => x.toFixed(1).replace('.', ',');
-const pc = (x: number): string => `%${Math.round(x * 100)}`;
-const band = (b: [number, number] | null): string => (!b ? 'sayı yok' : b[0] === b[1] ? `~${pc(b[0])}` : `${pc(b[0])}-${b[1] * 100}`);
+const N_DICE = 300;
+const band = (b: [number, number] | null): string => (!b ? L().noNumber : b[0] === b[1] ? `~${pc(b[0])}` : percent(`${Math.round(b[0] * 100)}-${b[1] * 100}`));
 
 const sv = (w: number, h: number, inner: string): string => `<svg viewBox="0 0 ${w} ${h}" aria-hidden="true">${inner}</svg>`;
 const arrow = (c: string, dash: string): string => sv(26, 10, `<path d="M1 5H19" stroke="${c}" stroke-width="2.2"${dash}/><path d="M17 1L25 5L17 9z" fill="${c}"/>`);
 const dotI = (c: string): string => `<i style="background:${c}"></i>`;
 const key = (...a: [string, string][]): string => `<div class="legend">${a.map(([i, t]) => `<span>${i}${t}</span>`).join('')}</div>`;
-const TEMPLATE = (id: string) => `
+const TEMPLATE = (id: string) => {
+  const T = L();
+  return `
 <div class="sim sim-ahl">
-  <p class="lede">Ahlaki kararlarımızı akıl mı verir, sezgi mi; ve kültürler "adil"i neden farklı tanımlar?</p>
-  <div class="tabs" role="tablist" aria-label="Simülasyon bölümleri">
-    <button class="tab" role="tab" id="${id}-tab-tro" data-pane="tro" aria-controls="${id}-pane-tro" aria-selected="true" type="button">Trolley</button>
-    <button class="tab" role="tab" id="${id}-tab-pg" data-pane="pg" aria-controls="${id}-pane-pg" aria-selected="false" tabindex="-1" type="button">Kamu malı ve ceza</button>
-    <button class="tab" role="tab" id="${id}-tab-dice" data-pane="dice" aria-controls="${id}-pane-dice" aria-selected="false" tabindex="-1" type="button">Zar ve dürüstlük</button>
+  <p class="lede">${T.lede}</p>
+  <div class="tabs" role="tablist" aria-label="${T.tabsLabel}">
+    <button class="tab" role="tab" id="${id}-tab-tro" data-pane="tro" aria-controls="${id}-pane-tro" aria-selected="true" type="button">${T.tabs.tro}</button>
+    <button class="tab" role="tab" id="${id}-tab-pg" data-pane="pg" aria-controls="${id}-pane-pg" aria-selected="false" tabindex="-1" type="button">${T.tabs.pg}</button>
+    <button class="tab" role="tab" id="${id}-tab-dice" data-pane="dice" aria-controls="${id}-pane-dice" aria-selected="false" tabindex="-1" type="button">${T.tabs.dice}</button>
   </div>
 
-  <div class="sim-bar" role="group" aria-label="Anlık çıktılar"><div class="sim-bar-in">
+  <div class="sim-bar" role="group" aria-label="${T.barLabel}"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
     <div class="meters" data-ref="meters"></div>
   </div></div>
@@ -38,63 +42,63 @@ const TEMPLATE = (id: string) => `
   <!-- ============ 1 · Trolley ============ -->
   <section class="pane" role="tabpanel" id="${id}-pane-tro" data-pane="tro" aria-labelledby="${id}-tab-tro">
     <div data-ref="tour1"></div>
-    <div class="chips" role="group" aria-label="Senaryolar" data-ref="scChips"></div>
-    <section class="card" aria-label="Senaryo ve karar">
+    <div class="chips" role="group" aria-label="${T.scenariosLabel}" data-ref="scChips"></div>
+    <section class="card" aria-label="${T.scenarioDecisionLabel}">
       <p class="sc-text" data-ref="scText"></p>
       <div class="row decide" role="group" data-ref="decide">
-        <button class="btn btn-yes" type="button" data-ref="yes">Evet</button>
-        <button class="btn btn-no" type="button" data-ref="no">Hayır</button>
+        <button class="btn btn-yes" type="button" data-ref="yes">${T.yes}</button>
+        <button class="btn btn-no" type="button" data-ref="no">${T.no}</button>
       </div>
       <p class="sc-res" data-ref="scRes"></p>
     </section>
 
-    <section aria-label="İki sistem">
-      <h3 class="sim-h">İki sistem</h3>
+    <section aria-label="${T.systemsLabel}">
+      <h3 class="sim-h">${T.systemsTitle}</h3>
       <div class="sys">
         <div class="sys-box cold">
-          <p class="sys-t">Soğuk hesap</p><p class="sys-s">dlPFC · faydacı</p>
+          <p class="sys-t">${T.cold}</p><p class="sys-s">${T.coldSub}</p>
           <div class="track"><b data-ref="coldB"></b></div>
           <p class="sys-n" data-ref="coldT"></p>
         </div>
         <div class="sys-box hot">
-          <p class="sys-t">Sıcak sezgi</p><p class="sys-s">vmPFC · amigdala · insula</p>
+          <p class="sys-t">${T.hot}</p><p class="sys-s">${T.hotSub}</p>
           <div class="track"><b data-ref="hotB"></b></div>
           <ul class="parts" data-ref="parts"></ul>
         </div>
       </div>
     </section>
 
-    <section aria-label="Senaryo karşılaştırması">
-      <h3 class="sim-h">Evet oranı: model ve kitap</h3>
+    <section aria-label="${T.compareLabel}">
+      <h3 class="sim-h">${T.compareTitle}</h3>
       <div class="stage">
-        <svg viewBox="0 0 360 232" role="group" aria-label="Beş senaryo ve ayarların için model tahmini ile kitaptaki evet oranları" data-ref="plot"></svg>
-        ${key([sv(14, 12, '<circle cx="7" cy="6" r="4.5" fill="var(--ink)"/>'), 'model (ortalama kişi)'], [sv(16, 12, '<rect x="1" y="2" width="14" height="8" rx="2" fill="var(--dop)" fill-opacity=".55" stroke="var(--dop)"/>'), 'kitaptaki oran'], [sv(14, 12, '<path d="M7 1.5L12 6L7 10.5L2 6z" fill="none" stroke="var(--ink)" stroke-width="1.6"/>'), 'tutarlı niyet kuralı'])}
+        <svg viewBox="0 0 360 232" role="group" aria-label="${T.plotLabel}" data-ref="plot"></svg>
+        ${key([sv(14, 12, '<circle cx="7" cy="6" r="4.5" fill="var(--ink)"/>'), T.legendModel], [sv(16, 12, '<rect x="1" y="2" width="14" height="8" rx="2" fill="var(--dop)" fill-opacity=".55" stroke="var(--dop)"/>'), T.legendBook], [sv(14, 12, '<path d="M7 1.5L12 6L7 10.5L2 6z" fill="none" stroke="var(--ink)" stroke-width="1.6"/>'), T.legendConsistent])}
       </div>
     </section>
 
-    <section aria-label="Girdiler">
-      <h3 class="sim-h">Girdiler: üç boyut</h3>
+    <section aria-label="${T.inputsLabel}">
+      <h3 class="sim-h">${T.inputsTitle}</h3>
       <div class="dims" data-ref="dims"></div>
       <div class="sliders" data-ref="savedSl"></div>
     </section>
 
 
-    <section class="card" aria-label="Sonuç">
-      <h3 class="sim-h">Sonuç: kararların ve kitap</h3>
+    <section class="card" aria-label="${T.resultLabel}">
+      <h3 class="sim-h">${T.resultTitle}</h3>
       <ul class="res" data-ref="res"></ul>
       <p class="note" data-ref="prof"></p>
-      <div class="seg" role="group" aria-label="Greene'in iki sorun türü">
-        <button class="btn" type="button" aria-pressed="true" data-ref="gMe">Ben mi, Biz mi?</button>
-        <button class="btn" type="button" aria-pressed="false" data-ref="gThem">Biz mi, Onlar mı?</button>
+      <div class="seg" role="group" aria-label="${T.greeneLabel}">
+        <button class="btn" type="button" aria-pressed="true" data-ref="gMe">${T.gMe}</button>
+        <button class="btn" type="button" aria-pressed="false" data-ref="gThem">${T.gThem}</button>
       </div>
       <p class="note" data-ref="gText"></p>
     </section>
 
-    <section class="card" aria-label="Knobe etkisi">
-      <h3 class="sim-h">Knobe etkisi: niyet yargısı</h3>
-      <div class="seg" role="group" aria-label="Senaryo"><button class="btn" type="button" aria-pressed="true" data-ref="kHarm">Plan zarar verir</button><button class="btn" type="button" aria-pressed="false" data-ref="kHelp">Plan yarar sağlar</button></div>
+    <section class="card" aria-label="${T.knobeLabel}">
+      <h3 class="sim-h">${T.knobeTitle}</h3>
+      <div class="seg" role="group" aria-label="${T.knobeScenarioLabel}"><button class="btn" type="button" aria-pressed="true" data-ref="kHarm">${T.kHarm}</button><button class="btn" type="button" aria-pressed="false" data-ref="kHelp">${T.kHelp}</button></div>
       <p class="note" data-ref="kText"></p>
-      <div class="row decide"><button class="btn" type="button" data-ref="kYes">İsteyerek yaptı</button><button class="btn" type="button" data-ref="kNo">İsteyerek yapmadı</button></div>
+      <div class="row decide"><button class="btn" type="button" data-ref="kYes">${T.kYes}</button><button class="btn" type="button" data-ref="kNo">${T.kNo}</button></div>
       <div class="kn" data-ref="kRes" hidden></div>
     </section>
 
@@ -104,28 +108,28 @@ const TEMPLATE = (id: string) => `
   <!-- ============ 2 · Kamu malı ve ceza ============ -->
   <section class="pane" role="tabpanel" id="${id}-pane-pg" data-pane="pg" aria-labelledby="${id}-tab-pg" hidden>
     <div data-ref="tour2"></div>
-    <section class="card" aria-label="Kamu malı oyunu ve ceza">
-      <h3 class="sim-h">1 · Kamu malı oyunu ve ceza (Herrmann)</h3>
-      <p class="note">16 oyuncu, her biri 4 kişilik bir grupta, ${PG.rounds} tur. Her turda 0-${PG.E} jeton ortak havuza girer; sonra isteyen, diğerlerini ceza puanıyla cezalandırır.</p>
-      <div class="chips" role="group" aria-label="Toplum" data-ref="socChips"></div>
-      <div class="chips" role="group" aria-label="Ceza aşaması" data-ref="punChips"></div>
+    <section class="card" aria-label="${T.pgLabel}">
+      <h3 class="sim-h">${T.pgTitle}</h3>
+      <p class="note">${T.pgIntro(PG.rounds, PG.E)}</p>
+      <div class="chips" role="group" aria-label="${T.societyLabel}" data-ref="socChips"></div>
+      <div class="chips" role="group" aria-label="${T.punishLabel}" data-ref="punChips"></div>
       <div class="stage">
-        <svg viewBox="0 0 360 306" role="img" aria-label="Dört grup ve oyuncular: dolgu katkıyı, oklar cezayı gösterir" data-ref="groups"></svg>
-        ${key([sv(16, 14, '<circle cx="8" cy="7" r="6" fill="none" stroke="var(--pfc)" stroke-width="1.6"/><circle cx="8" cy="7" r="3" fill="var(--pfc)"/>'), 'normal oyuncu'], [sv(16, 14, '<path d="M8 .8L15 7L8 13.2L1 7z" fill="none" stroke="var(--amy)" stroke-width="1.6"/><circle cx="8" cy="7" r="2.6" fill="var(--amy)"/>'), 'antisosyal eğilimli'], [arrow('var(--pfc)', ''), 'bedava binene ceza'], [arrow('var(--amy)', ' stroke-dasharray="4 2"'), 'işbirlikçiye ceza'])}
+        <svg viewBox="0 0 360 306" role="img" aria-label="${T.groupsLabel}" data-ref="groups"></svg>
+        ${key([sv(16, 14, '<circle cx="8" cy="7" r="6" fill="none" stroke="var(--pfc)" stroke-width="1.6"/><circle cx="8" cy="7" r="3" fill="var(--pfc)"/>'), T.legendNormal], [sv(16, 14, '<path d="M8 .8L15 7L8 13.2L1 7z" fill="none" stroke="var(--amy)" stroke-width="1.6"/><circle cx="8" cy="7" r="2.6" fill="var(--amy)"/>'), T.legendAnti], [arrow('var(--pfc)', ''), T.legendPro], [arrow('var(--amy)', ' stroke-dasharray="4 2"'), T.legendAntiArrow])}
       </div>
-      <div class="row play"><button class="btn" type="button" data-ref="replay">Yeniden oyna</button><button class="btn" type="button" data-ref="reseed">Başka oyuncular</button></div>
+      <div class="row play"><button class="btn" type="button" data-ref="replay">${T.replay}</button><button class="btn" type="button" data-ref="reseed">${T.reseed}</button></div>
       <div class="sliders" data-ref="roundSl"></div>
-      <div class="chart" aria-label="Katkı grafiği"><h4 class="sim-h">Ortalama katkı</h4>
-        <svg viewBox="0 0 360 188" role="img" aria-label="Turlara göre ortalama katkı: cezalı ve cezasız oyun" data-ref="chart1"></svg></div>
-      <div class="chart" aria-label="Ceza grafiği"><h4 class="sim-h">Ceza puanları</h4>
-        <svg viewBox="0 0 360 150" role="img" aria-label="Turlara göre ceza puanları: bedava binene ve işbirlikçiye" data-ref="chart2"></svg></div>
+      <div class="chart" aria-label="${T.chartContribLabel}"><h4 class="sim-h">${T.chartContribTitle}</h4>
+        <svg viewBox="0 0 360 188" role="img" aria-label="${T.chartContribAria}" data-ref="chart1"></svg></div>
+      <div class="chart" aria-label="${T.chartPunLabel}"><h4 class="sim-h">${T.chartPunTitle}</h4>
+        <svg viewBox="0 0 360 150" role="img" aria-label="${T.chartPunAria}" data-ref="chart2"></svg></div>
       <div class="sliders" data-ref="socSl"></div>
     </section>
 
-    <section class="card" aria-label="Adalet eğrisi">
-      <h3 class="sim-h">2 · Adalet pazarla ve topluluk büyüklüğüyle değişir (Henrich)</h3>
-      <div class="chips" role="group" aria-label="Topluluk" data-ref="mkChips"></div>
-      <div class="chart"><svg viewBox="0 0 360 206" role="img" aria-label="Teklif edilen paya göre reddedilme olasılığı: seçili topluluk ve iki referans" data-ref="chart3"></svg></div>
+    <section class="card" aria-label="${T.fairnessLabel}">
+      <h3 class="sim-h">${T.fairnessTitle}</h3>
+      <div class="chips" role="group" aria-label="${T.communityLabel}" data-ref="mkChips"></div>
+      <div class="chart"><svg viewBox="0 0 360 206" role="img" aria-label="${T.chart3Aria}" data-ref="chart3"></svg></div>
       <div class="readout" data-ref="mkRead"></div>
       <div class="sliders" data-ref="mkSl"></div>
     </section>
@@ -137,36 +141,38 @@ const TEMPLATE = (id: string) => `
   <!-- ============ 3 · Zar ve dürüstlük ============ -->
   <section class="pane" role="tabpanel" id="${id}-pane-dice" data-pane="dice" aria-labelledby="${id}-tab-dice" hidden>
     <div data-ref="tour3"></div>
-    <section class="card" aria-label="Tek bir atış">
-      <h3 class="sim-h">1 · Zar iki kez atılır, yalnızca ilki sayılır</h3>
-      <div class="row play"><button class="btn tour-next" type="button" data-ref="roll">Zarları at</button></div>
-      <div class="dice" data-ref="dice" role="group" aria-label="Atılan zarlar"></div>
+    <section class="card" aria-label="${T.singleRollLabel}">
+      <h3 class="sim-h">${T.singleRollTitle}</h3>
+      <div class="row play"><button class="btn tour-next" type="button" data-ref="roll">${T.roll}</button></div>
+      <div class="dice" data-ref="dice" role="group" aria-label="${T.rolledLabel}"></div>
       <ul class="res" data-ref="rollRes"></ul>
     </section>
-    <section class="card" aria-label="Toplumun bildirdiği dağılım">
-      <h3 class="sim-h">2 · ${300} kişinin bildirdiği sonuçlar</h3>
-      <div class="chips" role="group" aria-label="Toplum" data-ref="mixChips"></div>
+    <section class="card" aria-label="${T.distLabel}">
+      <h3 class="sim-h">${T.distTitle(N_DICE)}</h3>
+      <div class="chips" role="group" aria-label="${T.societyLabel}" data-ref="mixChips"></div>
       <div class="stage">
-        <svg viewBox="0 0 360 232" role="img" aria-label="Bildirilen sayıların dağılımı; tipe göre renkli sütunlar" data-ref="hist"></svg>
-        ${key([dotI('var(--pfc)'), 'dürüst'], [dotI('var(--dop)'), 'haklı dürüstlük'], [dotI('var(--amy)'), 'tam yalan'], [sv(24, 10, '<path d="M1 5H23" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="4 3"/>'), 'düz dağılım (%17)'])}
+        <svg viewBox="0 0 360 232" role="img" aria-label="${T.histAria}" data-ref="hist"></svg>
+        ${key([dotI('var(--pfc)'), T.legHonest], [dotI('var(--dop)'), T.legJustified], [dotI('var(--amy)'), T.legLiar], [sv(24, 10, '<path d="M1 5H23" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="4 3"/>'), T.legFlat(pc(1 / 6))])}
       </div>
       <div class="readout" data-ref="diceRead"></div>
       <div class="sliders" data-ref="mixSl"></div>
-      <div class="row play"><button class="btn" type="button" data-ref="rerun">Yeniden çalıştır</button></div>
+      <div class="row play"><button class="btn" type="button" data-ref="rerun">${T.rerun}</button></div>
     </section>
 
 
     <div class="notes" data-notes="dice"></div>
   </section>
 
-  <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan: trolley oranları, Knobe %85 ve %23, Hadza %73, pazar ~%90, 50 ve 5000 kişi eşikleri, ceza ve sosyal sermaye yönü, zarın iki atış düzeni. Oyun parametreleri, ağırlıklar, hazır karışımlar ve eğri biçimleri modelin varsayımıdır.</p>
+  <p class="foot">${T.foot}</p>
 </div>`;
+};
 
 interface SliderHandle { inp: HTMLInputElement; set: (v: number) => void }
 
 export function mount(container: HTMLElement): () => void {
   const scope = new Scope();
   const id = uid('ahl');
+  const T = L();
   container.innerHTML = TEMPLATE(id);
   const root = container.firstElementChild as HTMLElement;
   const $ = <T extends Element = HTMLElement>(name: string) => ref<T>(root, name);
@@ -258,14 +264,8 @@ export function mount(container: HTMLElement): () => void {
   /* =====================================================================
      1 · Trolley
      ===================================================================== */
-  const KNOBE_TXT = {
-    zarar: 'Bir çalışan patrona kâr getirecek bir plan önerir; plan çevreye zarar verecektir. Patron "çevreyi umursamıyorum, yap" der. Plan uygulanır ve çevre zarar görür.',
-    yarar: 'Bir çalışan patrona kâr getirecek bir plan önerir; plan çevreye yarar sağlayacaktır. Patron "çevreyi umursamıyorum, yap" der. Plan uygulanır ve çevre yarar görür.',
-  };
-  const GREENE_TXT = {
-    me: 'Ben mi, Biz mi: bencilliğin grubu bozduğu ortak mal sorunları. Hızlı ahlaki sezgiler burada iyi işler; çoğu zaman yeter.',
-    them: 'Biz mi, Onlar mı: farklı grupların kendi sezgilerinin çatıştığı sorunlar. Her taraf kendi sezgisini doğru bulur; yavaş, bilinçli akıl yürütme gerekir.',
-  };
+  const KNOBE_TXT = { zarar: T.knobeHarm, yarar: T.knobeHelp };
+  const GREENE_TXT = { me: T.greeneMe, them: T.greeneThem };
   const scChips = $('scChips');
   const scBtns = SCENARIOS.map((sc) => {
     const b = document.createElement('button');
@@ -278,7 +278,7 @@ export function mount(container: HTMLElement): () => void {
     const sc = SCENARIOS.find((s) => s.id === sid)!;
     S.sel = sid; S.dims = dimsOf(sc, saved); dirty = true;
   }
-  const INTENTS: { k: Intent; name: string }[] = [{ k: 'kaza', name: 'Kaza' }, { k: 'yan', name: 'Yan etki' }, { k: 'arac', name: 'Araç' }];
+  const INTENTS: { k: Intent; name: string }[] = [{ k: 'kaza', name: T.intentAccident }, { k: 'yan', name: T.intentSide }, { k: 'arac', name: T.intentMeans }];
   const dimsEl = $('dims');
   const mkGroup = (label: string): HTMLElement => {
     const g = document.createElement('div'); g.className = 'dg';
@@ -287,11 +287,11 @@ export function mount(container: HTMLElement): () => void {
     return g.querySelector('.seg')!;
   };
   const edit = (f: () => void) => { f(); S.sel = null; };
-  const syncForce = toggles(mkGroup('Kişisel güç'), [{ k: '0', name: 'Yok' }, { k: '1', name: 'Kasla' }], () => String(S.dims.force), (k) => edit(() => { S.dims = { ...S.dims, force: Number(k) as 0 | 1 }; }));
-  const syncProx = toggles(mkGroup('Yakınlık'), [{ k: '0', name: 'Uzak' }, { k: '1', name: 'Yakın' }], () => String(S.dims.prox), (k) => edit(() => { S.dims = { ...S.dims, prox: Number(k) as 0 | 1 }; }));
-  const syncIntent = toggles(mkGroup('Niyet'), INTENTS, () => S.dims.intent, (k) => edit(() => { S.dims = { ...S.dims, intent: k }; }));
+  const syncForce = toggles(mkGroup(T.dimForce), [{ k: '0', name: T.forceNone }, { k: '1', name: T.forceMuscle }], () => String(S.dims.force), (k) => edit(() => { S.dims = { ...S.dims, force: Number(k) as 0 | 1 }; }));
+  const syncProx = toggles(mkGroup(T.dimProx), [{ k: '0', name: T.proxFar }, { k: '1', name: T.proxNear }], () => String(S.dims.prox), (k) => edit(() => { S.dims = { ...S.dims, prox: Number(k) as 0 | 1 }; }));
+  const syncIntent = toggles(mkGroup(T.dimIntent), INTENTS, () => S.dims.intent, (k) => edit(() => { S.dims = { ...S.dims, intent: k }; }));
   const savedSl = makeSlider($('savedSl'), {
-    name: 'Kurtarılan kişi sayısı', hint: 'Karşısında hep tek kişi var. Hesap sayıyla büyür, sezgi büyümez (modelin varsayımı).',
+    name: T.savedName, hint: T.savedHint,
     min: 2, max: 30, step: 1, val: 5, fmt: (v) => String(v), cb: (v) => { S.dims = { ...S.dims, saved: v }; if (v !== 5) S.sel = null; dirty = true; }, color: 'var(--pfc)',
   });
 
@@ -304,7 +304,7 @@ export function mount(container: HTMLElement): () => void {
     svgText(plot, { class: 'ax', x: px(v), y: 12, 'text-anchor': 'middle' }, pc(v));
   }
   interface PRow { g: SVGElement; hl: SVGElement; band: SVGElement; dot: SVGElement; dia: SVGElement; you: SVGElement }
-  const rows: PRow[] = [...SCENARIOS.map((s) => s.short), 'Ayarların'].map((name, i) => {
+  const rows: PRow[] = [...SCENARIOS.map((s) => s.short), T.customRow].map((name, i) => {
     const y = PL.top + i * PL.row;
     const custom = i === SCENARIOS.length;
     const g = svg('g', { class: 'prow' + (custom ? ' custom' : ''), ...(custom ? { role: 'img' } : { tabindex: '0', role: 'button', 'aria-pressed': 'false', 'aria-label': name }) }, plot);
@@ -322,34 +322,33 @@ export function mount(container: HTMLElement): () => void {
     }
     return { g, hl, band, dot, dia, you };
   });
-  const noNum = svgText(plot, { class: 'rl muted', x: px(0.5), y: PL.top + 3 * PL.row + 3.5 }, 'kitapta sayı yok');
+  const noNum = svgText(plot, { class: 'rl muted', x: px(0.5), y: PL.top + 3 * PL.row + 3.5 }, T.noNumberBook);
 
   const resEl = $('res');
   function drawTrolley(): void {
     const sy = systems(S.dims);
     const sc = S.sel ? SCENARIOS.find((s) => s.id === S.sel)! : null;
     scBtns.forEach((b, i) => b.setAttribute('aria-pressed', String(S.sel === SCENARIOS[i].id)));
-    $('scText').textContent = sc ? sc.text : 'Özel ayar: boyutları ve sayıyı değiştirerek sezgiyle hesabın nasıl çekiştiğine bak. Karar vermek için bir senaryo seç.';
+    $('scText').textContent = sc ? sc.text : T.customText;
     const ans = sc ? S.ans[sc.id] : undefined;
     const yes = $<HTMLButtonElement>('yes'), no = $<HTMLButtonElement>('no');
     yes.disabled = no.disabled = !sc;
     yes.setAttribute('aria-pressed', String(ans === true)); no.setAttribute('aria-pressed', String(ans === false));
-    yes.textContent = 'Evet'; no.textContent = 'Hayır';
-    $('decide').setAttribute('aria-label', sc ? sc.ask : 'Karar');
+    yes.textContent = T.yes; no.textContent = T.no;
+    $('decide').setAttribute('aria-label', sc ? sc.ask : T.decision);
     const res = $('scRes');
     if (sc && ans !== undefined) {
       const mp = sy.pYes;
-      res.textContent = `${ans ? 'Evet' : 'Hayır'} dedin. Kitapta bu senaryoda onay: ${band(sc.book)}; model: ${pc(mp)}.` +
-        (sc.id === 'dongu' ? ` Mantıken ${pc(BOOK.loopLogical)} beklenirdi.` : '');
+      res.textContent = T.scRes(ans, band(sc.book), pc(mp)) + (sc.id === 'dongu' ? T.scResLoop(pc(BOOK.loopLogical)) : '');
     } else res.textContent = sc ? sc.ask : '';
     // iki sistem
     setW($('coldB'), sy.cold / 3.6); setW($('hotB'), sy.hot / 3.6);
-    $('coldT').textContent = `${S.dims.saved} kişi kurtarmak, 1 kişiyi kaybetmek: net kazanç hesabı ${S.dims.saved - 1}. Sayı arttıkça çekim yavaşça büyür.`;
+    $('coldT').textContent = T.coldNote(S.dims.saved, S.dims.saved - 1);
     const hp = sy.hotParts;
     $('parts').innerHTML =
-      `<li><span>Ölümü seçmek</span><b>${hp.choice > 0 ? 'var' : 'yok'}</b></li>` +
-      `<li><span>Kasla araç yapmak</span><b>${hp.force > 0 ? 'güçlü' : 'yok'}</b></li>` +
-      `<li><span>Yakınlık</span><b>${hp.prox > 0 ? 'küçük' : 'yok'}</b></li>`;
+      `<li><span>${T.parts.choice}</span><b>${hp.choice > 0 ? T.parts.choiceOn : T.parts.off}</b></li>` +
+      `<li><span>${T.parts.force}</span><b>${hp.force > 0 ? T.parts.forceOn : T.parts.off}</b></li>` +
+      `<li><span>${T.parts.prox}</span><b>${hp.prox > 0 ? T.parts.proxOn : T.parts.off}</b></li>`;
     // grafik
     SCENARIOS.forEach((s, i) => {
       const r = rows[i], p = scenarioP(s), cons = systems(dimsOf(s)).pConsistent;
@@ -363,45 +362,45 @@ export function mount(container: HTMLElement): () => void {
       r.dia.setAttribute('opacity', showDia ? '1' : '0');
       if (showDia) r.dia.setAttribute('transform', `translate(${px(cons)},${PL.top + i * PL.row})`);
       const a = S.ans[s.id];
-      r.you.textContent = a === undefined ? '' : a ? 'Sen: evet' : 'Sen: hayır';
+      r.you.textContent = a === undefined ? '' : T.youAnswer(a);
       r.g.classList.toggle('sel', S.sel === s.id);
       r.g.setAttribute('aria-pressed', String(S.sel === s.id));
-      r.g.setAttribute('aria-label', `${s.short}: model ${pc(p)}, kitap ${band(s.book)}${a === undefined ? '' : a ? ', senin kararın evet' : ', senin kararın hayır'}`);
+      r.g.setAttribute('aria-label', T.rowAria(s.short, pc(p), band(s.book), a));
     });
     noNum.setAttribute('opacity', '1');
     rows[5].dot.setAttribute('cx', String(px(sy.pYes)));
     rows[5].you.textContent = pc(sy.pYes);
-    rows[5].g.setAttribute('aria-label', `Ayarların: model ${pc(sy.pYes)}`);
+    rows[5].g.setAttribute('aria-label', T.customAria(pc(sy.pYes)));
     rows[5].g.classList.toggle('sel', S.sel === null);
     // girdiler
     syncForce(); syncProx(); syncIntent(); savedSl.set(S.dims.saved);
     // sonuç
     resEl.innerHTML = SCENARIOS.map((s) => {
       const a = S.ans[s.id];
-      return `<li><span>${s.short}</span><span class="v">${a === undefined ? '—' : a ? 'evet' : 'hayır'}</span><span class="v bk">${band(s.book)}${s.id === 'dongu' ? ` (mantıken ~${pc(BOOK.loopLogical)})` : ''}</span></li>`;
+      return `<li><span>${s.short}</span><span class="v">${a === undefined ? '—' : a ? T.resYes : T.resNo}</span><span class="v bk">${band(s.book)}${s.id === 'dongu' ? T.resLoop(pc(BOOK.loopLogical)) : ''}</span></li>`;
     }).join('');
     const pf = profile(S.ans);
-    const gap = S.ans.anahtar === true && S.ans.kopru === false ? ' Anahtara evet, itmeye hayır: kitaptaki ana örüntü, kişisel güç farkı.' : '';
+    const gap = S.ans.anahtar === true && S.ans.kopru === false ? T.profGap : '';
     $('prof').textContent = pf === 'bekliyor'
-      ? 'Beş senaryoyu da yanıtla. Kitapta deneklerin yaklaşık %30\'u tutarlı deontolog, %30\'u tutarlı faydacı; kalanlar senaryoya göre değişiyor.'
-      : pf === 'faydaci' ? 'Beşine de evet: tutarlı faydacı örüntü. Kitapta deneklerin yaklaşık %30\'u böyle.' + gap
-        : pf === 'deontolog' ? 'Beşine de hayır: tutarlı deontolog örüntü. Kitapta deneklerin yaklaşık %30\'u böyle.' + gap
-          : 'Senaryoya göre değiştin; kitaptaki deneklerin kalanı da böyle.' + gap;
+      ? T.profWait
+      : pf === 'faydaci' ? T.profUtil + gap
+        : pf === 'deontolog' ? T.profDeon + gap
+          : T.profMixed + gap;
     $('gMe').setAttribute('aria-pressed', String(S.g === 'me'));
     $('gThem').setAttribute('aria-pressed', String(S.g === 'them'));
     $('gText').textContent = GREENE_TXT[S.g];
     // Knobe
     $('kHarm').setAttribute('aria-pressed', String(S.knobe === 'zarar'));
     $('kHelp').setAttribute('aria-pressed', String(S.knobe === 'yarar'));
-    $('kText').textContent = KNOBE_TXT[S.knobe] + (S.knobe === 'zarar' ? ' Patron çevreye zarar vermeyi isteyerek mi yaptı?' : ' Patron çevreye yardım etmeyi isteyerek mi yaptı?');
+    $('kText').textContent = KNOBE_TXT[S.knobe];
     const kr = $('kRes');
     kr.hidden = S.kAns === null;
     if (S.kAns !== null) {
       const rate = S.knobe === 'zarar' ? BOOK.knobe.zarar : BOOK.knobe.yarar;
-      kr.innerHTML = `<p>${S.kAns ? '"İsteyerek yaptı"' : '"İsteyerek yapmadı"'} dedin. Kitapta ${S.knobe === 'zarar' ? 'zarar' : 'yarar'} senaryosunda ${pc(rate)} "isteyerek" dedi.</p>` +
-        `<div class="kb"><span>Zarar</span><div class="track" style="--c:var(--amy)"><b style="width:${BOOK.knobe.zarar * 100}%"></b></div><b>${pc(BOOK.knobe.zarar)}</b></div>` +
-        `<div class="kb"><span>Yarar</span><div class="track" style="--c:var(--pfc)"><b style="width:${BOOK.knobe.yarar * 100}%"></b></div><b>${pc(BOOK.knobe.yarar)}</b></div>` +
-        '<p>Aynı patron, aynı kayıtsızlık; niyet yargısı sonucun iyi ya da kötü olmasına göre kayıyor.</p>';
+      kr.innerHTML = `<p>${T.kResult(S.kAns, S.knobe === 'zarar', pc(rate))}</p>` +
+        `<div class="kb"><span>${T.kBarHarm}</span><div class="track" style="--c:var(--amy)"><b style="width:${BOOK.knobe.zarar * 100}%"></b></div><b>${pc(BOOK.knobe.zarar)}</b></div>` +
+        `<div class="kb"><span>${T.kBarHelp}</span><div class="track" style="--c:var(--pfc)"><b style="width:${BOOK.knobe.yarar * 100}%"></b></div><b>${pc(BOOK.knobe.yarar)}</b></div>` +
+        `<p>${T.kClosing}</p>`;
     }
   }
   const answer = (v: boolean) => { if (S.sel) { S.ans = { ...S.ans, [S.sel]: v }; dirty = true; } };
@@ -415,11 +414,11 @@ export function mount(container: HTMLElement): () => void {
   scope.on($('kNo'), 'click', () => { S.kAns = false; dirty = true; });
   function barTrolley(): void {
     const sy = systems(S.dims);
-    const word = (v: number) => (v < 0.9 ? 'düşük' : v < 1.8 ? 'orta' : 'yüksek');
+    const word = (v: number) => (v < 0.9 ? T.levels.low : v < 1.8 ? T.levels.mid : T.levels.high);
     setBar(describeTrolley(S.dims), [
-      { label: 'Evet olasılığı', text: pc(sy.pYes), frac: sy.pYes, color: 'var(--ink)' },
-      { label: 'Soğuk çekim', text: word(sy.cold), frac: sy.cold / 3.6, color: 'var(--pfc)' },
-      { label: 'Sıcak alarm', text: word(sy.hot), frac: sy.hot / 3.6, color: 'var(--amy)' },
+      { label: T.barYes, text: pc(sy.pYes), frac: sy.pYes, color: 'var(--ink)' },
+      { label: T.barCold, text: word(sy.cold), frac: sy.cold / 3.6, color: 'var(--pfc)' },
+      { label: T.barHot, text: word(sy.hot), frac: sy.hot / 3.6, color: 'var(--amy)' },
     ]);
   }
 
@@ -430,16 +429,16 @@ export function mount(container: HTMLElement): () => void {
   let runPun = simulate(S.seed, S.soc, true);
   const resim = () => { runNone = simulate(S.seed, S.soc, false); runPun = simulate(S.seed, S.soc, true); dirty = true; };
   const play = () => { S.rev = reduced ? PG.rounds : 0; S.acc = 0; dirty = true; };
-  const socItems = [{ k: 'yuksek', name: 'Yüksek sosyal sermaye ve hukuk' }, { k: 'orta', name: 'Orta' }, { k: 'dusuk', name: 'Düşük sosyal sermaye ve hukuk' }];
+  const socItems = [{ k: 'yuksek', name: T.socHigh }, { k: 'orta', name: T.socMid }, { k: 'dusuk', name: T.socLow }];
   const SOC: Record<string, Society> = { yuksek: PROFILES.yuksek, orta: { capital: 0.5, law: 0.5 }, dusuk: PROFILES.dusuk };
   const socKey = (): string | null => socItems.find((it) => SOC[it.k].capital === S.soc.capital && SOC[it.k].law === S.soc.law)?.k ?? null;
   const syncSoc = toggles($('socChips'), socItems, socKey, (k) => setSociety(SOC[k]));
-  const syncPun = toggles($('punChips'), [{ k: 'on', name: 'Ceza aşaması açık' }, { k: 'off', name: 'Ceza aşaması kapalı' }], () => (S.pun ? 'on' : 'off'), (k) => { S.pun = k === 'on'; });
+  const syncPun = toggles($('punChips'), [{ k: 'on', name: T.punOn }, { k: 'off', name: T.punOff }], () => (S.pun ? 'on' : 'off'), (k) => { S.pun = k === 'on'; });
   let capSl: SliderHandle, lawSl: SliderHandle, roundSl: SliderHandle;
   function setSociety(s: Society): void { S.soc = { ...s }; capSl.set(Math.round(s.capital * 100)); lawSl.set(Math.round(s.law * 100)); resim(); play(); }
-  capSl = makeSlider($('socSl'), { name: 'Sosyal sermaye', hint: 'İnsanlara ve kurumlara güven; düştükçe antisosyal ceza artar', min: 0, max: 100, step: 5, val: 85, fmt: (v) => `%${v}`, cb: (v) => { S.soc = { ...S.soc, capital: v / 100 }; resim(); play(); }, color: 'var(--pfc)' });
-  lawSl = makeSlider($('socSl'), { name: 'Hukukun üstünlüğü', hint: 'Kurallar ve yaptırımlar ne kadar işler', min: 0, max: 100, step: 5, val: 85, fmt: (v) => `%${v}`, cb: (v) => { S.soc = { ...S.soc, law: v / 100 }; resim(); play(); }, color: 'var(--pfc)' });
-  roundSl = makeSlider($('roundSl'), { name: 'Gösterilen tur', hint: 'Turları tek tek gez; oklar o turdaki cezayı gösterir', min: 1, max: PG.rounds, step: 1, val: PG.rounds, fmt: (v) => `${v} / ${PG.rounds}`, cb: (v) => { S.rev = v; S.acc = 0; dirty = true; } });
+  capSl = makeSlider($('socSl'), { name: T.capName, hint: T.capHint, min: 0, max: 100, step: 5, val: 85, fmt: (v) => percent(String(v)), cb: (v) => { S.soc = { ...S.soc, capital: v / 100 }; resim(); play(); }, color: 'var(--pfc)' });
+  lawSl = makeSlider($('socSl'), { name: T.lawName, hint: T.lawHint, min: 0, max: 100, step: 5, val: 85, fmt: (v) => percent(String(v)), cb: (v) => { S.soc = { ...S.soc, law: v / 100 }; resim(); play(); }, color: 'var(--pfc)' });
+  roundSl = makeSlider($('roundSl'), { name: T.roundName, hint: T.roundHint, min: 1, max: PG.rounds, step: 1, val: PG.rounds, fmt: (v) => `${v} / ${PG.rounds}`, cb: (v) => { S.rev = v; S.acc = 0; dirty = true; } });
   scope.on($('replay'), 'click', play);
   scope.on($('reseed'), 'click', () => { S.seed++; resim(); play(); });
 
@@ -467,7 +466,7 @@ export function mount(container: HTMLElement): () => void {
   });
   for (let g = 0; g < PG.groups; g++) {
     const [cx, cy] = cellXY(g);
-    svgText(gSvg, { class: 'ax', x: cx + 90, y: cy + 150 - 6, 'text-anchor': 'middle' }, `Grup ${g + 1}`);
+    svgText(gSvg, { class: 'ax', x: cx + 90, y: cy + 150 - 6, 'text-anchor': 'middle' }, T.group(g + 1));
   }
   function drawGroups(): void {
     const run = S.pun ? runPun : runNone;
@@ -492,7 +491,7 @@ export function mount(container: HTMLElement): () => void {
         'marker-end': `url(#${id}-${p.anti ? 'ma' : 'mp'})`,
       }, edgeLayer);
     }
-    gSvg.setAttribute('aria-label', `${Math.max(1, S.rev)}. tur, ${S.pun ? 'ceza aşaması açık' : 'ceza aşaması kapalı'}: oyuncuların katkıları ortalama ${f1(avgContribution(r))}, ceza oku ${r.pun.length}`);
+    gSvg.setAttribute('aria-label', T.groupsAria(Math.max(1, S.rev), S.pun, f1(avgContribution(r)), r.pun.length));
   }
 
   // Zaman grafikleri
@@ -502,16 +501,16 @@ export function mount(container: HTMLElement): () => void {
   const c1y = (v: number): number => C1.bot - ((C1.bot - C1.top) * v) / PG.E;
   yGrid(c1, C1.x0, C1.x1, c1y, [0, 10, 20], String);
   for (let t = 1; t <= PG.rounds; t += t === 1 ? 2 : 2) svgText(c1, { class: 'ax', x: rx(t), y: C1.bot + 14, 'text-anchor': 'middle' }, String(t));
-  svgText(c1, { class: 'ax', x: (C1.x0 + C1.x1) / 2, y: C1.bot + 28, 'text-anchor': 'middle' }, 'tur');
+  svgText(c1, { class: 'ax', x: (C1.x0 + C1.x1) / 2, y: C1.bot + 28, 'text-anchor': 'middle' }, T.round);
   const lnNone = svg('polyline', { class: 'ln none', points: '' }, c1), lnPun = svg('polyline', { class: 'ln pun', points: '' }, c1);
-  const lbNone = svgText(c1, { class: 'lb', x: 0, y: 0 }, 'cezasız'), lbPun = svgText(c1, { class: 'lb', x: 0, y: 0 }, 'cezalı');
+  const lbNone = svgText(c1, { class: 'lb', x: 0, y: 0 }, T.noPun), lbPun = svgText(c1, { class: 'lb', x: 0, y: 0 }, T.withPun);
   const mkPts = (rs: Round[], upTo: number): string => rs.slice(0, upTo).map((r, i) => `${rx(i + 1).toFixed(1)},${c1y(avgContribution(r)).toFixed(1)}`).join(' ');
 
   const C2 = { x0: 34, x1: 346, top: 20, bot: 112 };
   const c2 = $<SVGElement>('chart2');
   const c2Grid = svg('g', {}, c2), c2Bars = svg('g', {}, c2);
   for (let t = 1; t <= PG.rounds; t += 2) svgText(c2, { class: 'ax', x: rx(t, C2), y: C2.bot + 14, 'text-anchor': 'middle' }, String(t));
-  svgText(c2, { class: 'ax', x: (C2.x0 + C2.x1) / 2, y: C2.bot + 28, 'text-anchor': 'middle' }, 'tur');
+  svgText(c2, { class: 'ax', x: (C2.x0 + C2.x1) / 2, y: C2.bot + 28, 'text-anchor': 'middle' }, T.round);
   const c2Leg = svgText(c2, { class: 'ax', x: C2.x0, y: 9 }, '');
   function drawCharts(): void {
     const n = Math.max(S.rev, 0);
@@ -532,27 +531,27 @@ export function mount(container: HTMLElement): () => void {
       svg('rect', { class: 'b-pro', x, y: C2.bot - h1, width: bw, height: h1 }, c2Bars);
       svg('rect', { class: 'b-anti', x, y: C2.bot - h1 - h2, width: bw, height: h2 }, c2Bars);
     });
-    c2Leg.textContent = 'mavi bedava binene, kırmızı işbirlikçiye';
+    c2Leg.textContent = T.punLegend;
   }
 
   // Henrich
-  const mkItems = [{ k: 'hadza', name: 'Hadza benzeri' }, { k: 'big', name: 'Büyük, pazara bağlı' }];
+  const mkItems = [{ k: 'hadza', name: T.mkHadza }, { k: 'big', name: T.mkBig }];
   const MK: Record<string, Market> = { hadza: HADZA, big: BIG_MARKET };
   const mkKey = (): string | null => mkItems.find((it) => { const m = MK[it.k]; return m.market === S.mk.market && m.size === S.mk.size && m.religion === S.mk.religion; })?.k ?? null;
   const syncMk = toggles($('mkChips'), mkItems, mkKey, (k) => setMarket(MK[k]));
   const sizeOf = (t: number): number => Math.round(Math.pow(10, 1 + 3 * t));
   const tOf = (size: number): number => (Math.log10(size) - 1) / 3;
   let mSl: SliderHandle, zSl: SliderHandle, rSl: SliderHandle;
-  const fmtSize = (t: number): string => { const s = sizeOf(t); return s >= 1000 ? `~${(Math.round(s / 100) / 10).toString().replace('.', ',')} bin kişi` : `~${s} kişi`; };
+  const fmtSize = (t: number): string => { const s = sizeOf(t); return s >= 1000 ? T.sizeThousand((Math.round(s / 100) / 10).toString().replace('.', decimalSep())) : T.sizePeople(s); };
   function setMarket(m: Market): void {
     S.mk = { ...m };
     mSl.set(Math.round(m.market * 100)); zSl.set(Math.round(tOf(m.size) * 100) / 100); rSl.set(Math.round(m.religion * 100)); dirty = true;
   }
   const mkSlH = $('mkSl');
-  mSl = makeSlider(mkSlH, { name: 'Pazar entegrasyonu', hint: 'Kalorinin ne kadarı satın alınıyor (kitapta 0 ile ~%90 arası)', min: 0, max: 90, step: 5, val: 0, fmt: (v) => `%${v}`, cb: (v) => { S.mk = { ...S.mk, market: v / 100 }; dirty = true; }, color: 'var(--dop)' });
-  zSl = makeSlider(mkSlH, { name: 'Topluluk büyüklüğü', hint: 'Kitapta 50 kişiden küçük gruplar ile 5000+ kişilik topluluklar karşılaştırılır', min: 0, max: 1, step: 0.01, val: tOf(40), fmt: fmtSize, cb: (v) => { S.mk = { ...S.mk, size: sizeOf(v) }; dirty = true; }, color: 'var(--dop)' });
-  rSl = makeSlider(mkSlH, { name: 'Dünya dinine mensup oranı', hint: 'Arttıkça üçüncü taraf cezası artar (kitapta; her ölçümde tutarlı değil)', min: 0, max: 100, step: 5, val: 0, fmt: (v) => `%${v}`, cb: (v) => { S.mk = { ...S.mk, religion: v / 100 }; dirty = true; }, color: 'var(--dop)' });
-  makeSlider(mkSlH, { name: 'Senin teklifin', hint: 'Karşıya önerdiğin pay; eğri reddedilme olasılığını gösterir', min: 0, max: 50, step: 1, val: 30, fmt: (v) => `%${v}`, cb: (v) => { S.offer = v / 100; dirty = true; }, color: 'var(--ink)' });
+  mSl = makeSlider(mkSlH, { name: T.marketName, hint: T.marketHint, min: 0, max: 90, step: 5, val: 0, fmt: (v) => percent(String(v)), cb: (v) => { S.mk = { ...S.mk, market: v / 100 }; dirty = true; }, color: 'var(--dop)' });
+  zSl = makeSlider(mkSlH, { name: T.sizeName, hint: T.sizeHint, min: 0, max: 1, step: 0.01, val: tOf(40), fmt: fmtSize, cb: (v) => { S.mk = { ...S.mk, size: sizeOf(v) }; dirty = true; }, color: 'var(--dop)' });
+  rSl = makeSlider(mkSlH, { name: T.religionName, hint: T.religionHint, min: 0, max: 100, step: 5, val: 0, fmt: (v) => percent(String(v)), cb: (v) => { S.mk = { ...S.mk, religion: v / 100 }; dirty = true; }, color: 'var(--dop)' });
+  makeSlider(mkSlH, { name: T.offerName, hint: T.offerHint, min: 0, max: 50, step: 1, val: 30, fmt: (v) => percent(String(v)), cb: (v) => { S.offer = v / 100; dirty = true; }, color: 'var(--ink)' });
 
   const C3 = { x0: 34, x1: 346, top: 12, bot: 148 };
   const c3 = $<SVGElement>('chart3');
@@ -560,7 +559,7 @@ export function mount(container: HTMLElement): () => void {
   const oy = (p: number): number => C3.bot - (C3.bot - C3.top) * p;
   yGrid(c3, C3.x0, C3.x1, oy, [0, 0.5, 1], pc);
   for (const v of [0, 0.1, 0.2, 0.3, 0.4, 0.5]) svgText(c3, { class: 'ax', x: ox(v), y: C3.bot + 14, 'text-anchor': v === 0 ? 'start' : v === 0.5 ? 'end' : 'middle' }, pc(v));
-  svgText(c3, { class: 'ax', x: (C3.x0 + C3.x1) / 2, y: C3.bot + 28, 'text-anchor': 'middle' }, 'karşıya önerilen pay');
+  svgText(c3, { class: 'ax', x: (C3.x0 + C3.x1) / 2, y: C3.bot + 28, 'text-anchor': 'middle' }, T.offerAxis);
   const curve = (m: Market): string => Array.from({ length: 51 }, (_, i) => { const o = i / 100; return `${ox(o).toFixed(1)},${oy(pReject(o, m)).toFixed(1)}`; }).join(' ');
   svg('polyline', { class: 'ln ref1', points: curve(HADZA) }, c3);
   svg('polyline', { class: 'ln ref2', points: curve(BIG_MARKET) }, c3);
@@ -568,25 +567,25 @@ export function mount(container: HTMLElement): () => void {
   const offLine = svg('line', { class: 'offline', y1: C3.top, y2: C3.bot }, c3);
   const offDot = svg('circle', { class: 'cur-dot', r: 4.5 }, c3);
   const lgY = 198;
-  svg('line', { class: 'ln ref1', x1: C3.x0, x2: C3.x0 + 18, y1: lgY - 4, y2: lgY - 4 }, c3); svgText(c3, { class: 'ax lgt', x: C3.x0 + 23, y: lgY }, 'Hadza benzeri');
-  svg('line', { class: 'ln ref2', x1: C3.x0 + 104, x2: C3.x0 + 122, y1: lgY - 4, y2: lgY - 4 }, c3); svgText(c3, { class: 'ax lgt', x: C3.x0 + 127, y: lgY }, 'büyük, pazara bağlı');
-  svg('line', { class: 'ln cur', x1: C3.x0 + 232, x2: C3.x0 + 250, y1: lgY - 4, y2: lgY - 4 }, c3); svgText(c3, { class: 'ax lgt', x: C3.x0 + 255, y: lgY }, 'seçili');
+  svg('line', { class: 'ln ref1', x1: C3.x0, x2: C3.x0 + 18, y1: lgY - 4, y2: lgY - 4 }, c3); svgText(c3, { class: 'ax lgt', x: C3.x0 + 23, y: lgY }, T.legHadza);
+  svg('line', { class: 'ln ref2', x1: C3.x0 + 104, x2: C3.x0 + 122, y1: lgY - 4, y2: lgY - 4 }, c3); svgText(c3, { class: 'ax lgt', x: C3.x0 + 127, y: lgY }, T.legBig);
+  svg('line', { class: 'ln cur', x1: C3.x0 + 232, x2: C3.x0 + 250, y1: lgY - 4, y2: lgY - 4 }, c3); svgText(c3, { class: 'ax lgt', x: C3.x0 + 255, y: lgY }, T.legSelected);
   function drawMarket(): void {
     lnCur.setAttribute('points', curve(S.mk));
     offLine.setAttribute('x1', String(ox(S.offer))); offLine.setAttribute('x2', String(ox(S.offer)));
     offDot.setAttribute('cx', String(ox(S.offer))); offDot.setAttribute('cy', String(oy(pReject(S.offer, S.mk))));
-    $('mkRead').innerHTML = tiles([['Diktatör: karşıya verilen', pc(dictatorOffer(S.mk))], ['Bu payın altı reddedilir', pc(rejectThreshold(S.mk))],
-      ['Senin teklifin reddedilir', pc(pReject(S.offer, S.mk))], ['En kârlı teklif', pc(bestOffer(S.mk))]]);
+    $('mkRead').innerHTML = tiles([[T.tileDictator, pc(dictatorOffer(S.mk))], [T.tileThreshold, pc(rejectThreshold(S.mk))],
+      [T.tileReject, pc(pReject(S.offer, S.mk))], [T.tileBest, pc(bestOffer(S.mk))]]);
     syncMk();
   }
   function barPG(): void {
     const run = S.pun ? runPun : runNone;
     const n = Math.max(1, S.rev);
     const r = run.rounds[n - 1];
-    setBar(S.pun ? describePG(runNone, runPun, n, S.soc) : `${n}. tur, ceza aşaması kapalı: ortalama katkı ${Math.round(avgContribution(r))}/${PG.E}. Bedava binenler cezasız kalınca katkılar erir.`, [
-      { label: 'Ortalama katkı', text: `${Math.round(avgContribution(r))}/${PG.E}`, frac: avgContribution(r) / PG.E, color: 'var(--pfc)' },
-      { label: 'Antisosyal ceza', text: S.pun ? pc(antiFraction(runPun, n)) : '—', frac: S.pun ? antiFraction(runPun, n) : 0, color: 'var(--amy)' },
-      { label: 'Ort. kazanç', text: f1(avgPay(r)), frac: avgPay(r) / 32, color: 'var(--ink)' },
+    setBar(S.pun ? describePG(runNone, runPun, n, S.soc) : T.pgOff(n, Math.round(avgContribution(r)), PG.E), [
+      { label: T.barAvgContrib, text: `${Math.round(avgContribution(r))}/${PG.E}`, frac: avgContribution(r) / PG.E, color: 'var(--pfc)' },
+      { label: T.barAntiPun, text: S.pun ? pc(antiFraction(runPun, n)) : '—', frac: S.pun ? antiFraction(runPun, n) : 0, color: 'var(--amy)' },
+      { label: T.barAvgPay, text: f1(avgPay(r)), frac: avgPay(r) / 32, color: 'var(--ink)' },
     ]);
   }
 
@@ -597,10 +596,9 @@ export function mount(container: HTMLElement): () => void {
   const syncMix = toggles($('mixChips'), MIXES.map((m) => ({ k: m.id, name: m.name })), mixKey, (k) => setMix(MIXES.find((m) => m.id === k)!.mix));
   let jSl: SliderHandle, lSl: SliderHandle;
   function setMix(m: Mix): void { S.mix = { ...m }; jSl.set(Math.round(m.justified * 100)); lSl.set(Math.round(m.liar * 100)); dirty = true; }
-  jSl = makeSlider($('mixSl'), { name: 'Haklı dürüstlük', hint: 'İki atıştan daha çok kazandıranı bildirenler', min: 0, max: 100, step: 5, val: 65, fmt: (v) => `%${v}`, cb: (v) => { S.mix = normMix({ ...S.mix, justified: v / 100 }); lSl.set(Math.round(S.mix.liar * 100)); dirty = true; }, color: 'var(--dop)' });
-  lSl = makeSlider($('mixSl'), { name: 'Tam yalan', hint: 'Atışa bakmadan hep 5 bildirenler. Kalanlar dürüst', min: 0, max: 100, step: 1, val: 5, fmt: (v) => `%${v}`, cb: (v) => { S.mix = normMix({ ...S.mix, liar: v / 100 }); dirty = true; }, color: 'var(--amy)' });
+  jSl = makeSlider($('mixSl'), { name: T.jName, hint: T.jHint, min: 0, max: 100, step: 5, val: 65, fmt: (v) => percent(String(v)), cb: (v) => { S.mix = normMix({ ...S.mix, justified: v / 100 }); lSl.set(Math.round(S.mix.liar * 100)); dirty = true; }, color: 'var(--dop)' });
+  lSl = makeSlider($('mixSl'), { name: T.lName, hint: T.lHint, min: 0, max: 100, step: 1, val: 5, fmt: (v) => percent(String(v)), cb: (v) => { S.mix = normMix({ ...S.mix, liar: v / 100 }); dirty = true; }, color: 'var(--amy)' });
   scope.on($('rerun'), 'click', () => { S.dseed++; dirty = true; });
-  const N_DICE = 300;
   const H = { x0: 34, x1: 346, top: 18, bot: 172 };
   const hist = $<SVGElement>('hist');
   const hGrid = svg('g', {}, hist), hBars = svg('g', {}, hist);
@@ -609,7 +607,7 @@ export function mount(container: HTMLElement): () => void {
   const hExp = svg('g', {}, hist);
   FACES.forEach((f) => {
     svgText(hist, { class: 'ax', x: hx(f), y: H.bot + 14, 'text-anchor': 'middle' }, String(f));
-    svgText(hist, { class: 'ax', x: hx(f), y: H.bot + 27, 'text-anchor': 'middle' }, `ödeme ${payOf(f)}`);
+    svgText(hist, { class: 'ax', x: hx(f), y: H.bot + 27, 'text-anchor': 'middle' }, T.payout(payOf(f)));
   });
   const DICE_CLS = ['d0', 'd1', 'd2'];
   function drawHist(): void {
@@ -631,26 +629,25 @@ export function mount(container: HTMLElement): () => void {
         svg('rect', { class: `hb ${DICE_CLS[t]}`, x: hx(f) - bw / 2, y: y(acc + p), width: bw, height: y(acc) - y(acc + p) }, hBars);
         acc += p;
       }
-      svgText(hBars, { class: 'hv', x: hx(f), y: y(acc) - 4, 'text-anchor': 'middle' }, `%${Math.round(acc * 100)}`);
+      svgText(hBars, { class: 'hv', x: hx(f), y: y(acc) - 4, 'text-anchor': 'middle' }, pc(acc));
       svg('line', { class: 'expt', x1: hx(f) - bw / 2 - 3, x2: hx(f) + bw / 2 + 3, y1: y(exp[i]), y2: y(exp[i]) }, hExp);
     });
     const e = expectedDist(m);
-    $('diceRead').innerHTML = tiles([['Beklenen ödeme', expectedPay(e).toFixed(2).replace('.', ',')], ['Dürüstken', '2,50'],
-      ['Düz dağılımdan sapma', pc(deviation(e))], ['Dürüst oyuncu payı', pc(honestShare(m))]]);
-      `<div class="ro"><span>Dürüst oyuncu payı</span><b>${pc(honestShare(m))}</b></div>`;
-    hist.setAttribute('aria-label', `Bildirilen sayılar: ${FACES.map((f, i) => `${f} için %${Math.round((tot[i] / N_DICE) * 100)}`).join(', ')}`);
+    $('diceRead').innerHTML = tiles([[T.tileExpPay, f2(expectedPay(e))], [T.tileWhenHonest, f2(2.5)],
+      [T.tileDeviation, pc(deviation(e))], [T.tileHonestShare, pc(honestShare(m))]]);
+    hist.setAttribute('aria-label', T.histAriaLive(FACES.map((f, i) => T.histItem(f, pc(tot[i] / N_DICE)))));
     syncMix();
   }
   const diceEl = $('dice');
   function drawRoll(): void {
     const rr = $('rollRes');
-    if (!S.roll) { diceEl.innerHTML = '<p class="note">Zarları at: ilk atış ödüllendirilir, ikincisi zarın düzgün olduğunu sınamak içindir.</p>'; rr.innerHTML = ''; return; }
+    if (!S.roll) { diceEl.innerHTML = `<p class="note">${T.rollHint}</p>`; rr.innerHTML = ''; return; }
     const [a, b] = S.roll, best = bestOf(a, b);
-    diceEl.innerHTML = `<div class="die" role="img" aria-label="İlk atış: ${a}"><small>İlk atış</small><b>${a}</b></div><div class="die" role="img" aria-label="İkinci atış: ${b}"><small>İkinci atış</small><b>${b}</b></div>`;
+    diceEl.innerHTML = `<div class="die" role="img" aria-label="${T.firstRoll}: ${a}"><small>${T.firstRoll}</small><b>${a}</b></div><div class="die" role="img" aria-label="${T.secondRoll}: ${b}"><small>${T.secondRoll}</small><b>${b}</b></div>`;
     rr.innerHTML =
-      `<li><span>Dürüst</span><span class="v">${a} bildirir</span><span class="v bk">ödeme ${payOf(a)}</span></li>` +
-      `<li><span>Haklı dürüstlük</span><span class="v">${best} bildirir</span><span class="v bk">ödeme ${payOf(best)}</span></li>` +
-      `<li><span>Tam yalan</span><span class="v">5 bildirir</span><span class="v bk">ödeme 5</span></li>`;
+      `<li><span>${T.rowHonest}</span><span class="v">${T.reports(a)}</span><span class="v bk">${T.payout(payOf(a))}</span></li>` +
+      `<li><span>${T.rowJustified}</span><span class="v">${T.reports(best)}</span><span class="v bk">${T.payout(payOf(best))}</span></li>` +
+      `<li><span>${T.rowLiar}</span><span class="v">${T.reports(5)}</span><span class="v bk">${T.payout(5)}</span></li>`;
   }
   scope.on($('roll'), 'click', () => {
     const r = mulberry32(S.rollSeed++ * 97 + 11);
@@ -661,52 +658,37 @@ export function mount(container: HTMLElement): () => void {
   function barDice(): void {
     const m = normMix(S.mix), e = expectedDist(m);
     setBar(describeDice(m), [
-      { label: 'Beklenen ödeme', text: expectedPay(e).toFixed(2).replace('.', ','), frac: expectedPay(e) / 5, color: 'var(--ink)' },
-      { label: 'Düz dağılımdan sapma', text: pc(deviation(e)), frac: deviation(e), color: 'var(--dop)' },
-      { label: '5 bildirenler', text: pc(e[4]), frac: e[4], color: 'var(--amy)' },
+      { label: T.barExpPay, text: f2(expectedPay(e)), frac: expectedPay(e) / 5, color: 'var(--ink)' },
+      { label: T.barDeviation, text: pc(deviation(e)), frac: deviation(e), color: 'var(--dop)' },
+      { label: T.barFive, text: pc(e[4]), frac: e[4], color: 'var(--amy)' },
     ]);
   }
 
   /* ---------- Rehberli turlar ---------- */
   const tour1 = createTour(scope, [
-    { title: 'Anahtar: hesap kazanır', text: 'Tramvay beş kişiye gidiyor; anahtar tek kişiye çeviriyor. Kitapta çevirenler %60-70.',
-      look: 'Mavi çubuk kırmızıdan uzun, "evet" ~%67.', apply: () => selectScenario('anahtar') },
-    { title: 'Köprüden itme: sezgi kazanır', text: 'Aynı 5\'e karşı 1, ama kişiyi elinle itmek gerekiyor. Kişisel güçle araç yapmak sıcak sistemi çalıştırıyor; kitapta onay ~%30.',
-      look: 'Kırmızı çubuk maviyi geçiyor, "evet" ~%30.', apply: () => selectScenario('kopru') },
-    { title: 'Sopa mesafeyi açmıyor', text: 'Sopayla itmek temas mesafesini artırır ama kişisel gücü kaldırmaz. Kitapta direnç azalmadı.',
-      look: 'Kırmızı çubuk hâlâ uzun, model ~%34.', apply: () => selectScenario('sopa') },
-    { title: 'Döngü: sezgi niyeti görmüyor', text: 'Kişinin ölümü araç, ama anahtarla yapılıyor. Mantıken itmeyle aynı (~%30) olmalı; kitapta %60-70 kaldı.',
-      look: 'İçi boş baklava (tutarlı kural) ile dolu nokta arasındaki boşluk.', apply: () => selectScenario('dongu') },
-    { title: 'Sayı hesabı büyütür', text: 'Köprüde kurtarılan sayısı artınca soğuk çekim büyür, sıcak alarm aynı kalır. Eğri modelin varsayımı; kitapta yalnızca 5\'e karşı 1 var.',
-      look: 'Mavi çubuk uzar, "evet" yükselir.', apply: () => selectScenario('kopru', 30) },
-    { title: 'Ne zaman sezgi, ne zaman akıl?', text: 'Greene: hızlı sezgi "Ben mi, Biz mi" sorunlarında iyi işler; "Biz mi, Onlar mı" çatışmasında yavaş akıl gerekir.',
-      look: 'Sonuç kartındaki iki düğme.', apply: () => { selectScenario('anahtar'); S.g = 'them'; } },
+    { ...T.tour1[0], apply: () => selectScenario('anahtar') },
+    { ...T.tour1[1], apply: () => selectScenario('kopru') },
+    { ...T.tour1[2], apply: () => selectScenario('sopa') },
+    { ...T.tour1[3], apply: () => selectScenario('dongu') },
+    { ...T.tour1[4], apply: () => selectScenario('kopru', 30) },
+    { ...T.tour1[5], apply: () => { selectScenario('anahtar'); S.g = 'them'; } },
   ]);
   $('tour1').appendChild(tour1.el);
 
   const tour2 = createTour(scope, [
-    { title: 'Cezasız: katkılar erir', text: 'Başta herkes havuza koyar; bedava binen kazanır, koşullu işbirlikçiler ona uyar ve katkılar düşer.',
-      look: 'Kesikli "cezasız" çizgi iniyor.', apply: () => { S.pun = false; setSociety(PROFILES.yuksek); } },
-    { title: 'Yüksek sosyal sermaye: ceza işler', text: 'Düşük katkı verenler cezalanıp katkılarını artırıyor. Kitapta ABD ve Avustralya\'da antisosyal ceza neredeyse yoktu.',
-      look: 'Mavi çizgi yükseliyor, ceza çubukları mavi.', apply: () => { S.pun = true; setSociety(PROFILES.yuksek); } },
-    { title: 'Düşük sosyal sermaye: ceza geri teper', text: 'Elmas simgeli oyuncular kendilerinden fazla verenleri cezalandırıyor. Kitapta Umman ve Yunanistan\'da cömertliği cezalandırmak bencilliği cezalandırmaktan fazla paraya mal oldu.',
-      look: 'Kırmızı kesikli oklar ve çubuklar; katkı geriliyor.', apply: () => { S.pun = true; setSociety(PROFILES.dusuk); } },
-    { title: 'Adalet evrensel değil: Hadza', text: 'Pazarı olmayan küçük bir topluluk: Diktatör Oyunu\'nda ortalama %27 veriliyor, sıfırın üstündeki hemen her teklif kabul.',
-      look: 'Reddetme eğrisi sol dipte.', apply: () => setMarket(HADZA) },
-    { title: 'Pazar ve büyük topluluk', text: 'Pazar ~%90 ve topluluk 5000+ kişi olunca teklifler 50:50\'ye yaklaşıyor, adaletsiz teklifler reddediliyor.',
-      look: 'Eğri sağa kayıyor, en kârlı teklif yükseliyor.', apply: () => setMarket(BIG_MARKET) },
+    { ...T.tour2[0], apply: () => { S.pun = false; setSociety(PROFILES.yuksek); } },
+    { ...T.tour2[1], apply: () => { S.pun = true; setSociety(PROFILES.yuksek); } },
+    { ...T.tour2[2], apply: () => { S.pun = true; setSociety(PROFILES.dusuk); } },
+    { ...T.tour2[3], apply: () => setMarket(HADZA) },
+    { ...T.tour2[4], apply: () => setMarket(BIG_MARKET) },
   ]);
   $('tour2').appendChild(tour2.el);
 
   const tour3 = createTour(scope, [
-    { title: 'Herkes dürüstse', text: 'İlk atış bildirilirse her sayı altıda bir çıkar; sütunlar düz çizgiye yakın, örneklem küçük olduğu için biraz dalgalanır.',
-      look: 'Sütunlar kesikli %17 çizgisinin etrafında.', apply: () => setMix(MIXES[0].mix) },
-    { title: 'Haklı dürüstlük', text: 'Herkes iki atıştan daha çok kazandıranı bildirirse 5 payı 11/36, 6 payı 1/36 olur. Kimse yalan söylemiyor sayılır; kendini aklıyor.',
-      look: 'Sütunlar soldan sağa yükseliyor, 6 neredeyse yok.', apply: () => setMix({ justified: 1, liar: 0 }) },
-    { title: 'Düşük ve yüksek ihlalli toplum', text: 'Kitapta kural ihlali arttıkça yalan arttı. Hazır karışımlar yalnızca bu yönü gösterir; oranlar varsayım.',
-      look: 'Yüksek ihlalde beklenen ödeme belirgin yüksek.', apply: () => setMix(MIXES[2].mix) },
-    { title: 'Tam yalan nadir', text: 'Kitapta hiçbir kültürde en çok kazandıran sayı sık uydurulmadı; çoğu iki atıştan yükseğini bildirdi.',
-      look: 'Kırmızı pay küçük; tam yalan %100 olunca tek sütun.', apply: () => setMix({ justified: 0.65, liar: 0.05 }) },
+    { ...T.tour3[0], apply: () => setMix(MIXES[0].mix) },
+    { ...T.tour3[1], apply: () => setMix({ justified: 1, liar: 0 }) },
+    { ...T.tour3[2], apply: () => setMix(MIXES[2].mix) },
+    { ...T.tour3[3], apply: () => setMix({ justified: 0.65, liar: 0.05 }) },
   ]);
   $('tour3').appendChild(tour3.el);
 
@@ -737,7 +719,7 @@ export function mount(container: HTMLElement): () => void {
   }
   render();
   // Sayfa altı notları (nasıl çalışıyor + Kitapta) ayrı parçadan gelir; etkileşimli kısım daha küçük açılır.
-  lazyNotes(scope, root, () => import('./notes').then((m) => m.NOTES));
+  lazyNotes(scope, root, () => import('./notes').then((m) => m.default()));
   scope.loop(frame, { root, onResume: () => { last = performance.now(); dirty = true; } });
 
   return () => {

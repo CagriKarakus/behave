@@ -1,8 +1,10 @@
 // Küçük ek kart: bir varyantın (alelin) popülasyonda yayılması. Wright-Fisher: her nesil seçilim + rastlantısal örnekleme (sürüklenme).
+import { percent } from '../../i18n/fmt';
 import { mulberry32 } from '../rng';
 import { svg, svgText } from '../kit';
 import { chips, el, pc, slider, type Ctx } from '../ui';
 import { fitness, runWF, selectP, type SelMode } from './model';
+import { L } from './text';
 
 const SIZES = [20, 50, 100, 200, 500];
 const GENS = 100;
@@ -10,26 +12,27 @@ const RUNS = 30;
 const X0 = 38, X1 = 350, Y0 = 8, Y1 = 118;
 
 export function createAllele(ctx: Ctx, host: HTMLElement, getF: () => number) {
+  const a = L().allele;
   let mode: SelMode = 'yararli', strength = 5, p0 = 10, ni = 2, seed = 7;
   let dirty = true;
   host.innerHTML =
-    '<p class="note">Yeni bir varyant (alel) nesiller içinde yayılır mı, elenir mi, dengeye mi varır? Çizgiler tek tek popülasyonlar, kesikli çizgi yalnızca seçilimin beklentisi.</p>' +
+    `<p class="note">${a.intro}</p>` +
     '<div class="chips" data-ref="mo"></div><div class="sliders" data-ref="sl"></div><div class="row" data-ref="ac"></div>' +
-    '<div class="chart"><svg viewBox="0 0 360 150" role="img" aria-label="Varyant frekansının nesiller boyunca grafiği" data-ref="ch"></svg></div>' +
+    `<div class="chart"><svg viewBox="0 0 360 150" role="img" aria-label="${a.chartAria}" data-ref="ch"></svg></div>` +
     '<p class="say-al" data-ref="out"></p>';
   const q = <T extends HTMLElement | SVGElement = HTMLElement>(k: string): T => host.querySelector<T>(`[data-ref="${k}"]`) as T;
   const touch = (): void => { dirty = true; };
 
-  const setMode = chips(q('mo'), ctx.scope, [{ key: 'notr', label: 'Nötr' }, { key: 'yararli', label: 'Yararlı' }, { key: 'zararli', label: 'Zararlı' }, { key: 'denge', label: 'Heterozigot avantajı' }],
-    (k) => { mode = k as SelMode; setMode(mode); touch(); }, 'Seçilim türü');
+  const setMode = chips(q('mo'), ctx.scope, (['notr', 'yararli', 'zararli', 'denge'] as const).map((key) => ({ key, label: a.modes[key] })),
+    (k) => { mode = k as SelMode; setMode(mode); touch(); }, a.modeAria);
   const sl = q('sl');
-  const sS = slider(ctx.scope, sl, { id: `${ctx.id}-al-s`, name: 'Seçilim gücü', hint: 'Varyantın uyumu ne kadar değiştirdiği (nötrde etkisiz).', min: 1, max: 20, value: strength, cls: 'sl', fmt: (v) => `%${v}`, onInput: (v) => { strength = v; touch(); } });
-  slider(ctx.scope, sl, { id: `${ctx.id}-al-p`, name: 'Başlangıç frekansı', hint: 'Varyantı taşıyan alel payı.', min: 1, max: 50, value: p0, cls: 'sl', fmt: (v) => `%${v}`, onInput: (v) => { p0 = v; touch(); } });
-  slider(ctx.scope, sl, { id: `${ctx.id}-al-n`, name: 'Popülasyon büyüklüğü', hint: 'Küçük popülasyonda rastlantı (sürüklenme) güçlü.', min: 0, max: SIZES.length - 1, value: ni, cls: 'sl', fmt: (v) => `${SIZES[v]} birey`, onInput: (v) => { ni = v; touch(); } });
+  const sS = slider(ctx.scope, sl, { id: `${ctx.id}-al-s`, name: a.sName, hint: a.sHint, min: 1, max: 20, value: strength, cls: 'sl', fmt: (v) => percent(String(v)), onInput: (v) => { strength = v; touch(); } });
+  slider(ctx.scope, sl, { id: `${ctx.id}-al-p`, name: a.pName, hint: a.pHint, min: 1, max: 50, value: p0, cls: 'sl', fmt: (v) => percent(String(v)), onInput: (v) => { p0 = v; touch(); } });
+  slider(ctx.scope, sl, { id: `${ctx.id}-al-n`, name: a.nName, hint: a.nHint, min: 0, max: SIZES.length - 1, value: ni, cls: 'sl', fmt: (v) => a.nFmt(SIZES[v]), onInput: (v) => { ni = v; touch(); } });
   const ac = q('ac');
-  const again = el(ac, 'button', 'btn', 'Yeniden çalıştır'); again.type = 'button';
+  const again = el(ac, 'button', 'btn', a.again); again.type = 'button';
   ctx.scope.on(again, 'click', () => { seed++; touch(); });
-  const fromMut = el(ac, 'button', 'btn', 'Yukarıdaki mutasyondan al'); fromMut.type = 'button';
+  const fromMut = el(ac, 'button', 'btn', a.fromMut); fromMut.type = 'button';
   ctx.scope.on(fromMut, 'click', () => {
     const f = getF();
     mode = f >= 0.995 ? 'notr' : 'zararli';
@@ -59,10 +62,10 @@ export function createAllele(ctx: Ctx, host: HTMLElement, getF: () => number) {
       svgText(s, { x: X0 - 6, y: gy(v) + 3, 'text-anchor': 'end' }, pc(v));
     }
     svgText(s, { x: X0, y: 138 }, '0');
-    svgText(s, { x: X1, y: 138, 'text-anchor': 'end' }, `${GENS} nesil`);
+    svgText(s, { x: X1, y: 138, 'text-anchor': 'end' }, a.gens(GENS));
     runs.slice(0, 12).forEach((r) => svg('path', { d: path(r), class: 'ln al-run' }, s));
     svg('path', { d: path(exp), class: 'ln al-exp' }, s);
-    q('out').textContent = `${RUNS} popülasyonda: ${fix} sabitlendi (%100), ${lost} elendi (%0), ${RUNS - fix - lost} arada; son frekans ortalaması ${pc(mean)}.`;
+    q('out').textContent = a.out(RUNS, fix, lost, RUNS - fix - lost, pc(mean));
   }
   return {
     draw(): boolean { if (!dirty) return false; dirty = false; render(); return true; },

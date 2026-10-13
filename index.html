@@ -13,6 +13,8 @@
         var t = localStorage.getItem('behave-theme');
         if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
       } catch (e) {}
+      // İngilizce rotada (#/en...) dil özniteliği ilk boyamadan önce doğru olsun.
+      if (/^#\/en(\/|\?|$)/.test(location.hash)) document.documentElement.lang = 'en';
     </script>
   </head>
   <body>

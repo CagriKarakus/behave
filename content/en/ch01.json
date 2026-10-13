@@ -1,0 +1,123 @@
+{
+ "summary": "The chapter discusses why it is so hard to define basic terms before studying a behavior. Concepts such as aggression, altruism, competition and empathy are both loaded with ideological meanings and classified differently in each discipline. The author distinguishes types of aggression such as defensive-offensive, impulsive-premeditated, reactive-spontaneous and hot-blooded-cold-blooded, and adds displaced aggression. Next, the question of whether pure self-sacrifice exists is opened up through the tension between hot-blooded evil and cold-blooded kindness. That binding a wounded person and shooting an enemy engaged the same contextual decision circuit in a virtual room experiment shows that the book will treat behaviors not as good or bad, but as the biology of the best and worst behaviors.",
+ "keyConcepts": [
+  {
+   "term": "Ideological load of terms",
+   "explanation": "The meanings of concepts such as aggression and altruism are loaded with values and defined differently across disciplines; for this reason it is hard to build a shared definition."
+  },
+  {
+   "term": "Types of aggression",
+   "explanation": "The distinctions defensive-offensive, impulsive-premeditated, reactive-spontaneous and hot-blooded-cold-blooded (instrumental) are classifications, each of which points to a different biology."
+  },
+  {
+   "term": "Displaced aggression",
+   "explanation": "This is aggression that a stressed organism directs at a target weaker than itself; once shown, this tendency can lower stress hormones."
+  },
+  {
+   "term": "Hot-blooded and cold-blooded behavior",
+   "explanation": "Violence committed with emotion is easier to understand and is seen as mitigating; kindness or evil without emotion, by contrast, disturbs people."
+  },
+  {
+   "term": "The pure altruism question",
+   "explanation": "Whether an act of kindness can be separated from the expectation of reciprocity, reputation or reward is debated; examples such as organ donation bring this question to the fore."
+  },
+  {
+   "term": "Contextual decision",
+   "explanation": "Even when the motor action differs, two actions can be regarded as the same in terms of context, and this evaluation is made by the prefrontal cortex (PFC)."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Virtual room experiment (brain scan)",
+   "finding": "Participants could bind a wounded person or shoot an alien. Although the two actions differ motorically, when both were judged to be right, the same contextual circuit in the prefrontal cortex (PFC) was activated."
+  },
+  {
+   "name": "Observations of displaced aggression",
+   "finding": "A rat exposed to shock attacks a smaller rat nearby, a beta male baboon defeated by an alpha male chases the lowest-ranking (omega) male, and rates of domestic violence rise when unemployment increases. This tendency can lower the aggressor's stress hormones."
+  },
+  {
+   "name": "Magazine profile of organ donors (MacFarquhar, 2009)",
+   "finding": "People who donate kidneys to strangers display a self-sacrifice that expects nothing in return but appears unemotional. This lack of emotion creates suspicion and unease in those around them."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Aggression Classification Map",
+   "shows": "Shows how a behavior can be positioned on different axes (reactive or spontaneous, hot-blooded or cold-blooded, impulsive or premeditated) and how blurry the boundaries are.",
+   "inputs": [
+    "Level of provocation",
+    "Emotional intensity",
+    "Clarity of purpose (instrumental or angry)"
+   ],
+   "outputs": [
+    "Position of the behavior on the axes",
+    "Which classifications lie close to one another"
+   ]
+  },
+  {
+   "title": "Context Gate",
+   "shows": "Compares how the same motor action (bandage or fire) takes on different meanings depending on the type of target and the situation, while also showing the corresponding decision-circuit activity.",
+   "inputs": [
+    "Type of target (wounded person or enemy)",
+    "Type of action (bandage or fire)"
+   ],
+   "outputs": [
+    "Contextual appropriateness score of the action",
+    "Decision-circuit activity (relative)"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "The Introduction sets out the framework for the aggression and cooperation topics defined in this chapter."
+  },
+  {
+   "why": "The importance of context highlighted at the end of this chapter is deepened in the second chapter through the workings of the brain one second earlier."
+  },
+  {
+   "why": "The effect of displaced aggression on stress hormones is covered in detail in the fourth chapter."
+  }
+ ],
+ "experiments": {
+  "ch01-e1": {
+   "name": "Shock-induced displaced aggression (rat) and stress buffering",
+   "researchers": "R. Ulrich and N. Azrin (shock-induced aggression); S. Levine et al.; R. Sapolsky et al. (displaced aggression in baboons)",
+   "question": "Does a stressed animal release its stress by turning on a target weaker than itself?",
+   "method": "The book gives this example in only a few sentences: the tendency of a rat given electric shocks to bite a smaller rat nearby, baboon aggression directed at those lower in the hierarchy after a defeat, and domestic violence that rises as unemployment increases are listed as examples of the same pattern. In the fourth chapter, it is described that when a shocked rat can bite another rat, its stress response and its risk of ulcers decrease.",
+   "finding": "An animal exposed to stress or pain may direct its aggression at a weak third party. According to the book, this kind of displaced aggression can lower the aggressor's stress hormone levels; in Sapolsky's baboon data, among males of the same rank, individuals who directed their aggression at someone else after a defeat had lower glucocorticoid levels.",
+   "roleInChapter": "It shows that aggression is directed not only at the person who threatens but at the weak target within reach of the person under stress; it explains how aggression is tied to context and stress.",
+   "caveats": "The book gives no citation for this in this chapter; the topic is treated with its sources in the fourth chapter (ch04 note 78). The account in the first chapter is a one-sentence series of examples.",
+   "replication": {
+    "note": "Aggression triggered by pain or shock, and the redirection of aggression to a third party under stress, are a classic phenomenon that has been observed repeatedly in rodents and primates for decades. The part about aggression lowering stress hormones rests on fewer studies, most of them in animals.",
+    "refs": [
+     "Ulrich and Azrin 1962",
+     "Virgin and Sapolsky 1997"
+    ]
+   }
+  },
+  "ch01-e2": {
+   "name": "Magazine profile of organ donors (MacFarquhar)",
+   "researchers": "Larissa MacFarquhar",
+   "question": "How do people who donate organs to strangers experience self-sacrifice that expects nothing in return, and how do those around them respond to it?",
+   "method": "The journalist Larissa MacFarquhar described, in a long magazine article, people who donate kidneys to strangers and the reactions of those around them. This is not an experiment but a qualitative investigation; the book nevertheless mentions it as a study.",
+   "finding": "The donors display a self-sacrifice that expects nothing in return; but this self-sacrifice seems to carry no emotional warmth, and this lack of emotion creates suspicion and unease in those around them.",
+   "roleInChapter": "It makes concrete the question of pure altruism and why cold-blooded kindness is found disturbing; it questions the affinity we feel for hot-blooded behaviors.",
+   "replication": {
+    "note": "This is not an experiment but a journalistic investigation; the concept of replication does not apply directly. The observation that unrelated kidney donors meet with suspicion from those around them is not a systematically tested finding.",
+    "refs": []
+   }
+  },
+  "ch01-e3": {
+   "name": "Virtual room experiment (bandage or fire)",
+   "researchers": "J. King, J. Blair et al.",
+   "question": "When the same motor actions (applying a bandage or firing a weapon) are judged to be right depending on the context, is the same decision circuit activated in the brain?",
+   "method": "Participants in the scanner enter a virtual room; they encounter either a wounded person or a hostile alien. Participants can apply a bandage to the wounded person or fire at the alien; brain scanning is carried out in both conditions.",
+   "finding": "Binding the wounded person and shooting the alien are motorically different actions; but when both are the contextually appropriate (“right”) action, the same circuit is activated in the part of the prefrontal cortex (PFC) most sensitive to context.",
+   "roleInChapter": "It shows that what matters is less the motor appearance of the behavior than the meaning of that action in context. It is the basis for the book's treating behaviors not as good or bad, but as the biology of the best and worst behaviors.",
+   "replication": {
+    "note": "This is a single fMRI study with a small sample; to our knowledge no direct replication has been published. It should also be kept in mind that fMRI studies of this period were generally conducted with low statistical power.",
+    "refs": []
+   }
+  }
+ }
+}

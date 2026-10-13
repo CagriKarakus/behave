@@ -1,0 +1,248 @@
+{
+ "summary": "The chapter discusses how the biological causes of behavior are reflected in criminal justice, and why the notion of “mitigated free will” is inconsistent. The author shows that the idea of a “homunculus” that operates separately from brain biology and makes the decisions keeps shifting the boundaries in areas such as adolescence, brain damage, mental illness and moral praise. The Libet experiment and the “free won't” debate show that where to draw this boundary is an open question. The author argues that the multifactorial biology of behavior is not yet fully understood, but that as knowledge grows, today's notions of culpability and punishment will change. The practical consequence is a system that gives up the idea that punishment is deserved or virtuous and focuses instead on protection from dangerous people.",
+ "keyConcepts": [
+  {
+   "term": "Mitigated free will",
+   "explanation": "This is the view that people should be held responsible, but that a severe illness or brain damage can reduce responsibility. The author argues that this amounts to adding a “spiritual” exception to biology."
+  },
+  {
+   "term": "Homunculus",
+   "explanation": "This is the hypothetical inner agent, separate from brain biology, that makes the decisions. The author notes that this agent is positioned outside scientific causation and is therefore problematic."
+  },
+  {
+   "term": "Causation vs. compulsion",
+   "explanation": "This is the distinction that every behavior has a cause, but only some are “compulsive.” According to the author, this distinction cannot be defended without a hidden homunculus."
+  },
+  {
+   "term": "Readiness potential and free won't",
+   "explanation": "This is the debate about the brain signal that precedes a movement, as measured by Libet, and the timing of the conscious decision. According to Libet, the possibility of vetoing the decision may still exist."
+  },
+  {
+   "term": "Multifactorial biology",
+   "explanation": "This is the idea that complex social behaviors cannot be explained by a single gene or a single hormone, but arise from the combination of many biological and environmental factors."
+  },
+  {
+   "term": "Aptitude vs. effort",
+   "explanation": "This is the tendency to attribute aptitude to biology and effort, or resistance to impulse, to free will. The author regards this distinction as a mental dualism and finds it mistaken."
+  },
+  {
+   "term": "Limbic punishment",
+   "explanation": "This is the idea that deciding on responsibility for a crime is associated with the cognitive dlPFC, while deciding on the appropriate punishment is associated with the emotional vmPFC, amygdala and insula, and that punishing activates the dopaminergic reward system."
+  },
+  {
+   "term": "Explaining lots, predicting little",
+   "explanation": "Biological knowledge can explain the general patterns of behavior, but it is weak at predicting in advance what a specific individual will do."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Multifactorial Behavior Prediction",
+   "shows": "Shows how the predictability of an outcome increases as biological and life factors are added, but does not always reach certainty.",
+   "inputs": [
+    "Serotonin transporter gene status",
+    "Parental loss in childhood",
+    "Poverty and living alone",
+    "Cortisol (glucocorticoid) level",
+    "Culture (individualist / collectivist)"
+   ],
+   "outputs": [
+    "Prediction percentage (approximate)",
+    "Contribution of each added factor",
+    "Margin of uncertainty"
+   ]
+  },
+  {
+   "title": "Readiness Signal and Veto Window",
+   "shows": "Shows how the timing measured in the Libet experiment changes with attention delay and the veto window.",
+   "inputs": [
+    "Timing of the readiness signal",
+    "Delay in reporting the conscious decision",
+    "Length of the veto window"
+   ],
+   "outputs": [
+    "Measured “decision” time",
+    "Whether a veto is possible (yes / no)",
+    "Share of the delay due to experimental artifact"
+   ]
+  },
+  {
+   "title": "The Cost and Reward of Punishment",
+   "shows": "Shows how far punishing an unfair offer is worth bearing the cost, and how effective the pleasure is when punishment is free.",
+   "inputs": [
+    "Cost of punishment",
+    "Reward weight of free punishment",
+    "Unfairness level of the offer"
+   ],
+   "outputs": [
+    "Frequency of punishment",
+    "Total cost paid",
+    "Relationship between the reward effect and cost"
+   ]
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Libet experiment (1980s)",
+   "finding": "In an experiment in which participants moved their wrist whenever they wished, the readiness signal appeared about half a second before the reported decision. Critics argued that this delay may stem from the experimental setup (the clock and attention) rather than from the decision itself; Libet himself proposed the possibility of a veto in this interval."
+  },
+  {
+   "name": "Praise: “You're so smart” or “You worked so hard” (Dweck)",
+   "finding": "When children were praised for their effort, they put in more effort on the next task and were more resilient in the face of difficulty. The opposite was seen in those praised for their intelligence; effort came to seem suspect, even like something that puts one at a disadvantage."
+  },
+  {
+   "name": "Impulse control in adolescents (Steinberg)",
+   "finding": "The frontal immaturity of the adolescent brain is more decisive for impulse control that unfolds within seconds; in moral and social decisions that take days, such as the decision about an abortion, adolescents' capacity appears stronger. The author explains the APA's seemingly different stances in two cases with this distinction."
+  },
+  {
+   "name": "Studies of predictive power",
+   "finding": "According to the book's approximate calculation, a single serotonin transporter gene gives about 10% predictive power, and this rises as factors such as childhood loss and poverty are added. Even so, the predictability of behavioral outcomes, such as a person with frontal damage showing violence, an abused child becoming an abuser in adulthood, or war trauma turning into PTSD, mostly remains below 50%."
+  },
+  {
+   "name": "Brain imaging of punishment",
+   "finding": "The decision about criminal responsibility was associated with the dlPFC, while the decision about the amount of punishment was associated with the vmPFC, amygdala and anterior insula. The more active the reward system was during costless punishment, the more participants were later willing to pay in order to punish."
+  },
+  {
+   "name": "Causation through magnetic stimulation",
+   "finding": "Transcranial magnetic stimulation, which temporarily interferes with the cortex, was able to change moral decision making, punishment decisions and generosity. The author presents this as a strong example that biology affects behavior at the level of causation, not merely correlation."
+  }
+ ],
+ "links": [
+  {
+   "why": "How adolescent frontal maturation affects impulse control is the background to the discussion of the Roper decision in this chapter."
+  },
+  {
+   "why": "The discussion of frontal cortex damage, criminal behavior and neurolaw is opened in ch2; the book leaves the details to this chapter."
+  },
+  {
+   "why": "The serotonin transporter gene and childhood adversity are cited as examples in this chapter's discussion of the single gene versus multifactorial biology."
+  },
+  {
+   "why": "The response to unfairness and the Ultimatum Game are used in this chapter to explain the link between the desire to punish and the reward system."
+  },
+  {
+   "why": "Ramachandran's exaggerated claim about mirror neurons is mentioned in this chapter with a reference to ch14."
+  }
+ ],
+ "verifyNotes": [
+  "The legal cases (M'Naghten, Roper v. Simmons, Graham, Miller) and the details of the Libet experiment are reported as the book presents them; these cases and experiments have not been independently verified.",
+  "The prediction percentages are approximate values given by the book; they should not be presented as exact statistics."
+ ],
+ "experiments": {
+  "ch16-e1": {
+   "name": "Impulse control in adolescents and the APA's seemingly inconsistent stance (Steinberg)",
+   "researchers": "L. Steinberg et al.",
+   "question": "Does adolescent immaturity apply equally to impulse control within seconds and to moral decisions that take days?",
+   "method": "This is not an experiment but a theoretical analysis: in light of research on adolescent brain development, Steinberg et al. compared two positions of the APA: in Roper v. Simmons, that adolescents are too immature to be subject to adult criminal standards, and in an earlier case, that adolescents are mature enough to decide on an abortion without parental consent.",
+   "finding": "An abortion decision unfolds over days to weeks and requires logical reasoning about moral and social issues; whether or not to shoot someone may require impulse control within seconds. The immaturity of the adolescent frontal cortex is far more decisive for the latter; therefore the APA's two positions are not contradictory.",
+   "roleInChapter": "Shows how the development of the adolescent brain enters the debate on law and responsibility. It argues that the boundaries of free will can change depending on time and the type of decision.",
+   "caveats": null,
+   "replication": {
+    "note": "The distinction that “cold” (slow, deliberate) cognitive capacity matures earlier than “hot” (emotional, momentary) psychosocial maturity was supported in a study by Steinberg's team with more than 5,000 people in 11 countries (Icenogle et al. 2019).",
+    "refs": [
+     "Steinberg et al. 2009",
+     "Icenogle et al. 2019, Law and Human Behavior"
+    ]
+   }
+  },
+  "ch16-e2": {
+   "name": "Libet readiness potential and “free won't” experiment",
+   "researchers": "B. Libet et al.",
+   "question": "Does the conscious decision to move come before the brain signal that initiates the movement, and does this decision leave room to veto the movement?",
+   "method": "A participant connected to an EEG looked at a clock, flexed their wrist whenever they felt like it, and reported by reading the clock the moment they decided to do so. The EEG was examined for the “readiness potential” from the motor cortex and supplementary premotor areas, indicating that the movement was about to begin.",
+   "finding": "The readiness potential appeared consistently about half a second before the reported moment of conscious intention. According to Libet, this showed that the brain prepares for the movement before awareness; however, in the interval between them there remained the possibility of consciously vetoing the movement (in Ramachandran's phrase, “free won't”).",
+   "roleInChapter": "Addresses the question of timing between consciousness and biology. Shows how the concept of free will is limited by biological processes and where this boundary might be drawn.",
+   "caveats": "Sapolsky relays that critics argue the half-second delay most likely stems not from the decision itself but from the experimental setup (reading the clock and attention). The uncertainty of feeling a decision is also a subject of criticism.",
+   "replication": {
+    "note": "The finding that the readiness potential begins before the reported decision has been replicated, but its interpretation has been seriously questioned: Schurger et al. 2012 showed that the readiness potential may not be a decision signal but the accumulation of random neural fluctuations; the reliability of the time-reporting method has also been criticized.",
+    "refs": [
+     "Libet et al. 1983",
+     "Schurger et al. 2012, PNAS"
+    ]
+   }
+  },
+  "ch16-e3": {
+   "name": "Praise for intelligence versus praise for effort (Dweck)",
+   "researchers": "C. Mueller and C. Dweck",
+   "question": "Are children more likely to put in more effort and be more resilient in the face of difficulty on the next task when they are praised for their intelligence or for their effort?",
+   "method": "Children successfully completed a task or test; they then received praise such as “you're so smart” or “you worked so hard.” Their effort, resilience, enjoyment of the process and views of achievement on subsequent tasks were compared.",
+   "finding": "Children praised for their effort worked harder the next time, were more resilient, enjoyed the process more, and cared about success for its own sake rather than for the grade. The exact opposite was seen in those praised for their intelligence; effort began to be perceived as something suspect and belittling.",
+   "roleInChapter": "Shows how the aptitude versus effort distinction establishes a dualism of “free will” and “biology” in everyday language. Both intelligence and effort have biological foundations; this distinction nevertheless gives rise to a moral hierarchy.",
+   "caveats": null,
+   "replication": {
+    "note": "A preregistered replication of Mueller and Dweck's intelligence-praise effect (Li and Bates 2019) failed to reproduce the finding; meta-analyses of growth mindset interventions (Sisk et al. 2018) found very small effects on average. In the large national experiment (Yeager et al. 2019), small but significant effects were reported in certain subgroups.",
+    "refs": [
+     "Mueller and Dweck 1998",
+     "Li and Bates 2019, JEP: General",
+     "Sisk et al. 2018, Psychological Science",
+     "Yeager et al. 2019, Nature"
+    ]
+   }
+  },
+  "ch16-e4": {
+   "name": "Interfering with the cortex through magnetic stimulation and moral decisions",
+   "researchers": "The book does not name a specific study; representative example: L. Young et al.",
+   "question": "If the cortex is temporarily interfered with, do moral decision making, punishment and generosity change?",
+   "method": "At this point the book does not describe a single experiment; it refers collectively to transcranial magnetic stimulation (TMS) studies that temporarily activate or suppress a region of the cortex. In the representative example (Young et al.), participants who received TMS to the right temporoparietal junction evaluated moral scenarios in which the information about intent and outcome varied.",
+   "finding": "According to the book, interfering with the cortex through TMS can change moral decisions, punishment decisions, and levels of generosity and empathy. In the study by Young et al., disruption of the right TPJ reduced the weight given to a person's beliefs and intentions in moral judgment (e.g., failed attempts to cause harm were judged more leniently).",
+   "roleInChapter": "Shows the difference between correlation and causation. It argues that biology does not merely describe behavior but can change it, and offers evidence against the free will debate.",
+   "caveats": null,
+   "replication": {
+    "note": "Because the book does not point to a specific study, a general replication status cannot be given. TMS studies on social decision making generally have small samples and their effects vary from study to study; a direct replication of Young et al. 2010 is not known.",
+    "refs": [
+     "Young et al. 2010"
+    ]
+   }
+  },
+  "ch16-e5": {
+   "name": "Predictability of depression from biological factors",
+   "researchers": "Sapolsky's thought experiment (serotonin transporter gene and environment interaction; ch08)",
+   "question": "How predictable are a person's depression and social behavior once their biological and life factors are known?",
+   "method": "This is not an experiment but a worked example by Sapolsky: to predict the behavior of a person with depression, information is added in sequence, such as the serotonin transporter gene, parental loss in childhood, living alone in poverty, blood glucocorticoid level, individualist/collectivist culture and the menstrual cycle, and how the predictive power increases is discussed in rough terms.",
+   "finding": "Gene information alone gives about 10% prediction, perhaps 25% when parental loss in childhood is added, and perhaps 40% when poverty and loneliness are added; with other factors it can rise above 50%. Even in cases such as severe frontal damage, the predictability of particular behavioral outcomes is generally well below 50%.",
+   "roleInChapter": "Makes concrete the idea of “explaining lots but predicting little.” Shows why the multifactorial nature of biology makes it difficult to predict individual behavior.",
+   "caveats": "These proportions are approximate estimates given by the book and should not be presented as “exact statistics” (the book's text also signals that they are estimates, with expressions such as “maybe” and “say”). The detailed source is not included in the notes of this chapter; the ch8 account should be consulted.",
+   "replication": {
+    "note": "The 5-HTTLPR × stress interaction on which the example is based could not be replicated in large studies: a joint analysis involving more than 38,000 people (Culverhouse et al. 2018) and a systematic test of candidate gene studies (Border et al. 2019) found no significant effect. The numbers are also presented in the book as rough estimates.",
+    "refs": [
+     "Caspi et al. 2003",
+     "Culverhouse et al. 2018, Molecular Psychiatry",
+     "Border et al. 2019, American Journal of Psychiatry"
+    ]
+   }
+  },
+  "ch16-e6": {
+   "name": "The neural basis of culpability and punishment decisions (Buckholtz; Gospic)",
+   "researchers": "J. W. Buckholtz et al.; K. Gospic et al.",
+   "question": "Are decisions about criminal responsibility and the amount of punishment associated with the same brain regions, and do emotional regions shape the punishment decision?",
+   "method": "In the study by Buckholtz et al., participants in the scanner read norm-violation scenarios and separately determined the perpetrator's responsibility and the appropriate punishment. Gospic et al., in turn, examined amygdala activity during the immediate rejection of unfair offers in the Ultimatum Game.",
+   "finding": "The culpability/responsibility decision was associated with cognitive dlPFC activity; the decision about appropriate punishment activated the emotional vmPFC, amygdala and insula, and as activity increased, the punishment given also increased. Immediate rejection of an unfair offer was linked to amygdala activity.",
+   "roleInChapter": "Shows that the desire to punish relies on a limbic process rather than on “cold-blooded reason.” This makes it harder to defend punishment as a moral virtue.",
+   "caveats": null,
+   "replication": {
+    "note": "A direct replication of these fMRI findings is not known; the role of the dlPFC in the punishment decision was later tested causally with TMS (Buckholtz et al. 2015, Neuron), but the samples are small.",
+    "refs": [
+     "Buckholtz et al. 2008",
+     "Gospic et al. 2011",
+     "Buckholtz et al. 2015"
+    ]
+   }
+  },
+  "ch16-e7": {
+   "name": "Punishment of unfair offers and the reward circuit (de Quervain)",
+   "researchers": "D. J.-F. de Quervain, E. Fehr et al.",
+   "question": "Which brain circuits lie behind the desire for costly punishment, and does the activity of these circuits predict willingness to pay for punishment?",
+   "method": "Participants played an economic game in the scanner; in some rounds they could punish the player who had treated them unfairly at no cost, and in others by spending points they had earned. Activity in dopaminergic reward regions (the striatum) was measured during punishment.",
+   "finding": "The higher the activity in the dopaminergic reward system during costless punishment, the more points the participant was willing to spend to punish in the other condition.",
+   "roleInChapter": "Shows that punishment may be not “justice” but an emotional process rewarded by dopamine. For this reason, the view of punishment as a virtue is called into question.",
+   "caveats": null,
+   "replication": {
+    "note": "Striatal activation during punishment has been supported in some later studies (e.g., Strobel et al. 2011; Crockett et al. 2013); however, whether this activity reflects “the pleasure of revenge” or a general goal-attainment/anticipation signal is contested, and the original study had a small sample.",
+    "refs": [
+     "de Quervain et al. 2004",
+     "Strobel et al. 2011",
+     "Crockett et al. 2013"
+    ]
+   }
+  }
+ }
+}

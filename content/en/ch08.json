@@ -1,0 +1,326 @@
+{
+ "timescale": "The moment of fertilization: when the genome forms",
+ "summary": "Looking at the genetic roots of behavior, the chapter argues that genes alone are not determinative. When and how much a gene is expressed is regulated by transcription factors, epigenetic marks and environmental signals; a large part of DNA is also devoted to this regulatory function. In behavioral genetics, twin and adoption studies produce heritability estimates, but these estimates depend on the environment studied and are often overstated. Molecular studies show that the associations of serotonin, dopamine, oxytocin and steroid hormone genes with behavior are small and context-dependent, and that simple deterministic readings such as the 'warrior gene' are not supported. In the end, genes offer propensities, sensitivities and vulnerabilities; what these mean depends on the environment.",
+ "keyConcepts": [
+  {
+   "term": "Transcription factor",
+   "explanation": "Proteins that bind to promoter regions on DNA and determine whether a gene will be copied into RNA. Through these proteins, genes respond to signals from the environment."
+  },
+  {
+   "term": "Promoter",
+   "explanation": "The DNA sequence immediately in front of a gene that acts as the 'on switch' starting transcription."
+  },
+  {
+   "term": "Noncoding DNA",
+   "explanation": "Most of the genome does not code for protein; a large share of the regulatory sequences and on-off switches lies in these regions."
+  },
+  {
+   "term": "Epigenetics",
+   "explanation": "Processes that silence a gene through chemical marks settling onto it, without any change in the DNA sequence. Some epigenetic marks can be transmitted across generations."
+  },
+  {
+   "term": "Alternative splicing",
+   "explanation": "Production of more than one protein from the same gene region by choosing different combinations of exons. For this reason the 'one gene, one protein' rule does not hold."
+  },
+  {
+   "term": "Transposable genetic element",
+   "explanation": "The movement of pieces of DNA around within the genome. It is seen in the brain, especially during the formation of neurons, which means that neurons can differ genetically from one another."
+  },
+  {
+   "term": "Heritability",
+   "explanation": "A measure of what percentage of the variation among individuals in a population, in a given environment, is due to genetic differences. It is not synonymous with a trait being inherited."
+  },
+  {
+   "term": "Twin and adoption studies",
+   "explanation": "Methods that compare the similarity of identical and fraternal twins, or of individuals who were raised apart and adopted. They have weak points such as the equal environments assumption and selective placement."
+  },
+  {
+   "term": "Gene–environment interaction",
+   "explanation": "A qualitative change in the effect of a gene depending on the environment. It is summed up by the sentence 'its effect depends on the environment.'"
+  },
+  {
+   "term": "Candidate gene and GWAS",
+   "explanation": "The candidate gene approach focuses on genes previously considered relevant; genome-wide association studies (GWAS) scan tens of thousands of genes and millions of single nucleotide variants. In both, the effect of individual variants is generally very small."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Caspi and colleagues (Duke, 2002)",
+   "finding": "In a cohort followed from birth to age 26, the low-activity variant of the MAO-A gene increased the probability of antisocial behavior about threefold, only in those who had experienced severe childhood abuse. Without abuse, the same variant had no visible effect."
+  },
+  {
+   "name": "1993 Dutch family study (MAO-A mutation)",
+   "finding": "Various aggressive and antisocial behaviors were seen in a family carrying a mutation that completely eliminates the MAO-A protein. But the same family also showed arson and exhibitionism, which shows that the 'warrior gene' reading is oversimplified."
+  },
+  {
+   "name": "Identical twins reared apart (Bouchard)",
+   "finding": "Many behavioral and personality similarities were found between twins raised in different homes. However, because selective placement, the prenatal environment and similar cultural conditions could explain some of these similarities, the size of the genetic share is contested."
+  },
+  {
+   "name": "Three-laboratory mouse study (Science, 1999)",
+   "finding": "Even when genetically identical mice were tested under the same conditions in three laboratories, the effect of cocaine differed greatly between laboratories. The increase in locomotion was measured at about 5,000 centimeters in Alberta but about 700 in Oregon and Albany. Many gene variants worked in an environment-dependent way."
+  },
+  {
+   "name": "GWAS of height and educational attainment",
+   "finding": "In studies of hundreds of thousands of people, the strongest single variant for height and body mass index explained only about 0.3-0.4% of the variance. For educational attainment, the strongest variant had an effect of around 0.02%, and all variants together explained about 2%. This picture points to the small contributions of very many genes."
+  },
+  {
+   "name": "Heritability of IQ in families of high and low socioeconomic status",
+   "finding": "The heritability of IQ was found to be about 70% in children from high-SES families but about 10% in children from low-SES families. Poverty can suppress the expression of genetic differences."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Gene–Environment Table and Heritability",
+   "shows": "Shows how the same three gene variants give different outcomes in two different environments, and how the share of total variance that is genetic changes with the environment. When the values in Environment A and B are close to each other, heritability is high; when they run in opposite directions, it becomes meaningless.",
+   "inputs": [
+    "Effect of the three variants in Environment A",
+    "Effect of the three variants in Environment B",
+    "Size of the difference between environments"
+   ],
+   "outputs": [
+    "Genetic share of variance",
+    "Environmental share of variance",
+    "Whether there is a gene–environment interaction"
+   ]
+  },
+  {
+   "title": "Heritability Falls as the Number of Environments Grows",
+   "shows": "Shows how the heritability of a trait, which looks high when measured in a single environment, falls as the number and diversity of environments increase. It carries the general logic of the plant example in the book and of the high-versus-low SES comparison.",
+   "inputs": [
+    "Number of environments studied",
+    "Diversity among environments",
+    "Size of the genetic effect"
+   ],
+   "outputs": [
+    "Heritability estimate",
+    "Share of the environmental effect",
+    "How misleading measurement in a single environment is"
+   ]
+  },
+  {
+   "title": "Combination Counter in Gene Expression",
+   "shows": "Shows why, as the genome grows, the number of possible expression profiles and the number of transcription factors required increase exponentially. It makes concrete the profile counts (such as 1, 3, 7, 15, 31) in going from one gene to three genes, four genes and five genes.",
+   "inputs": [
+    "Number of genes",
+    "Assumption of a separate transcription factor for each profile"
+   ],
+   "outputs": [
+    "Number of possible expression profiles",
+    "Number of transcription factors required",
+    "Increase in the proportion of regulatory genes"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "The chapter takes up, at the epigenetic level, the idea that environmental influences in childhood can permanently freeze the on-off state of genes. This idea was introduced in the previous chapter."
+  },
+  {
+   "why": "The roles of serotonin and dopamine in impulsivity and reward anticipation are revisited here as the groundwork for the candidate gene studies in this chapter."
+  },
+  {
+   "why": "The roles of oxytocin, vasopressin, testosterone and glucocorticoids in behavior are examined in this chapter together with the relevant genetic variants."
+  },
+  {
+   "why": "Chapter 5 leaves the subject of genes in the brain to this chapter. Read together, the two chapters show the link between brain plasticity and gene regulation."
+  },
+  {
+   "why": "The next chapter covers the distribution of the 7R variant of the DRD4 gene across populations and its relationship to culture."
+  }
+ ],
+ "experiments": {
+  "ch08-e1": {
+   "name": "Moral Spillover Effects Based on Kinship (“blood is thicker”)",
+   "researchers": "E. Uhlmann, L. Zhu, D. Pizarro and P. Bloom",
+   "question": "Do people think that a person's moral failing “spills over” onto relatives through blood ties?",
+   "method": "Participants were given scenarios: how obligated is the grandchild of someone who harmed others two generations ago to help the grandchildren of the victims (a biological grandchild was compared with a grandchild adopted at birth)? In another scenario, when one of a pair of identical twins who grew up unaware of each other committed a crime, their willingness to arrest both was compared with two unrelated people who look exactly alike.",
+   "finding": "Participants saw the biological grandchild as more obligated than the adopted grandchild. They were more willing to imprison identical twins raised in separate environments together than unrelated look-alikes; shared genes were perceived as a shared moral stain.",
+   "roleInChapter": "Shows the human tendency to see genes as an unchanging essence (essentialism), and the psychological root of excessive enthusiasm for genetic explanations.",
+   "caveats": null,
+   "replication": {
+    "note": "These are scenario-based, small-scale studies; no direct, preregistered replication is known. The broader literature on genetic essentialism supports the general trend.",
+    "refs": []
+   }
+  },
+  "ch08-e2": {
+   "name": "Adoption studies of schizophrenia (Heston; Kety, Rosenthal et al.)",
+   "researchers": "L. L. Heston; S. Kety, D. Rosenthal et al.",
+   "question": "Does the risk of schizophrenia in children given up for adoption soon after birth follow their biological families or their adoptive families?",
+   "method": "The psychiatric status of people adopted soon after birth was compared with that of their biological and adoptive relatives: Heston compared children born to schizophrenic mothers and raised in foster families with controls; Kety and Rosenthal examined the families of adoptees diagnosed with schizophrenia and the adopted-away children of schizophrenic parents.",
+   "finding": "Adoptees resembled their biological families more than their adoptive families in terms of schizophrenia and related disorders; this design revealed a strong genetic component in schizophrenia.",
+   "roleInChapter": "Introduces the logic of the adoption method (the human counterpart of cross-fostering in animal studies) for separating genetic influence from environment.",
+   "caveats": "Sapolsky relays the criticisms directed at the assumptions of adoption studies: the prenatal environment is shared, selective placement can make genetic similarity be credited to the environment, and the greater homogeneity of adoptive families (range restriction) makes it harder to see the effect of environment.",
+   "replication": {
+    "note": "A strong genetic contribution to schizophrenia has been consistently supported by Danish and Finnish adoption studies, twin studies and large genome-wide studies after 2014 (Ripke et al. 2014; Trubetskoy et al. 2022). The diagnostic criteria of the early studies have been criticized.",
+    "refs": [
+     "Tienari et al. 2004",
+     "Ripke et al. 2014",
+     "Trubetskoy et al. 2022"
+    ]
+   }
+  },
+  "ch08-e3": {
+   "name": "Minnesota Study of Twins Reared Apart",
+   "researchers": "T. J. Bouchard et al.",
+   "question": "How similar are identical twins who have the same genes but grew up in different homes in behavior and personality?",
+   "method": "Identical twins who were separated at birth and grew up in different homes unaware of each other were located in adulthood and put through extensive psychological assessment; Bouchard eventually studied more than a hundred pairs. The cultural, material and technological similarities of the homes were taken into account to control for selective placement.",
+   "finding": "Twins reared apart showed marked similarity in many domains, including intelligence and personality. Even the pair mentioned in the book, Jack Yufe and Oskar Stohr, one raised as a Jew in Israel and the other as a member of the Hitler Youth in Germany, shared many habits and personality traits.",
+   "roleInChapter": "Introduces, through twin and adoption methods, the conclusion that genetics plays an important role in many domains of behavior; the assumptions of these methods are then discussed.",
+   "caveats": "Sapolsky relays that Bouchard finds selective placement unimportant, while critics such as Leon Kamin object to this conclusion on analytic and data grounds, and he states plainly that he cannot resolve this dispute.",
+   "replication": {
+    "note": "That behavior and personality traits are moderately heritable has been supported by the Swedish study of twins reared apart (SATSA) and by a meta-analysis of 50 years of twin studies (Polderman et al. 2015). Criticisms of the equal environments assumption and of selective placement continue.",
+    "refs": [
+     "Polderman et al. 2015",
+     "Pedersen et al. 1988",
+     "Joseph 2002"
+    ]
+   }
+  },
+  "ch08-e4": {
+   "name": "Genetics of Mouse Behavior: Interactions with Laboratory Environment (three-laboratory mouse study)",
+   "researchers": "J. Crabbe, D. Wahlsten and B. Dudek",
+   "question": "Do genetically identical mouse strains show the same behavior when tested in three different laboratories under conditions standardized as far as possible?",
+   "method": "Laboratories in Oregon, Alberta and Albany tested the same mouse strains (carrying variants related to behaviors such as addiction and anxiety). Test age, date and time, weaning age, cage and bedding, feed, light, temperature, number of handlings and glove brand were equalized; even mice born in the laboratory were driven around in a minivan to mimic the jostling of shipping.",
+   "finding": "The effect of many gene variants differed greatly by laboratory. For example, in the 129/SvEvTac strain, cocaine increased locomotion over 15 minutes by 667 cm in Oregon and 701 cm in Albany, but by more than 5,000 cm in Alberta. Within-laboratory variability was small, and a few variants showed a similar effect in all three laboratories.",
+   "roleInChapter": "Shows that gene–environment interaction is everywhere, and that we can ask not what a gene “does” but only what it does in a particular environment.",
+   "caveats": "Sapolsky stresses that the environmental factors that created the difference are extremely subtle and still unidentified.",
+   "replication": {
+    "note": "Between-laboratory interaction effects have also been seen in later multi-site mouse phenotyping studies and have become one of the key pieces of evidence in the debate on reproducibility in animal research (Wahlsten et al. 2006; Kafkafi et al. 2018).",
+    "refs": [
+     "Wahlsten et al. 2006",
+     "Kafkafi et al. 2018"
+    ]
+   }
+  },
+  "ch08-e5": {
+   "name": "Socioeconomic Status Modifies Heritability of IQ in Young Children",
+   "researchers": "E. Turkheimer et al.",
+   "question": "Does a family's socioeconomic status change how much of the variation in children's IQ is explained by genetics?",
+   "method": "In a twin sample of young children, the heritability of IQ was estimated separately according to the family's socioeconomic level.",
+   "finding": "According to the book, the heritability of IQ was about 70% in children of families with high socioeconomic level and about 10% in those with low level; the negative effect of poverty overshadowed genetic differences.",
+   "roleInChapter": "Makes concrete that heritability values hold only for the environments in which they were measured, and the importance of gene–environment interaction.",
+   "caveats": null,
+   "replication": {
+    "note": "A meta-analysis (Tucker-Drob and Bates 2016) showed that the effect is found in US samples but is not seen, or is reversed, in Western Europe and Australia. A large twin-sibling study in Florida also failed to find the interaction (Figlio et al. 2017).",
+    "refs": [
+     "Tucker-Drob and Bates 2016",
+     "Figlio et al. 2017"
+    ]
+   }
+  },
+  "ch08-e6": {
+   "name": "Abnormal Behavior Associated with a Point Mutation in the Structural Gene for Monoamine Oxidase A (Dutch family)",
+   "researchers": "H. Brunner et al.",
+   "question": "How does a mutation that eliminates the MAO-A enzyme entirely affect behavior?",
+   "method": "A large Dutch family in which many male members had behavioral problems was studied; a point mutation that completely abolishes the protein was identified in the MAO-A gene on the X chromosome, and the behavior of carriers and their monoamine metabolism were assessed.",
+   "finding": "Men carrying the mutation showed various antisocial and aggressive behaviors; however, they were borderline intellectually disabled, and for some the antisocial behavior was arson and exhibitionism rather than violence.",
+   "roleInChapter": "Starts the “high serotonin = aggression” finding, with aggression increasing when serotonin cannot be broken down; it also shows how selective a reading the “warrior gene” label rests on.",
+   "caveats": "Sapolsky stresses that the paper is remembered for its aggression finding while the intellectual disability in the family and the different behaviors such as arson and exhibitionism are forgotten; for this reason he says there is as much justification for calling it a “pants-dropping gene” as a “warrior gene.”",
+   "replication": {
+    "note": "Complete MAO-A deficiency (Brunner syndrome) has been described in other families after 2014, and the co-occurrence of intellectual disability and behavioral problems has been confirmed. This is specific to a rare mutation and cannot be generalized to common variants.",
+    "refs": [
+     "Piton et al. 2014",
+     "Palmer et al. 2016"
+    ]
+   }
+  },
+  "ch08-e7": {
+   "name": "Mice Lacking MAOA (MAOA knockout mice)",
+   "researchers": "O. Cases et al.",
+   "question": "How do brain chemistry and behavior change when the MAO-A gene is deleted in mice?",
+   "method": "Mice with the MAO-A gene inactivated were produced; brain serotonin and norepinephrine levels were measured, and aggression and fear behaviors were compared with normal mice.",
+   "finding": "In these mice, which correspond to the mutation in the Dutch family, synaptic serotonin levels rose; the animals were extremely aggressive and their fear responses were heightened.",
+   "roleInChapter": "Supports the observation in the Dutch family in an experimental animal model.",
+   "caveats": "Sapolsky notes that this finding belongs to the complete absence of the protein and cannot be directly transferred to the common low-activity variants.",
+   "replication": {
+    "note": "Increased aggression in MAO-A-deficient mice has also been shown by other laboratories with different mutant lines (e.g., Scott et al. 2008; Bortolato et al.).",
+    "refs": [
+     "Scott et al. 2008",
+     "Bortolato and Shih 2011"
+    ]
+   }
+  },
+  "ch08-e8": {
+   "name": "Neural Mechanisms of Genetic Risk for Impulsivity and Violence in Humans (low-activity MAO-A variant)",
+   "researchers": "A. Meyer-Lindenberg, J. Buckholtz, D. Weinberger et al.",
+   "question": "Do brain circuits related to emotion and impulse control work differently in healthy people carrying the common low-activity MAO-A variant?",
+   "method": "MAO-A variants were determined in a large sample of healthy volunteers; participants were imaged with structural and functional MRI while looking at angry and fearful faces and during other tasks.",
+   "finding": "Carriers of the low-activity variant were on average more aggressive and impulsive; when looking at angry and fearful faces, the amygdala and insula were activated more and the prefrontal cortex less. The book interprets this as the combination of a strong fear response and a weak frontal brake.",
+   "roleInChapter": "Shows how the effect of a genetic variant can appear at the level of brain circuits, and how it can set the stage for reactive aggression.",
+   "caveats": "Sapolsky explains that pharmacological serotonin manipulation studies say “low serotonin = aggression” whereas MAO-A genetics says “high serotonin = aggression”; this contradiction could be explained by compensation of the transporter pump, receptor downregulation or developmental structural changes. He stresses that the effects of MAO-A variants are very small.",
+   "replication": {
+    "note": "The brain imaging effects of a single candidate gene have been criticized in general for low statistical power, and the MAO-A imaging findings have not been consistently replicated in later studies.",
+    "refs": [
+     "Duncan and Keller 2011",
+     "Buckholtz and Meyer-Lindenberg 2008"
+    ]
+   }
+  },
+  "ch08-e9": {
+   "name": "Role of Genotype in the Cycle of Violence in Maltreated Children (MAOA genotype and childhood maltreatment)",
+   "researchers": "A. Caspi, T. Moffitt et al.",
+   "question": "Does the low-activity MAO-A variant predict antisocial behavior by itself, or only together with childhood maltreatment?",
+   "method": "In a large birth cohort followed from birth to age 26 (Dunedin, New Zealand), MAO-A genotype, history of childhood maltreatment and adult antisocial behavior (a composite measure of standard psychological assessments and convictions for violent crime) were examined.",
+   "finding": "The MAO-A variant by itself did not predict antisocial behavior at age 26. The low-activity variant raised the probability of antisocial behavior about threefold only in those with a history of severe childhood abuse; without a history of abuse, the variant had no predictive power.",
+   "roleInChapter": "The chapter's central example of gene–environment interaction; against “warrior gene” determinism, it shows that the effect of the gene depends on the environment.",
+   "caveats": "Sapolsky writes that this interaction was frequently replicated later and was also shown in rhesus monkeys; the notes also list a weaker effect in girls, an effect seen in whites but not in blacks, and replication failures. The book attributes the study to Duke University; at the time, the authors were at King's College London and the University of Wisconsin.",
+   "replication": {
+    "note": "Meta-analyses (Kim-Cohen et al. 2006; Byrd and Manuck 2014) have reported a small but significant interaction; however, some large studies failed to replicate it, and candidate gene–environment interaction research has been heavily criticized for publication bias and low power (Duncan and Keller 2011). The sister finding of 5-HTT × stress → depression, on the other hand, has not been replicated in large studies (Border et al. 2019; Culverhouse et al. 2018).",
+    "refs": [
+     "Kim-Cohen et al. 2006",
+     "Byrd and Manuck 2014",
+     "Duncan and Keller 2011",
+     "Border et al. 2019"
+    ]
+   }
+  },
+  "ch08-e10": {
+   "name": "Hundreds of Variants Clustered in Genomic Loci and Biological Pathways Affect Human Height (GWAS of height)",
+   "researchers": "H. Lango Allen et al. (GIANT consortium)",
+   "question": "With how many genetic variants, and to what extent, can a highly heritable trait such as height be explained?",
+   "method": "The genomes of 183,727 people were scanned for single nucleotide variants associated with differences in height; the paper had about 280 authors.",
+   "finding": "Hundreds of variants were found to be associated with height; only a handful of them lay in known genes related to skeletal growth. The strongest single variant explained only 0.4% of the differences in height, and all variants together explained about 10%.",
+   "roleInChapter": "Shows that even a simple and strongly inherited trait is determined by a great many genes with small effects, and therefore why the search for a “single gene” for behavior is hopeless.",
+   "caveats": "Sapolsky notes that rare variants could not be captured with the GWAS methods of that day, so the real number of genes may be even greater.",
+   "replication": {
+    "note": "The findings were extended with much larger samples: a GWAS of 5.4 million people (Yengo et al. 2022) found more than 12,000 variants, which explain about 40-45% of the variation in height in people of European ancestry. The conclusion that height is extremely polygenic was strengthened; the proportion explained rose far above the value in the book.",
+    "refs": [
+     "Yengo et al. 2022"
+    ]
+   }
+  },
+  "ch08-e11": {
+   "name": "Association Analyses of 249,796 Individuals Reveal 18 New Loci Associated with Body Mass Index (GWAS of body mass index)",
+   "researchers": "E. Speliotes et al. (GIANT consortium)",
+   "question": "Which genetic variants contribute to differences in body mass index (BMI), and to what extent?",
+   "method": "The genomes of about a quarter of a million people (249,796) were scanned for variants associated with BMI.",
+   "finding": "The single variant that best explained BMI explained only 0.3% of the variation; BMI, like height, turned out to be highly polygenic.",
+   "roleInChapter": "Repeats the same picture as the height study in another trait, reinforcing that genetic influence is the sum of very many small contributions.",
+   "caveats": "Sapolsky adds that rare variants were missed and that these traits are probably influenced by hundreds of genes.",
+   "replication": {
+    "note": "Larger studies (Locke et al. 2015; Yengo et al. 2018) found hundreds of new loci and confirmed that BMI is highly polygenic; the effect of individual variants remained small.",
+    "refs": [
+     "Locke et al. 2015",
+     "Yengo et al. 2018"
+    ]
+   }
+  },
+  "ch08-e12": {
+   "name": "GWAS of 126,559 Individuals Identifies Genetic Variants Associated with Educational Attainment (GWAS of educational attainment)",
+   "researchers": "C. Rietveld et al.",
+   "question": "To what extent do genetic variants associated with years of completed education explain differences in education?",
+   "method": "The genomes of 126,559 people were scanned for variants associated with years of completed education; the paper had about 180 authors.",
+   "finding": "The strongest single variant explained only 0.02% of the difference in educational attainment, and all the variants found together explained about 2%.",
+   "roleInChapter": "Shows that even in a trait close to behavior and relatively easy to measure, genetic influence is extremely diffuse and small.",
+   "caveats": "Sapolsky relays that the commentary accompanying the paper described educational attainment as a “highly polygenic” trait.",
+   "replication": {
+    "note": "Later giant studies (Lee et al. 2018, 1.1 million people; Okbay et al. 2022, 3 million people) found thousands of variants; polygenic scores came to explain about 12-16% of the differences in education. However, within-family analyses have shown that a significant part of these estimates reflects indirect effects such as family environment and population structure.",
+    "refs": [
+     "Lee et al. 2018",
+     "Okbay et al. 2022"
+    ]
+   }
+  }
+ }
+}

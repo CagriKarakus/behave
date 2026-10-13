@@ -1,0 +1,325 @@
+{
+ "timescale": "Centuries to millennia ago",
+ "summary": "The chapter examines the influence of culture on behavior through cross-cultural differences: individualist and collectivist cultures, egalitarian and stratified societies, population density and ethnic heterogeneity. These differences are shown to be linked to ecology and modes of subsistence (rice farming, wheat farming, nomadic herding), and even to co-occur with the distribution of the 7R variant of the DRD4 gene. The chapter argues that inequality erodes social capital and health, and that crowding does not by itself produce violence but amplifies existing tendencies. The second half takes up the debate between Hobbes and Rousseau with archaeological and ethnographic evidence, concluding that hunter-gatherer societies experienced war rarely and that agriculture was the source of many problems.",
+ "keyConcepts": [
+  {
+   "term": "Collectivist vs. individualist cultures",
+   "explanation": "The distinction between cultures that emphasize harmony, interdependence and group needs, and cultures that prioritize autonomy, individual achievement and personal rights. This distinction produces measurable differences in perception, thinking and moral responses."
+  },
+  {
+   "term": "Culture",
+   "explanation": "In the chapter, culture is taken in a broad sense as the transmission of ways of thinking and doing by non-genetic means. Within this framework, tool use and learned behavioral traditions in animals are discussed alongside humans."
+  },
+  {
+   "term": "Gene–culture coevolution",
+   "explanation": "The reciprocal process in which the brain shapes culture and culture shapes the brain. Although gene frequencies differ between cultures, their effect is generally small; the main determinant is cultural inoculation in childhood."
+  },
+  {
+   "term": "Culture of honor",
+   "explanation": "A cultural pattern in which responding violently to insult and disrespect is regarded as legitimate and necessary. It is traced to a nomadic herding origin and linked to the pattern of violence in the southern United States."
+  },
+  {
+   "term": "Social capital and income inequality",
+   "explanation": "The sum of resources such as trust, mutual aid and civic participation. As income inequality rises, this capital is shown to decline, and people help one another less and behave more punitively."
+  },
+  {
+   "term": "Socioeconomic status (SES)–health gradient",
+   "explanation": "The phenomenon of health worsening with each step down the social ladder. The chapter argues that this stems not only from material poverty but from inequality and from a person's feeling of deprivation."
+  },
+  {
+   "term": "Big Gods",
+   "explanation": "Conceptions of gods that monitor and punish moral behavior, arising in large societies where anonymous interactions are frequent. Punishment is thereby delegated to third-party institutions and gods."
+  },
+  {
+   "term": "Density and heterogeneity",
+   "explanation": "Population density and the coexistence of different groups do not by themselves create violence; they strengthen existing tendencies. The shape and sharpness of the boundaries between groups may determine the likelihood of conflict."
+  },
+  {
+   "term": "Indirect reciprocity",
+   "explanation": "The principle that a good deed done to one person is repaid not directly but through a good deed done to another, third person. It forms the basis of meat sharing in hunter-gatherer groups."
+  },
+  {
+   "term": "The Hobbes or Rousseau question",
+   "explanation": "The question of whether war and violence in human history are a natural tendency or a cultural and historical product. Archaeological evidence and data from contemporary hunter-gatherers are used against each other in this debate."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Guiso et al. (Science, 2008)",
+   "finding": "Across 40 countries, the boy-girl gap in math scores shrank as gender equality increased. In Iceland, the most equal country, girls scored higher than boys. This shows the claim that the math gap is biological being reassessed through a cultural explanation."
+  },
+  {
+   "name": "Nisbett and Cohen hallway experiment",
+   "finding": "In Southern men who were deliberately insulted, testosterone and glucocorticoid levels rose markedly and their predictions about a violent scenario increased. No change was seen in Northern men after the insult."
+  },
+  {
+   "name": "Fry and Söderberg (Science, 2013)",
+   "finding": "In most of the 21 pristine nomadic hunter-gatherer groups studied before outside influences, multi-person warfare was not seen, but lethal violence occurred in 86% of the groups. War was rare in these societies but not entirely absent."
+  },
+  {
+   "name": "Chagnon's Yanomamö finding and reanalyses",
+   "finding": "Chagnon reported that men who had killed had more children. Fry showed that this was an analytic error stemming from an age difference. In a study of the Nyangatom, large open-warfare raids did not increase reproductive success, whereas covert livestock theft did."
+  },
+  {
+   "name": "Calhoun's rodent density experiments",
+   "finding": "Calhoun reported that densely housed rats showed violence, deviant behavior and social pathology. The chapter points out that density makes non-aggressive individuals more withdrawn and amplifies existing tendencies, and that violence remains low in high-density cities such as Hong Kong, Singapore and Tokyo."
+  },
+  {
+   "name": "Distribution of the DRD4 7R variant across populations (Ding and Kidd)",
+   "finding": "The 7R variant is almost absent in East Asia but reaches up to 70% in the indigenous populations of the Americas. This distribution suggests a selection pressure coinciding with rice farming and collectivist culture, but the causal link is not certain."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Income Inequality and Reciprocal Cooperation",
+   "shows": "Shows how mutual aid and cooperation in economic games decline as income inequality rises, while punitive behavior increases. Makes visible the link between inequality and social capital.",
+   "inputs": [
+    "Level of income inequality",
+    "Cost of punishment",
+    "Initial level of trust"
+   ],
+   "outputs": [
+    "Rate of mutual aid",
+    "Rate of punishment of overly generous players",
+    "Overall social capital indicator"
+   ]
+  },
+  {
+   "title": "Patch Size and Conflict Boundaries",
+   "shows": "A model in which two groups mix on a grid, running on a tendency toward self-similarity and on mobility. Shows how the number of isolated islands and peninsulas and the length of the group boundary change as the average patch size changes, and which level of mixing carries the highest conflict risk.",
+   "inputs": [
+    "Tendency toward self-assortment",
+    "Mobility of individuals",
+    "Ratio of the two groups"
+   ],
+   "outputs": [
+    "Number of isolated islands and peninsulas",
+    "Total length of the group boundary",
+    "Regions carrying conflict risk"
+   ]
+  },
+  {
+   "title": "Distribution of the 7R Variant by Migration Distance",
+   "shows": "Shows how the frequency of the 7R variant changed along the way as humans spread from Africa across the world, and how selection pressure in East Asia shaped this distribution. Carries the logic of Kidd's distribution plot in the book.",
+   "inputs": [
+    "Migration distance (from Africa)",
+    "Strength of selection against 7R in East Asia",
+    "Starting 7R frequency"
+   ],
+   "outputs": [
+    "7R frequency by region",
+    "Size of the drop in East Asia"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "The previous chapter introduced the relationship of the 7R variant of the DRD4 gene to impulsivity and novelty seeking, and gene–environment interactions. This chapter moves on to the distribution of 7R across populations."
+  },
+  {
+   "why": "The chapter recalls that cultural values are inoculated in early childhood, and that cross-cultural differences are therefore shaped in this period."
+  },
+  {
+   "why": "The next chapter treats cooperation mechanisms such as reciprocal altruism and indirect reciprocity from an evolutionary perspective; the sharing norms of hunter-gatherers in this chapter prepare the ground for that topic."
+  },
+  {
+   "why": "This chapter addresses how inequality produces justifications that legitimize status among those at the top, and how thinking varies with socioeconomic status."
+  },
+  {
+   "why": "This chapter notes that cultural differences give rise to different moral systems, and says the details will be taken up in ch13."
+  },
+  {
+   "why": "This chapter leaves to ch15 the topic of how disease cues increase attitudes against outsiders, and behavioral immunity."
+  },
+  {
+   "why": "The chapter notes that contact between groups can produce both peace and conflict and that this topic will be addressed in the final chapter; in addition, people having become less cruel over recent centuries is the main subject of the final chapter."
+  }
+ ],
+ "verifyNotes": [],
+ "experiments": {
+  "ch09-e1": {
+   "name": "Gender equality and the math score gap",
+   "researchers": "L. Guiso et al.",
+   "question": "As gender equality increases across countries, does the boy-girl gap in math scores also change?",
+   "method": "In about forty countries, the level of gender equality, based on economic, educational and political indicators, was compared with the girl-boy gap in students' math scores. According to the book, the most unequal country was Turkey, the United States was in the middle, and the most equal countries were the Scandinavian ones.",
+   "finding": "The more gender-egalitarian a country was, the smaller the girl-boy gap in math scores. In the Scandinavian countries the gap became statistically insignificant, and in Iceland, the most equal country of that time, girls did better than boys. (For comparison, the book also recalls that in 1983 there were eleven boys for every girl in the top percentile of the math SAT.)",
+   "roleInChapter": "At the opening of the chapter, it introduces the influence of culture on behavior by showing that even a difference assumed to be biological changes with cultural context.",
+   "replication": {
+    "note": "Stoet and Geary (2013), examining later waves of the PISA data that were used, reported that the average math gap was not consistently related to countries' gender equality indicators; in contrast, studies such as Kane and Mertz (2012) supported the view that the gap varies with cultural factors. It is a consistent finding that girls' average math deficit varies greatly from country to country; how much of this is due to gender equality is still debated.",
+    "refs": [
+     "Stoet and Geary 2013 (PLoS ONE)",
+     "Kane and Mertz 2012 (Notices of the AMS)"
+    ]
+   }
+  },
+  "ch09-e2": {
+   "name": "Holistic vs. analytic attention (picture context experiment)",
+   "researchers": "T. Masuda and R. E. Nisbett; T. Hedden et al.",
+   "question": "Do East Asians and Americans differ in whether they pay more attention to the focal object or to the context of a scene?",
+   "method": "Japanese and American participants were shown complex scenes with a single figure in the middle, and were then asked to recall the objects and the background in the scene. Attention was measured through recall accuracy for the central figure versus the surrounding context.",
+   "finding": "East Asians recalled the context of the scene more accurately, whereas Americans recalled the central figure. According to the book, the difference is also seen in eye movements: Westerners look first at the center of the picture, East Asians at the whole scene. When Westerners are asked to focus on the context and East Asians on the central object, the frontal cortex is activated more (the unfamiliar style of attention demands more effort).",
+   "roleInChapter": "Shows that culture penetrates unexpected processes such as perception and attention; supports the chapter's 'culture is everywhere' argument.",
+   "caveats": "Sapolsky emphasizes that cross-cultural differences hold 'on average', that individual variation is large, and that this attentional tendency can change quickly with cultural cues (priming).",
+   "replication": {
+    "note": "The difference in recalling context and in attention was repeated in many cross-cultural studies; however, differences at the level of eye tracking were not found in some replications (e.g., Evans et al. 2009). The size of the effects varies with the task and the sample.",
+    "refs": [
+     "Masuda and Nisbett 2001",
+     "Evans et al. 2009 (Visual Cognition)"
+    ]
+   }
+  },
+  "ch09-e3": {
+   "name": "Rice versus wheat culture (China)",
+   "researchers": "T. Talhelm et al.",
+   "question": "Can psychological differences within China be explained by whether subsistence relied on rice or wheat farming?",
+   "method": "Rice-growing regions of China were compared with wheat-growing regions in the north. Standard tests of individualism-collectivism were administered (e.g., drawing a sociogram; choosing which two of a rabbit, a dog and a carrot are similar), and the regions' divorce rates and patent applications were also examined.",
+   "finding": "People from the northern wheat regions showed a more individualist profile on these tests, similar to Westerners. Divorce rates and patent applications were also higher in wheat regions than in rice regions.",
+   "roleInChapter": "Shows the ecological origin of collectivism, that is, how mode of subsistence shapes culture; reveals that culture can also change when ecology changes.",
+   "replication": {
+    "note": "In 2018 the same team found the rice-wheat difference again, using observational measures in cafes (sitting alone, moving a chair that blocks the way). Some researchers, however, questioned the size of the effect and alternative explanations such as temperature and modernization; an independent multi-lab replication is not known.",
+    "refs": [
+     "Talhelm et al. 2018 (Science Advances)"
+    ]
+   }
+  },
+  "ch09-e4": {
+   "name": "Worldwide distribution of the DRD4 7R variant",
+   "researchers": "F. Chang et al.; K. Kidd (later assessment)",
+   "question": "How is the 7R variant of the DRD4 gene distributed among human populations, and is this distribution related to humans' migration routes?",
+   "method": "Allele frequencies of the DRD4 gene were measured in many populations from different regions of the world. The frequencies were compared with the route of human dispersal out of Africa and with geographic location.",
+   "finding": "The 7R variant has a frequency of about 23% in Europeans and European-descended Americans and about 1% in East Asians. In the distribution compiled by Kidd, it is 10-25% in African, European and Middle Eastern societies, close to 40% among the Maya of Central America, about 55% in the north of South America, and about 70% (the highest value in the world) in groups of the Amazon basin; it is almost zero in China, Cambodia, Japan and Taiwan.",
+   "roleInChapter": "Shows a difference in gene frequency that co-occurs with collectivist culture; it is the most debated example of the idea that genes and culture can evolve together (gene–culture coevolution).",
+   "caveats": "Sapolsky states explicitly that we do not know the reason for the relationship between 7R and culture; at the end of the chapter he also emphasizes that the effect of cross-cultural differences in gene variants on behavior is quite small.",
+   "replication": {
+    "note": "The geographic distribution of 7R frequency and its relationship to migration distance have been shown consistently with genetic data. However, the link of 7R to novelty seeking or impulsivity turned out weak or nonsignificant in meta-analyses; the interpretation that the distribution explains cultural differences therefore remains debated.",
+    "refs": [
+     "Chen et al. 1999 (Evolution and Human Behavior)",
+     "Munafò et al. 2008 (Biological Psychiatry)"
+    ]
+   }
+  },
+  "ch09-e5": {
+   "name": "Hallway insult experiment (South and North)",
+   "researchers": "R. Nisbett and D. Cohen",
+   "question": "Does the stress and anger response of insulted men vary with the culture of honor of the region where they grew up?",
+   "method": "Blood samples were first taken from male university participants; they were then asked to drop off a questionnaire they had completed at the end of a hallway. Half of the participants walked through the narrow hallway without incident. For the other half, a large man who was the researchers' confederate came from the opposite direction, bumped the participant with his shoulder, insulted him in an irritated voice and walked on. Hormone levels were then measured, and participants were asked to complete the story of a man who sees an acquaintance making advances on his fiancée.",
+   "finding": "In insulted Southern men, testosterone and glucocorticoid levels rose markedly; this was not seen in those from other regions. In the control condition, Southerners were slightly more inclined than Northerners to end the story violently; after the insult, there was no change in Northerners, whereas imagined violence increased greatly in Southerners.",
+   "roleInChapter": "Shows that the culture of honor exists not only in rhetoric but also in the physiological stress response; it is a concrete example of how culture acts on biology.",
+   "caveats": "Sapolsky does not criticize the experiment itself; he notes that Fischer's explanation of the origin of the Southern culture of honor in herding has problems (e.g., herder immigrants mostly settled in hilly regions).",
+   "replication": {
+    "note": "No direct, large-scale replication of the hallway experiment is known. Archival and survey findings on the culture of honor in the southern United States (e.g., honor-related homicide rates) have generally been supported in later studies, but the experiment's sample was small.",
+    "refs": [
+     "Cohen et al. 1996"
+    ]
+   }
+  },
+  "ch09-e6": {
+   "name": "Antisocial punishment (economic game)",
+   "researchers": "B. Herrmann et al.",
+   "question": "In different societies, do people punish players who do not follow the rules or overly generous players more?",
+   "method": "In economic games conducted in different societies, participants could punish other players by spending their own resources. Whether punishment was directed at cheaters or at overly generous players was compared across societies.",
+   "finding": "In Greece and Oman, people were more inclined to spend to punish overly generous players than to punish cheaters. In Australia, this 'antisocial punishment' was hardly seen at all.",
+   "roleInChapter": "It is one of the examples of striking differences between cultures; the chapter returns to this study later when noting that inequality and low social trust predict bullying and antisocial punishment.",
+   "replication": {
+    "note": "Antisocial punishment was observed in other countries and samples after Herrmann et al. (e.g., Gächter and Herrmann's studies in Russia); the size of the differences between societies varies with the game used.",
+    "refs": [
+     "Herrmann et al. 2008",
+     "Gächter and Herrmann 2011"
+    ]
+   }
+  },
+  "ch09-e7": {
+   "name": "Status inequality on airplanes and air rage",
+   "researchers": "K. A. DeCelles and M. I. Norton",
+   "question": "Does the presence of a first-class section on an airplane, and reminders of the status difference, increase air rage among economy-class passengers?",
+   "method": "Using an airline's flight records, the frequency of incidents (air rage) among economy passengers was compared between planes with and without a first-class section. Whether passengers walked through first class when boarding was also assessed separately.",
+   "finding": "The presence of a first-class section on the plane increased the likelihood of air rage among economy passengers about fourfold. When economy passengers were walked through first class at boarding, the likelihood increased by more than another twofold. The anger was generally directed not at first class but at the passenger next to them or at the flight attendant.",
+   "roleInChapter": "Shows with an everyday example how inequality produces violence: a person of low status gets angry not at the powerful but generally at someone below them.",
+   "caveats": "Sapolsky presents the finding as a metaphor for the consequences of societal inequality.",
+   "replication": {
+    "note": "It rests on observational data from a single airline; no independent replication is known. Although the study tried to control for confounders such as plane size and flight duration, causal interpretation is limited.",
+    "refs": [
+     "DeCelles and Norton 2016"
+    ]
+   }
+  },
+  "ch09-e8": {
+   "name": "Population density experiments in rats (Calhoun)",
+   "researchers": "J. B. Calhoun",
+   "question": "How does high population density change the behavior and social structure of rats?",
+   "method": "In the 1950s at the U.S. National Institute of Mental Health (NIMH), John Calhoun housed rats at progressively increasing densities and observed their behavior over a long period. Aggression, sexual behavior and maternal behavior were recorded.",
+   "finding": "Calhoun reported that high density produced 'deviant' behavior and 'social pathology': violence, cannibalism, females attacking their young, indiscriminate sexual behavior. According to the book, the real picture was more complex: density made aggressive rats more aggressive and non-aggressive ones more withdrawn, that is, it exaggerated existing tendencies.",
+   "roleInChapter": "Shows that density does not by itself produce violence but amplifies existing tendencies; it is a cautionary example of how popular interpretations can be exaggerated.",
+   "caveats": "Sapolsky notes that the conclusions in Calhoun's popular account were erroneous; he points out that these conclusions cannot be generalized to humans either, and recalls that violence is low in high-density cities such as Hong Kong, Singapore and Tokyo.",
+   "replication": {
+    "note": "The association of overcrowding in animals with stress and behavioral disturbances has been seen in various studies; however, Calhoun's 'behavioral sink' narrative and its generalization to humans have been seriously criticized in historical and scientific work (Ramsden 2011). Research on human density has not found a consistent link between density and violence.",
+    "refs": [
+     "Ramsden 2011",
+     "Freedman 1975 (Crowding and Behavior)"
+    ]
+   }
+  },
+  "ch09-e9": {
+   "name": "Ethnic patch size and boundary model",
+   "researchers": "M. Lim et al.; A. Rutherford et al. (2014)",
+   "question": "In two groups living intermixed, how do patch size and the structure of boundaries affect conflict risk?",
+   "method": "A computer model was built on a grid with individuals of two groups randomly distributed. Individuals were given a certain mobility and a tendency to be with their own group; as the self-assortment process progressed, the number of isolated islands and peninsulas and the length of the group boundary were tracked. The results were compared with the actual conflict zones of the Balkans in the 1990s.",
+   "finding": "As self-assortment progressed, islands and peninsulas of one group enclosed within the other first formed; their number (that is, the number of people living in enclosed areas) peaked at an intermediate stage. When the model was applied to 1990 Yugoslavia with ethnic islands about 20-60 km in diameter, it predicted the sites of major fighting and massacres in the war. Rutherford et al., in turn, showed that clear boundaries such as mountains and rivers support peace.",
+   "roleInChapter": "Shows that conflict can arise not only from the level of mixing but also from the shape of group boundaries; makes concrete the 'Mister Rogers' versus 'Sharks versus Jets' dilemma.",
+   "replication": {
+    "note": "The model was fitted retrospectively to data from the Balkans (and later Switzerland); no independent prospective test is known. Because it leaves out the political and historical causes of conflict, interpretations are limited.",
+    "refs": [
+     "Lim et al. 2007",
+     "Rutherford et al. 2014"
+    ]
+   }
+  },
+  "ch09-e10": {
+   "name": "Aggression in wild baboons during a drought",
+   "researchers": "R. Sapolsky",
+   "question": "How do drought and food stress change the hormone levels and aggressive behavior of wild baboons?",
+   "method": "Wild baboons in East Africa were studied during the severe drought of 1984; hormone levels and behavior were recorded. The time that baboons, who normally feed for only a few hours a day, devoted to foraging during the drought was monitored.",
+   "finding": "Food was still sufficient, but finding enough calories took all of the baboons' waking time. With no time left for social intrigue, aggression decreased.",
+   "roleInChapter": "Shows that ecological stress can both increase and decrease aggression; emphasizes that conflict is not a simple competition for resources.",
+   "replication": {
+    "note": "An observational study based on a single natural event; no direct replication is known. It is consistent with other field observations that ecological hardship can reduce aggression in primates.",
+    "refs": [
+     "Sapolsky 1986"
+    ]
+   }
+  },
+  "ch09-e11": {
+   "name": "Reproductive success of killers among the Yanomamö (Chagnon)",
+   "researchers": "N. Chagnon",
+   "question": "Among Yanomamö men, does standing out in war or homicide yield more children in terms of genetic legacy?",
+   "method": "In fieldwork among Yanomamö communities from the 1960s onward, Chagnon recorded men's killing histories and numbers of wives and children; in 1988 he compared the reproductive success of those who had killed with that of those who had not.",
+   "finding": "Chagnon reported that men who had killed had more wives and children than average. According to Fry's reanalysis, however, the killers were on average more than ten years older (they had had longer to have children), and warriors killed at a young age had never entered the analysis.",
+   "roleInChapter": "Shows the possible evolutionary reward of war with concrete data and then disentangles it through criticisms; it is one of the most questioned pieces of evidence in the chapter's Hobbes-Rousseau debate.",
+   "caveats": "Fry's reanalysis showed that age had not been controlled for. In the study of the Nyangatom by Glowacki and Wrangham, large open-warfare raids did not increase reproductive success, whereas covert livestock theft did. It has also been criticized that Chagnon gave the Yanomamö items such as axes, machetes and shotguns, and that this may have altered the violence.",
+   "replication": {
+    "note": "Chagnon's finding was not generalized to other societies: in studies of the Cheyenne, Waorani and Nyangatom, participation in open warfare did not increase reproductive success (among the Nyangatom only covert raids did). Chagnon's data analysis and field methods continue to receive intense criticism in anthropology.",
+    "refs": [
+     "Beckerman et al. 2009",
+     "Glowacki and Wrangham 2015",
+     "Fry 2009"
+    ]
+   }
+  },
+  "ch09-e12": {
+   "name": "Lethal violence in mobile forager bands (Fry and Söderberg)",
+   "researchers": "D. P. Fry and P. Söderberg",
+   "question": "How often do war and lethal violence occur in nomadic hunter-gatherer groups living in stable ecosystems, studied before outside contact?",
+   "method": "21 nomadic hunter-gatherer groups well documented in the ethnographic literature before outside contact were examined, and lethal violence events were assessed for each. War was defined as conflict resulting in more than one death.",
+   "finding": "War was seen in only a minority of groups; however, lethal violence occurred in 86% of the groups. War was rare in these communities, but not entirely absent.",
+   "roleInChapter": "It is the main evidence that hunter-gatherers were neither entirely peaceful nor constantly at war, and that war was rare for most of human history; it supports the chapter's conclusion.",
+   "caveats": "Sapolsky considers this study the best available approximation of warfare among our ancestors; throughout the chapter he also reminds us that present-day hunter-gatherers are not perfect representatives of prehistoric humans.",
+   "replication": {
+    "note": "The dataset relies on ethnographic records, and which groups count as 'pristine' nomadic hunter-gatherers is disputed; researchers such as Wrangham and Glowacki argue that lethal intergroup aggression was more common. Archaeological data such as the Nataruk finding in West Turkana (Lahr et al. 2016) also keep the debate going.",
+    "refs": [
+     "Wrangham and Glowacki 2012 (Human Nature)",
+     "Lahr et al. 2016"
+    ]
+   }
+  }
+ }
+}

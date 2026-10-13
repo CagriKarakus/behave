@@ -3,6 +3,7 @@
 // 4) küçük ek: alel frekansı (Wright-Fisher). Kitaptan: kodon tablosu (61 amino asit kodonu, 3 dur), kodon fazlalığı, nokta/silme/ekleme etkileri.
 // Fonksiyon puanları, eşikler, hız sabitleri modelin varsayımıdır (nitel).
 import type { Rng } from '../rng';
+import { L } from './text';
 
 /* ================= 1. Genetik kod ================= */
 const ORDER = 'TCAG';
@@ -12,7 +13,8 @@ export const CODON: Record<string, string> = {};
 for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) for (let k = 0; k < 4; k++) CODON[ORDER[i] + ORDER[j] + ORDER[k]] = CODE_STR[16 * i + 4 * j + k];
 
 export type AaClass = 'hid' | 'pol' | 'pos' | 'neg' | 'ozel';
-export const CLASS_TR: Record<AaClass, string> = { hid: 'hidrofobik', pol: 'polar', pos: 'artı yüklü', neg: 'eksi yüklü', ozel: 'özel (Gly, Pro)' };
+/** Amino asit sınıfının görünen adı (çalışma anında, dile göre). */
+export const className = (c: AaClass): string => L().classes[c];
 export const AA: Record<string, { three: string; cls: AaClass }> = {
   A: { three: 'Ala', cls: 'hid' }, R: { three: 'Arg', cls: 'pos' }, N: { three: 'Asn', cls: 'pol' }, D: { three: 'Asp', cls: 'neg' },
   C: { three: 'Cys', cls: 'pol' }, Q: { three: 'Gln', cls: 'pol' }, E: { three: 'Glu', cls: 'neg' }, G: { three: 'Gly', cls: 'ozel' },
@@ -54,10 +56,8 @@ export function applyMut(dna: string, m: Mut): string {
 }
 
 export type Kind = 'degisim-yok' | 'sessiz' | 'yanlis' | 'anlamsiz' | 'kayma' | 'cerceve-ici' | 'baslangic' | 'uzama';
-export const KIND_TR: Record<Kind, string> = {
-  'degisim-yok': 'Değişiklik yok', sessiz: 'Sessiz mutasyon', yanlis: 'Yanlış anlamlı mutasyon', anlamsiz: 'Anlamsız (dur) mutasyonu',
-  kayma: 'Çerçeve kayması', 'cerceve-ici': 'Çerçeve içi silme ya da ekleme', baslangic: 'Başlangıç kodonu kaybı', uzama: 'Dur kodonu kaybı',
-};
+/** Mutasyon türünün görünen adı (çalışma anında, dile göre). */
+export const kindName = (k: Kind): string => L().kinds[k];
 
 /** Amino asit değişiminin ağırlığı (0-1): aynı sınıf hafif, sınıf değişimi ağır, artı-eksi yük dönmesi en ağır. Varsayım. */
 export function severity(a: string, b: string): number {
@@ -149,17 +149,19 @@ export function expression(i: RegIn): RegOut {
   return { tfActive, bound, expr, state: expr >= 0.5 ? 'açık' : expr < 0.15 ? 'kapalı' : 'kısmen' };
 }
 
-export interface Exon { id: string; len: number; role: string; optional: boolean }
+/** role: iç anahtar; görünen ad L().roles[role]. */
+export interface Exon { id: string; len: number; role: 'start' | 'bind' | 'work' | 'end'; optional: boolean }
 export const EXONS: Exon[] = [
-  { id: 'E1', len: 40, role: 'başlangıç', optional: false },
-  { id: 'E2', len: 60, role: 'bağlanma', optional: true },
-  { id: 'E3', len: 80, role: 'iş yapma', optional: true },
-  { id: 'E4', len: 30, role: 'bitiş', optional: false },
+  { id: 'E1', len: 40, role: 'start', optional: false },
+  { id: 'E2', len: 60, role: 'bind', optional: true },
+  { id: 'E3', len: 80, role: 'work', optional: true },
+  { id: 'E4', len: 30, role: 'end', optional: false },
 ];
 /** E2 ve E3'ün alınıp alınmadığına göre ürünün uzunluğu ve ne yapabildiği (varsayım). */
 export function splice(useE2: boolean, useE3: boolean): { exons: string[]; len: number; does: string } {
   const ex = EXONS.filter((e) => !e.optional || (e.id === 'E2' ? useE2 : useE3));
-  const does = useE2 && useE3 ? 'hedefe bağlanır ve işi yapar' : useE2 ? 'hedefe bağlanır, iş yapamaz' : useE3 ? 'işi yapar, hedefi seçemez' : 'kısa kalır, ikisini de yapamaz';
+  const d = L().does;
+  const does = useE2 && useE3 ? d.both : useE2 ? d.bindOnly : useE3 ? d.workOnly : d.neither;
   return { exons: ex.map((e) => e.id), len: ex.reduce((s, e) => s + e.len, 0), does };
 }
 

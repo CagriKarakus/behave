@@ -8,6 +8,7 @@
 @media (max-width: 479px) { .brand-name { display: none; } }
 .theme-btn { white-space: nowrap; min-height: 40px; min-width: 40px; font: 500 12px var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); background: transparent; border: 1px solid var(--accent); border-radius: var(--radius); padding: 8px 14px; cursor: pointer; }
 .theme-btn:hover { background: var(--accent); color: var(--on-accent); }
+.lang-btn { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
 
 .page { max-width: none; margin-inline: 0; padding: clamp(24px, 3vw, 48px) var(--gutter) 80px; position: relative; }
 .page.narrow { max-width: 640px; margin-inline: auto; }

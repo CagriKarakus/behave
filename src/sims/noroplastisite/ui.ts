@@ -1,5 +1,8 @@
 // Nöroplastisite görünümü için küçük arayüz yardımcıları: kaydırıcı, biçimleyiciler, sayaçlar.
+import { decimalSep } from '../../i18n/locale';
+import { num } from '../../i18n/fmt';
 import type { Scope } from '../kit';
+import { L } from './text';
 import { slider, type SliderHandle as SharedSliderHandle } from '../ui';
 
 export interface SliderHandle extends SharedSliderHandle {
@@ -24,23 +27,26 @@ export function makeSlider(scope: Scope, parent: HTMLElement, sid: string, o: Sl
 }
 
 /* ---------- Biçimleyiciler ---------- */
-export const fmtHz = (f: number): string => `${String(f).replace('.', ',')} Hz`;
+export const fmtHz = (f: number): string => L().fmt.hz(String(f).replace('.', decimalSep()));
 export function fmtSec(s: number): string {
-  if (s < 60) return `${s} sn`;
+  if (s < 60) return L().fmt.sec(s);
   const m = s / 60;
-  return `${Number.isInteger(m) ? m : m.toFixed(1).replace('.', ',')} dk`;
+  return L().fmt.min(Number.isInteger(m) ? String(m) : num(m, 1));
 }
+const loc = (s: string): string => s.replace('.', decimalSep());
 export function fmtMin(m: number): string {
-  if (m <= 0) return 'hemen sonra';
-  if (m < 60) return `${m} dk sonra`;
-  if (m < 1440) return `${(m / 60).toFixed(1).replace('.0', '').replace('.', ',')} sa sonra`;
-  return `${(m / 1440).toFixed(1).replace('.0', '').replace('.', ',')} gün sonra`;
+  const f = L().fmt;
+  if (m <= 0) return f.now;
+  if (m < 60) return f.afterMin(m);
+  if (m < 1440) return f.afterHr(loc((m / 60).toFixed(1).replace('.0', '')));
+  return f.afterDay(loc((m / 1440).toFixed(1).replace('.0', '')));
 }
 export function fmtDays(d: number): string {
-  if (d < 14) return `${d} gün`;
-  if (d < 84) return `${d} gün (${Math.round(d / 7)} hf)`;
-  if (d < 365) return `${d} gün (≈${Math.round(d / 30)} ay)`;
-  return `${d} gün (≈${(d / 365).toFixed(1).replace('.', ',')} yıl)`;
+  const f = L().fmt;
+  if (d < 14) return f.days(d);
+  if (d < 84) return f.daysWeeks(d, Math.round(d / 7));
+  if (d < 365) return f.daysMonths(d, Math.round(d / 30));
+  return f.daysYears(d, num(d / 365, 1));
 }
 export const signed = (v: number): string => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v);
 export const pctOf = (v: number): number => Math.round(v * 100);

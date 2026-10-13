@@ -1,11 +1,11 @@
 // Savaş ve barış: görünüm kabuğu ile tembel yüklenen sekme parçaları arasında paylaşılan türler ve küçük yardımcılar.
+import { percent } from '../../i18n/fmt';
 import type { Scope } from '../kit';
 import type { BabParams, Cond, ContactParams, PayParams, TrenchParams, VillageParams } from './model';
 
 export type Tab = 'sip' | 'tem' | 'bab';
 export type Card = 'ct' | 'fo' | 'py';
-export const pc = (x: number): string => `%${Math.round(x * 100)}`;
-export const f1 = (x: number): string => x.toFixed(1).replace('.', ',');
+export { pc, f1 } from '../ui';
 export const sv = (w: number, h: number, inner: string): string => `<svg viewBox="0 0 ${w} ${h}" aria-hidden="true">${inner}</svg>`;
 export const dotI = (c: string): string => `<i style="background:${c}"></i>`;
 export const key = (...a: [string, string][]): string => `<div class="legend">${a.map(([i, t]) => `<span>${i}${t}</span>`).join('')}</div>`;
@@ -19,7 +19,7 @@ export const LG = {
   line: (c: string, dash = ''): string => sv(26, 10, `<path d="M1 5H25" stroke="${c}" stroke-width="2.4"${dash}/>`),
 };
 
-export const pctFmt = (v: number): string => `%${v}`;
+export const pctFmt = (v: number): string => percent(String(v));
 export const cls = (el: Element, base: string, show: boolean): void => el.setAttribute('class', show ? base : `${base} hide`);
 
 export interface SliderHandle { inp: HTMLInputElement; set: (v: number) => void }
@@ -50,7 +50,7 @@ export interface Env {
   setBar: (say: string, ms: Meter[]) => void;
   makeSlider: (parent: HTMLElement, o: SliderOpts) => SliderHandle;
   toggles: <T extends string>(parent: HTMLElement, items: { k: T; name: string }[], get: () => T | null, pick: (k: T) => void) => () => void;
-  makeTransport: (parent: HTMLElement, o: { max: number; speed: number; unit: string; seed: () => void }) => Transport;
+  makeTransport: (parent: HTMLElement, o: { max: number; speed: number; unit: 'day' | 'round'; seed: () => void }) => Transport;
   tiles: (xs: [string, string][]) => string;
   yGrid: (parent: Element, x0: number, x1: number, y: (v: number) => number, vals: number[], fmt: (v: number) => string) => void;
   poly: (pts: [number, number][]) => string;

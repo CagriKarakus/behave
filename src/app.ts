@@ -1,6 +1,9 @@
-import type { ContentSource } from './content';
+import { sourceFor, type ContentSource } from './content';
+import { observeLinks } from './i18n/links';
+import { rememberLocale, setLocale, storedLocale, type Locale } from './i18n/locale';
+import { t } from './i18n/t';
 import { effectiveTheme, toggleTheme } from './lib/theme';
-import { startRouter, type Route } from './lib/router';
+import { startRouter, toLang, type Route } from './lib/router';
 import { renderHome } from './pages/home';
 import { renderChapter, renderNotFound } from './pages/chapter';
 import { renderExperiments } from './pages/experiment';
@@ -11,19 +14,41 @@ import type { Page } from './pages/page';
  * rota değişince önceki sayfayı temizleyip yenisini çizer. Dönen fonksiyon her şeyi söker.
  */
 export function createApp(host: HTMLElement, src: ContentSource): () => void {
-  const book = src.index.book;
   host.innerHTML = `
-  <a class="skip" href="#main">İçeriğe geç</a>
+  <a class="skip" href="#main"></a>
   <header class="topbar">
-    <a class="brand" href="#/" aria-label="Davranış: ana sayfa"><span class="brand-mark" aria-hidden="true"></span><span class="brand-name">Davranış</span></a>
-    <nav class="topnav" aria-label="Ana gezinti"><a href="#/">Bölümler</a><a href="#/deneyler">Deneyler</a></nav>
+    <a class="brand" href="#/"><span class="brand-mark" aria-hidden="true"></span><span class="brand-name"></span></a>
+    <nav class="topnav"><a href="#/" data-nav="chapters"></a><a href="#/deneyler" data-nav="experiments"></a></nav>
+    <a class="theme-btn lang-btn" id="lang-btn" href="#/"></a>
     <button class="theme-btn" type="button" id="theme-btn"></button>
   </header>
   <main id="main" tabindex="-1"></main>
-  <footer class="site-foot"><p>Bu site Robert M. Sapolsky'nin Behave (2017) kitabından esinlenen bağımsız bir okuma ve öğrenme aracıdır; kitabın yazarı ya da yayıncısıyla bağlantılı değildir. Simülasyonlar nitel modellerdir, ölçüm değildir. Bilim ilerledikçe bulgular değişebilir; bazı deneylerin güncel replikasyon durumu kartlarında belirtilmiştir.</p></footer>`;
+  <footer class="site-foot"><p></p></footer>`;
   const main = host.querySelector('#main') as HTMLElement;
   const skip = host.querySelector('.skip') as HTMLAnchorElement;
   const themeBtn = host.querySelector('#theme-btn') as HTMLButtonElement;
+  const langBtn = host.querySelector('#lang-btn') as HTMLAnchorElement;
+  let lang: Locale = 'tr';
+  let stopLinks: () => void = () => {};
+
+  /** Kabuğun (üst çubuk, altbilgi) metinlerini geçerli dile göre yazar. */
+  function syncChrome(): void {
+    skip.textContent = t('app.skip');
+    host.querySelector('.brand')?.setAttribute('aria-label', t('app.brandAria'));
+    (host.querySelector('.brand-name') as HTMLElement).textContent = t('app.brand');
+    host.querySelector('.topnav')?.setAttribute('aria-label', t('app.navAria'));
+    (host.querySelector('[data-nav=chapters]') as HTMLElement).textContent = t('app.navChapters');
+    (host.querySelector('[data-nav=experiments]') as HTMLElement).textContent = t('app.navExperiments');
+    (host.querySelector('.site-foot p') as HTMLElement).textContent = t('app.footer');
+    langBtn.textContent = lang === 'tr' ? 'EN' : 'TR';
+    langBtn.setAttribute('aria-label', t('app.langSwitch'));
+    langBtn.setAttribute('lang', lang === 'tr' ? 'en' : 'tr');
+    langBtn.setAttribute('hreflang', lang === 'tr' ? 'en' : 'tr');
+    langBtn.href = toLang(location.hash || '#/', lang === 'tr' ? 'en' : 'tr');
+    // Üst çubuk bağlantıları (İngilizce'de öneklenir); <main> dışında kaldığı için ayrıca yazılır.
+    for (const a of host.querySelectorAll<HTMLAnchorElement>('.brand, .topnav a')) a.href = toLang(a.getAttribute('href') ?? '#/', lang).replace(/^$/, '#/');
+    document.querySelector('meta[name=description]')?.setAttribute('content', t('app.metaDescription'));
+  }
 
   // Atlama bağlantısı hash'i değiştirmez (yönlendirici "#main"i rota sanıp 404 çizmesin); odağı <main>'e taşır.
   const onSkip = (e: Event) => { e.preventDefault(); main.focus(); };
@@ -31,8 +56,8 @@ export function createApp(host: HTMLElement, src: ContentSource): () => void {
 
   function syncThemeBtn(): void {
     const dark = effectiveTheme() === 'dark';
-    themeBtn.textContent = dark ? 'Açık tema' : 'Koyu tema';
-    themeBtn.setAttribute('aria-label', dark ? 'Açık temaya geç' : 'Koyu temaya geç');
+    themeBtn.textContent = dark ? t('app.themeLight') : t('app.themeDark');
+    themeBtn.setAttribute('aria-label', dark ? t('app.themeToLight') : t('app.themeToDark'));
   }
   const onTheme = () => { toggleTheme(); syncThemeBtn(); };
   themeBtn.addEventListener('click', onTheme);
@@ -40,6 +65,8 @@ export function createApp(host: HTMLElement, src: ContentSource): () => void {
   const mq = typeof matchMedia === 'function' ? matchMedia('(prefers-color-scheme: dark)') : null;
   mq?.addEventListener?.('change', syncThemeBtn);
   syncThemeBtn();
+  const onLangClick = () => { rememberLocale(lang === 'tr' ? 'en' : 'tr'); };
+  langBtn.addEventListener('click', onLangClick);
 
   // Kaydırma konumu: her geçmiş girdisinin kendi durumunda saklanır. Geri/ileri ve yenilemede geri gelir,
   // bağlantıyla yeni sayfaya gidince en üsttedir.
@@ -62,12 +89,23 @@ export function createApp(host: HTMLElement, src: ContentSource): () => void {
   let token = 0;
   let first = true;
 
-  function show(route: Route): void {
-    const t = ++token;
+  function show(route: Route, routeLang: Locale = 'tr'): void {
+    const tk = ++token;
+    const langChanged = routeLang !== lang || first;
+    // Dil değişince kabuk ve bağlantı yeniden yazıcı yenilenir; sayfa yeniden kurulur.
+    if (langChanged) {
+      lang = routeLang;
+      setLocale(lang);
+      stopLinks(); stopLinks = lang === 'en' ? observeLinks(main) : () => {};
+      syncThemeBtn();
+    }
+    syncChrome();
+    const cs = sourceFor(src, lang);
+    const book = cs.index.book;
     // Aynı bölümde başka bir deneye ya da simülasyona geçiş: sayfayı yeniden kurma.
-    if (route.name === 'chapter' && chapterId === route.id && page && ((route.experiment && page.focusExperiment) || (route.sim && page.selectSim))) {
+    if (!langChanged && route.name === 'chapter' && chapterId === route.id && page && ((route.experiment && page.focusExperiment) || (route.sim && page.selectSim))) {
       if (route.sim) void page.selectSim?.(route.sim);
-      if (route.experiment) void page.focusExperiment?.(route.experiment).then((found) => { if (t === token && !found) window.scrollTo(0, 0); });
+      if (route.experiment) void page.focusExperiment?.(route.experiment).then((found) => { if (tk === token && !found) window.scrollTo(0, 0); });
       return;
     }
     // Önceki sayfanın simülasyonu (rAF, dinleyiciler) burada durdurulur.
@@ -75,17 +113,17 @@ export function createApp(host: HTMLElement, src: ContentSource): () => void {
     chapterId = null;
     let title = book.titleTr;
     if (route.name === 'home') {
-      page = renderHome(main, src.index);
+      page = renderHome(main, cs.index);
     } else if (route.name === 'chapter') {
-      const ch = src.index.chapters.find((c) => c.id === route.id);
-      title = ch ? `${ch.titleTr} · ${book.titleTr}` : `Bulunamadı · ${book.titleTr}`;
-      page = renderChapter(main, src, route.id, route.experiment, route.sim);
+      const ch = cs.index.chapters.find((c) => c.id === route.id);
+      title = ch ? `${ch.titleTr} · ${book.titleTr}` : `${t('app.notFoundTitle')} · ${book.titleTr}`;
+      page = renderChapter(main, cs, route.id, route.experiment, route.sim);
       if (ch) chapterId = ch.id;
     } else if (route.name === 'experiments') {
-      title = `Deneyler · ${book.titleTr}`;
-      page = renderExperiments(main, src, route.focus);
+      title = `${t('exp.title')} · ${book.titleTr}`;
+      page = renderExperiments(main, cs, route.focus);
     } else {
-      page = renderNotFound(main, 'Aradığın sayfa yok.');
+      page = renderNotFound(main, t('app.notFound'));
     }
     document.title = title;
 
@@ -96,12 +134,17 @@ export function createApp(host: HTMLElement, src: ContentSource): () => void {
     if (!first) (document.getElementById('page-title') as HTMLElement | null)?.focus({ preventScroll: true });
     first = false;
     void page.ready.then((focused) => {
-      if (t !== token) return;
+      if (tk !== token) return;
       if (wantsCard) { if (!focused) window.scrollTo(0, 0); } // kart bulunamadıysa önceki sayfanın konumu kalmasın
       else if (y) window.scrollTo(0, y);
     });
   }
 
+  // Kayıtlı tercih İngilizce ise, rota belirtilmemiş açılışta (boş ya da "#/") İngilizce ana sayfaya geçilir.
+  // Açıkça Türkçe bir bağlantıya (#/bolum/...) dokunulmaz.
+  if (storedLocale() === 'en' && /^(#\/?)?$/.test(location.hash)) {
+    try { history.replaceState(history.state, '', '#/en'); } catch { /* kısıtlı ortam */ }
+  }
   const stopRouter = startRouter(show);
   return () => {
     stopRouter();
@@ -109,6 +152,9 @@ export function createApp(host: HTMLElement, src: ContentSource): () => void {
     page?.dispose(); page = null;
     skip.removeEventListener('click', onSkip);
     themeBtn.removeEventListener('click', onTheme);
+    langBtn.removeEventListener('click', onLangClick);
+    stopLinks();
+    setLocale('tr');
     mq?.removeEventListener?.('change', syncThemeBtn);
     window.removeEventListener('scroll', saveScroll);
     clearTimeout(scrollTimer);

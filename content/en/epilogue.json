@@ -1,0 +1,81 @@
+{
+ "summary": "The Epilogue is a summary that gathers the themes repeated throughout the book into short items. It is stressed again that scientific findings describe average tendencies, and that individual differences and exceptions are found everywhere. Topics such as the interaction of genes and environment, the importance of context, the working together of emotion and cognition, and the ease with which the Us/Them distinction can be manipulated come to the fore. The final section closes by arguing that complexity calls for responsibility rather than despair, and that scientific thinking and compassion are not opposites of one another.",
+ "keyConcepts": [
+  {
+   "term": "Average vs. variation",
+   "explanation": "Scientific findings often describe an average tendency; the variation between individuals is often the most interesting part."
+  },
+  {
+   "term": "Context",
+   "explanation": "Genes and hormones do not determine behavior on their own; the same biological effect can produce a good or a bad outcome depending on the environment."
+  },
+  {
+   "term": "Gene–environment interaction",
+   "explanation": "Genes carry predispositions and vulnerabilities rather than certainties; the most effective path of evolutionary change is often the regulation of a gene rather than the gene itself."
+  },
+  {
+   "term": "Us vs. them",
+   "explanation": "Humans naturally make the distinction between groups, and this distinction can be shifted within seconds by unconscious cues."
+  },
+  {
+   "term": "Rationalization",
+   "explanation": "Most of the suffering in the world comes not from those who believe a terrible act is permitted, but from people who oppose that act in principle and regard their own situation as an exception."
+  },
+  {
+   "term": "Cognition and affect",
+   "explanation": "Reasoning and emotions always work together; the question to ask is which of them dominates."
+  },
+  {
+   "term": "Socioeconomic status and hierarchy",
+   "explanation": "The text notes that by inventing socioeconomic status, humans created a form of subjugation unseen among hierarchical primates."
+  },
+  {
+   "term": "Co-evolution of brain and culture",
+   "explanation": "Brain structure and cultural norms change by influencing one another; some moral intuitions that seem natural today first emerged in the past through nonconformist reasoning that did not fit the mold."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Average or Distribution?",
+   "shows": "Shows how very different the individual distributions of populations with the same average can be. It visualizes how context, threshold value and individual difference together produce outcomes.",
+   "inputs": [
+    "Average tendency",
+    "Width of individual variation",
+    "Contextual threshold value"
+   ],
+   "outputs": [
+    "Individual distribution chart",
+    "Proportion of individuals exceeding the threshold",
+    "Comparison showing how misleading the average is"
+   ]
+  },
+  {
+   "title": "Us/Them Slider",
+   "shows": "Shows how whom people count as “us” can shift as a shared goal or label changes. It makes concrete the idea of easy manipulability in the Epilogue.",
+   "inputs": [
+    "Presence of a shared goal",
+    "Change of label",
+    "Level of pressure in the environment",
+    "Elapsed time"
+   ],
+   "outputs": [
+    "Ingroup and outgroup closeness scores",
+    "Timeline of who is counted as “us”"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "The Epilogue is the direct continuation of the “War and Peace” discussion in ch17; the first lines of the Epilogue connect to the end of ch17."
+  },
+  {
+   "why": "Avoiding categorical boxes and the “complicated” multi-factor explanation are the conclusions reached by the approach established in the Introduction."
+  },
+  {
+   "why": "That the Us/Them distinction can be steered unconsciously and within seconds is the main finding of ch11."
+  },
+  {
+   "why": "The item “There is no clothing above the homunculus” summarizes the free will discussion in ch16."
+  }
+ ]
+}

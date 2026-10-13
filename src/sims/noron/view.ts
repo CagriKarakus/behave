@@ -3,35 +3,39 @@ import './view.css';
 import { Scope, ref, uid } from '../kit';
 import { createTour, type TourStep } from '../tour';
 import { createSumPanel } from './panel-sum';
+import { L } from './text';
 import { relatedBox, type Ctx, type Meter, type Panel } from './ui';
 
 type Tab = 'sum' | 'syn' | 'circ';
-const TABS: Array<{ key: Tab; label: string }> = [
-  { key: 'sum', label: 'Toplama ve eşik' },
-  { key: 'syn', label: 'Sinaps' },
-  { key: 'circ', label: 'Devre' },
-];
 
-const TEMPLATE = (id: string) => `
+const TEMPLATE = (id: string) => {
+  const V = L().view;
+  const tabs: Array<{ key: Tab; label: string }> = [
+    { key: 'sum', label: V.tabSum },
+    { key: 'syn', label: V.tabSyn },
+    { key: 'circ', label: V.tabCirc },
+  ];
+  return `
 <div class="sim sim-nr">
-  <p class="lede">Bir nöron gelen binlerce sinyali nasıl tek bir "ateşle / ateşleme" kararına dönüştürür?</p>
+  <p class="lede">${V.lede}</p>
 
-  <div class="tabs" role="tablist" aria-label="Simülasyon bölümleri">
-    ${TABS.map((t, i) => `<button class="tab" role="tab" id="${id}-tab-${t.key}" data-pane="${t.key}" aria-controls="${id}-pane-${t.key}" aria-selected="${i === 0}" ${i ? 'tabindex="-1"' : ''} type="button">${t.label}</button>`).join('')}
+  <div class="tabs" role="tablist" aria-label="${V.tablist}">
+    ${tabs.map((t, i) => `<button class="tab" role="tab" id="${id}-tab-${t.key}" data-pane="${t.key}" aria-controls="${id}-pane-${t.key}" aria-selected="${i === 0}" ${i ? 'tabindex="-1"' : ''} type="button">${t.label}</button>`).join('')}
   </div>
 
-  <div class="sim-bar" role="group" aria-label="Anlık açıklama"><div class="sim-bar-in">
+  <div class="sim-bar" role="group" aria-label="${V.barLabel}"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
     <div class="nr-meters" data-ref="meters"></div>
   </div></div>
   <p class="sr-only" aria-live="polite" data-ref="live"></p>
 
-  ${TABS.map((t, i) => `<section class="pane" role="tabpanel" id="${id}-pane-${t.key}" data-pane="${t.key}" aria-labelledby="${id}-tab-${t.key}" ${i ? 'hidden' : ''}></section>`).join('')}
+  ${tabs.map((t, i) => `<section class="pane" role="tabpanel" id="${id}-pane-${t.key}" data-pane="${t.key}" aria-labelledby="${id}-tab-${t.key}" ${i ? 'hidden' : ''}></section>`).join('')}
 
   ${relatedBox()}
 
-  <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan (Ek 1): dinlenme ~-70 mV; eşikte tam ya da hiç; tek girdi sönüp gider, birçoğu birlikte gerekir; geri alım ve enzim sinyalin süresini belirler; ilaçlar geri alımı engelleyerek güçlendirir; geri bildirim kısaltır, ileri beslemeli zamanda, yanal inhibisyon uzayda keskinleştirir. Eşik, tepe, süreler, genlikler, hız sabitleri, %90 ilaç etkisi ve devre güçleri modelin varsayımıdır.</p>
+  <p class="foot">${V.foot}</p>
 </div>`;
+};
 
 export function mount(container: HTMLElement): () => void {
   const scope = new Scope();
@@ -118,48 +122,23 @@ export function mount(container: HTMLElement): () => void {
   const after = () => { barDirty = true; poke(); };
   const addTour = (key: Tab, steps: TourStep[]) => hostOf(key).prepend(createTour(scope, steps, { onExit: after }).el);
 
+  const TS = L().tourSum;
   addTour('sum', [
+    { ...TS[0], apply: () => sum.scene({}, ({ add }) => add(0, 1, 15)) },
+    { ...TS[1], apply: () => sum.scene({}, ({ volley }) => volley(six, 1, 15)) },
+    { ...TS[2], apply: () => sum.scene({}, ({ train }) => { train(0, 8, 2, 15); train(0, 8, 8, 50); }) },
+    { ...TS[3], apply: () => sum.scene({}, ({ volley }) => { volley(six, 1, 15); volley(six, 1, 75); volley([0, 1, 2], -1, 75); }) },
     {
-      title: 'Tek girdi sönüp gider',
-      text: 'Dinlenme gerilimi yaklaşık -70 mV (kitaptan). En yakın dendritten gelen tek girdi gerilimi ~4 mV oynatıp söner.',
-      look: 'Küçük bir tümsek; eşik çizgisi çok uzakta.',
-      apply: () => sum.scene({}, ({ add }) => add(0, 1, 15)),
-    },
-    {
-      title: 'Uzamsal toplama',
-      text: 'Altı dendrit aynı anda uyarılınca etkiler akson tepeciğinde toplanır. Toplam eşiği (-55 mV, varsayım) aşınca aksiyon potansiyeli doğar.',
-      look: 'Kesikli çizgi (girdi toplamı) eşiği geçince gerilim +40 mV\'ye fırlıyor.',
-      apply: () => sum.scene({}, ({ volley }) => volley(six, 1, 15)),
-    },
-    {
-      title: 'Zamansal toplama',
-      text: 'Aynı dendrite sekiz girdi: 2 ms arayla gelenler üst üste biner, 8 ms arayla gelenler her seferinde sönüp gider.',
-      look: 'İlk dizi ateşliyor, ikincisi eşiğin altında kalıyor.',
-      apply: () => sum.scene({}, ({ train }) => { train(0, 8, 2, 15); train(0, 8, 8, 50); }),
-    },
-    {
-      title: 'Engelleyici girdi',
-      text: 'Altı uyarıcı girdi ilk seferde ateşletiyor. İkincide üç engelleyici girdi de var ve toplam eşiğe varamıyor.',
-      look: 'İkinci dalganın tepesi eşiğin altında.',
-      apply: () => sum.scene({}, ({ volley }) => { volley(six, 1, 15); volley(six, 1, 75); volley([0, 1, 2], -1, 75); }),
-    },
-    {
-      title: 'Hep ya da hiç, sonra refrakter',
-      text: 'Eşiği zor geçen ve çok güçlü uyarı aynı boyda bir aksiyon potansiyeli verir. 2 ms sonra gelen ikinci dalga refrakter dönemde boşa gider.',
-      look: 'Üç tepe de +40 mV; kesikli analog çizgi ikincide çok daha yüksek.',
+      ...TS[4],
       apply: () => sum.scene({}, ({ volley }) => {
         volley([0, 1, 2, 3, 4], 1, 15);
         for (let k = 0; k < 3; k++) volley(six, 1, 55);
         volley(six, 1, 95); volley(six, 1, 97);
       }),
     },
-    {
-      title: 'Hız, şiddeti taşır',
-      text: 'Sürekli girdi arttıkça aksiyon potansiyelinin boyu değişmez, sıklığı artar: analog şiddet ateşleme hızına çevrilir.',
-      look: 'Alttaki eğride nokta yükseldikçe çıkış sıklaşıyor.',
-      apply: () => sum.scene({ exc: 0.6 }),
-    },
+    { ...TS[5], apply: () => sum.scene({ exc: 0.6 }) },
   ]);
+
 
 
 

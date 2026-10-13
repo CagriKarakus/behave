@@ -1,5 +1,7 @@
 // Nöron simülasyonunun ortak arayüz yardımcıları (yalnızca bu klasörde kullanılır).
+import { t } from '../../i18n/t';
 import { svg, svgText, type Scope } from '../kit';
+import { L } from './text';
 
 export interface Meter { label: string; value: string; frac: number; color: string }
 
@@ -82,10 +84,15 @@ export function gridY(parent: Element, x0: number, x1: number, y: number, label:
 
 export const line = (parent: Element, cls: string): SVGElement => svg('path', { class: cls, d: '' }, parent);
 
-export const relatedBox = (): string =>
-  '<aside class="book" aria-label="İlgili bölümler"><h3 class="sim-h">İlgili bölümler</h3><ul class="book-list">' +
-  '<li><a href="#/bolum/ch02?sim=bir-saniye-once">Bölüm 2: Bir Saniye Önce</a>. Dopamin ve serotonin sistemleri bu sinaptik iletimin üzerinde çalışır; serotonin azaltılınca dürtüsellik artıyor (' +
-  '<a href="#/bolum/ch02?deney=ch02-e12">Wood ve ark.</a>, replikasyon: karışık).</li>' +
-  '<li><a href="#/bolum/ch05?sim=noroplastisite">Bölüm 5: Günler ila Aylar Önce</a>. NMDA reseptörü, tekrarlayan glutamat sinyaliyle eşik davranışı gösterir (<a href="#/bolum/ch05?deney=ch05-e1">LTP, sağlam</a>); ' +
-  'LTD gereksiz sinyali silip önemliyi belirginleştirir. Antidepresan etkisi için yeni nöron gerekli mi (<a href="#/bolum/ch05?deney=ch05-e11">karışık</a>) açık soru.</li>' +
-  '</ul><p class="note">Ek 1 için ayrı deney kaydı yok; sayılar özet ve kavramlardan, gerisi modelin varsayımından gelir.</p></aside>';
+export const relatedBox = (): string => {
+  const T = L().related;
+  const a2 = `<a href="#/bolum/ch02?sim=bir-saniye-once">${T.ch2Title}</a>`;
+  const w = `<a href="#/bolum/ch02?deney=ch02-e12">${T.ch2Study}</a>`;
+  const a5 = `<a href="#/bolum/ch05?sim=noroplastisite">${T.ch5Title}</a>`;
+  const ltp = `<a href="#/bolum/ch05?deney=ch05-e1">${T.ch5Ltp(t('repl.sağlam'))}</a>`;
+  const mixed = `<a href="#/bolum/ch05?deney=ch05-e11">${t('repl.karışık')}</a>`;
+  return `<aside class="book" aria-label="${T.label}"><h3 class="sim-h">${T.label}</h3><ul class="book-list">` +
+    `<li>${T.ch2(a2, w, t('repl.karışık'))}</li>` +
+    `<li>${T.ch5(a5, ltp, mixed)}</li>` +
+    `</ul><p class="note">${T.note}</p></aside>`;
+};

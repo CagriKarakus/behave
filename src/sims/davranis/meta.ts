@@ -5,5 +5,6 @@ export const meta: SimMeta = {
   chapter: 'ch01',
   title: 'Aynı eylem, farklı anlam',
   blurb: 'Saldırganlık haritası, bağlam kapısı, yer değiştirme saldırganlığı',
+  en: { title: 'Same act, different meaning', blurb: 'Aggression map, context gate, displaced aggression' },
   order: 1,
 };

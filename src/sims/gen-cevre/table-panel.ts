@@ -1,9 +1,12 @@
 // Sekme 1: gen × çevre tablosu, reaksiyon normu grafiği ve sanal popülasyondan kalıtılabilirlik.
 import { svg, svgText } from '../kit';
 import {
-  DEFAULT_PARAMS, MAX_ENV, PRESETS, VARIANTS, decompose, describeTable, h2Curve, rankFlips, simulatePop, tableFromParams,
+  DEFAULT_PARAMS, MAX_ENV, PER_CELL, PRESETS, VARIANTS, decompose, describeTable, h2Curve, rankFlips, simulatePop, tableFromParams,
   type Decomp, type Pop, type Table, type TableParams,
 } from './model';
+import { percent } from '../../i18n/fmt';
+import { t } from '../../i18n/t';
+import { L } from './text';
 import { bookBox, chipRow, makeSlider, pc, type Ctx, type Meter, type Panel, type SliderHandle } from '../ui';
 
 const VAR_COL = ['var(--hyp)', 'var(--pit)', 'var(--eff)'];
@@ -16,53 +19,56 @@ function marker(parent: Element, g: number, x: number, y: number, r: number, ext
   return svg('polygon', { points: `${x},${y - r * 1.2} ${x + r * 1.15},${y + r * 0.85} ${x - r * 1.15},${y + r * 0.85}`, ...a }, parent);
 }
 
-const legendHTML = (): string => '<div class="legend" aria-label="Varyantlar">' + VARIANTS.map((v, g) => {
+const legendHTML = (): string => `<div class="legend" aria-label="${L().table.variantsLabel}">` + VARIANTS.map((v, g) => {
   const s = g === 0 ? '<circle cx="8" cy="5" r="4"/>' : g === 1 ? '<rect x="4" y="1" width="8" height="8" rx="1"/>' : '<polygon points="8,0 13,9 3,9"/>';
-  return `<span><svg viewBox="0 0 16 10" fill="${VAR_COL[g]}" aria-hidden="true">${s}</svg>${v} varyantı</span>`;
+  return `<span><svg viewBox="0 0 16 10" fill="${VAR_COL[g]}" aria-hidden="true">${s}</svg>${L().table.variant(v)}</span>`;
 }).join('') + '</div>';
 
-const TEMPLATE = () => `
-<p class="note">Üç gen varyantı (A, B, C) birkaç ortamda. Tablodaki sayı, o varyant ve ortamdaki ortalama sonuçtur; her hücrede bireyler bu ortalamanın çevresinde dağılır. Sanal bir popülasyon bu tablodan türetilir ve kalıtılabilirlik (h²) ondan hesaplanır.</p>
-<div class="chips" data-ref="presets" role="group" aria-label="Hazır örnekler"></div>
+const TEMPLATE = () => {
+  const T = L().table;
+  return `
+<p class="note">${T.intro}</p>
+<div class="chips" data-ref="presets" role="group" aria-label="${T.presetsLabel}"></div>
 <p class="note preset-note" data-ref="presetNote"></p>
 
 <div class="stage">
-  <svg data-ref="rn" viewBox="0 0 360 236" role="img" aria-label="Reaksiyon normu grafiği: ortam ekseninde her varyantın ortalama sonucu"></svg>
+  <svg data-ref="rn" viewBox="0 0 360 236" role="img" aria-label="${T.rnLabel}"></svg>
   ${legendHTML()}
 </div>
 
-<section class="card" aria-label="Gen çevre tablosu">
-  <h3 class="sim-h">Ortalama sonuç tablosu (sayıları değiştirebilirsin)</h3>
+<section class="card" aria-label="${T.cardLabel}">
+  <h3 class="sim-h">${T.cardTitle}</h3>
   <div class="tbl-wrap" data-ref="tbl"></div>
-  <p class="note">Alt satır: yalnızca o ortamdaki bireylere bakılırsa h². Tek ortamda ölçülen sayı ancak o ortam için geçerlidir.</p>
+  <p class="note">${T.cardNote}</p>
 </section>
 
-<section class="card" aria-label="Varyans payları ve ortam sayısı eğrisi">
-  <h3 class="sim-h">Sanal popülasyonda farkın kaynağı</h3>
-  <div class="vbar" data-ref="vbar" role="img" aria-label="Toplam farkın genetik, ortam, etkileşim ve rastlantı payları"></div>
+<section class="card" aria-label="${T.varCardLabel}">
+  <h3 class="sim-h">${T.varTitle}</h3>
+  <div class="vbar" data-ref="vbar" role="img" aria-label="${T.vbarLabel}"></div>
   <div class="vleg" data-ref="vleg"></div>
-  <h3 class="sim-h">Aynı genler, daha çok ortam</h3>
-  <p class="note">Ortamlar soldan sağa sırayla eklenirse h² nasıl değişir?</p>
-  <div class="chart"><svg data-ref="curve" viewBox="0 0 360 130" role="img" aria-label="Kalıtılabilirliğin dahil edilen ortam sayısına göre değişimi"></svg></div>
+  <h3 class="sim-h">${T.curveTitle}</h3>
+  <p class="note">${T.curveNote}</p>
+  <div class="chart"><svg data-ref="curve" viewBox="0 0 360 130" role="img" aria-label="${T.curveLabel}"></svg></div>
 </section>
 
-<section aria-label="Tablo girdileri"><h3 class="sim-h">Girdiler</h3>
+<section aria-label="${T.inputsLabel}"><h3 class="sim-h">${L().common.inputs}</h3>
   <div class="sliders" data-ref="sliders"></div>
-  <div class="row" style="margin-top:12px"><button class="btn" type="button" data-ref="rerun">Sanal popülasyonu yeniden çalıştır</button></div>
+  <div class="row" style="margin-top:12px"><button class="btn" type="button" data-ref="rerun">${T.rerun}</button></div>
 </section>
 
-<details class="more"><summary>Model nasıl çalışıyor?</summary>
-  <p>Her varyant × ortam hücresinde ${150} sanal birey vardır. Bireyin sonucu = hücre ortalaması + rastlantısal fark (aynı gen, aynı ortam, yine de bireyler arası değişim). Genotipler ortamlara bağımsız ve eşit dağılır.</p>
-  <p>Toplam fark dörde ayrılır: varyantların ortalama farkı (genetik pay, h²), ortamların ortalama farkı, ikisinin birlikte yarattığı etkileşim, ve hücre içi rastlantı. Etkileşim, "bir varyantın etkisi ortama göre değişiyor" demektir; genetik paya ya da ortam payına temiz biçimde yazılamaz.</p>
-  <p>Girdiler: ortam sayısı, ortamlar arası fark (ortamlar yoksuldan zengine eşit aralıkla dizilir), varyantlar arası gen farkı ve etkileşim gücü (1'de çizgilerin eğimi A için 2, B için 1, C için 0 olur ve çizgiler kesişir). Tablo hücrelerini elle de değiştirebilirsin.</p>
+<details class="more"><summary>${t('sim.how')}</summary>
+  <p>${T.how[0](PER_CELL)}</p>
+  <p>${T.how[1]}</p>
+  <p>${T.how[2]}</p>
 </details>
 
 ${bookBox([
-    { id: 'ch08-e4', text: 'Üç laboratuvarda aynı fareler (Crabbe, 1999): replikasyon sağlam' },
-    { id: 'ch08-e5', text: 'Sosyoekonomik duruma göre IQ\'nun kalıtılabilirliği (Turkheimer, 2003): replikasyon karışık' },
-  ], '<p class="note">Turkheimer bulgusu ABD örneklemlerinde görüldü; Batı Avrupa ve Avustralya\'da görülmedi ya da tersine döndü, Florida\'daki büyük bir çalışma etkileşimi bulamadı. Yani "yoksul ortamda h² düşüktür" kesin bir yasa değil, tartışmalı bir bulgu.</p>')}
-<p class="foot">Nitel model. Kitaptan gelen sayılar: Turkheimer\'de h² ≈ %10 (düşük SES) ve ≈ %70 (yüksek SES); Crabbe\'de hareketlilik artışı 667, 701 ve 5.000\'den fazla cm. Bunların dışındaki tüm sayılar (sonuç ölçeği, gen farkı, B ve C varyantları) sembolik. Varyantlar gerçek genler değildir. "Genetik pay" burada varyantlar arası ortalama farkın payıdır; gerçek ikiz çalışmalarının h² tahmini bundan farklı yollarla hesaplanır.</p>
+    { id: 'ch08-e4', text: T.book[0](t('repl.sağlam')) },
+    { id: 'ch08-e5', text: T.book[1](t('repl.karışık')) },
+  ], T.bookExtra)}
+<p class="foot">${T.foot}</p>
 `;
+};
 
 export interface TablePanel extends Panel {
   /** Tur ve dış çağrılar: hazır örnek ya da parametre kümesi uygula. */
@@ -99,11 +105,12 @@ export function createTablePanel(ctx: Ctx, host: HTMLElement): TablePanel {
   /* ---- Sliders ---- */
   const sl: Record<string, SliderHandle> = {};
   const slHost = $('sliders');
+  const SL = L().table.sliders;
   const fromParams = () => { S.table = tableFromParams(S.params); S.preset = null; S.structural = true; setChip(null); recompute(); };
-  sl.n = makeSlider(ctx, slHost, 'n', 'Ortam sayısı', 'Kaç farklı ortamda ölçüm yapılıyor. Tek ortam, çoğu çalışmanın yaptığı şeydir.', 1, MAX_ENV, S.params.n, (v) => { S.params.n = v; fromParams(); }, (v) => `${v} ortam`, 'var(--gld)');
-  sl.spread = makeSlider(ctx, slHost, 'spread', 'Ortam çeşitliliği', 'Ortamlar birbirinden ne kadar farklı: hepsi benzer mi, yoksul ile zengin mi?', 0, 100, Math.round(S.params.spread * 100), (v) => { S.params.spread = v / 100; fromParams(); }, (v) => `%${v}`, 'var(--gld)');
-  sl.gen = makeSlider(ctx, slHost, 'gen', 'Varyantlar arası gen farkı', 'A, B ve C varyantlarının ortalama sonucu birbirinden ne kadar ayrışıyor.', 0, 100, Math.round(S.params.gen * 100), (v) => { S.params.gen = v / 100; fromParams(); }, (v) => `%${v}`, 'var(--pit)');
-  sl.inter = makeSlider(ctx, slHost, 'inter', 'Gen × çevre etkileşimi', 'Sıfırda ortam herkesi aynı oranda etkiler. Yüksekte varyantlar ortama farklı yanıt verir ve çizgiler kesişir.', 0, 100, Math.round(S.params.inter * 100), (v) => { S.params.inter = v / 100; fromParams(); }, (v) => `%${v}`, 'var(--red)');
+  sl.n = makeSlider(ctx, slHost, 'n', SL.n.name, SL.n.hint, 1, MAX_ENV, S.params.n, (v) => { S.params.n = v; fromParams(); }, SL.n.fmt, 'var(--gld)');
+  sl.spread = makeSlider(ctx, slHost, 'spread', SL.spread.name, SL.spread.hint, 0, 100, Math.round(S.params.spread * 100), (v) => { S.params.spread = v / 100; fromParams(); }, (v) => percent(String(v)), 'var(--gld)');
+  sl.gen = makeSlider(ctx, slHost, 'gen', SL.gen.name, SL.gen.hint, 0, 100, Math.round(S.params.gen * 100), (v) => { S.params.gen = v / 100; fromParams(); }, (v) => percent(String(v)), 'var(--pit)');
+  sl.inter = makeSlider(ctx, slHost, 'inter', SL.inter.name, SL.inter.hint, 0, 100, Math.round(S.params.inter * 100), (v) => { S.params.inter = v / 100; fromParams(); }, (v) => percent(String(v)), 'var(--red)');
   ctx.scope.on($('rerun'), 'click', () => { S.seed++; recompute(); ctx.touch(); });
 
   /* ---- Hazır örnekler ---- */
@@ -129,13 +136,13 @@ export function createTablePanel(ctx: Ctx, host: HTMLElement): TablePanel {
   /* ---- Tablo ---- */
   const tbl = $('tbl');
   function buildTable(): void {
-    const n = nEnv();
+    const n = nEnv(), T = L().table;
     const head = S.table.envNames.map((nm) => `<th scope="col">${nm}</th>`).join('');
     const rows = VARIANTS.map((v, g) =>
       `<tr><th scope="row"><svg viewBox="0 0 16 12" width="16" height="12" fill="${VAR_COL[g]}" aria-hidden="true">${g === 0 ? '<circle cx="8" cy="6" r="4.5"/>' : g === 1 ? '<rect x="3.5" y="1.5" width="9" height="9" rx="1"/>' : '<polygon points="8,0.5 13.5,11 2.5,11"/>'}</svg> ${v}</th>` +
-      Array.from({ length: n }, (_, e) => `<td><input type="number" inputmode="decimal" min="0" max="100" step="1" data-g="${g}" data-e="${e}" value="${Math.round(S.table.cells[g][e] * 10) / 10}" aria-label="${v} varyantı, ${S.table.envNames[e]}: ortalama sonuç"></td>`).join('') + '</tr>').join('');
+      Array.from({ length: n }, (_, e) => `<td><input type="number" inputmode="decimal" min="0" max="100" step="1" data-g="${g}" data-e="${e}" value="${Math.round(S.table.cells[g][e] * 10) / 10}" aria-label="${T.cellAria(v, S.table.envNames[e])}"></td>`).join('') + '</tr>').join('');
     const pe = Array.from({ length: n }, (_, e) => `<td class="pe" data-pe="${e}">–</td>`).join('');
-    tbl.innerHTML = `<table class="gx"><thead><tr><th><span class="sr-only">Varyant</span></th>${head}</tr></thead><tbody>${rows}<tr class="h2row"><th scope="row">h² (ortam içi)</th>${pe}</tr></tbody></table>`;
+    tbl.innerHTML = `<table class="gx"><thead><tr><th><span class="sr-only">${T.thVariant}</span></th>${head}</tr></thead><tbody>${rows}<tr class="h2row"><th scope="row">${T.h2Row}</th>${pe}</tr></tbody></table>`;
   }
   ctx.scope.on(tbl, 'input', (ev) => {
     const t = ev.target as HTMLInputElement;
@@ -143,7 +150,7 @@ export function createTablePanel(ctx: Ctx, host: HTMLElement): TablePanel {
     const v = parseFloat(t.value);
     if (!Number.isFinite(v)) return;
     S.table.cells[+t.dataset.g][+t.dataset.e!] = Math.min(100, Math.max(0, v));
-    S.preset = null; setChip(null); $('presetNote').textContent = 'Tablo elle değiştirildi.';
+    S.preset = null; setChip(null); $('presetNote').textContent = L().table.edited;
     recompute();
   });
 
@@ -187,11 +194,10 @@ export function createTablePanel(ctx: Ctx, host: HTMLElement): TablePanel {
   }
 
   /* ---- Varyans payları + eğri ---- */
-  const SEG: Array<[keyof Pick<Decomp, 'h2' | 'env' | 'gxe' | 'res'>, string, string]> = [
-    ['h2', 'Genetik (h²)', 'var(--pit)'], ['env', 'Ortam', 'var(--gld)'], ['gxe', 'Gen × ortam', 'var(--red)'], ['res', 'Rastlantı', 'var(--lesion)'],
-  ];
+  const SEG_COL = { h2: 'var(--pit)', env: 'var(--gld)', gxe: 'var(--red)', res: 'var(--lesion)' } as const;
   function drawVar(): void {
-    const d = S.dec;
+    const d = S.dec, names = L().table.seg;
+    const SEG = (['h2', 'env', 'gxe', 'res'] as const).map((k) => [k, names[k], SEG_COL[k]] as const);
     $('vbar').innerHTML = SEG.map(([k, nm, col]) => `<i style="width:${(d[k] * 100).toFixed(1)}%;background:${col}" title="${nm}"></i>`).join('');
     $('vleg').innerHTML = SEG.map(([k, nm, col]) => `<span><i style="background:${col}"></i>${nm} <b>${pc(d[k])}</b></span>`).join('');
   }
@@ -208,7 +214,7 @@ export function createTablePanel(ctx: Ctx, host: HTMLElement): TablePanel {
       svgText(sv, { x: x(i), y: y(v) - 8, 'text-anchor': 'middle', style: 'fill:var(--ink)' }, pc(v));
       svgText(sv, { x: x(i), y: bot + 14, 'text-anchor': 'middle' }, String(i + 1));
     });
-    svgText(sv, { x: (x0 + x1) / 2, y: 124, 'text-anchor': 'middle', class: 'ax-t' }, 'Dahil edilen ortam sayısı');
+    svgText(sv, { x: (x0 + x1) / 2, y: 124, 'text-anchor': 'middle', class: 'ax-t' }, L().table.curveAxis);
     sv.setAttribute('viewBox', '0 0 360 130');
   }
   function drawPerEnv(): void {
@@ -228,9 +234,9 @@ export function createTablePanel(ctx: Ctx, host: HTMLElement): TablePanel {
     setParams,
     say: () => describeTable(S.dec, S.curve, S.flips, nEnv()),
     meters: (): Meter[] => [
-      { label: 'Genetik pay (h²)', value: pc(S.dec.h2), frac: S.dec.h2, color: 'var(--pit)' },
-      { label: 'Ortam farkı payı', value: pc(S.dec.env), frac: S.dec.env, color: 'var(--gld)' },
-      { label: 'Gen × ortam payı', value: pc(S.dec.gxe), frac: S.dec.gxe, color: 'var(--red)' },
+      { label: L().table.meters.h2, value: pc(S.dec.h2), frac: S.dec.h2, color: 'var(--pit)' },
+      { label: L().table.meters.env, value: pc(S.dec.env), frac: S.dec.env, color: 'var(--gld)' },
+      { label: L().table.meters.gxe, value: pc(S.dec.gxe), frac: S.dec.gxe, color: 'var(--red)' },
     ],
     draw(): boolean {
       if (!S.dirty) return false;

@@ -3,6 +3,7 @@
 // bakması gerektiğini söyler (look). Tur bitince ya da "Serbest oyna"ya basılınca
 // kullanıcı kaydırıcılarla serbestçe dener.
 
+import { t } from '../i18n/t';
 import type { Scope } from './kit';
 
 export interface TourStep {
@@ -25,18 +26,18 @@ export interface Tour {
 export function createTour(scope: Scope, steps: TourStep[], opts: { onExit?: () => void } = {}): Tour {
   const el = document.createElement('section');
   el.className = 'tour';
-  el.setAttribute('aria-label', 'Rehberli tur');
+  el.setAttribute('aria-label', t('tour.title'));
   el.innerHTML =
-    '<div class="tour-head"><span class="tour-k">Rehberli tur</span><span class="tour-n" data-t="n"></span></div>' +
+    `<div class="tour-head"><span class="tour-k">${t('tour.title')}</span><span class="tour-n" data-t="n"></span></div>` +
     '<p class="tour-title" data-t="title"></p>' +
     '<p class="tour-text" data-t="text" aria-live="polite"></p>' +
     '<p class="tour-look" data-t="look"></p>' +
     '<div class="tour-nav">' +
-    '<button type="button" class="btn" data-t="prev">Geri</button>' +
-    '<button type="button" class="btn tour-next" data-t="next">İleri</button>' +
-    '<button type="button" class="btn tour-exit" data-t="exit">Serbest oyna</button>' +
+    `<button type="button" class="btn" data-t="prev">${t('tour.prev')}</button>` +
+    `<button type="button" class="btn tour-next" data-t="next">${t('tour.next')}</button>` +
+    `<button type="button" class="btn tour-exit" data-t="exit">${t('tour.free')}</button>` +
     '</div>' +
-    '<button type="button" class="btn tour-start" data-t="start" hidden>Turu baştan başlat</button>';
+    `<button type="button" class="btn tour-start" data-t="start" hidden>${t('tour.restart')}</button>`;
   const q = (k: string) => el.querySelector<HTMLElement>(`[data-t="${k}"]`)!;
   let i = 0;
 
@@ -51,10 +52,10 @@ export function createTour(scope: Scope, steps: TourStep[], opts: { onExit?: () 
     q('n').textContent = `${i + 1} / ${steps.length}`;
     q('title').textContent = s.title;
     q('text').textContent = s.text;
-    q('look').textContent = s.look ? `Neye bak: ${s.look}` : '';
+    q('look').textContent = s.look ? t('tour.look', { x: s.look }) : '';
     q('look').hidden = !s.look;
     (q('prev') as HTMLButtonElement).disabled = i === 0;
-    q('next').textContent = i === steps.length - 1 ? 'Bitir' : 'İleri';
+    q('next').textContent = i === steps.length - 1 ? t('tour.done') : t('tour.next');
   };
   const go = (n: number) => {
     i = Math.max(0, Math.min(steps.length - 1, n));

@@ -1,0 +1,96 @@
+{
+ "summary": "The Introduction conveys people's contradictory attitude toward violence through the author's fantasy of catching and punishing Hitler: the violence we hate is different from the violence we praise in context. The author says that this book examines, from a biological perspective, violence, aggression and competition, but also cooperation, empathy and self-sacrifice. Three basic principles stand out: understanding behavior requires biology but biology alone is not enough, and biological, psychological and cultural explanations cannot be separated from one another. The danger of categorical thinking is shown through the cases of scientists such as Watson, Moniz and Lorenz, each squeezed into a single box. The book's method is also set out here: the causes of a behavior are sought on a time ladder that runs from brain events one second earlier to hormones, childhood, genes, culture and evolution; according to the author, the book's most important idea is that these rungs are not separate boxes, and that each explanation contains all those that came before it. Finally, the ways in which humans both resemble and differ from other animals are considered.",
+ "keyConcepts": [
+  {
+   "term": "Categorical thinking",
+   "explanation": "Dividing causes into disciplinary or species boxes makes memorizing easier, but although the boundaries of the boxes are arbitrary, they can hide real differences."
+  },
+  {
+   "term": "Interdisciplinary view",
+   "explanation": "Explaining a behavior from a single field alone, such as neuroscience, endocrinology or evolutionary biology, remains incomplete; explanations at different levels must be combined."
+  },
+  {
+   "term": "Embedded explanations",
+   "explanation": "A behavior explained by a single cause actually carries within it all the biological and environmental influences behind that cause."
+  },
+  {
+   "term": "Context-dependent violence",
+   "explanation": "The same act may be acceptable in one context and horrifying in another; for this reason violence cannot be classified as good or bad in itself."
+  },
+  {
+   "term": "Animal nature and human uniqueness",
+   "explanation": "Humans share some of their responses with other species, but they use the same physiology in very different ways through cultural and cognitive routes."
+  },
+  {
+   "term": "Single-cause reductionism",
+   "explanation": "Attributing behavior solely to one gene, one hormone or one childhood event is a fallacy that has led to serious harm in history."
+  }
+ ],
+ "keyStudies": [
+  {
+   "name": "Wellesley effect (rats and human women)",
+   "finding": "The reproductive cycles of female rats housed together become synchronized within weeks; a similar synchronization in human women has been seen in some studies and not in others."
+  },
+  {
+   "name": "The historical claims of Watson, Moniz and Lorenz",
+   "finding": "The behaviorist Watson argued that the environment could turn any child into a desired profession or type; Moniz developed the frontal leukotomy (later called lobotomy) on the claim that it corrected mental disorders by changing “synaptic adjustments,” and received a Nobel Prize in 1949; Lorenz was an ethologist who produced Nazi propaganda and took part in racial policy. The author uses these three examples to show the danger of science squeezed into a single box."
+  },
+  {
+   "name": "Naipaul's account of a massacre in Indonesia",
+   "finding": "A rumor that the perpetrators of a massacre had an orchestra accompany the destruction of villages was confirmed by the statement of one perpetrator; his justification was that it made everything more beautiful. It shows that humans can combine violence with art and aesthetics."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "The Time Ladder",
+   "shows": "Shows how the causes of a chosen behavior, from brain events one second before to its evolutionary past, are arranged in rungs, and how each rung contains the one before it.",
+   "inputs": [
+    "Choice of behavior (e.g., sudden anger, generosity, fear)",
+    "Time span to display"
+   ],
+   "outputs": [
+    "List of the causes that stand out at each rung",
+    "Connecting lines between the rungs"
+   ]
+  },
+  {
+   "title": "The Category-Boundary Fallacy",
+   "shows": "Shows how dividing a continuous variable into boxes exaggerates the difference between two values close to a box boundary.",
+   "inputs": [
+    "Difference between the two values",
+    "Position of the box boundary"
+   ],
+   "outputs": [
+    "Difference perceived by the user",
+    "Deviation between the actual difference and the perception"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "The Introduction presents the basic terms and the types of aggression that will be addressed in the first chapter."
+  },
+  {
+   "why": "Brain events one second before behavior, the lowest rung of the time ladder, are examined in the second chapter."
+  }
+ ],
+ "experiments": {
+  "intro-e1": {
+   "name": "Wellesley effect (menstrual synchrony)",
+   "researchers": "Martha McClintock",
+   "question": "Do the menstrual cycles of women who live together become synchronized over time?",
+   "method": "McClintock recorded the onset dates of the menstrual cycles of college women living in the same dormitory at Wellesley College over one academic year, and examined whether cycle onsets converged among roommates and close friends. The book does not elaborate on the method; it places the human finding alongside the cycle synchronization that emerges within weeks in female rats housed together.",
+   "finding": "According to the book, female rats housed together equalize their ovulations to within a window of a few hours within weeks. A similar convergence in humans was first reported among roommates at Wellesley; some later studies found it and some did not.",
+   "roleInChapter": "It shows that human physiology is shared with other mammals, but that this shared mechanism may not give the same result in every study.",
+   "caveats": "Sapolsky notes that the effect has not been replicated in some studies and that this criticism has itself been criticized; the finding is not definitive.",
+   "replication": {
+    "note": "Most of the more careful studies conducted since the 1990s found no synchronization, and critics argued that the original finding may have arisen from variability in cycle lengths and from the statistical method. A year-long study of Chinese women living in dormitories (Yang and Schank 2006) saw no synchronization; after 2017 there is also no robust new evidence supporting the effect, and the effect is today regarded as largely doubtful.",
+    "refs": [
+     "Wilson 1992 (PNE)",
+     "Schank 2001 (J Comp Psychol)",
+     "Yang and Schank 2006 (Human Nature)"
+    ]
+   }
+  }
+ }
+}

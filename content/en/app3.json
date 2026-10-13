@@ -1,0 +1,87 @@
+{
+ "summary": "Appendix 3 explains that proteins are the building blocks of the nervous and hormonal systems, including hormones, neurotransmitter receptors and enzymes. It explains that a protein's function depends on its three-dimensional shape, and that this shape is influenced by the amino acid sequence and by environmental conditions. The flow from DNA to RNA to protein, along with the triplet structure of the genetic code and codon redundancy, is summarized. The effects of point, deletion and insertion mutations on the protein and allelic variation are covered. Finally, it clarifies that the genetic similarity between humans and chimpanzees and the sharing between siblings are measured at different levels.",
+ "keyConcepts": [
+  {
+   "term": "Protein shape and function",
+   "explanation": "A protein's function depends on its shape; some enzymes work by switching between two conformations. Environmental influences such as temperature and acidity can change the shape slightly."
+  },
+  {
+   "term": "Amino acid sequence",
+   "explanation": "Each protein is a sequence made up of about 20 different amino acids, and its sequence determines the protein's shape. For a protein of about 300 amino acids, the number of possible sequences is astronomical."
+  },
+  {
+   "term": "Central dogma",
+   "explanation": "The gene in DNA is transcribed into RNA, and RNA is translated into protein; in this flow, one gene determines one type of protein."
+  },
+  {
+   "term": "Codon and redundancy",
+   "explanation": "A codon of three nucleotides specifies one amino acid; 61 of the 64 codons code for amino acids, and most amino acids have more than one codon. This redundancy leaves some mutations without effect."
+  },
+  {
+   "term": "Point, deletion and insertion mutations",
+   "explanation": "A point mutation changes a single nucleotide and sometimes has no effect. Deletions and insertions, by contrast, shift the reading frame and generally have very large effects."
+  },
+  {
+   "term": "Alleles and polymorphism",
+   "explanation": "The multiple forms of a gene are called alleles. At equilibrium, different alleles can persist together in a population and create diversity among individuals."
+  },
+  {
+   "term": "Genetic similarity levels",
+   "explanation": "There is about 98% overlap between humans and chimpanzees at the level of gene types; between siblings, there is an average of 50% sharing at the level of a specific version. The two comparisons measure different levels."
+  }
+ ],
+ "simulationIdeas": [
+  {
+   "title": "Codon Translation Simulator",
+   "shows": "Shows how a DNA sequence is translated into an amino acid sequence and how point, deletion or insertion mutations alter this sequence.",
+   "inputs": [
+    "Starting DNA sequence",
+    "Mutation position",
+    "Mutation type (point, deletion, insertion)"
+   ],
+   "outputs": [
+    "Resulting amino acid sequence",
+    "Whether the reading frame has shifted",
+    "Whether the effect is neutral or harmful"
+   ]
+  },
+  {
+   "title": "Allele Frequency Simulator",
+   "shows": "Shows whether a new variant spreads in the population depending on its selective advantage, and whether, if harmful, it is eliminated or reaches equilibrium.",
+   "inputs": [
+    "Selective advantage or disadvantage of the variant",
+    "Starting frequency",
+    "Number of generations"
+   ],
+   "outputs": [
+    "Graph of the variant's frequency across generations",
+    "Fixation or equilibrium state"
+   ]
+  },
+  {
+   "title": "Protein Conformation Simulator",
+   "shows": "Shows how an enzyme switches between two conformations depending on the molecules that bind to it, and how environmental conditions change this switching.",
+   "inputs": [
+    "Temperature",
+    "Acidity",
+    "Presence of bound substrate"
+   ],
+   "outputs": [
+    "Timing of the conformational switch",
+    "Enzyme function rate"
+   ]
+  }
+ ],
+ "links": [
+  {
+   "why": "Appendix 3 recalls the main text's lock-and-key analogy with reference to “appendix 1”."
+  },
+  {
+   "why": "Genetic diversity and allele details are cited in the appendix text with the note that they are treated in a more complex way in chapter 8."
+  },
+  {
+   "why": "Some hormones are protein in structure, and this appendix connects with the hormone production in Appendix 2."
+  }
+ ],
+ "verifyNotes": []
+}

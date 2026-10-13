@@ -2,6 +2,8 @@ import type { ChapterDetail, ChapterMeta } from '../content/types';
 import type { ContentSource } from '../content';
 import { CONF_DOTS, chapterLabel } from '../content/normalize';
 import { html, raw, type Safe } from '../lib/html';
+import { t } from '../i18n/t';
+import type { MsgKey } from '../i18n/messages';
 import { chapterHref, withSim } from '../lib/router';
 import { enhanceSimBar } from '../sims/bar';
 import { simsFor } from '../sims/registry';
@@ -13,7 +15,7 @@ const paragraphs = (s: string): Safe => html`${s.split(/\n{2,}/).filter((p) => p
 function navLink(c: ChapterMeta | undefined, dir: 'prev' | 'next'): Safe {
   if (!c) return html`<span class="nav-link nav-empty"></span>`;
   return html`<a class="nav-link nav-${dir}" href="${chapterHref(c.id)}" rel="${dir}">
-    <span class="nav-dir">${dir === 'prev' ? '← Önceki' : 'Sonraki →'}</span>
+    <span class="nav-dir">${dir === 'prev' ? t('ch.prev') : t('ch.next')}</span>
     <span class="nav-label">${chapterLabel(c)}</span>
     <span class="nav-title">${c.titleTr}</span>
   </a>`;
@@ -21,9 +23,9 @@ function navLink(c: ChapterMeta | undefined, dir: 'prev' | 'next'): Safe {
 
 export function renderNotFound(el: HTMLElement, what: string): Page {
   el.innerHTML = html`<div class="page narrow">
-    <h1 id="page-title" tabindex="-1">Sayfa bulunamadı</h1>
+    <h1 id="page-title" tabindex="-1">${t('ch.notFoundTitle')}</h1>
     <p class="lede">${what}</p>
-    <p><a class="btn-link" href="#/">← Tüm bölümlere dön</a></p>
+    <p><a class="btn-link" href="#/">${t('ch.backAll')}</a></p>
   </div>`.value;
   return staticPage(() => { el.innerHTML = ''; });
 }
@@ -32,21 +34,21 @@ export function renderNotFound(el: HTMLElement, what: string): Page {
 function restHtml(c: ChapterMeta, d: ChapterDetail, hasSim: boolean, byId: Map<string, ChapterMeta>): Safe {
   return html`
       ${d.keyConcepts.length ? html`<section aria-labelledby="h-kav">
-        <h2 id="h-kav" class="sec-h">Temel kavramlar</h2>
+        <h2 id="h-kav" class="sec-h">${t('ch.concepts')}</h2>
         <dl class="concepts">${d.keyConcepts.map((k) => html`<div class="concept"><dt>${k.term}</dt>${k.explanation ? html`<dd>${k.explanation}</dd>` : ''}</div>`)}</dl>
       </section>` : ''}
 
       ${d.experiments.length ? html`<section aria-labelledby="h-den">
-        <h2 id="h-den" class="sec-h">Deneyler</h2>
+        <h2 id="h-den" class="sec-h">${t('ch.experiments')}</h2>
         <div class="exp-list">${d.experiments.map((e) => experimentCard(e, c, false))}</div>
-        <p><a class="btn-link" href="#/deneyler">Tüm deneyler →</a></p>
+        <p><a class="btn-link" href="#/deneyler">${t('ch.allExperiments')}</a></p>
       </section>` : d.keyStudies.length ? html`<section aria-labelledby="h-cal">
-        <h2 id="h-cal" class="sec-h">Öne çıkan çalışmalar</h2>
+        <h2 id="h-cal" class="sec-h">${t('ch.keyStudies')}</h2>
         <ul class="studies">${d.keyStudies.map((k) => html`<li><strong>${k.name}</strong>${k.finding ? html`<span>${k.finding}</span>` : ''}</li>`)}</ul>
       </section>` : ''}
 
       ${d.links.length ? html`<section aria-labelledby="h-bag">
-        <h2 id="h-bag" class="sec-h">Bölümler arası bağlantılar</h2>
+        <h2 id="h-bag" class="sec-h">${t('ch.links')}</h2>
         <ul class="links">${d.links.map((l) => {
           const t = byId.get(l.to);
           return t
@@ -56,18 +58,18 @@ function restHtml(c: ChapterMeta, d: ChapterDetail, hasSim: boolean, byId: Map<s
       </section>` : ''}
 
       ${!hasSim && d.simulationIdeas.length ? html`<section aria-labelledby="h-fik">
-        <h2 id="h-fik" class="sec-h">Simülasyon fikirleri</h2>
+        <h2 id="h-fik" class="sec-h">${t('ch.ideas')}</h2>
         <ul class="ideas">${d.simulationIdeas.map((s) => html`<li class="idea">
-          <span class="badge badge-soon">Yakında</span>
+          <span class="badge badge-soon">${t('ch.soon')}</span>
           <h3>${s.title}</h3>
           ${s.shows ? html`<p>${s.shows}</p>` : ''}
-          ${s.inputs.length ? html`<p class="io"><span>Girdiler</span> ${s.inputs.join(' · ')}</p>` : ''}
-          ${s.outputs.length ? html`<p class="io"><span>Çıktılar</span> ${s.outputs.join(' · ')}</p>` : ''}
+          ${s.inputs.length ? html`<p class="io"><span>${t('ch.inputs')}</span> ${s.inputs.join(' · ')}</p>` : ''}
+          ${s.outputs.length ? html`<p class="io"><span>${t('ch.outputs')}</span> ${s.outputs.join(' · ')}</p>` : ''}
         </li>`)}</ul>
       </section>` : ''}
 
       ${d.verifyNotes.length ? html`<details class="verify">
-        <summary>Doğrulama notları (${d.verifyNotes.length})</summary>
+        <summary>${t('ch.verify', { n: d.verifyNotes.length })}</summary>
         <ul>${d.verifyNotes.map((n) => html`<li>${n}</li>`)}</ul>
       </details>` : ''}`;
 }
@@ -79,7 +81,7 @@ function restHtml(c: ChapterMeta, d: ChapterDetail, hasSim: boolean, byId: Map<s
 export function renderChapter(el: HTMLElement, src: ContentSource, id: string, focusExp?: string, simId?: string): Page {
   const chapters = src.index.chapters;
   const idx = chapters.findIndex((c) => c.id === id);
-  if (idx < 0) return renderNotFound(el, `“${id}” kimlikli bir bölüm yok.`);
+  if (idx < 0) return renderNotFound(el, t('ch.noSuchChapter', { id }));
   const c = chapters[idx];
   const sims = simsFor(c.id);
   const byId = new Map(chapters.map((x) => [x.id, x]));
@@ -90,19 +92,19 @@ export function renderChapter(el: HTMLElement, src: ContentSource, id: string, f
   el.innerHTML = html`
   <article class="page chapter${sims.length ? ' has-sim' : ''}" aria-labelledby="page-title">
     <header class="ch-head">
-      <a class="back" href="#/">← Tüm bölümler</a>
+      <a class="back" href="#/">${t('ch.back')}</a>
       <p class="eyebrow">${chapterLabel(c)}${c.timescale ? ` · ${c.timescale}` : ''}</p>
       <h1 id="page-title" tabindex="-1">${c.titleTr}</h1>
       ${c.titleEn ? html`<p class="hero-en" lang="en">${c.titleEn}</p>` : ''}
       <p class="badges">
-        ${c.confidence ? html`<span class="badge badge-conf" title="İçerik güven düzeyi"><span aria-hidden="true">${CONF_DOTS[c.confidence]}</span> Güven: ${c.confidence}</span>` : ''}
-        ${sims.length ? raw('<span class="badge badge-sim">Simülasyon var</span>') : ''}
+        ${c.confidence ? html`<span class="badge badge-conf" title="${t('conf.title')}"><span aria-hidden="true">${CONF_DOTS[c.confidence]}</span> ${t('conf.label', { c: t(`conf.${c.confidence}` as MsgKey) })}</span>` : ''}
+        ${sims.length ? raw(`<span class="badge badge-sim">${t('ch.hasSim')}</span>`) : ''}
       </p>
       <div class="summary prose" data-slot="summary"></div>
     </header>
 
-    ${sims.length > 1 ? html`<aside class="ch-sim" aria-label="Simülasyon">
-      <div class="sim-tabs" role="tablist" aria-label="Simülasyonlar">
+    ${sims.length > 1 ? html`<aside class="ch-sim" aria-label="${t('ch.simAria')}">
+      <div class="sim-tabs" role="tablist" aria-label="${t('ch.simsAria')}">
         ${sims.map((s, i) => html`<button type="button" class="sim-tab" role="tab" id="simtab-${i}" data-sim-tab="${s.id}" aria-controls="simpanel"
           aria-selected="${i === start ? 'true' : 'false'}" tabindex="${i === start ? '0' : '-1'}">
           <span class="sim-tab-title">${s.title}</span>
@@ -112,7 +114,7 @@ export function renderChapter(el: HTMLElement, src: ContentSource, id: string, f
       <div class="sim-card" id="simpanel" role="tabpanel" aria-labelledby="simtab-${start}" tabindex="-1">
         <div class="sim-host" data-sim="${sims[start].id}"></div>
       </div>
-    </aside>` : sims.length ? html`<aside class="ch-sim" aria-label="Simülasyon">
+    </aside>` : sims.length ? html`<aside class="ch-sim" aria-label="${t('ch.simAria')}">
       <section class="sim-card" aria-labelledby="simh-0">
         <h2 id="simh-0" class="sim-title">${sims[0].title}</h2>
         <p class="muted sim-blurb">${sims[0].blurb}</p>
@@ -121,8 +123,8 @@ export function renderChapter(el: HTMLElement, src: ContentSource, id: string, f
     </aside>` : ''}
 
     <div class="ch-rest">
-      <div data-slot="rest" class="ch-rest-body" aria-busy="true"><p class="muted" role="status">Yükleniyor…</p></div>
-      <nav class="pager" aria-label="Bölümler arası gezinti">
+      <div data-slot="rest" class="ch-rest-body" aria-busy="true"><p class="muted" role="status">${t('ch.loading')}</p></div>
+      <nav class="pager" aria-label="${t('ch.pagerAria')}">
         ${navLink(chapters[idx - 1], 'prev')}
         ${navLink(chapters[idx + 1], 'next')}
       </nav>
@@ -157,7 +159,7 @@ export function renderChapter(el: HTMLElement, src: ContentSource, id: string, f
       unmountSim = () => { offBar(); unmount(); };
     } catch (e) {
       console.error(e);
-      if (!disposed && my === seq) host.textContent = 'Simülasyon yüklenemedi.';
+      if (!disposed && my === seq) host.textContent = t('ch.simFailed');
     }
   };
   const simsReady = sims.length ? activate(start) : Promise.resolve();
@@ -204,7 +206,7 @@ export function renderChapter(el: HTMLElement, src: ContentSource, id: string, f
     console.error(e);
     if (disposed) return;
     const rest = slot('rest');
-    rest.innerHTML = '<p class="muted" role="alert">Bölüm içeriği yüklenemedi. Bağlantını denetleyip sayfayı yenile.</p>';
+    rest.innerHTML = `<p class="muted" role="alert">${t('ch.loadFailed')}</p>`;
     rest.removeAttribute('aria-busy');
   });
 
