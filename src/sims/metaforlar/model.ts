@@ -124,13 +124,14 @@ export function gauges(id: CardId, x: Inputs): Gauge[] {
 
 export interface CardDef {
   id: CardId;
-  name: string;
-  short: string;
-  exps: Array<{ id: string; label: string; status: Status }>;
+  /** Metinler (name, short, metaphor, note, exps[].label) okuma anında geçerli dilden gelir. */
+  readonly name: string;
+  readonly short: string;
+  exps: Array<{ id: string; readonly label: string; status: Status }>;
   /** Metaforun gündelik karşılığı. */
-  metaphor: string;
+  readonly metaphor: string;
   /** Kısa replikasyon notu (chapters.json). */
-  note: string;
+  readonly note: string;
   /** Genel bakış çubuğu için ana ölçü anahtarı ve onu en yüksek girdide veren girdiler. */
   primary: string;
   /** Canlı çubukta gösterilen ölçü. */
@@ -138,49 +139,23 @@ export interface CardDef {
   max: Partial<Inputs>;
 }
 
+const card = (id: CardId, exps: Array<{ id: string; status: Status }>, primary: string, bar: string, max: Partial<Inputs>): CardDef => ({
+  id,
+  get name() { return L().cards[id].name; },
+  get short() { return L().cards[id].short; },
+  get metaphor() { return L().cards[id].metaphor; },
+  get note() { return L().cards[id].note; },
+  exps: exps.map((e, i) => ({ id: e.id, status: e.status, get label() { return L().cards[id].exps[i]; } })),
+  primary, bar, max,
+});
+
 export const CARDS: Record<CardId, CardDef> = {
-  cyber: {
-    id: 'cyber', name: 'Cyberball: dışlanma', short: 'Cyberball',
-    exps: [{ id: 'ch15-e1', label: 'Eisenberger 2003', status: 'karışık' }],
-    metaphor: 'Dışlanmak "acıtır": sosyal acı, beyinde fiziksel acıya benzetilir.',
-    note: 'Dışlanmanın olumsuz duygusu çok çalışmada sağlam. "Fiziksel acıyla aynı dACC" iddiası ise meta-analizlerde (Woo 2014) sorgulandı: iki acının nöral örüntüsü ayrışıyor.',
-    primary: 'acc', bar: 'acc', max: { excl: 1 },
-  },
-  insula: {
-    id: 'insula', name: 'İnsula: iğrenç ve ahlaksız', short: 'İnsula',
-    exps: [{ id: 'ch15-e6', label: 'Sanfey 2003', status: 'sağlam' }, { id: 'ch15-e4', label: 'Eskine/Chan 2012', status: 'tartışmalı' }],
-    metaphor: '"İğrenç" hem bozuk yemek hem ahlaksız eylem için kullanılır; ikisi aynı bölgeyi (ön insula) çalıştırır.',
-    note: 'Adaletsiz teklifte insula etkinliği ve reddi öngörmesi sağlam. Tat ile ahlaki yargının birbirini kaydırması ise tartışmalı: ters yöndeki bulgunun çok laboratuvarlı replikasyonu başarısız (Ghelfi 2020).',
-    primary: 'sev', bar: 'ins', max: { gross: 1 },
-  },
-  cup: {
-    id: 'cup', name: 'Sıcak fincan: cana yakın', short: 'Sıcak fincan',
-    exps: [{ id: 'ch15-e11', label: 'Williams ve Bargh 2008', status: 'tartışmalı' }],
-    metaphor: '"Sıcak insan" ile elde tutulan sıcak nesne karışır.',
-    note: 'Daha büyük örneklemli doğrudan replikasyonlar (Lynott 2014; Chabris 2019) sıcaklık yargısına ya da prososyal seçime etki bulamadı.',
-    primary: 'warm', bar: 'warm', max: { temp: 1 },
-  },
-  clip: {
-    id: 'clip', name: 'Ağır pano: ciddi', short: 'Ağır pano',
-    exps: [{ id: 'ch15-e10', label: 'Ackerman 2010', status: 'tartışmalı' }],
-    metaphor: '"Ağırbaşlı" ile gerçek ağırlık karışır: ağır panodaki özgeçmiş daha ciddi görünür.',
-    note: 'Ön kayıtlı bir replikasyon (JASNH 2018) ağır ve hafif pano arasında fark bulamadı; bu tür duyusal priming etkileri krizin en sorgulanan bulguları.',
-    primary: 'ser', bar: 'ser', max: { weight: 1 },
-  },
-  macbeth: {
-    id: 'macbeth', name: 'Macbeth: kirli ve temiz', short: 'Macbeth',
-    exps: [{ id: 'ch15-e7', label: 'Zhong ve Liljenquist 2006', status: 'tartışmalı' }, { id: 'ch15-e8', label: 'Lee ve Schwarz 2010', status: 'karışık' }, { id: 'ch15-e9', label: 'El yıkama ve yardım', status: 'tartışmalı' }],
-    metaphor: '"Kirli" ahlaksızdır; ahlaki lekeyi fiziksel temizlikle silme isteği.',
-    note: 'Doğrudan replikasyonlar (Earp 2014) başarısız; meta-analiz etkinin çok küçük olduğunu gösterdi (Siev 2018). Beden bölgesi özgüllüğü (ağız/el) kısmen yeniden üretildi.',
-    primary: 'gar', bar: 'gar', max: { mviol: 1, chan: 0 },
-  },
-  germ: {
-    id: 'germ', name: 'Bakteri uyarısı ve göç', short: 'Bakteri ve göç',
-    exps: [{ id: 'ch15-e5', label: 'Landau 2009', status: 'bilinmiyor' }],
-    metaphor: 'Hastalık ve bulaşma dili, "dışarıdan gelen" için iğrenmeyi çağırır; toplum bir bedene benzetilir.',
-    note: 'Doğrudan replikasyonu bilinmiyor; benzer priming etkileri replikasyon krizinde zayıf çıktı. Hastalık tehdidi ile dışgrup tutumu literatürü kısmen destekleniyor.',
-    primary: 'imm', bar: 'imm', max: { lang: 1 },
-  },
+  cyber: card('cyber', [{ id: 'ch15-e1', status: 'karışık' }], 'acc', 'acc', { excl: 1 }),
+  insula: card('insula', [{ id: 'ch15-e6', status: 'sağlam' }, { id: 'ch15-e4', status: 'tartışmalı' }], 'sev', 'ins', { gross: 1 }),
+  cup: card('cup', [{ id: 'ch15-e11', status: 'tartışmalı' }], 'warm', 'warm', { temp: 1 }),
+  clip: card('clip', [{ id: 'ch15-e10', status: 'tartışmalı' }], 'ser', 'ser', { weight: 1 }),
+  macbeth: card('macbeth', [{ id: 'ch15-e7', status: 'tartışmalı' }, { id: 'ch15-e8', status: 'karışık' }, { id: 'ch15-e9', status: 'tartışmalı' }], 'gar', 'gar', { mviol: 1, chan: 0 }),
+  germ: card('germ', [{ id: 'ch15-e5', status: 'bilinmiyor' }], 'imm', 'imm', { lang: 1 }),
 };
 
 /** Genel bakış: bir kartın ana ölçüsünde en yüksek girdideki kayma (puan, 0-100). */
@@ -197,9 +172,7 @@ export function describeCard(id: CardId, x: Inputs, mode: Mode): string {
   const g = gauges(id, x).find((q) => q.key === CARDS[id].bar)!;
   const pts = (v: number): string => String(Math.round(v * 100));
   const cur = cardValue(g, mode), other = cardValue(g, mode === 'book' ? 'repl' : 'book');
-  const lead = mode === 'book' ? 'kitabın iddiasında' : 'replikasyon sonrası tahminde';
-  const rest = g.book === g.repl ? 'iki okumada aynı (replikasyonda ayakta)' : mode === 'book' ? `replikasyon sonrası tahmin ${pts(other)}` : `kitabın iddiası ${pts(other)}`;
-  return `${CARDS[id].short}, ${lead}: ${g.label} ${pts(cur)}/100 (etkisiz taban ${pts(g.base)}); ${rest}.`;
+  return L().describeCard(CARDS[id].short, mode === 'book', g.label, pts(cur), pts(g.base), g.book === g.repl, pts(other));
 }
 
 /* =====================================================================
@@ -256,9 +229,5 @@ export function simulateCrowd(S: number, m: number, y: number, seed: number): Cr
 
 export function describeSacred(S: number, kind: OfferKind, size: number): string {
   const { m, y } = offerParts(kind, size);
-  const sup = Math.round(expectedSupport(S, m, y) * 100), ord = Math.round(expectedSupport(0, m, y) * 100);
-  const back = Math.round(expectedBacklash(S, m, y) * 100);
-  const what = kind === 'maddi' ? 'maddi teklif' : kind === 'sembolik' ? 'sembolik jest' : 'maddi teklif ve sembolik jest birlikte';
-  const lvl = Math.round(size * 100);
-  return `${what[0].toUpperCase()}${what.slice(1)} %${lvl}: uzlaşmaya destek %${sup}, ters tepki %${back}; aynı teklif sıradan bir çıkar konusunda %${ord} destek alırdı.`;
+  return L().describeSacred(kind, pct(size), pct(expectedSupport(S, m, y)), pct(expectedBacklash(S, m, y)), pct(expectedSupport(0, m, y)));
 }

@@ -1,4 +1,8 @@
 import { repBadge } from '../ui';
+import { t } from '../../i18n/t';
+import { percent } from '../../i18n/fmt';
+import { L } from './text';
+import type { BK, RP, RS } from './text.tr';
 import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, uid } from '../kit';
@@ -9,136 +13,132 @@ import {
   type Metrics, type PggResult,
 } from './model';
 
-const TABS = ['Parçalar ve sınırlar', 'Pirinç ve buğday', 'Onur kültürü ve eşitsizlik'] as const;
 const CELL = 12;
 const STEP_S = 0.12;
 
-interface Scen { id: string; name: string; pref: number; mob: number; river?: boolean }
+interface Scen { id: string; pref: number; mob: number; river?: boolean }
 const SCEN: Scen[] = [
-  { id: 'mixed', name: 'Karışık yaşam', pref: 0.12, mob: 0.5 },
-  { id: 'mid', name: 'Ayrışma başlıyor', pref: 0.4, mob: 0.5 },
-  { id: 'stuck', name: 'Düşük hareketlilik', pref: 0.5, mob: 0.1 },
-  { id: 'sep', name: 'Net ayrışma', pref: 0.5, mob: 1 },
-  { id: 'river', name: 'Nehir çiti', pref: 0.4, mob: 0.5, river: true },
+  { id: 'mixed', pref: 0.12, mob: 0.5 },
+  { id: 'mid', pref: 0.4, mob: 0.5 },
+  { id: 'stuck', pref: 0.5, mob: 0.1 },
+  { id: 'sep', pref: 0.5, mob: 1 },
+  { id: 'river', pref: 0.4, mob: 0.5, river: true },
 ];
-const TOOLS = [['look', 'Gözle'], ['wall', 'Çit çiz'], ['erase', 'Çit sil'], ['aut', 'Özerklik ver']] as const;
-type Tool = (typeof TOOLS)[number][0];
+const TOOLS = ['look', 'wall', 'erase', 'aut'] as const;
+type Tool = (typeof TOOLS)[number];
 
 const PGG_PRESETS = [
-  { id: 'hi', name: 'Yüksek güven (Avustralya örüntüsü)', ineq: 0.2, trust: 0.85 },
-  { id: 'lo', name: 'Düşük güven (Yunanistan, Umman örüntüsü)', ineq: 0.7, trust: 0.25 },
+  { id: 'hi', ineq: 0.2, trust: 0.85 },
+  { id: 'lo', ineq: 0.7, trust: 0.25 },
 ];
 
-const BOOK = (id: string, label: string) => `<a href="#/bolum/ch09?deney=${id}">${label}</a>`;
+const BOOK: BK = (id, label) => `<a href="#/bolum/ch09?deney=${id}">${label}</a>`;
 
-const slider = (k: string, name: string, min: number, max: number, stp: number, hint: string, cls = '') =>
-  `<div class="sl ${cls}"><div class="sl-top"><label class="sl-name" for="@${k}">${name}</label><span class="sl-val" data-ref="v-${k}"></span></div>` +
+const slider = (k: keyof Strings['sl'], min: number, max: number, stp: number, cls = '') => {
+  const { name, hint } = L().sl[k];
+  return `<div class="sl ${cls}"><div class="sl-top"><label class="sl-name" for="@${k}">${name}</label><span class="sl-val" data-ref="v-${k}"></span></div>` +
   `<input type="range" id="@${k}" data-k="${k}" min="${min}" max="${max}" step="${stp}"><p class="sl-hint">${hint}</p></div>`;
+};
 
 const meterHtml = (k: number) =>
   `<div class="m" data-ref="mm${k}"><div class="m-top"><span data-ref="ml${k}"></span><b data-ref="mv${k}">0%</b></div><div class="track"><b data-ref="mb${k}"></b></div></div>`;
 
-const TEMPLATE = (id: string) => `
+const TEMPLATE = (id: string) => {
+  const T = L();
+  return `
 <div class="sim sim-ke">
-  <p class="lede">Ekoloji ve tarih, kültürleri nasıl biçimlendirir ve kültür bugünkü davranışımıza nasıl yansır?</p>
+  <p class="lede">${T.lede}</p>
   <div data-ref="tourHost"></div>
-  <div class="tabs" role="tablist" aria-label="Üç bakış">
-    ${TABS.map((t, i) => `<button type="button" class="tab" role="tab" id="${id}-t${i}" aria-controls="${id}-p${i}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">${i + 1}. ${t}</button>`).join('')}
+  <div class="tabs" role="tablist" aria-label="${T.tabsLabel}">
+    ${T.tabs.map((tab, i) => `<button type="button" class="tab" role="tab" id="${id}-t${i}" aria-controls="${id}-p${i}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}">${i + 1}. ${tab}</button>`).join('')}
   </div>
-  <div class="sim-bar" role="group" aria-label="Anlık çıktılar"><div class="sim-bar-in">
+  <div class="sim-bar" role="group" aria-label="${T.barLabel}"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
     <div class="meters">${[0, 1, 2].map(meterHtml).join('')}</div>
   </div></div>
   <p class="sr-only" aria-live="polite" data-ref="live"></p>
 
   <section role="tabpanel" id="${id}-p0" aria-labelledby="${id}-t0" class="panel" data-ref="p0">
-    <div class="chips" data-ref="scen" role="group" aria-label="Hazır senaryolar">${SCEN.map((s) => `<button type="button" class="chip" data-s="${s.id}" aria-pressed="false">${s.name}</button>`).join('')}</div>
+    <div class="chips" data-ref="scen" role="group" aria-label="${T.scenLabel}">${SCEN.map((s, i) => `<button type="button" class="chip" data-s="${s.id}" aria-pressed="false">${T.scen[i]}</button>`).join('')}</div>
     <div class="stage">
-      <canvas data-ref="grid" role="img" aria-label="Izgara: mavi kareler A grubu, turuncu daireler B grubu. Kırmızı çizgiler riskli temas hatları."></canvas>
+      <canvas data-ref="grid" role="img" aria-label="${T.gridAria}"></canvas>
       <div class="legend">
-        <span><i class="sq" style="background:var(--pfc)"></i>A grubu</span>
-        <span><i style="background:var(--dop)"></i>B grubu</span>
-        <span><i class="sq" style="background:var(--edge)"></i>çit</span>
-        <span><i class="sq" style="background:var(--gld);opacity:.45"></i>özerk bölge</span>
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--red)" stroke-width="3"/></svg>riskli temas</span>
+        <span><i class="sq" style="background:var(--pfc)"></i>${T.legA}</span>
+        <span><i style="background:var(--dop)"></i>${T.legB}</span>
+        <span><i class="sq" style="background:var(--edge)"></i>${T.legWall}</span>
+        <span><i class="sq" style="background:var(--gld);opacity:.45"></i>${T.legAut}</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--red)" stroke-width="3"/></svg>${T.legRisk}</span>
       </div>
     </div>
-    <div class="row" data-ref="tools" role="group" aria-label="Sınır araçları">${TOOLS.map(([k, n]) => `<button type="button" class="btn" data-tool="${k}" aria-pressed="${k === 'look'}">${n}</button>`).join('')}</div>
+    <div class="row" data-ref="tools" role="group" aria-label="${T.toolsLabel}">${TOOLS.map((k) => `<button type="button" class="btn" data-tool="${k}" aria-pressed="${k === 'look'}">${T.tools[k]}</button>`).join('')}</div>
     <div class="row">
-      <button type="button" class="btn" data-ref="play" aria-pressed="true">Duraklat</button>
-      <button type="button" class="btn" data-ref="step">Adım</button>
-      <button type="button" class="btn" data-ref="fast">+40 adım</button>
-      <button type="button" class="btn" data-ref="restart">Yeniden başlat</button>
-      <button type="button" class="btn" data-ref="allaut">Tüm parçalara özerklik</button>
-      <button type="button" class="btn" data-ref="noborder">Sınırları kaldır</button>
+      <button type="button" class="btn" data-ref="play" aria-pressed="true">${T.pause}</button>
+      <button type="button" class="btn" data-ref="step">${T.step}</button>
+      <button type="button" class="btn" data-ref="fast">${T.fast}</button>
+      <button type="button" class="btn" data-ref="restart">${T.restart}</button>
+      <button type="button" class="btn" data-ref="allaut">${T.allAut}</button>
+      <button type="button" class="btn" data-ref="noborder">${T.noBorder}</button>
     </div>
-    <section class="chart" aria-label="Risk eğrisi">
-      <h3 class="sim-h">Parça büyüdükçe çatışma riski</h3>
-      <svg viewBox="0 0 360 150" role="img" aria-label="Yatay eksen ortalama parça çapı (km, logaritmik), dikey eksen çatışma riski" data-ref="chart"></svg>
+    <section class="chart" aria-label="${T.riskSection}">
+      <h3 class="sim-h">${T.riskH}</h3>
+      <svg viewBox="0 0 360 150" role="img" aria-label="${T.riskAria}" data-ref="chart"></svg>
     </section>
     <div class="sliders">
-      ${slider('pref', 'Benzerlik tercihi', 0, 80, 1, 'Komşularının en az bu kadarı kendi grubundan değilse kişi taşınır.', 'sl-pfc')}
-      ${slider('mob', 'Hareketlilik', 0, 100, 1, 'Kişi bir adımda ne kadar uzağa taşınabilir.', 'sl-dop')}
-      ${slider('ratio', 'A grubunun payı', 30, 70, 1, 'Dengesiz oranlarda küçük grup daha çok ada oluşturur.')}
+      ${slider('pref', 0, 80, 1, 'sl-pfc')}
+      ${slider('mob', 0, 100, 1, 'sl-dop')}
+      ${slider('ratio', 30, 70, 1)}
     </div>
   </section>
 
   <section role="tabpanel" id="${id}-p1" aria-labelledby="${id}-t1" class="panel" data-ref="p1" hidden>
-    <div class="chips" data-ref="eco" role="group" aria-label="Ekoloji">${ECOS.map((e) => `<button type="button" class="chip" data-e="${e.id}" aria-pressed="false">${e.name}</button>`).join('')}</div>
+    <div class="chips" data-ref="eco" role="group" aria-label="${T.ecoLabel}">${ECOS.map((e) => `<button type="button" class="chip" data-e="${e.id}" aria-pressed="false">${ecoName(e.id)}</button>`).join('')}</div>
     <div class="stage">
-      <svg viewBox="0 0 360 214" role="group" aria-label="Ekoloji, geçim biçimi, kültürel eğilim haritası" data-ref="map"></svg>
-      <div class="legend"><span>Çizgi kalınlığı: etkinin gücü</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--edge)" stroke-width="2" stroke-dasharray="5 3"/></svg>azaltır</span></div>
+      <svg viewBox="0 0 360 214" role="group" aria-label="${T.mapAria}" data-ref="map"></svg>
+      <div class="legend"><span>${T.legStroke}</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--edge)" stroke-width="2" stroke-dasharray="5 3"/></svg>${T.legReduce}</span></div>
     </div>
     <div class="sliders">
-      ${slider('L', 'Ortak emek bağımlılığı', 0, 100, 1, 'Pirinçte sulama kanalı komşularla birlikte yönetilir.', 'sl-gld')}
-      ${slider('V', 'Mal ve itibar kırılganlığı', 0, 100, 1, 'Çalınabilir sürü, zayıf devlet: itibarını sert savunmak gerekir.', 'sl-amy')}
+      ${slider('L', 0, 100, 1, 'sl-gld')}
+      ${slider('V', 0, 100, 1, 'sl-amy')}
     </div>
     <div class="tests" data-ref="tests"></div>
   </section>
 
   <section role="tabpanel" id="${id}-p2" aria-labelledby="${id}-t2" class="panel" data-ref="p2" hidden>
-    <h3 class="sim-h">Koridor hakaret deneyi</h3>
-    <div class="chips" data-ref="cchips" role="group" aria-label="Katılımcı kökeni">
-      <button type="button" class="chip" data-c="north" aria-pressed="false">Kuzeyli katılımcı</button>
-      <button type="button" class="chip" data-c="south" aria-pressed="true">Güneyli katılımcı</button>
-      <button type="button" class="chip" data-c="ins" aria-pressed="true">Hakaret edildi</button>
-      <button type="button" class="chip" data-c="rerun">Yeniden çalıştır</button>
+    <h3 class="sim-h">${T.hallH}</h3>
+    <div class="chips" data-ref="cchips" role="group" aria-label="${T.originLabel}">
+      <button type="button" class="chip" data-c="north" aria-pressed="false">${T.chipNorth}</button>
+      <button type="button" class="chip" data-c="south" aria-pressed="true">${T.chipSouth}</button>
+      <button type="button" class="chip" data-c="ins" aria-pressed="true">${T.chipInsult}</button>
+      <button type="button" class="chip" data-c="rerun">${T.chipRerun}</button>
     </div>
-    <div class="stage"><svg viewBox="0 0 360 96" role="img" aria-label="Dar koridorda katılımcıya omuz atıp hakaret eden iri yapılı işbirlikçi" data-ref="hall"></svg></div>
+    <div class="stage"><svg viewBox="0 0 360 96" role="img" aria-label="${T.hallAria}" data-ref="hall"></svg></div>
     <div class="tests" data-ref="ctests"></div>
-    ${slider('h', 'Onur kültürü gücü', 0, 100, 1, 'Hakareti kişisel bir saldırı sayma ve karşılık vermenin meşruluğu.', 'sl-amy')}
-    <h3 class="sim-h">Eşitsizlik, güven ve antisosyal ceza</h3>
-    <div class="chips" data-ref="pchips" role="group" aria-label="Toplum örüntüsü">${PGG_PRESETS.map((p) => `<button type="button" class="chip" data-p="${p.id}" aria-pressed="false">${p.name}</button>`).join('')}<button type="button" class="chip" data-p="rerun">Yeniden oyna</button></div>
+    ${slider('h', 0, 100, 1, 'sl-amy')}
+    <h3 class="sim-h">${T.pggH}</h3>
+    <div class="chips" data-ref="pchips" role="group" aria-label="${T.pattLabel}">${PGG_PRESETS.map((p) => `<button type="button" class="chip" data-p="${p.id}" aria-pressed="false">${T.presets[p.id]}</button>`).join('')}<button type="button" class="chip" data-p="rerun">${T.replay}</button></div>
     <div class="tests" data-ref="ptests"></div>
-    <section class="chart"><h3 class="sim-h">Tur tur: katkı ve güven</h3><svg viewBox="0 0 360 130" role="img" aria-label="Turlara göre ortalama katkı oranı ve güven" data-ref="pchart"></svg></section>
-    <section class="chart"><h3 class="sim-h">Gelir eşitsizliği arttıkça</h3><svg viewBox="0 0 360 130" role="img" aria-label="Gelir eşitsizliğine göre sosyal sermaye ve antisosyal ceza payı" data-ref="schart"></svg></section>
+    <section class="chart"><h3 class="sim-h">${T.roundH}</h3><svg viewBox="0 0 360 130" role="img" aria-label="${T.roundAria}" data-ref="pchart"></svg></section>
+    <section class="chart"><h3 class="sim-h">${T.ineqH}</h3><svg viewBox="0 0 360 130" role="img" aria-label="${T.ineqAria}" data-ref="schart"></svg></section>
     <div class="sliders">
-      ${slider('ineq', 'Gelir eşitsizliği', 0, 100, 1, 'Oyuncuların başlangıç gelirleri ne kadar dağınık.', 'sl-dop')}
-      ${slider('trust', 'Güven ve hukukun üstünlüğü', 0, 100, 1, 'Kurallara ve yabancılara güven; sosyal sermayenin başlangıç düzeyi.', 'sl-gld')}
-      ${slider('cost', 'Cezalandırma maliyeti', 1, 3, 0.5, 'Ceza vermek cezalandırana ne kadar pahalıya mal olur.')}
+      ${slider('ineq', 0, 100, 1, 'sl-dop')}
+      ${slider('trust', 0, 100, 1, 'sl-gld')}
+      ${slider('cost', 1, 3, 0.5)}
     </div>
   </section>
 
-  <details class="how"><summary>Model nasıl çalışıyor?</summary>
-    <p><b>Parçalar.</b> Izgarada iki grup ve boş hücreler var. Komşularının benzerlik tercihi kadarı kendi grubundan değilse kişi, hareketlilik yarıçapı içinde tercihini karşılayan boş bir hücreye taşınır; memnun olanlar da nadiren sınırı düzleştirir. Aynı gruptan bitişik hücreler bir parça sayılır. "Ortalama parça", bir kişinin yaşadığı parçanın büyüklüğüdür. Risk, her parçanın çapına bağlı bir çan eğrisi (20-60 km civarı tepe) ile diğer grupla temas oranının çarpımından gelir; çit temas hattını keser, özerklik temasın ağırlığını %20'ye indirir. Bir hücre 4 km sayılır. Bunlar modelin varsayımıdır.</p>
-    <p><b>Ekoloji.</b> İki girdi (ortak emek bağımlılığı, mal ve itibar kırılganlığı) doğrusal formüllerle kollektivizm, bütüncül dikkat ve onur duyarlılığına dönüşür; test çıktıları bu üç eğilimin sadeleştirilmiş yansımasıdır.</p>
-    <p><b>Koridor.</b> Her katılımcının onur duyarlılığı ortalama çevresinde dağılır; hakaretin hormon ve şiddet etkisi bu duyarlılığın karesiyle büyür, yani yalnızca onur kültürü güçlüyse görünür.</p>
-    <p><b>Kamu malı.</b> 24 oyuncu, 4'lü gruplar, 10 tur. Katkı grubun ortalamasına yaklaşır. Cezalandırıcı, hile yapanı (prososyal) ya da kendinden fazla katkı vereni (antisosyal) cezalandırabilir; antisosyal ceza olasılığı güven azaldıkça ve gelir eşitsizliği arttıkça yükselir. Güven, katkı ve cezalarla yavaşça değişir.</p>
+  <details class="how"><summary>${t('sim.how')}</summary>
+    ${T.how.map((p) => `<p>${p}</p>`).join('\n    ')}
   </details>
 
-  <aside class="book" aria-label="Kitapta">
-    <h3 class="sim-h">Kitapta</h3>
+  <aside class="book" aria-label="${t('sim.book')}">
+    <h3 class="sim-h">${t('sim.book')}</h3>
     <ul>
-      <li>${BOOK('ch09-e9', 'Lim ve ark. 2007; Rutherford ve ark. 2014')}: ayrışma sürerken önce ada ve yarımadalar belirir; 20-60 km çaplı adalar 1990 Yugoslavya'sında çatışma yerlerini öngördü, net sınırlar barışı destekledi. Replikasyon: bilinmiyor (geriye dönük uyarlama, ileriye dönük sınama yok).</li>
-      <li>${BOOK('ch09-e3', 'Talhelm ve ark. 2014')}: pirinç bölgeleri daha kollektivist; buğday bölgelerinde bireycilik, boşanma ve patent daha yüksek. Replikasyon: <b>karışık</b>.</li>
-      <li>${BOOK('ch09-e2', 'Masuda ve Nisbett 2001')}: Doğu Asyalılar bağlamı, Amerikalılar merkezdeki nesneyi daha iyi hatırlar. Replikasyon: <b>karışık</b> (göz izleme farkı bazı çalışmalarda bulunamadı).</li>
-      <li>${BOOK('ch09-e5', 'Nisbett ve Cohen 1996')}: hakarete uğrayan Güneyli erkeklerde testosteron ve glukokortikoid yükselir, Kuzeylilerde yükselmez. Replikasyon: bilinmiyor (örneklem küçük).</li>
-      <li>${BOOK('ch09-e6', 'Herrmann ve ark. 2008')}: Yunanistan ve Umman'da cömert oyuncular cezalandırılır, Avustralya'da antisosyal ceza neredeyse yoktur. Replikasyon: sağlam. ${BOOK('ch09-e7', 'DeCelles ve Norton 2016')} (uçakta eşitsizlik ve hava öfkesi): bilinmiyor.</li>
-      <li>${BOOK('ch09-e11', 'Chagnon ve Yanomamö')}: öldüren erkeklerin daha çok çocuğu olduğu bulgusu yaş farkı nedeniyle sorgulandı; başka toplumlarda tekrarlanmadı. Replikasyon: <b>tartışmalı</b>. ${BOOK('ch09-e12', 'Fry ve Söderberg 2013')}: 21 saf göçebe avcı-toplayıcı grubun çoğunda savaş görülmedi, %86'sında ölümcül şiddet vardı. Replikasyon: <b>tartışmalı</b> ("Hobbes mu Rousseau mu?" sorusu açık).</li>
+      ${T.book.map((f) => `<li>${f(BOOK, RP, RS)}</li>`).join('\n      ')}
     </ul>
   </aside>
-  <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan gelenler: Lim'in 20-60 km ada ölçeği, Rutherford'un net sınır sonucu, Talhelm ve Masuda yönleri, koridor deneyindeki Güneyli/Kuzeyli örüntüsü, Herrmann'ın Yunanistan/Umman ve Avustralya karşıtlığı, eşitsizlikle azalan sosyal sermaye. Hücre boyu, çan eğrisi, özerklik ağırlığı, çöl çobanlığı ve yağmur ormanı örnekleri, tüm yüzdeler ve katsayılar modelin varsayımıdır. Hukukun üstünlüğü bağı kitap dışından, Herrmann'ın makalesinden gelir.</p>
+  <p class="foot">${T.foot}</p>
 </div>`;
+};
 
 const bar = (label: string, v: number, text: string, color: string) =>
   `<div class="bar" style="--c:${color}"><div class="bar-top"><span>${label}</span><b>${text}</b></div><div class="track"><b style="width:${pct(Math.max(0, Math.min(1, v)))}%"></b></div></div>`;

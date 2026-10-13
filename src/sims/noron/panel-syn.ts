@@ -1,8 +1,12 @@
 // Sekme 2: Sinaps. Salım -> reseptöre bağlanma -> geri alım / enzimle yıkım; ilaç benzeri engeller sinyalin düzeyini ve süresini değiştirir.
+import { decimalSep } from '../../i18n/locale';
+import { pct } from '../../i18n/fmt';
+import { t } from '../../i18n/t';
 import { svg, svgText } from '../kit';
 import { SYN_DEFAULT, advanceSyn, clamp, createSyn, f1, f2, release, singleSpike, type Single, type Syn, type SynP, type SynType } from './model';
 import { mulberry32 } from '../rng';
 import type { TourStep } from '../tour';
+import { L } from './text';
 import { chipRow, el, gridY, linePath, makeSlider, toggleBtn, type Ctx, type Meter, type SliderHandle } from './ui';
 
 const SPEED = 40;   // gerçek 1 sn = 40 ms model zamanı
@@ -14,6 +18,7 @@ const CH = { x0: 34, x1: 352 };
 const cxs = (s: Syn, t: number): number => CH.x1 - (s.t - t) / WIN * (CH.x1 - CH.x0);
 
 export function createSynPanel(ctx: Ctx, host: HTMLElement) {
+  const X = L().syn;
   const P: SynP = { ...SYN_DEFAULT };
   let s = createSyn();
   let paused = false, dirty = true, last = -1;
@@ -23,18 +28,18 @@ export function createSynPanel(ctx: Ctx, host: HTMLElement) {
   const slots = Array.from({ length: NP }, () => ({ x: 46 + rnd() * 268, y: 84 + rnd() * 60, a: rnd() * 6.28, b: rnd() * 6.28 }));
 
   let st = '<path class="term" d="M30 6H330V52Q330 72 310 72H50Q30 72 30 52Z"/>' +
-    '<text class="lb" x="40" y="20">presinaptik uç</text>' +
+    `<text class="lb" x="40" y="20">${X.presyn}</text>` +
     '<path data-r="imp" class="imp" d="M205 3L195 20H203L199 33L213 14H205Z" opacity="0"/>';
   for (const [x, y] of [[70, 38], [112, 50], [152, 36], [252, 40]]) st += `<circle class="ves" cx="${x}" cy="${y}" r="10"/><circle class="vd" cx="${x}" cy="${y}" r="3.5"/>`;
   st += '<circle data-r="dv" class="ves" cx="200" cy="58" r="10"/><circle class="vd" data-r="dvd" cx="200" cy="58" r="3.5"/>' +
     '<rect class="pump" x="276" y="64" width="28" height="12" rx="4"/><path class="pumpa" d="M290 64V46M285 52L290 46L295 52"/>' +
-    '<text class="lb" x="290" y="92" text-anchor="middle">pompa</text><path data-r="xru" class="xx" opacity="0" d="M279 62L301 80M301 62L279 80"/>';
+    `<text class="lb" x="290" y="92" text-anchor="middle">${X.pump}</text><path data-r="xru" class="xx" opacity="0" d="M279 62L301 80M301 62L279 80"/>`;
   for (const [x, y] of [[74, 132], [178, 112], [300, 134]]) st += `<g data-r="enz"><path class="enz" d="M-7 0L0 -7L7 0L0 7Z" transform="translate(${x} ${y})"/></g>`;
   st += '<path data-r="xen" class="xx" opacity="0" d="M164 100L192 124M192 100L164 124"/>';
   for (let i = 0; i < NP; i++) st += `<circle data-r="np${i}" class="np" r="3.2" cx="60" cy="100" opacity="0"/>`;
   st += '<path class="mem" d="M30 150H330"/>';
   RECV.forEach((x, i) => { st += `<path data-r="rc${i}" class="rc" d="M${x - 10} 148Q${x - 10} 164 ${x} 164Q${x + 10} 164 ${x + 10} 148"/>`; });
-  st += '<rect class="post" x="30" y="170" width="300" height="60" rx="12"/><text class="lb" x="42" y="190">postsinaptik nöron</text>';
+  st += '<rect class="post" x="30" y="170" width="300" height="60" rx="12"/><text class="lb" x="42" y="190">${X.postsyn}</text>';
 
   host.innerHTML =
     '<p class="note">Ateşleyince veziküller boşalır, nörotransmitter reseptöre bağlanır, sonra geri alınır ya da parçalanır. İlaç benzeri düğmelerle yolları kapat.</p>' +

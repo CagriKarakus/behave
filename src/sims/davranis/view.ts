@@ -6,7 +6,6 @@ import { createHaritaPanel } from './panel-harita';
 import { createBaglamPanel } from './panel-baglam';
 import { createYerPanel } from './panel-yer';
 import { L } from './text';
-import { getLocale } from '../../i18n/locale';
 
 type Tab = 'harita' | 'baglam' | 'yer';
 const TABS: Tab[] = ['harita', 'baglam', 'yer'];
@@ -49,7 +48,7 @@ export function mount(container: HTMLElement): () => void {
     baglam: createBaglamPanel(ctx, hostOf('baglam')),
     yer: createYerPanel(ctx, hostOf('yer')),
   };
-  lazyNotes(scope, root, () => (getLocale() === 'en' ? import('./notes.en').then((m) => m.default()) : import('./notes').then((m) => m.default())));
+  lazyNotes(scope, root, () => import('./notes').then((m) => m.default()));
 
   /* ---- Çıktı çubuğu ---- */
   metersEl.innerHTML = [0, 1, 2].map((i) => `<div class="m"><div class="m-top"><span data-ref="ml${i}"></span><b data-ref="mv${i}"></b></div><div class="track"><b data-ref="mb${i}"></b></div></div>`).join('');

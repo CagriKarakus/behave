@@ -11,7 +11,7 @@ import {
   CHANCE, COLS, EMOTIONS, GINI_MAX, GINI_MIN, KURZBAN_DEFAULT, MATRICES, TAJFEL_DEFAULT, TARGETS,
   behaviors, classify, col, confusion, corr, describeKurzban, describePos, describeTajfel, dominant, emotions,
   mixedShare, simulateMemory, simulateTajfel, society, strategyCols, userProfile,
-  type KurzbanInputs, type Pos, type TajfelInputs,
+  type Emotion, type KurzbanInputs, type Pos, type TajfelInputs,
 } from './model';
 
 type Tab = 'tajfel' | 'kurzban' | 'fiske';
@@ -489,44 +489,15 @@ export function mount(container: HTMLElement): () => void {
 
   // =================================================================== Tur
   const setPos = (i: number, w: number, c: number) => { gpos[i] = { w, c }; S.gsel = i; };
-  const tour = createTour(scope, [
-    {
-      title: 'Keyfi bir etiket',
-      text: 'Yazı tura gibi anlamsız bir ölçütle iki gruptan birine atanırsın. Sonra iki isimsiz kişiye puan dağıtırsın: biri senin grubundan, biri öbüründen.',
-      look: 'Matriste bir sütun seç; ilk sayı iç grup üyesinin, ikincisi dış grup üyesinin puanı.',
-      apply: () => { setTab('tajfel'); S.t = { ...TAJFEL_DEFAULT }; syncT(); if (S.mine === null) drawLabel(); else changeT(); },
-    },
-    {
-      title: 'Fark mı, kazanç mı?',
-      text: 'Matris 1\'de en büyük toplam ve en büyük iç grup kazancı sağ uçtadır; en büyük fark sol uçtadır. Sanal katılımcıların çoğu, iç grubun mutlak kazancından vazgeçip farkı seçer (kitapta: kayırmacılık, keyfi etiketle bile).',
-      look: 'Sütun altlarındaki dağılımda sol uçta (F) kümelenme. "Kontrol" anahtarı ikinci alıcıyı da iç grup yapar ve fark seçimi çöker.',
-      apply: () => { setTab('tajfel'); S.t = { ...TAJFEL_DEFAULT }; syncT(); S.mi = 0; if (S.mine === null) drawLabel(); if (S.picks[0] === null) S.picks[0] = 1; changeT(); },
-    },
-    {
-      title: 'Irk: koalisyon ipucu',
-      text: 'Kim ne dedi? Forma yokken yanlış atıflar çoğunlukla aynı ırktan kişiye gider. Irk burada otomatik bir kategori gibi görünür.',
-      look: 'Irka göre çubuğun şans düzeyinin (%43) çok üstünde olması.',
-      apply: () => { setTab('kurzban'); S.k = { ...KURZBAN_DEFAULT }; S.sel = 0; changeK(true); },
-    },
-    {
-      title: 'Forma gelince',
-      text: 'İki takımın forması giyilince ve forma koalisyonu belli edince karışmalar formaya göre kümelenir; ırka göre kümelenme belirgin azalır ama tamamen silinmez. Irk değişmez bir kategori değil, yeniden çizilebilir bir ipucudur.',
-      look: 'Irk çubuğunun küçülüp forma çubuğunun büyümesi. "Forma var ama anlamsız" çipine geçince ne olur?',
-      apply: () => { setTab('kurzban'); S.k = { ...KURZBAN_DEFAULT, shirts: true }; changeK(true); },
-    },
-    {
-      title: 'Sıcaklık–yetkinlik haritası',
-      text: 'Gruplar iki eksende konumlanır ve köşe duyguyu belirler. "Yeni grup" düşük–düşük köşeye sürüklenince tiksinme ve dışlama baskın olur. Sağ altta duran "Yaşlılar" ise acıma ve yardım uyandırır.',
-      look: 'Bir daireyi sürükle; alt çubukta duygu ve davranış çubukları değişir.',
-      apply: () => { setTab('fiske'); S.layer = false; tgLayer(false); renderSoc(); setPos(4, 0.28, 0.34); renderF(); },
-    },
-    {
-      title: 'Eşitsizlik ve karışık algı',
-      text: 'Toplum katmanını aç ve Gini\'yi yükselt: gruplar karışık köşelere kayar ve karışık stereotip payı artar. Kitaptaki 37 ülke bulgusu korelasyoneldir.',
-      look: 'Alt çubukta "Karışık algı (toplum)" yüzdesi.',
-      apply: () => { setTab('fiske'); S.layer = true; tgLayer(true); S.gini = 0.5; sGini(0.5); renderSoc(); renderF(); },
-    },
-  ]);
+  const applies: Array<() => void> = [
+    () => { setTab('tajfel'); S.t = { ...TAJFEL_DEFAULT }; syncT(); if (S.mine === null) drawLabel(); else changeT(); },
+    () => { setTab('tajfel'); S.t = { ...TAJFEL_DEFAULT }; syncT(); S.mi = 0; if (S.mine === null) drawLabel(); if (S.picks[0] === null) S.picks[0] = 1; changeT(); },
+    () => { setTab('kurzban'); S.k = { ...KURZBAN_DEFAULT }; S.sel = 0; changeK(true); },
+    () => { setTab('kurzban'); S.k = { ...KURZBAN_DEFAULT, shirts: true }; changeK(true); },
+    () => { setTab('fiske'); S.layer = false; tgLayer(false); renderSoc(); setPos(4, 0.28, 0.34); renderF(); },
+    () => { setTab('fiske'); S.layer = true; tgLayer(true); S.gini = 0.5; sGini(0.5); renderSoc(); renderF(); },
+  ];
+  const tour = createTour(scope, T.tour.map((st, i) => ({ ...st, apply: applies[i] })));
   root.querySelector('.lede')!.after(tour.el);
 
   return () => {

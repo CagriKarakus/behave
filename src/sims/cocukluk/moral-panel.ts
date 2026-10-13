@@ -1,61 +1,45 @@
 // Sekme 3: Ahlaki gelişim (Kohlberg): Heinz ikilemi, yaşa göre aşama dağılımı, eleştiriler ve Blake'in adalet çalışması.
 import { Scope } from '../kit';
-import { LEVEL_NAMES, actProb, fairness, levelOf, levelShares, stageDist } from './model';
+import { actProb, fairness, levelOf, levelShares, stageDist } from './model';
 import { bookBox, chipRow, el, makeSlider, pc, type Ctx, type Meter, type Panel } from '../ui';
+import { t } from '../../i18n/t';
+import { L } from './text';
 
 type Stance = 'yes' | 'no';
 type Crit = 'culture' | 'gender' | 'action';
 type Society = 'late' | 'none';
 const LEVEL_COLORS = ['var(--dop)', 'var(--pfc)', 'var(--pit)'];
 
-// Heinz gerekçeleri: aynı karar her aşamadan savunulabilir. Metinler özgündür.
-const REASONS: Record<Stance, string[]> = {
-  yes: [
-    'Karısını ölüme bırakırsa herkes onu suçlar, başı derde girer.',
-    'Karısına ihtiyacı var; o da ileride ona aynı iyiliği yapar.',
-    'İyi bir koca karısını kurtarmak ister; herkes bunu anlar.',
-    'Karısına bakmak görevidir; bu görev bu kez yasanın önüne geçer.',
-    'Yaşama hakkı mülkiyet hakkından önce gelir; böyle bir yasa adil değildir.',
-    'Bir insanın hayatı her kuralın üstündedir; vicdan bunu gerektirir.',
-  ],
-  no: [
-    'Çalarsa yakalanır ve hapse girer.',
-    'Hapse düşerse kendine hiçbir yararı kalmaz.',
-    'Hırsız diye anılmak ailesini utandırır; iyi insan böyle yapmaz.',
-    'Yasa herkes için geçerli; çalmak düzeni bozar.',
-    'Mülkiyet toplumsal anlaşmanın parçası; çare yasal yoldan aranmalı.',
-    'Başkasının hakkını çiğnemek ilkeye aykırı; adil bir yol bulunmalı.',
-  ],
-};
-
 export function createMoralPanel(ctx: Ctx, host: HTMLElement) {
+  const T = L().moral;
+  const REASONS: Record<Stance, string[]> = { yes: T.reasonsYes, no: T.reasonsNo };
   let age = 30, stance: Stance = 'yes', stage = 3, crit: Crit = 'culture', society: Society = 'late', pressure = 0.3, fAge = 10;
   let dirty = true;
 
   host.innerHTML =
-    `<p class="note">Kohlberg ahlaki ikilemlerde <em>kararı</em> değil <em>gerekçeyi</em> sınıflandırır. Önce aynı kararın farklı aşamalardan nasıl savunulduğuna, sonra yaşa göre dağılıma bak.</p>` +
-    `<div class="card"><h3 class="sim-h">Heinz ikilemi</h3><p>Heinz'in karısı ölümcül hasta. Kurtaracak tek ilaç eczacıda ve çok pahalı; Heinz parayı bulamıyor. İlacı çalmalı mı?</p>` +
+    `<p class="note">${T.note}</p>` +
+    `<div class="card"><h3 class="sim-h">${T.heinzH}</h3><p>${T.heinz}</p>` +
     `<div class="chips" data-ref="stance"></div><div class="chips" data-ref="stage"></div>` +
     `<blockquote class="quote"><b data-ref="qhead"></b><span data-ref="qtext"></span></blockquote>` +
-    `<p class="note">Aynı karar, farklı aşamalardan savunulabilir. Aşamayı belirleyen karar değil, gerekçedir.</p></div>` +
-    `<div class="card"><h3 class="sim-h">Yaşa göre gerekçe düzeyi (sanal nüfus)</h3><div class="sliders" data-ref="ctl"></div>` +
-    `<div class="chart"><svg viewBox="0 0 320 150" role="img" aria-label="Yaşa göre Kohlberg aşama dağılımı" data-ref="dist"></svg></div>` +
-    `<div class="legend"><span><i style="background:var(--dop)"></i>Gelenek öncesi (ceza/ödül)</span><span><i style="background:var(--pfc)"></i>Geleneksel (ilişki/kural)</span><span><i style="background:var(--pit)"></i>Gelenek sonrası (ilke)</span></div></div>` +
-    `<div class="card"><h3 class="sim-h">Kitaptaki eleştiriler</h3><div class="chips" data-ref="crit"></div><div class="critbody" data-ref="cbody"></div></div>` +
+    `<p class="note">${T.heinzNote}</p></div>` +
+    `<div class="card"><h3 class="sim-h">${T.distH}</h3><div class="sliders" data-ref="ctl"></div>` +
+    `<div class="chart"><svg viewBox="0 0 320 150" role="img" aria-label="${T.distAria}" data-ref="dist"></svg></div>` +
+    `<div class="legend"><span><i style="background:var(--dop)"></i>${T.legend[0]}</span><span><i style="background:var(--pfc)"></i>${T.legend[1]}</span><span><i style="background:var(--pit)"></i>${T.legend[2]}</span></div></div>` +
+    `<div class="card"><h3 class="sim-h">${T.critH}</h3><div class="chips" data-ref="crit"></div><div class="critbody" data-ref="cbody"></div></div>` +
     bookBox([
-      { id: 'ch07-e4', text: 'Kohlberg aşamaları: sıra desteklenmiş, evrensellik ve cinsiyet yanlılığı eleştirilmiş (karışık)' },
-      { id: 'ch07-e3', text: 'Blake: yedi toplumda adalet duygusunun gelişimi' },
-      { id: 'ch07-e1', text: 'Young: sağ TPJ (zihin kuramı) bozulunca niyet yargıda daha az hesaba katılır' },
-      { id: 'ch07-e2', text: 'Decety: çocuk beyninde empatinin olgunlaşması' },
+      { id: 'ch07-e4', text: T.book[0] },
+      { id: 'ch07-e3', text: T.book[1] },
+      { id: 'ch07-e1', text: T.book[2] },
+      { id: 'ch07-e2', text: T.book[3] },
     ]) +
-    `<details class="more"><summary>Model nasıl çalışıyor?</summary><p>Aşama dağılımı yaşla yükselen bir ortalama etrafında geniş bir yayılımdır; üst aşamalara güçlü ceza verilir. Kitaptan gelen nitel desen: çocuklar 8-10 yaşa dek çoğunlukla ilk düzeyde, ergen ve yetişkinlerin çoğu geleneksel düzeyde, 5. ve 6. aşamada tutarlı akıl yürüten neredeyse kimse yok. Yüzdeler modelin varsayımıdır. Zihin kuramı ve sağ TPJ: niyeti hesaba katmak ahlaki yargının bir bileşenidir; bu simülasyon o devreyi modellemez.</p><p>Ahlaki eylem olasılığı illüstratiftir: aşamanın eğimi küçük, bağlam baskısının etkisi büyük seçilmiştir. Bu, kitabın "akıl yürütme düzeyi eylemi nadiren öngörür" vurgusunun nitel karşılığıdır.</p></details>`;
+    `<details class="more"><summary>${t('sim.how')}</summary><p>${T.how[0]}</p><p>${T.how[1]}</p></details>`;
 
   const q = <T extends Element = HTMLElement>(n: string) => host.querySelector<T>(`[data-ref="${n}"]`)!;
 
-  const setStance = chipRow(q('stance'), ctx, [{ key: 'yes', label: 'Heinz çalmalı' }, { key: 'no', label: 'Heinz çalmamalı' }], (k) => { stance = k as Stance; dirty = true; }, 'Karar');
-  const setStage = chipRow(q('stage'), ctx, [1, 2, 3, 4, 5, 6].map((n) => ({ key: String(n), label: `${n}. aşama` })), (k) => { stage = +k; dirty = true; }, 'Gerekçenin aşaması');
-  const ageSl = makeSlider(ctx, q('ctl'), 'mage', 'Yaş', 'Küçük çocuklar çoğunlukla ceza/ödül gerekçesi kullanır; yetişkinler çoğunlukla kural ve ilişki gerekçesi.', 5, 70, age, (v) => { age = v; dirty = true; }, (v) => `${v} yaş`, 'var(--pfc)');
-  const setCrit = chipRow(q('crit'), ctx, [{ key: 'culture', label: 'Kültür (Blake)' }, { key: 'gender', label: 'Cinsiyet (Gilligan)' }, { key: 'action', label: 'Düşünce ≠ eylem' }], (k) => { crit = k as Crit; buildCrit(); dirty = true; }, 'Eleştiri');
+  const setStance = chipRow(q('stance'), ctx, [{ key: 'yes', label: T.stanceYes }, { key: 'no', label: T.stanceNo }], (k) => { stance = k as Stance; dirty = true; }, T.stanceGroup);
+  const setStage = chipRow(q('stage'), ctx, [1, 2, 3, 4, 5, 6].map((n) => ({ key: String(n), label: L().stageN(n) })), (k) => { stage = +k; dirty = true; }, T.stageGroup);
+  const ageSl = makeSlider(ctx, q('ctl'), 'mage', T.ageName, T.ageHint, 5, 70, age, (v) => { age = v; dirty = true; }, (v) => L().ageFmt(v), 'var(--pfc)');
+  const setCrit = chipRow(q('crit'), ctx, [{ key: 'culture', label: T.critCulture }, { key: 'gender', label: T.critGender }, { key: 'action', label: T.critAction }], (k) => { crit = k as Crit; buildCrit(); dirty = true; }, T.critGroup);
 
   /* ---- Eleştiri paneli ---- */
   const cbody = q('cbody');
@@ -70,29 +54,29 @@ export function createMoralPanel(ctx: Ctx, host: HTMLElement) {
     fairSvg = null; actEls = [];
     cbody.innerHTML = '';
     if (crit === 'culture') {
-      el(cbody, 'p', '', 'Blake ve arkadaşları yedi toplumda 4-15 yaş çocukları haksız paylaşımlar karşısında izledi. Kendi aleyhine eşitsizliğe tepki 4-6 yaştan itibaren her toplumda vardı. Kendi lehine, öbür çocuğun aleyhine eşitsizliğe tepki ise ancak 8-10 yaşlarında ve yalnızca bazı toplumlarda ortaya çıktı.');
+      el(cbody, 'p', '', T.cultureP);
       const row = el(cbody, 'div', 'chips');
-      const setSoc = chipRow(row, cctx, [{ key: 'late', label: 'Geç gelişen toplum' }, { key: 'none', label: 'Hiç gelişmeyen toplum' }], (k) => { society = k as Society; setSoc(society); dirty = true; }, 'Toplum tipi');
+      const setSoc = chipRow(row, cctx, [{ key: 'late', label: T.socLate }, { key: 'none', label: T.socNone }], (k) => { society = k as Society; setSoc(society); dirty = true; }, T.socGroup);
       setSoc(society);
-      const ch = el(cbody, 'div', 'chart', '<svg viewBox="0 0 320 150" role="img" aria-label="Yaşa göre adalet tepkisi"></svg>');
+      const ch = el(cbody, 'div', 'chart', `<svg viewBox="0 0 320 150" role="img" aria-label="${T.fairAria}"></svg>`);
       fairSvg = ch.firstChild as SVGSVGElement;
-      const age2 = makeSlider(cctx, cbody, 'fage', 'İşaretli yaş', 'Çizgilerin o yaştaki değerini okumak için.', 4, 15, fAge, (v) => { fAge = v; dirty = true; }, (v) => `${v} yaş`, 'var(--dop)');
+      const age2 = makeSlider(cctx, cbody, 'fage', T.fageName, T.fageHint, 4, 15, fAge, (v) => { fAge = v; dirty = true; }, (v) => L().ageFmt(v), 'var(--dop)');
       void age2;
-      el(cbody, 'p', 'note', 'Eğriler nitel: biçimleri modelin varsayımıdır, yaşlar ve "bazı toplumlar" ayrımı kitaptandır. Kohlberg aşamalarının sırası kültürlerarası çalışmalarda büyük ölçüde desteklenmiş; üst aşamaların evrenselliği ise eleştirilmiştir.');
+      el(cbody, 'p', 'note', T.cultureNote);
     } else if (crit === 'gender') {
-      el(cbody, 'p', '', 'Kohlberg\'in ilk örneklemi Amerikalı erkeklerden oluşuyordu. Gilligan, kadınların ikilemlerde adaletten çok bakımı ve ilişkiyi öne çıkardığını savundu. Aynı ikilem iki sesle yanıtlanabilir:');
-      el(cbody, 'blockquote', 'quote', '<b>Adalet sesi</b><span>İlaç herkesin hakkı olmalı; kural herkese aynı uygulanmalı.</span>');
-      el(cbody, 'blockquote', 'quote', '<b>Bakım sesi</b><span>Heinz ve karısı arasındaki bağ korunmalı; eczacıyla konuşup bir çıkış yolu bulunmalı.</span>');
-      el(cbody, 'p', 'note', 'Yalnızca adalet ölçütüyle bakan bir sınıflama bakım odaklı gerekçeleri ilişkisel (3. aşama) görünümüne iterek geride bırakabilir. Kitap ayrıca aşama modellerinin katı alınmaması gerektiğini, geçişlerin keskin olmadığını ve aşamanın bağlama göre değişebildiğini söyler.');
+      el(cbody, 'p', '', T.genderP);
+      el(cbody, 'blockquote', 'quote', `<b>${T.voiceJusticeH}</b><span>${T.voiceJustice}</span>`);
+      el(cbody, 'blockquote', 'quote', `<b>${T.voiceCareH}</b><span>${T.voiceCare}</span>`);
+      el(cbody, 'p', 'note', T.genderNote);
     } else {
-      el(cbody, 'p', '', 'Ahlaki akıl yürütme düzeyi, ahlaki eylemi nadiren öngörür. Aşağıda her aşama için "ikilemin gerçek hayat karşılığında yardım etme" olasılığı (illüstratif) var: aşamanın eğimi küçük, durumun baskısı büyük.');
-      makeSlider(cctx, cbody, 'press', 'Durumun baskısı', 'Kalabalık, acele, risk, çıkar çatışması: eylemi bastırır.', 0, 100, Math.round(pressure * 100), (v) => { pressure = v / 100; dirty = true; }, (v) => (v < 30 ? 'düşük' : v > 70 ? 'yüksek' : 'orta'), 'var(--red)');
+      el(cbody, 'p', '', T.actP);
+      makeSlider(cctx, cbody, 'press', T.pressName, T.pressHint, 0, 100, Math.round(pressure * 100), (v) => { pressure = v / 100; dirty = true; }, (v) => T.pressWords[v < 30 ? 0 : v > 70 ? 2 : 1], 'var(--red)');
       const lst = el(cbody, 'div', 'actlist');
       actEls = [1, 2, 3, 4, 5, 6].map((n) => {
-        const row = el(lst, 'div', 'arow', `<span>${n}. aşama</span><div class="track"><b></b></div><b class="av"></b>`);
+        const row = el(lst, 'div', 'arow', `<span>${L().stageN(n)}</span><div class="track"><b></b></div><b class="av"></b>`);
         return { b: row.querySelector('.track > b') as HTMLElement, v: row.querySelector('.av') as HTMLElement };
       });
-      el(cbody, 'p', 'note', 'Yüzdeler modelin varsayımıdır (kitapta yok). Gözlenecek şey eğimin düzlüğü: baskı kaydırıcısı aşamalar arasındaki farktan çok daha fazla şeyi değiştirir.');
+      el(cbody, 'p', 'note', T.actNote);
     }
   }
   buildCrit();
@@ -101,7 +85,7 @@ export function createMoralPanel(ctx: Ctx, host: HTMLElement) {
     if (!dirty) return false;
     dirty = false;
     setStance(stance); setStage(String(stage)); setCrit(crit);
-    q('qhead').textContent = `${LEVEL_NAMES[levelOf(stage)]} · ${stage}. aşama gerekçesi: `;
+    q('qhead').textContent = T.qhead(L().levelNames[levelOf(stage)], stage);
     q('qtext').textContent = REASONS[stance][stage - 1];
     // Aşama dağılımı
     const d = stageDist(age);
@@ -111,7 +95,7 @@ export function createMoralPanel(ctx: Ctx, host: HTMLElement) {
       const h = Math.max(1, p * H * 1.4), x = X0 + i * bw + 6;
       s += `<rect x="${x}" y="${base - h}" width="${bw - 12}" height="${h}" rx="3" fill="${LEVEL_COLORS[levelOf(i + 1)]}"/><text class="v-lbl" x="${x + (bw - 12) / 2}" y="${base - h - 4}" text-anchor="middle">${pc(p)}</text><text x="${x + (bw - 12) / 2}" y="${base + 13}" text-anchor="middle">${i + 1}</text>`;
     });
-    s += `<text class="ax-t" x="${X0 + W / 2}" y="${base + 30}" text-anchor="middle">Ahlaki akıl yürütme aşaması (Kohlberg)</text>`;
+    s += `<text class="ax-t" x="${X0 + W / 2}" y="${base + 30}" text-anchor="middle">${T.distAxis}</text>`;
     q<SVGSVGElement>('dist').innerHTML = s;
     if (fairSvg) {
       const X = 34, WW = 272, Y0 = 10, HH = 104, px = (a: number) => X + ((a - 4) / 11) * WW, py = (v: number) => Y0 + HH - v * HH;
@@ -121,8 +105,8 @@ export function createMoralPanel(ctx: Ctx, host: HTMLElement) {
       t += `<path d="${line((a) => fairness(a, society).self)}" fill="none" stroke="var(--amy)" stroke-width="2.6"/><path d="${line((a) => fairness(a, society).other)}" fill="none" stroke="var(--pit)" stroke-width="2.6" stroke-dasharray="6 4"/>`;
       t += `<line x1="${px(fAge)}" y1="${Y0}" x2="${px(fAge)}" y2="${Y0 + HH}" stroke="var(--ink)" stroke-width="1" stroke-dasharray="2 3"/><circle cx="${px(fAge)}" cy="${py(me.self)}" r="4.5" fill="var(--amy)"/><circle cx="${px(fAge)}" cy="${py(me.other)}" r="4.5" fill="var(--pit)"/>`;
       for (let a = 4; a <= 15; a += 2) t += `<text x="${px(a)}" y="${Y0 + HH + 12}" text-anchor="middle">${a}</text>`;
-      t += `<text x="${X + 6}" y="${Y0 + 12}" fill="var(--red-text)" class="lbl-self">kendi aleyhine (sürekli çizgi)</text><text x="${X + 6}" y="${Y0 + 26}" class="lbl-other">başkası aleyhine (kesikli çizgi)</text>`;
-      t += `<text class="ax-t" x="${X + WW / 2}" y="${Y0 + HH + 28}" text-anchor="middle">Yaş</text><text class="ax-t" x="10" y="${Y0 + HH / 2}" text-anchor="middle" transform="rotate(-90 10 ${Y0 + HH / 2})">Eşitsizliğe tepki eğilimi</text>`;
+      t += `<text x="${X + 6}" y="${Y0 + 12}" fill="var(--red-text)" class="lbl-self">${T.fairSelf}</text><text x="${X + 6}" y="${Y0 + 26}" class="lbl-other">${T.fairOther}</text>`;
+      t += `<text class="ax-t" x="${X + WW / 2}" y="${Y0 + HH + 28}" text-anchor="middle">${T.fairAxisX}</text><text class="ax-t" x="10" y="${Y0 + HH / 2}" text-anchor="middle" transform="rotate(-90 10 ${Y0 + HH / 2})">${T.fairAxisY}</text>`;
       fairSvg.innerHTML = t;
     }
     actEls.forEach((e, i) => { const p = actProb(i + 1, pressure); e.b.style.width = `${Math.round(p * 100)}%`; e.b.style.background = 'var(--red)'; e.v.textContent = pc(p); });
@@ -134,11 +118,11 @@ export function createMoralPanel(ctx: Ctx, host: HTMLElement) {
     draw,
     say: () => {
       const [a, b, c] = levelShares(stageDist(age));
-      return `${age} yaş: gerekçelerin ${pc(a)}'i ceza/ödül, ${pc(b)}'i ilişki/kural, ${pc(c)}'i ilke odaklı. ${c < 0.07 ? '5. ve 6. aşamada tutarlı akıl yürüten neredeyse kimse yok.' : 'Üst aşamalar nadir.'}`;
+      return T.say(age, pc(a), pc(b), pc(c), c < 0.07);
     },
     meters: (): Meter[] => {
       const sh = levelShares(stageDist(age));
-      return LEVEL_NAMES.map((n, i) => ({ label: n.split(' (')[0], value: pc(sh[i]), frac: sh[i], color: LEVEL_COLORS[i] }));
+      return L().levelShort.map((n, i) => ({ label: n, value: pc(sh[i]), frac: sh[i], color: LEVEL_COLORS[i] }));
     },
     set(p: { age?: number; stance?: Stance; stage?: number; crit?: Crit }): void {
       if (p.age !== undefined) { age = p.age; ageSl.set(age); }

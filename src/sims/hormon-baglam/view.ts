@@ -1,4 +1,5 @@
-import { slider as baseSlider } from '../ui';
+import { f1, slider as baseSlider } from '../ui';
+import type { RepStatus } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, ref, svg, svgText, uid } from '../kit';
@@ -11,29 +12,40 @@ import {
   type Belief, type Evidence, type OIn, type Partner, type Route, type SIn, type TIn, type VoleIn,
 } from './model';
 import { mulberry32 } from '../rng';
+import { money, pct, percent } from '../../i18n/fmt';
+import { t } from '../../i18n/t';
+import type { MsgKey } from '../../i18n/messages';
+import { L } from './text';
+import type { BookEntry, Rep, Strings } from './text.tr';
 
 type Tab = 't' | 'o' | 's';
-const f1 = (x: number): string => x.toFixed(1).replace('.', ',');
 const pc = (x: number): number => Math.round(x * 100);
 
-const PARTNER_UI: Record<Partner, [string, string]> = {
-  biz: ['Biz (iç grup)', 'aynı takımdan'],
-  onlar: ['Onlar (dış grup)', 'karşı takımdan'],
-  yabanci: ['Anonim yabancı', 'başka odada'],
-  rastgele: ['Rastgele mekanizma', 'kontrol'],
+const replLabel = (s: RepStatus): string => t(`repl.${s}` as MsgKey);
+const REP: Rep = {
+  plain: (s) => t('repl.badge', { s: replLabel(s) }),
+  bold: (s) => t('repl.badge', { s: `<b>${replLabel(s)}</b>` }),
 };
 
-const TEMPLATE = (id: string) => `
-<div class="sim sim-hb">
-  <p class="lede">Testosteron, oksitosin ve stres hormonları davranışı yaratır mı, yoksa zaten var olan eğilimleri bağlama göre mi büyütür?</p>
+/** "Kitapta" kutusu: deney kimliklerine bağlantı + isteğe bağlı kavram satırı. */
+function bookHtml(book: Record<string, BookEntry>, concept?: string): string {
+  const li = Object.entries(book).map(([id, e]) => `<li><a href="#/bolum/${id.split('-')[0]}?deney=${id}">${e.text}</a>${e.tail(REP)}</li>`);
+  if (concept) li.push(`<li>${concept}</li>`);
+  return `<aside class="book" aria-label="${t('sim.book')}"><h3 class="sim-h">${t('sim.book')}</h3><ul>${li.join('')}</ul></aside>`;
+}
+const howHtml = (ps: string[]): string => `<details class="how"><summary>${t('sim.how')}</summary><div class="how-in">${ps.map((p) => `<p>${p}</p>`).join('')}</div></details>`;
 
-  <div class="tabs" role="tablist" aria-label="Hormonlar">
-    <button class="tab" role="tab" id="${id}-tab-t" data-pane="t" aria-controls="${id}-p-t" aria-selected="true" type="button">Testosteron</button>
-    <button class="tab" role="tab" id="${id}-tab-o" data-pane="o" aria-controls="${id}-p-o" aria-selected="false" tabindex="-1" type="button">Oksitosin</button>
-    <button class="tab" role="tab" id="${id}-tab-s" data-pane="s" aria-controls="${id}-p-s" aria-selected="false" tabindex="-1" type="button">Stres eğrisi</button>
+const TEMPLATE = (id: string, X: Strings) => `
+<div class="sim sim-hb">
+  <p class="lede">${X.lede}</p>
+
+  <div class="tabs" role="tablist" aria-label="${X.tabsAria}">
+    <button class="tab" role="tab" id="${id}-tab-t" data-pane="t" aria-controls="${id}-p-t" aria-selected="true" type="button">${X.tabT}</button>
+    <button class="tab" role="tab" id="${id}-tab-o" data-pane="o" aria-controls="${id}-p-o" aria-selected="false" tabindex="-1" type="button">${X.tabO}</button>
+    <button class="tab" role="tab" id="${id}-tab-s" data-pane="s" aria-controls="${id}-p-s" aria-selected="false" tabindex="-1" type="button">${X.tabS}</button>
   </div>
 
-  <div class="sim-bar" role="group" aria-label="Anlık çıktılar"><div class="sim-bar-in">
+  <div class="sim-bar" role="group" aria-label="${X.barAria}"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
     <div class="meters" data-ref="meters"></div>
   </div></div>
@@ -41,124 +53,98 @@ const TEMPLATE = (id: string) => `
 
   <!-- ===== Testosteron ===== -->
   <section class="pane" role="tabpanel" id="${id}-p-t" data-pane="t" aria-labelledby="${id}-tab-t">
-    <div class="chips" data-ref="tChips" role="group" aria-label="Hazır durumlar"></div>
+    <div class="chips" data-ref="tChips" role="group" aria-label="${X.presetsAria}"></div>
     <div class="stage">
-      <svg data-ref="tSvg" viewBox="0 0 360 190" role="img" aria-label="Ajanın statü meydan okumasına verdiği yanıtın olasılıkları: saldırı, cömertlik, geri çekilme"></svg>
-      <div class="legend"><span><i style="background:var(--amy)"></i>saldırı</span><span><i style="background:var(--gld)"></i>cömertlik</span><span><i style="background:var(--lesion)"></i>geri çekilme</span></div>
+      <svg data-ref="tSvg" viewBox="0 0 360 190" role="img" aria-label="${X.t.svgAria}"></svg>
+      <div class="legend"><span><i style="background:var(--amy)"></i>${X.t.legAtk}</span><span><i style="background:var(--gld)"></i>${X.t.legGen}</span><span><i style="background:var(--lesion)"></i>${X.t.legWit}</span></div>
     </div>
     <div class="readout" data-ref="tRead"></div>
-    <section aria-label="Girdiler"><h3 class="sim-h">Girdiler</h3><div class="sliders" data-ref="tSl"></div><div class="ctls" data-ref="tCtl"></div></section>
-    <section class="chart" aria-label="Doza göre eylem olasılığı">
-      <h3 class="sim-h">Doz arttıkça seçilen yol</h3>
-      <svg data-ref="tChart" viewBox="0 0 360 170" role="img" aria-label="Testosteron düzeyine göre statüyü koruyan eylemin olasılığı; meydan okuma varken ve yokken"></svg>
+    <section aria-label="${X.inputsH}"><h3 class="sim-h">${X.inputsH}</h3><div class="sliders" data-ref="tSl"></div><div class="ctls" data-ref="tCtl"></div></section>
+    <section class="chart" aria-label="${X.t.chartSecAria}">
+      <h3 class="sim-h">${X.t.chartH}</h3>
+      <svg data-ref="tChart" viewBox="0 0 360 170" role="img" aria-label="${X.t.chartAria}"></svg>
       <div class="legend"><span data-ref="tLeg1"></span><span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--muted)" stroke-width="2" stroke-dasharray="5 3"/></svg><span data-ref="tLeg2"></span></span></div>
     </section>
-    <section class="card" aria-label="Ultimatum oyunu varyantı">
-      <h3 class="sim-h">Ultimatum varyantı: 10 ₺'yi bölüşme</h3>
-      <p class="note">Teklif veren, karşı tarafa 10 ₺'den 0 ile 5 ₺ arası öneri sunar. Karşı taraf reddederse ikisi de hiçbir şey almaz; reddedilen teklif statü kaybıdır. 24 sanal teklif verenin payları:</p>
-      <svg data-ref="uSvg" viewBox="0 0 360 152" role="img" aria-label="24 sanal teklif verenin teklifleri; çizgiler modelin beklentisi"></svg>
+    <section class="card" aria-label="${X.t.ultSecAria}">
+      <h3 class="sim-h">${X.t.ultH}</h3>
+      <p class="note">${X.t.ultNote}</p>
+      <svg data-ref="uSvg" viewBox="0 0 360 152" role="img" aria-label="${X.t.ultAria}"></svg>
       <p class="sl-hint" data-ref="uStat"></p>
-      <div class="row"><button class="btn" type="button" data-ref="uAgain">Yeniden örnekle</button></div>
+      <div class="row"><button class="btn" type="button" data-ref="uAgain">${X.t.again}</button></div>
       <table class="tbl" data-ref="uTbl">
-        <caption>Ortalama teklif (₺): gerçekte ne alındı ve ne sanıldı</caption>
-        <thead><tr><th></th><th scope="col">Plasebo sanıyor</th><th scope="col">Testosteron sanıyor</th></tr></thead>
+        <caption>${X.t.tblCap}</caption>
+        <thead><tr><th></th><th scope="col">${X.t.colPlacebo}</th><th scope="col">${X.t.colT}</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Gerçekte plasebo</th><td data-ref="c00"></td><td data-ref="c01"></td></tr>
-          <tr><th scope="row">Gerçekte testosteron</th><td data-ref="c10"></td><td data-ref="c11"></td></tr>
+          <tr><th scope="row">${X.t.rowPlacebo}</th><td data-ref="c00"></td><td data-ref="c01"></td></tr>
+          <tr><th scope="row">${X.t.rowT}</th><td data-ref="c10"></td><td data-ref="c11"></td></tr>
         </tbody>
       </table>
-      <p class="sl-hint">Doz kaydırıcısı 0'dayken iki satır aynıdır. Satırlar ilacın, sütunlar inancın etkisini ayrı gösterir.</p>
+      <p class="sl-hint">${X.t.tblHint}</p>
     </section>
-    <details class="how"><summary>Model nasıl çalışıyor?</summary><div class="how-in">
-      <p>Ajanın üç yanıtı vardır: saldırı, cömertlik, geri çekilme. Her birinin ilk değeri kişinin kendi eğiliminden gelir. Meydan okuma varken hormon, statüyü koruyan yola bir kazanç ekler. Meydan okuma yokken bu kazanç yaklaşık altıda birine iner. Hormon kesilse de (doz 0) davranış sürer: hormon eğilimi büyütür, yaratmaz.</p>
-      <p>Ultimatum'da teklif veren para, adalet ve statü arasında tartar. Cömertlikle statü kazanılan ortamda doz teklifleri yükseltir; saldırıyla statü kazanılan ortamda düşürür. "Testosteron aldığını sanmak" ise ilaçtan bağımsız ayrı bir terimdir ve teklifleri düşürür.</p>
-      <p>Zar raporunda yalan oranı yalnızca dürüstlüğün itibar getirdiği (cömertlik yolu) bağlamda hormonla düşer. Saldırı yolunda kitapta test edilmiş bir durum yok, bu yüzden etkisiz bırakıldı.</p>
-    </div></details>
-    <aside class="book" aria-label="Kitapta"><h3 class="sim-h">Kitapta</h3><ul>
-      <li><a href="#/bolum/ch04?deney=ch04-e2">Eisenegger ve ark. (2010)</a>: kadın katılımcılara testosteron verildi; reddin statü kaybı olduğu Ultimatum'da daha adil teklif yaptılar. Replikasyon: karışık (erkeklerde cömertlik azalan bir çalışma da var).</li>
-      <li><a href="#/bolum/ch04?deney=ch04-e3">Aynı deneyde inanç</a>: gerçekte ne aldıklarından bağımsız, testosteron aldığına inananlar daha adaletsiz teklif verdi. Replikasyon: bilinmiyor; karşılaştırma rastgele atanmış değil.</li>
-      <li><a href="#/bolum/ch04?deney=ch04-e4">Wibral ve ark. (2012)</a>: testosteron verilen erkekler zar sonucunu daha az yanlış bildirdi. Replikasyon: bilinmiyor; tek, küçük çalışma.</li>
-      <li><a href="#/bolum/ch04?deney=ch04-e1">Dixson ve Herbert (1977)</a>: talapoin maymunlarında testosteron, mevcut saldırgan kalıbı (aşağıdakilere) büyüttü. Replikasyon: bilinmiyor.</li>
-      <li>Kavram: zorluk hipotezi (challenge hypothesis). Testosteron statü meydan okuması anında yükselir ve statüyü koruyan davranışı destekler.</li>
-    </ul></aside>
+    ${howHtml(X.t.how)}
+    ${bookHtml(X.t.book, X.t.concept)}
   </section>
 
   <!-- ===== Oksitosin ===== -->
   <section class="pane" role="tabpanel" id="${id}-p-o" data-pane="o" aria-labelledby="${id}-tab-o" hidden>
-    <div class="chips" data-ref="oChips" role="group" aria-label="Hazır durumlar"></div>
+    <div class="chips" data-ref="oChips" role="group" aria-label="${X.presetsAria}"></div>
     <div class="warn" role="note">
-      <p class="warn-h">Replikasyon durumu: tartışmalı</p>
-      <p>Kosfeld ve ark. (2005), burundan oksitosinin güven oyununda yatırımı artırdığını bulmuştu. Sonraki güven oyunu deneylerinde bu tutarlı biçimde tekrarlanamadı; çalışmalar birleştirilince güvenilir bir etki görülmedi. Burundan verilen oksitosinin beyne ne kadar ulaştığı ve alandaki çalışmaların düşük istatistiksel gücü de eleştirildi. "Biz-onlar" bulguları (De Dreu) için durum: karışık.</p>
+      <p class="warn-h">${X.o.warnH(replLabel('tartışmalı'))}</p>
+      <p>${X.o.warn(replLabel('karışık'))}</p>
     </div>
     <div class="stage">
-      <svg data-ref="oSvg" viewBox="0 0 360 246" role="img" aria-label="Güven oyununda dört karşı tarafa yatırılan pay; oksitosinsiz karşılaştırma işaretiyle"></svg>
-      <div class="legend"><span><i style="background:var(--hyp)"></i>oksitosinle</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="13" y1="0" x2="13" y2="10" stroke="var(--ink)" stroke-width="2.4"/></svg>oksitosinsiz</span></div>
+      <svg data-ref="oSvg" viewBox="0 0 360 246" role="img" aria-label="${X.o.svgAria}"></svg>
+      <div class="legend"><span><i style="background:var(--hyp)"></i>${X.o.legWith}</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="13" y1="0" x2="13" y2="10" stroke="var(--ink)" stroke-width="2.4"/></svg>${X.o.legWithout}</span></div>
     </div>
     <div class="readout" data-ref="oRead"></div>
-    <section aria-label="Girdiler"><h3 class="sim-h">Girdiler</h3><div class="sliders" data-ref="oSl"></div><div class="ctls" data-ref="oCtl"></div></section>
-    <section class="card" aria-label="Tarla faresi">
-      <h3 class="sim-h">Alt panel: tarla faresi ve vazopressin</h3>
-      <p class="note">Tek eşli bozkır tarla faresinin (prairie vole) ödül bölgelerinde vazopressin reseptörü (V1a) yoğundur; çok eşli akrabalarında azdır. Reseptör ve hormon birlikte gerekir.</p>
-      <div class="chips" data-ref="vChips" role="group" aria-label="Tür"></div>
+    <section aria-label="${X.inputsH}"><h3 class="sim-h">${X.inputsH}</h3><div class="sliders" data-ref="oSl"></div><div class="ctls" data-ref="oCtl"></div></section>
+    <section class="card" aria-label="${X.o.voleSecAria}">
+      <h3 class="sim-h">${X.o.voleH}</h3>
+      <p class="note">${X.o.voleNote}</p>
+      <div class="chips" data-ref="vChips" role="group" aria-label="${X.o.voleSpeciesAria}"></div>
       <div class="sliders" data-ref="vSl"></div>
       <div class="meters" data-ref="vMet"></div>
-      <p class="sl-hint">Dikkat: tek bir gene ya da reseptöre indirgemek fazla basit. Oksitosin reseptörü olmayan bozkır tarla fareleri üzerine 2023 tarihli bir CRISPR çalışması, bu farelerin yine de eş bağı kurabildiğini gösterdi.</p>
+      <p class="sl-hint">${X.o.voleHint}</p>
     </section>
-    <details class="how"><summary>Model nasıl çalışıyor?</summary><div class="how-in">
-      <p>Her karşı taraf için başlangıç güveni ayrıdır: iç grup yüksek, dış grup ve yabancı daha düşük. Oksitosin yalnızca belirli kapılarda etkilidir: iç gruba yatırım artar (De Dreu); anonim yabancıya yatırım, yalnızca özgün Kosfeld bulgusuna göre artar; rastgele mekanizmada etki yoktur, yani etki genel risk alma değil sosyal güvendir.</p>
-      <p>Dış grup tehdidi (maddi risk) yüksekken oksitosin, karşı takıma önleyici ihanet olasılığını ve örtük önyargıyı artırır. "Birleşik analizler" görünümünde Kosfeld etkisi sıfırlanır (kitaba göre güvenilir etki görülmedi); De Dreu etkileri ise belirsizlik nedeniyle yarıya indirilir (bu oran modelin varsayımı).</p>
-    </div></details>
-    <aside class="book" aria-label="Kitapta"><h3 class="sim-h">Kitapta</h3><ul>
-      <li><a href="#/bolum/ch04?deney=ch04-e7">Kosfeld ve ark. (2005)</a>: oksitosin alan yatırımcılar daha çok para emanet etti; karşı tarafın rastgele mekanizma olduğu kontrolde etki yoktu. Replikasyon: <b>tartışmalı</b>. Ayrıca Sapolsky, oksitosinin anonim ve başka odadaki yabancılarla işbirliğini azalttığını belirtir.</li>
-      <li><a href="#/bolum/ch04?deney=ch04-e8">De Dreu ve ark. (2010, 2011)</a>: oksitosin takım içi cömertliği artırdı, riskin yüksek olduğu durumlarda karşı takıma önleyici ihaneti ve dış gruplara örtük önyargıyı yükseltti. Replikasyon: karışık; "etnosentrizm" yorumu eleştirildi.</li>
-      <li><a href="#/bolum/ch04?deney=ch04-e5">Young, Lim ve ark. (1999, 2004)</a>: V1a reseptörü tarla farelerinde eş yakınlığını ve tercihini artırdı. Replikasyon: sağlam. Kitap ikinci deneyi dağ tarla faresinde anlatır; asıl çalışma çayır tarla faresinde ve ventral pallidumdadır.</li>
-    </ul></aside>
+    ${howHtml(X.o.how)}
+    ${bookHtml(X.o.book)}
   </section>
 
   <!-- ===== Stres ===== -->
   <section class="pane" role="tabpanel" id="${id}-p-s" data-pane="s" aria-labelledby="${id}-tab-s" hidden>
-    <div class="chips" data-ref="sChips" role="group" aria-label="Hazır durumlar"></div>
+    <div class="chips" data-ref="sChips" role="group" aria-label="${X.presetsAria}"></div>
     <div class="stage">
-      <svg data-ref="sSvg" viewBox="0 0 360 196" role="img" aria-label="Ters U eğrisi: stres şiddetine göre performans; akut ve süren stres eğrileri"></svg>
-      <div class="legend"><span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--pfc)" stroke-width="2.4"/></svg>kısa süreli stres</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--red)" stroke-width="2.4" stroke-dasharray="5 3"/></svg>seçilen süre</span></div>
+      <svg data-ref="sSvg" viewBox="0 0 360 196" role="img" aria-label="${X.s.svgAria}"></svg>
+      <div class="legend"><span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--pfc)" stroke-width="2.4"/></svg>${X.s.legAcute}</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--red)" stroke-width="2.4" stroke-dasharray="5 3"/></svg>${X.s.legChosen}</span></div>
     </div>
     <div class="stage">
-      <svg data-ref="eSvg" viewBox="0 0 360 120" role="img" aria-label="Stres altında empati kapsamı: yakın çevreye ve yabancıya yönelik empati"></svg>
+      <svg data-ref="eSvg" viewBox="0 0 360 120" role="img" aria-label="${X.s.empathyAria}"></svg>
     </div>
     <div class="readout" data-ref="sRead"></div>
-    <section aria-label="Girdiler"><h3 class="sim-h">Girdiler</h3><div class="sliders" data-ref="sSl"></div><div class="ctls" data-ref="sCtl"></div></section>
-    <section class="card" aria-label="Risk alma">
-      <h3 class="sim-h">Stres altında risk alma (balon görevi)</h3>
+    <section aria-label="${X.inputsH}"><h3 class="sim-h">${X.inputsH}</h3><div class="sliders" data-ref="sSl"></div><div class="ctls" data-ref="sCtl"></div></section>
+    <section class="card" aria-label="${X.s.riskSecAria}">
+      <h3 class="sim-h">${X.s.riskH}</h3>
       <div class="meters" data-ref="rMet"></div>
-      <p class="sl-hint">Çizgi: stressiz düzey. Orta stres cinsiyet farkını açar; çok büyük stres ikisinde de risk almayı artırır. Deney akut stresle yapıldı: süre kaydırıcısı bu çubukları değiştirmez.</p>
+      <p class="sl-hint">${X.s.riskHint}</p>
     </section>
-    <section class="card" aria-label="Futbol yenilgisi">
-      <h3 class="sim-h">Yer değiştirme: futbol yenilgisi ve aile içi şiddet</h3>
-      <div class="chips" data-ref="mChips" role="group" aria-label="Maç sonucu"></div>
+    <section class="card" aria-label="${X.s.mSecAria}">
+      <h3 class="sim-h">${X.s.mH}</h3>
+      <div class="chips" data-ref="mChips" role="group" aria-label="${X.s.mChipsAria}"></div>
       <div class="meters" data-ref="mMet"></div>
-      <p class="sl-hint">Yüzdeler Card ve Dahl'ın bulgusundan (kitap): polise bildirilen aile içi şiddette göreli artış. Gözlemsel veridir, nedensel bir deney değil.</p>
+      <p class="sl-hint">${X.s.mHint}</p>
     </section>
-    <details class="how"><summary>Model nasıl çalışıyor?</summary><div class="how-in">
-      <p>Performans eğrisi, stres şiddetiyle önce yükselip sonra düşer (ters U). Süre uzadıkça kronikleşme artar: yaklaşık bir günden sonra başlar, birkaç haftada tamamlanır. Kronik stres hem eğriyi alçaltır hem davranışı hedefe yönelikten alışkanlığa kaydırır. Eğrinin biçimi ve sayılar modelin varsayımıdır; yön kitaptan gelir.</p>
-      <p>Empati: yakın çevre stresle az, yabancı çok daralır. Glukokortikoid yanıtı engellenince yabancıya empati korunur. Fare deneyindeki yabancı karşılaşması başlı başına stresli olduğundan "yabancı" çubuğu stresle düşer.</p>
-      <p>Yer değiştirme seçeneği, saldırganlığı daha zayıf birine yöneltmenin stres hormonu düzeyini düşürmesini temsil eder (kitaptaki sıçan ve babun örnekleri). Bedeli bu hedefin maruz kaldığı zarardır; model onu göstermez.</p>
-    </div></details>
-    <aside class="book" aria-label="Kitapta"><h3 class="sim-h">Kitapta</h3><ul>
-      <li><a href="#/bolum/ch04?deney=ch04-e9">Dias-Ferreira ve ark. (2009)</a>: kronik stresli sıçanlar ödül değersizleşse de alışkanlığı sürdürdü. Replikasyon: karışık; insanlarda alışkanlık oluşturma yöntemlerinin güvenilirliği sorgulandı.</li>
-      <li><a href="#/bolum/ch04?deney=ch04-e10">Lighthall ve ark. (2009)</a>: soğuk baskı stresi erkeklerde risk almayı artırdı, kadınlarda azalttı. Replikasyon: bilinmiyor.</li>
-      <li><a href="#/bolum/ch04?deney=ch04-e11">Card ve Dahl (2011)</a>: beklenmedik yenilgide erkeklerin partnerine şiddeti yaklaşık %10, playoff yarışında %13, rakibe yenilgide %20 arttı. Replikasyon: sağlam (gözlemsel).</li>
-      <li><a href="#/bolum/ch04?deney=ch04-e12">Langford, Martin ve ark.</a>: glukokortikoid engellenince fareler yabancıya da acı empatisi gösterdi. Replikasyon: bilinmiyor.</li>
-      <li><a href="#/bolum/ch01?deney=ch01-e1">Yer değiştirme saldırganlığı</a> (Levine'in sıçanları, Sapolsky'nin babunları): saldırganlığı başkasına yönelten babunların glukokortikoid düzeyi daha düşüktü. Replikasyon: sağlam (hormonu düşürme kısmı daha az çalışmaya dayanır).</li>
-    </ul></aside>
+    ${howHtml(X.s.how)}
+    ${bookHtml(X.s.book)}
   </section>
 
-  <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan yalnızca Card ve Dahl yüzdeleri (yaklaşık %10, %13, %20) ve bulguların yönleri alındı; bütün diğer sayılar (kazançlar, eşikler, ₺ tutarları, kronikleşme süresi) modelin varsayımıdır. Gerçek hormon etkileri bundan çok daha karmaşıktır.</p>
+  <p class="foot">${X.foot}</p>
 </div>`;
 
 export function mount(container: HTMLElement): () => void {
   const scope = new Scope();
   const id = uid('hb');
-  container.innerHTML = TEMPLATE(id);
+  const X = L();
+  container.innerHTML = TEMPLATE(id, X);
   const root = container.firstElementChild as HTMLElement;
   const $ = <T extends Element = HTMLElement>(name: string) => ref<T>(root, name);
 
@@ -233,10 +219,15 @@ export function mount(container: HTMLElement): () => void {
   /* ---------- Üst çubuk göstergeleri ---------- */
   const barM = $('meters');
   const bm = [meter(barM, '', 'var(--ink)'), meter(barM, '', 'var(--ink)'), meter(barM, '', 'var(--ink)')];
+  const BAR_COL: Record<Tab, string[]> = {
+    t: ['var(--amy)', 'var(--gld)', 'var(--pfc)'],
+    o: ['var(--hyp)', 'var(--pit)', 'var(--red)'],
+    s: ['var(--pfc)', 'var(--dop)', 'var(--gld)'],
+  };
   const BAR_DEF: Record<Tab, Array<[string, string]>> = {
-    t: [['Saldırı eğilimi', 'var(--amy)'], ['Cömertlik eğilimi', 'var(--gld)'], ['Ortalama teklif', 'var(--pfc)']],
-    o: [['İç gruba verilen pay', 'var(--hyp)'], ['Dış gruba güven', 'var(--pit)'], ['Dış gruba önyargı', 'var(--red)']],
-    s: [['Performans', 'var(--pfc)'], ['Alışkanlığa kayma', 'var(--dop)'], ['Yabancıya empati', 'var(--gld)']],
+    t: X.bar.t.map((l, i) => [l, BAR_COL.t[i]]),
+    o: X.bar.o.map((l, i) => [l, BAR_COL.o[i]]),
+    s: X.bar.s.map((l, i) => [l, BAR_COL.s[i]]),
   };
   function setBar(t: Tab, vals: Array<[number, string]>): void {
     bm.forEach((m, i) => {
@@ -275,33 +266,33 @@ export function mount(container: HTMLElement): () => void {
      TESTOSTERON
      ===================================================== */
   presets($('tChips'), [
-    ['Meydan okuma yok', () => { T = { ...T_BASE, dose: 1, challenge: false }; }],
-    ['Saldırıyla statü', () => { T = { ...T_BASE, dose: 1, route: 'saldiri' }; }],
-    ['Cömertlikle statü (Eisenegger)', () => { T = { ...T_BASE, dose: 1, route: 'comertlik' }; }],
-    ['Yalnızca inanç', () => { T = { ...T_BASE, dose: 0, route: 'comertlik', belief: 'testosteron' }; }],
+    [X.t.chip[0], () => { T = { ...T_BASE, dose: 1, challenge: false }; }],
+    [X.t.chip[1], () => { T = { ...T_BASE, dose: 1, route: 'saldiri' }; }],
+    [X.t.chip[2], () => { T = { ...T_BASE, dose: 1, route: 'comertlik' }; }],
+    [X.t.chip[3], () => { T = { ...T_BASE, dose: 0, route: 'comertlik', belief: 'testosteron' }; }],
   ]);
-  slider($('tSl'), 'dose', 'Testosteron düzeyi', 'Verilen doz. 0 = hormon yok; davranış yine de var.', 0, 100,
-    () => pc(T.dose), (v) => { T.dose = v / 100; }, (v) => `%${v}`, 'var(--pit)');
-  slider($('tSl'), 'disp', 'Öteden gelen eğilim', 'Kişinin hormondan bağımsız yapısı: uzlaşmacıdan saldırgana.', -100, 100,
-    () => Math.round(T.disp * 100), (v) => { T.disp = v / 100; }, (v) => (v < -20 ? 'uzlaşmacı' : v > 20 ? 'saldırgan' : 'orta'), 'var(--edge)');
-  chipGroup<'var' | 'yok'>($('tCtl'), 'Statüye meydan okuma', [['var', 'Var'], ['yok', 'Yok']],
+  slider($('tSl'), 'dose', X.t.sDose, X.t.sDoseHint, 0, 100,
+    () => pc(T.dose), (v) => { T.dose = v / 100; }, (v) => percent(String(v)), 'var(--pit)');
+  slider($('tSl'), 'disp', X.t.sDisp, X.t.sDispHint, -100, 100,
+    () => Math.round(T.disp * 100), (v) => { T.disp = v / 100; }, (v) => (v < -20 ? X.t.dispLo : v > 20 ? X.t.dispHi : X.t.dispMid), 'var(--edge)');
+  chipGroup<'var' | 'yok'>($('tCtl'), X.t.ctlChallenge, [['var', X.t.yes], ['yok', X.t.no]],
     () => (T.challenge ? 'var' : 'yok'), (v) => { T.challenge = v === 'var'; });
-  chipGroup<Route>($('tCtl'), 'Bu ortamda statüyü koruyan yol', [['saldiri', 'Saldırganlık'], ['comertlik', 'Cömertlik']],
+  chipGroup<Route>($('tCtl'), X.t.ctlRoute, [['saldiri', X.t.routeAtk], ['comertlik', X.t.routeGen]],
     () => T.route, (v) => { T.route = v; });
-  chipGroup<Belief>($('tCtl'), 'Katılımcı ne aldığını sanıyor', [['plasebo', 'Plasebo'], ['testosteron', 'Testosteron']],
+  chipGroup<Belief>($('tCtl'), X.t.ctlBelief, [['plasebo', X.t.placebo], ['testosteron', X.t.testosterone]],
     () => T.belief, (v) => { T.belief = v; });
-  const [tRoDefense, tRoRej, tRoLie] = readouts($('tRead'), ['Statü korunuyor', 'Ortalama teklifin reddi', 'Zar raporunda yalan']);
+  const [tRoDefense, tRoRej, tRoLie] = readouts($('tRead'), [X.t.roDefense, X.t.roReject, X.t.roLie]);
 
   // Sahne
   const tSvg = $<SVGElement>('tSvg');
   const ROWS: Array<[keyof ReturnType<typeof choice>, string, string]> = [
-    ['saldiri', 'Saldırı (aşağıdakine)', 'var(--amy)'], ['comertlik', 'Cömertlik (paylaşım)', 'var(--gld)'], ['cekil', 'Geri çekilme', 'var(--lesion)'],
+    ['saldiri', X.t.rows[0], 'var(--amy)'], ['comertlik', X.t.rows[1], 'var(--gld)'], ['cekil', X.t.rows[2], 'var(--lesion)'],
   ];
   svg('rect', { x: 8, y: 8, width: 190, height: 22, rx: 11, fill: 'none', stroke: 'var(--edge)', 'stroke-width': 1.4 }, tSvg).setAttribute('data-k', 'pill');
   const tCtxTx = svgText(tSvg, { x: 18, y: 23, class: 't-cap' }, '');
   svg('circle', { cx: 56, cy: 108, r: 32, fill: 'var(--panel)', stroke: 'var(--ink)', 'stroke-width': 1.6 }, tSvg);
   const tAura = svg('circle', { cx: 56, cy: 108, r: 26, fill: 'var(--pit)', 'fill-opacity': 0 }, tSvg);
-  svgText(tSvg, { x: 56, y: 112, class: 't-ink', 'text-anchor': 'middle' }, 'Ajan');
+  svgText(tSvg, { x: 56, y: 112, class: 't-ink', 'text-anchor': 'middle' }, X.t.agent);
   const tHor = svgText(tSvg, { x: 56, y: 156, class: 't-cap', 'text-anchor': 'middle' }, '');
   const tRows = ROWS.map(([, label, col], i) => {
     const y = 66 + i * 52;
@@ -330,15 +321,15 @@ export function mount(container: HTMLElement): () => void {
 
   function drawTChart(): void {
     tChart.innerHTML = '';
-    gridXY(tChart, 'Testosteron düzeyi (%)', 'olasılık %');
+    gridXY(tChart, X.t.xLabel, X.t.yLabel);
     const key = T.route === 'saldiri' ? 'saldiri' : 'comertlik';
     const col = T.route === 'saldiri' ? 'var(--amy)' : 'var(--gld)';
     const at = (ch: boolean) => (x: number) => choice({ ...T, dose: x, challenge: ch })[key];
     svg('path', { class: 'ln', d: pathOf(at(!T.challenge)), stroke: 'var(--muted)', 'stroke-dasharray': '6 4', 'stroke-width': 1.8 }, tChart);
     svg('path', { class: 'ln', d: pathOf(at(T.challenge)), stroke: col }, tChart);
     svg('circle', { cx: cx(T.dose), cy: cy(choice(T)[key]), r: 5, fill: col, stroke: 'var(--panel)', 'stroke-width': 2 }, tChart);
-    $('tLeg1').innerHTML = `<i style="background:${col}"></i>${T.route === 'saldiri' ? 'saldırı' : 'cömertlik'} olasılığı, meydan okuma ${T.challenge ? 'var' : 'yok'}`;
-    $('tLeg2').textContent = `aynısı, meydan okuma ${T.challenge ? 'yok' : 'var'}`;
+    $('tLeg1').innerHTML = `<i style="background:${col}"></i>${X.t.legMain(T.route === 'saldiri', T.challenge)}`;
+    $('tLeg2').textContent = X.t.legOther(!T.challenge);
   }
 
   // Ultimatum histogramı
@@ -355,12 +346,12 @@ export function mount(container: HTMLElement): () => void {
       const n = smp.filter((s) => s === o).length;
       for (let k = 0; k < n; k++) svg('circle', { cx: x + BW / 2, cy: BASE - DOT - 1 - k * STEP, r: DOT, fill: 'var(--pfc)' }, uSvg);
       svg('line', { x1: x + 6, x2: x + BW - 6, y1: BASE - p[j] * NSAMP * STEP, y2: BASE - p[j] * NSAMP * STEP, stroke: 'var(--ink)', 'stroke-width': 2.4 }, uSvg);
-      svgText(uSvg, { x: x + BW / 2, y: BASE + 14, 'text-anchor': 'middle', class: 't-cap' }, o === 5 ? '5 ₺ eşit' : `${o} ₺`);
+      svgText(uSvg, { x: x + BW / 2, y: BASE + 14, 'text-anchor': 'middle', class: 't-cap' }, o === 5 ? X.t.equal(money(5)) : money(o));
     });
     svg('line', { class: 'grid', x1: X0, x2: X0 + 6 * BW, y1: BASE, y2: BASE }, uSvg);
-    svgText(uSvg, { x: X0 + 3 * BW, y: BASE + 30, 'text-anchor': 'middle', class: 't-cap' }, 'karşı tarafa önerilen pay');
+    svgText(uSvg, { x: X0 + 3 * BW, y: BASE + 30, 'text-anchor': 'middle', class: 't-cap' }, X.t.histX);
     const m = smp.reduce((a, b) => a + b, 0) / NSAMP;
-    $('uStat').textContent = `Örneklem ortalaması ${f1(m)} ₺; model beklentisi ${f1(mean(p))} ₺ (çizgiler).`;
+    $('uStat').textContent = X.t.histStat(money(f1(m)), money(f1(mean(p))));
   }
   scope.on($('uAgain'), 'click', () => { seed++; drawHist(); poke(); });
 
@@ -368,20 +359,20 @@ export function mount(container: HTMLElement): () => void {
     const c = choice(T);
     const mo = meanOffer(T);
     const p = popOffers(T);
-    tCtxTx.textContent = T.challenge ? 'Statü meydan okuması var' : 'Statü meydan okuması yok';
+    tCtxTx.textContent = T.challenge ? X.t.ctxOn : X.t.ctxOff;
     tSvg.querySelector('[data-k="pill"]')!.setAttribute('stroke-dasharray', T.challenge ? '0' : '4 3');
     tAura.setAttribute('fill-opacity', (0.75 * T.dose).toFixed(2));
-    tHor.textContent = T.dose < 0.05 ? 'hormon yok' : `T %${pc(T.dose)}`;
+    tHor.textContent = T.dose < 0.05 ? X.t.horNone : X.t.horShort(pct(T.dose));
     ROWS.forEach(([k], i) => {
       const v = c[k];
       tRows[i].fill.setAttribute('width', (130 * v).toFixed(1));
-      tRows[i].tx.textContent = `%${pc(v)}`;
+      tRows[i].tx.textContent = pct(v);
       tRows[i].arrow.setAttribute('stroke-width', (1 + 6 * v).toFixed(1));
       tRows[i].arrow.setAttribute('opacity', (0.3 + 0.7 * v).toFixed(2));
     });
-    tRoDefense.textContent = T.challenge ? `%${pc(statusKept(T))}` : 'risk altında değil';
-    tRoRej.textContent = `%${pc(rejectRate(p))}`;
-    tRoLie.textContent = `%${pc(lieRate(T))}`;
+    tRoDefense.textContent = T.challenge ? pct(statusKept(T)) : X.t.notAtRisk;
+    tRoRej.textContent = pct(rejectRate(p));
+    tRoLie.textContent = pct(lieRate(T));
     drawTChart();
     drawHist();
     const bt = beliefTable(T);
@@ -390,55 +381,55 @@ export function mount(container: HTMLElement): () => void {
       td.textContent = f1(v);
       td.classList.toggle('on', i === (T.dose > 0.05 ? 1 : 0) && j === (T.belief === 'testosteron' ? 1 : 0));
     }));
-    setBar('t', [[c.saldiri, `%${pc(c.saldiri)}`], [c.comertlik, `%${pc(c.comertlik)}`], [mo / 5, `${f1(mo)} ₺`]]);
-    sayEl.textContent = `${describeT(T)} Ortalama teklif ${f1(mo)} ₺${T.belief === 'testosteron' ? ' (inanç teklifi düşürüyor)' : ''}.`;
+    setBar('t', [[c.saldiri, pct(c.saldiri)], [c.comertlik, pct(c.comertlik)], [mo / 5, money(f1(mo))]]);
+    sayEl.textContent = X.t.say(describeT(T), money(f1(mo)), T.belief === 'testosteron');
   }
 
   /* =====================================================
      OKSİTOSİN
      ===================================================== */
   presets($('oChips'), [
-    ['Oksitosin yok', () => { O = { ...O_BASE, dose: 0 }; }],
-    ['Oksitosin, düşük tehdit', () => { O = { dose: 0.8, threat: 0.15, evidence: 'ozgun' }; }],
-    ['Oksitosin, yüksek tehdit', () => { O = { dose: 0.8, threat: 0.85, evidence: 'ozgun' }; }],
-    ['Birleşik analizler', () => { O = { dose: 0.8, threat: 0.85, evidence: 'birlesik' }; }],
+    [X.o.chip[0], () => { O = { ...O_BASE, dose: 0 }; }],
+    [X.o.chip[1], () => { O = { dose: 0.8, threat: 0.15, evidence: 'ozgun' }; }],
+    [X.o.chip[2], () => { O = { dose: 0.8, threat: 0.85, evidence: 'ozgun' }; }],
+    [X.o.chip[3], () => { O = { dose: 0.8, threat: 0.85, evidence: 'birlesik' }; }],
   ]);
-  slider($('oSl'), 'odose', 'Oksitosin (burun spreyi)', 'Verilen oksitosin. 0 = plasebo.', 0, 100,
-    () => pc(O.dose), (v) => { O.dose = v / 100; }, (v) => `%${v}`, 'var(--hyp)');
-  slider($('oSl'), 'thr', 'Dış grup tehdidi / maddi risk', 'Karşı takım ne kadar tehdit ya da riskli görünüyor.', 0, 100,
-    () => pc(O.threat), (v) => { O.threat = v / 100; }, (v) => `%${v}`, 'var(--red)');
-  chipGroup<Evidence>($('oCtl'), 'Hangi veriye göre', [['ozgun', 'Özgün çalışmalar'], ['birlesik', 'Birleşik analizler']],
+  slider($('oSl'), 'odose', X.o.sDose, X.o.sDoseHint, 0, 100,
+    () => pc(O.dose), (v) => { O.dose = v / 100; }, (v) => percent(String(v)), 'var(--hyp)');
+  slider($('oSl'), 'thr', X.o.sThreat, X.o.sThreatHint, 0, 100,
+    () => pc(O.threat), (v) => { O.threat = v / 100; }, (v) => percent(String(v)), 'var(--red)');
+  chipGroup<Evidence>($('oCtl'), X.o.ctlEvidence, [['ozgun', X.o.evOriginal], ['birlesik', X.o.evPooled]],
     () => O.evidence, (v) => { O.evidence = v; });
-  const [oRoBetray, oRoGap] = readouts($('oRead'), ['Dış gruba önleyici ihanet', 'İç grup − dış grup farkı']);
+  const [oRoBetray, oRoGap] = readouts($('oRead'), [X.o.roBetray, X.o.roGap]);
 
   const oSvg = $<SVGElement>('oSvg');
-  svgText(oSvg, { x: 60, y: 14, class: 't-cap' }, 'Emanetçiye yatırılan pay (₺, 10 ₺ üzerinden)');
+  svgText(oSvg, { x: 60, y: 14, class: 't-cap' }, X.o.caption);
   const oRows = PARTNERS.map((p, i) => {
     const b = 40 + i * 52;
     if (p === 'biz') { for (const dx of [-7, 0, 7]) svg('circle', { cx: 30 + dx, cy: b + 12, r: 8, fill: 'var(--hyp)', stroke: 'var(--panel)', 'stroke-width': 1.5 }, oSvg); }
     else if (p === 'onlar') { for (const dx of [-7, 0, 7]) svg('rect', { x: 23 + dx, y: b + 5, width: 14, height: 14, rx: 2, fill: 'var(--pit)', stroke: 'var(--panel)', 'stroke-width': 1.5 }, oSvg); }
     else if (p === 'yabanci') { svg('circle', { cx: 30, cy: b + 12, r: 11, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1.6, 'stroke-dasharray': '3 2' }, oSvg); svgText(oSvg, { x: 30, y: b + 17, 'text-anchor': 'middle', class: 't-ink' }, '?'); }
     else { svg('rect', { x: 19, y: b + 1, width: 22, height: 22, rx: 5, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1.6 }, oSvg); for (const [dx, dy] of [[-5, -5], [0, 0], [5, 5]]) svg('circle', { cx: 30 + dx, cy: b + 12 + dy, r: 2, fill: 'var(--ink)' }, oSvg); }
-    svgText(oSvg, { x: 60, y: b + 2, class: 't-ink' }, `${PARTNER_UI[p][0]} · ${PARTNER_UI[p][1]}`);
+    svgText(oSvg, { x: 60, y: b + 2, class: 't-ink' }, X.o.partnerLabel(X.o.partners[p].name, X.o.partners[p].who));
     svg('rect', { x: 60, y: b + 10, width: 250, height: 12, rx: 6, fill: 'var(--line)' }, oSvg);
     const fill = svg('rect', { x: 60, y: b + 10, width: 0, height: 12, rx: 6, fill: p === 'biz' ? 'var(--hyp)' : p === 'onlar' ? 'var(--pit)' : 'var(--edge)' }, oSvg);
     const ghost = svg('line', { x1: 60, x2: 60, y1: b + 6, y2: b + 26, stroke: 'var(--ink)', 'stroke-width': 2.4 }, oSvg);
     const tx = svgText(oSvg, { x: 352, y: b + 21, class: 't-pct', 'text-anchor': 'end' }, '');
     return { fill, ghost, tx };
   });
-  svgText(oSvg, { x: 60, y: 242, class: 't-cap' }, 'Anonim yabancı: Kosfeld düzeneği.');
+  svgText(oSvg, { x: 60, y: 242, class: 't-cap' }, X.o.footnote);
 
   // Tarla faresi
   presets($('vChips'), [
-    ['Tek eşli tür', () => { V = { receptor: 0.85, vasopressin: 0.5 }; }],
-    ['Çok eşli tür', () => { V = { receptor: 0.15, vasopressin: 0.5 }; }],
-    ['Çok eşli + reseptör artışı (Lim)', () => { V = { receptor: 0.85, vasopressin: 0.5 }; }],
+    [X.o.voleChip[0], () => { V = { receptor: 0.85, vasopressin: 0.5 }; }],
+    [X.o.voleChip[1], () => { V = { receptor: 0.15, vasopressin: 0.5 }; }],
+    [X.o.voleChip[2], () => { V = { receptor: 0.85, vasopressin: 0.5 }; }],
   ]);
-  slider($('vSl'), 'v1a', 'V1a reseptör yoğunluğu', 'Ödül bölgelerindeki vazopressin reseptörü.', 0, 100,
-    () => pc(V.receptor), (v) => { V.receptor = v / 100; }, (v) => `%${v}`, 'var(--eff)');
-  slider($('vSl'), 'avp', 'Vazopressin', 'Dolaşımdaki hormon (enjeksiyon).', 0, 100,
-    () => pc(V.vasopressin), (v) => { V.vasopressin = v / 100; }, (v) => `%${v}`, 'var(--pit)');
-  const vMet = [meter($('vMet'), 'Tanıdık dişiyle yakınlık', 'var(--gld)'), meter($('vMet'), 'Yabancı dişiyle yakınlık', 'var(--lesion)')];
+  slider($('vSl'), 'v1a', X.o.sV1a, X.o.sV1aHint, 0, 100,
+    () => pc(V.receptor), (v) => { V.receptor = v / 100; }, (v) => percent(String(v)), 'var(--eff)');
+  slider($('vSl'), 'avp', X.o.sAvp, X.o.sAvpHint, 0, 100,
+    () => pc(V.vasopressin), (v) => { V.vasopressin = v / 100; }, (v) => percent(String(v)), 'var(--pit)');
+  const vMet = [meter($('vMet'), X.o.mFamiliar, 'var(--gld)'), meter($('vMet'), X.o.mStranger, 'var(--lesion)')];
 
   function renderO(): void {
     const off: OIn = { ...O, dose: 0 };
@@ -446,47 +437,47 @@ export function mount(container: HTMLElement): () => void {
       const v = transfer(p, O) / 10, g = transfer(p, off) / 10;
       oRows[i].fill.setAttribute('width', (250 * v).toFixed(1));
       oRows[i].ghost.setAttribute('x1', String(60 + 250 * g)); oRows[i].ghost.setAttribute('x2', String(60 + 250 * g));
-      oRows[i].tx.textContent = `${f1(transfer(p, O))} ₺`;
+      oRows[i].tx.textContent = money(f1(transfer(p, O)));
     });
-    oRoBetray.textContent = `%${pc(betray(O))}`;
-    oRoGap.textContent = `${f1(transfer('biz', O) - transfer('onlar', O))} ₺`;
+    oRoBetray.textContent = pct(betray(O));
+    oRoGap.textContent = money(f1(transfer('biz', O) - transfer('onlar', O)));
     const vv = vole(V);
-    vMet[0].set(vv.familiar, `%${pc(vv.familiar)}`);
-    vMet[1].set(vv.stranger, `%${pc(vv.stranger)}`);
-    setBar('o', [[transfer('biz', O) / 10, `${f1(transfer('biz', O))} ₺`], [transfer('onlar', O) / 10, `${f1(transfer('onlar', O))} ₺`], [prejudice(O), `%${pc(prejudice(O))}`]]);
-    sayEl.textContent = describeO(O) + (O.evidence === 'birlesik' ? ' Birleşik analizlerde güven etkisi görünmez.' : '');
+    vMet[0].set(vv.familiar, pct(vv.familiar));
+    vMet[1].set(vv.stranger, pct(vv.stranger));
+    setBar('o', [[transfer('biz', O) / 10, money(f1(transfer('biz', O)))], [transfer('onlar', O) / 10, money(f1(transfer('onlar', O)))], [prejudice(O), pct(prejudice(O))]]);
+    sayEl.textContent = describeO(O) + (O.evidence === 'birlesik' ? ` ${X.o.pooledNote}` : '');
   }
 
   /* =====================================================
      STRES
      ===================================================== */
   presets($('sChips'), [
-    ['Sınav öncesi heyecan', () => { S = { ...S, sev: 0.4, minutes: 20 }; }],
-    ['Panik', () => { S = { ...S, sev: 0.95, minutes: 20 }; }],
-    ['Aylarca süren stres', () => { S = { ...S, sev: 0.4, minutes: 20160 }; }],
-    ['Stressiz', () => { S = { ...S, sev: 0, minutes: 20 }; }],
+    [X.s.chip[0], () => { S = { ...S, sev: 0.4, minutes: 20 }; }],
+    [X.s.chip[1], () => { S = { ...S, sev: 0.95, minutes: 20 }; }],
+    [X.s.chip[2], () => { S = { ...S, sev: 0.4, minutes: 20160 }; }],
+    [X.s.chip[3], () => { S = { ...S, sev: 0, minutes: 20 }; }],
   ]);
-  const fmtDur = (m: number): string => (m < 60 ? `${Math.round(m)} dk` : m < 1440 ? `${Math.round(m / 60)} saat` : m < 10080 ? `${Math.round(m / 1440)} gün` : `${Math.round(m / 10080)} hafta`);
-  slider($('sSl'), 'sev', 'Stres şiddeti', 'Düşük: hafif tedirginlik. Aşırı: panik.', 0, 100,
-    () => pc(S.sev), (v) => { S.sev = v / 100; }, (v) => `%${v}`, 'var(--amy)');
-  slider($('sSl'), 'dur', 'Stresin süresi', 'Dakikalardan haftalara: akutu kronikten ayıran bu.', 0, 100,
+  const fmtDur = (m: number): string => (m < 60 ? X.s.dur.min(Math.round(m)) : m < 1440 ? X.s.dur.hour(Math.round(m / 60)) : m < 10080 ? X.s.dur.day(Math.round(m / 1440)) : X.s.dur.week(Math.round(m / 10080)));
+  slider($('sSl'), 'sev', X.s.sSev, X.s.sSevHint, 0, 100,
+    () => pc(S.sev), (v) => { S.sev = v / 100; }, (v) => percent(String(v)), 'var(--amy)');
+  slider($('sSl'), 'dur', X.s.sDur, X.s.sDurHint, 0, 100,
     () => sliderOf(S.minutes), (v) => { S.minutes = minutesOf(v); }, (v) => fmtDur(minutesOf(v)), 'var(--dop)');
-  chipGroup<'a' | 'k'>($('sCtl'), 'Glukokortikoid yanıtı', [['a', 'Normal'], ['k', 'İlaçla engellendi']],
+  chipGroup<'a' | 'k'>($('sCtl'), X.s.ctlGc, [['a', X.s.gcNormal], ['k', X.s.gcBlocked]],
     () => (S.block ? 'k' : 'a'), (v) => { S.block = v === 'k'; });
-  chipGroup<'a' | 'k'>($('sCtl'), 'Saldırganlığı daha zayıf birine yönelt', [['a', 'Hayır'], ['k', 'Evet']],
+  chipGroup<'a' | 'k'>($('sCtl'), X.s.ctlDisplace, [['a', X.s.no], ['k', X.s.yes]],
     () => (S.displace ? 'k' : 'a'), (v) => { S.displace = v === 'k'; });
-  const [sRoGc, sRoRisk, sRoClose] = readouts($('sRead'), ['Stres hormonu yanıtı', 'Hedefe yönelik davranış', 'Yakın çevreye empati']);
+  const [sRoGc, sRoRisk, sRoClose] = readouts($('sRead'), [X.s.roGc, X.s.roGoal, X.s.roClose]);
 
   const mChips = $('mChips');
   const mBtns = MATCHES.map((mt, i) => {
     const b = document.createElement('button');
-    b.type = 'button'; b.className = 'chip'; b.textContent = mt.label;
+    b.type = 'button'; b.className = 'chip'; b.textContent = X.matches[mt.id];
     scope.on(b, 'click', () => { match = i; refresh(true); });
     mChips.appendChild(b);
     return b;
   });
-  const mMet = meter($('mMet'), 'Aile içi şiddet bildiriminde artış', 'var(--amy)');
-  const rMet = [meter($('rMet'), 'Risk alma, erkek', 'var(--pfc)'), meter($('rMet'), 'Risk alma, kadın', 'var(--pit)')];
+  const mMet = meter($('mMet'), X.s.mMeter, 'var(--amy)');
+  const rMet = [meter($('rMet'), X.s.riskMale, 'var(--pfc)'), meter($('rMet'), X.s.riskFemale, 'var(--pit)')];
 
   // Ters U
   const sSvg = $<SVGElement>('sSvg');
@@ -496,9 +487,9 @@ export function mount(container: HTMLElement): () => void {
       svg('line', { class: 'grid', x1: CX0, x2: CX1, y1: cy(v), y2: cy(v) }, sSvg);
       svgText(sSvg, { x: CX0 - 6, y: cy(v) + 3, 'text-anchor': 'end' }, `${pc(v)}`);
     }
-    [[0.1, 'düşük'], [0.4, 'orta'], [0.85, 'aşırı']].forEach(([v, t]) => svgText(sSvg, { x: cx(v as number), y: CB + 14, 'text-anchor': 'middle' }, t as string));
-    svgText(sSvg, { x: (CX0 + CX1) / 2, y: CB + 32, 'text-anchor': 'middle' }, 'Stres şiddeti');
-    svgText(sSvg, { x: 4, y: 8 }, 'performans %');
+    [0.1, 0.4, 0.85].forEach((v, k) => svgText(sSvg, { x: cx(v), y: CB + 14, 'text-anchor': 'middle' }, X.s.levels[k]));
+    svgText(sSvg, { x: (CX0 + CX1) / 2, y: CB + 32, 'text-anchor': 'middle' }, X.s.xLabel);
+    svgText(sSvg, { x: 4, y: 8 }, X.s.yLabel);
     svg('path', { class: 'ln', d: pathOf((x) => perfAcute(x)), stroke: 'var(--pfc)' }, sSvg);
     if (chronic(S.minutes) > 0.02) svg('path', { class: 'ln', d: pathOf((x) => perf(x, S.minutes)), stroke: 'var(--red)', 'stroke-dasharray': '6 4' }, sSvg);
     const py = perf(S.sev, S.minutes);
@@ -508,8 +499,8 @@ export function mount(container: HTMLElement): () => void {
   // Empati
   const eSvg = $<SVGElement>('eSvg');
   svg('circle', { cx: 180, cy: 58, r: 22, fill: 'var(--panel)', stroke: 'var(--ink)', 'stroke-width': 1.6 }, eSvg);
-  svgText(eSvg, { x: 180, y: 62, class: 't-ink', 'text-anchor': 'middle' }, 'Ajan');
-  const eNodes = [{ x: 44, t: 'Yakın çevre', col: 'var(--hyp)' }, { x: 316, t: 'Yabancı', col: 'var(--pit)' }].map((n, i) => {
+  svgText(eSvg, { x: 180, y: 62, class: 't-ink', 'text-anchor': 'middle' }, X.s.agent);
+  const eNodes = [{ x: 44, t: X.s.near, col: 'var(--hyp)' }, { x: 316, t: X.s.stranger, col: 'var(--pit)' }].map((n, i) => {
     const line = svg('line', { x1: i ? 204 : 156, x2: i ? 284 : 76, y1: 58, y2: 58, stroke: n.col, 'stroke-linecap': 'round' }, eSvg);
     if (i) svg('rect', { x: n.x - 14, y: 44, width: 28, height: 28, rx: 5, fill: 'var(--panel)', stroke: n.col, 'stroke-width': 1.8, 'stroke-dasharray': '4 3' }, eSvg);
     else svg('circle', { cx: n.x, cy: 58, r: 16, fill: 'var(--panel)', stroke: n.col, 'stroke-width': 1.8 }, eSvg);
@@ -517,24 +508,24 @@ export function mount(container: HTMLElement): () => void {
     const tx = svgText(eSvg, { x: i ? 248 : 112, y: 44, class: 't-pct', 'text-anchor': 'middle' }, '');
     return { line, tx };
   });
-  svgText(eSvg, { x: 180, y: 114, class: 't-cap', 'text-anchor': 'middle' }, 'Çizgi kalınlığı: karşıdaki acıya duyulan empati');
+  svgText(eSvg, { x: 180, y: 114, class: 't-cap', 'text-anchor': 'middle' }, X.s.lineNote);
 
   function renderS(): void {
     const em = empathy(S), rk = risk(S.sev), r0 = risk(0);
     drawStress();
     eNodes[0].line.setAttribute('stroke-width', (1 + 9 * em.yakin).toFixed(1));
     eNodes[1].line.setAttribute('stroke-width', (1 + 9 * em.yabanci).toFixed(1));
-    eNodes[0].tx.textContent = `%${pc(em.yakin)}`;
-    eNodes[1].tx.textContent = `%${pc(em.yabanci)}`;
-    sRoGc.textContent = `%${pc(gcLevel(S))}${S.displace ? ' (boşaltılıyor)' : ''}`;
-    sRoRisk.textContent = `%${pc(1 - habit(S.sev, S.minutes))}`;
-    sRoClose.textContent = `%${pc(em.yakin)}`;
-    rMet[0].set(rk.erkek, `%${pc(rk.erkek)}`, r0.erkek);
-    rMet[1].set(rk.kadin, `%${pc(rk.kadin)}`, r0.kadin);
+    eNodes[0].tx.textContent = pct(em.yakin);
+    eNodes[1].tx.textContent = pct(em.yabanci);
+    sRoGc.textContent = S.displace ? X.s.gcDisplacing(pct(gcLevel(S))) : pct(gcLevel(S));
+    sRoRisk.textContent = pct(1 - habit(S.sev, S.minutes));
+    sRoClose.textContent = pct(em.yakin);
+    rMet[0].set(rk.erkek, pct(rk.erkek), r0.erkek);
+    rMet[1].set(rk.kadin, pct(rk.kadin), r0.kadin);
     mBtns.forEach((b, i) => b.setAttribute('aria-pressed', String(i === match)));
-    mMet.set(MATCHES[match].up / 25, MATCHES[match].up ? `yaklaşık %${MATCHES[match].up}` : 'artış yok');
-    setBar('s', [[perf(S.sev, S.minutes), `%${pc(perf(S.sev, S.minutes))}`], [habit(S.sev, S.minutes), `%${pc(habit(S.sev, S.minutes))}`], [em.yabanci, `%${pc(em.yabanci)}`]]);
-    sayEl.textContent = describeS(S) + (S.block ? ' Stres hormonu engellendi.' : '');
+    mMet.set(MATCHES[match].up / 25, MATCHES[match].up ? X.s.mUp(percent(String(MATCHES[match].up))) : X.s.mNone);
+    setBar('s', [[perf(S.sev, S.minutes), pct(perf(S.sev, S.minutes))], [habit(S.sev, S.minutes), pct(habit(S.sev, S.minutes))], [em.yabanci, pct(em.yabanci)]]);
+    sayEl.textContent = describeS(S) + (S.block ? ` ${X.s.blocked}` : '');
   }
 
   /* ---------- Çizim döngüsü yerine olay tabanlı yenileme ---------- */
@@ -546,19 +537,14 @@ export function mount(container: HTMLElement): () => void {
 
   /* ---------- Rehberli tur ---------- */
   const go = (t: Tab, fn: () => void) => () => { fn(); showTab(t); };
+  const tr = X.tour;
   const tour = createTour(scope, [
-    { title: 'Bağlam yokken hormon az şey değiştirir', text: 'Testosteron yüksek, ama statüye yönelik bir meydan okuma yok. Ajanın davranışı büyük ölçüde kendi eğiliminden geliyor: hormon yeni bir şey icat etmiyor.', look: 'Doz kaydırıcısını 0\'a çek: çubuklar neredeyse hiç oynamaz.',
-      apply: go('t', () => { T = { ...T_BASE, dose: 1, challenge: false }; }) },
-    { title: 'Meydan okuma var, yol saldırı', text: 'Aynı doz, ama şimdi statüye meydan okunuyor ve ortamda statü saldırıyla korunuyor. Hormon, bağlamın ödüllendirdiği yolu büyütüyor.', look: 'Saldırı çubuğu ve grafikteki sürekli çizgi.',
-      apply: go('t', () => { T = { ...T_BASE, dose: 1, route: 'saldiri' }; }) },
-    { title: 'Aynı hormon, başka bağlam', text: 'Hormona dokunulmadı; yalnızca statünün cömertlikle korunduğu ortam seçildi. Ultimatum\'da teklifler yükseliyor (Eisenegger). Aynı hormon, bağlam değişince ters yönde etkili.', look: 'Cömertlik çubuğu ve ortalama teklif; saldırı yolundakinden yüksek.',
-      apply: go('t', () => { T = { ...T_BASE, dose: 1, route: 'comertlik' }; }) },
-    { title: 'Yalnızca inanç', text: 'Gerçekte hormon yok (plasebo), ama katılımcı testosteron aldığını sanıyor. Teklifler yine düşüyor: "testosteron kötü davranış yaptırır" inancı davranışı kendi başına kötüleştirebiliyor.', look: 'Tabloda sağ sütun sol sütundan düşük, satır farkı ise yok.',
-      apply: go('t', () => { T = { ...T_BASE, dose: 0, route: 'comertlik', belief: 'testosteron' }; }) },
-    { title: 'Oksitosin: biz ve onlar', text: 'Oksitosin iç gruba yatırımı artırıyor, dış gruba artırmıyor; tehdit yüksekken önyargı ve önleyici ihanet de büyüyor. Uyarı kutusu önemli: Kosfeld bulgusu tartışmalı, bu yüzden "Birleşik analizler" çipine de bak.', look: '"Biz" çubuğu uzar, "onlar" yerinde kalır; önyargı yükselir.',
-      apply: go('o', () => { O = { dose: 0.8, threat: 0.85, evidence: 'ozgun' }; }) },
-    { title: 'Stres: ters U ve sonuç', text: 'Orta, kısa stres performansı artırır; aşırı ya da aylarca süren stres bozar. Stres yabancıya empatiyi daraltır, risk almayı cinsiyete göre ayrıştırır. Üç hormonda da ortak sonuç: yeni davranış yok, var olan eğilim bağlama göre büyüyor.', look: 'Noktayı ters U\'nun tepesinden aşırı uca, sonra süreyi haftalara taşı.',
-      apply: go('s', () => { S = { ...S_BASE, sev: 0.4, minutes: 20 }; match = 2; }) },
+    { ...tr.s1, apply: go('t', () => { T = { ...T_BASE, dose: 1, challenge: false }; }) },
+    { ...tr.s2, apply: go('t', () => { T = { ...T_BASE, dose: 1, route: 'saldiri' }; }) },
+    { ...tr.s3, apply: go('t', () => { T = { ...T_BASE, dose: 1, route: 'comertlik' }; }) },
+    { ...tr.s4, apply: go('t', () => { T = { ...T_BASE, dose: 0, route: 'comertlik', belief: 'testosteron' }; }) },
+    { title: tr.s5.title, text: tr.s5.text(replLabel('tartışmalı')), look: tr.s5.look, apply: go('o', () => { O = { dose: 0.8, threat: 0.85, evidence: 'ozgun' }; }) },
+    { ...tr.s6, apply: go('s', () => { S = { ...S_BASE, sev: 0.4, minutes: 20 }; match = 2; }) },
   ]);
   root.querySelector('.lede')!.after(tour.el);
 

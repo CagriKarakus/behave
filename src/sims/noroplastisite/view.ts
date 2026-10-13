@@ -3,6 +3,9 @@ import '../sim.css';
 import './view.css';
 import { Scope, ref, svg, uid } from '../kit';
 import { createTour } from '../tour';
+import { pct, percent } from '../../i18n/fmt';
+import { L } from './text';
+import type { Strings } from './text.tr';
 import {
   caPos, clamp, minutesOfSlider, practiceAt, simulatePractice, simulateStress, stressAt,
   synapse, synDelta, synWeight, SYN, effort,
@@ -16,119 +19,109 @@ import {
 
 type Tab = 'syn' | 'prac' | 'str';
 
-/* ---------- Sabit metinler ---------- */
+/* ---------- Sabit parametreler (metinler text.tr.ts / text.en.ts içinde) ---------- */
 const SYN_PRESETS = [
-  { n: 'Zayıf: 1 Hz', f: 1, d: 900, post: 0 },
-  { n: 'Orta: 5 Hz', f: 5, d: 300, post: 0 },
-  { n: 'Yoğun: 100 Hz', f: 100, d: 1, post: 0 },
-  { n: 'Hebb: 1 Hz + ateşleme', f: 1, d: 900, post: 1 },
+  { f: 1, d: 900, post: 0 },
+  { f: 5, d: 300, post: 0 },
+  { f: 100, d: 1, post: 0 },
+  { f: 1, d: 900, post: 1 },
 ];
-const PRAC_PRESETS: Array<{ n: string; p: PracticeInputs; note: string }> = [
-  { n: 'Piyano, 5 gün', p: { minutes: 120, mental: 0, days: 5 },
-    note: 'Pascual-Leone: müzisyen olmayanlar günde 2 saat, birkaç gün piyano parmak alıştırması yaptı; el alanı büyüdü, pratik kesilince artış bir günden kısa sürede kayboldu.' },
-  { n: 'Yalnızca hayal ederek', p: { minutes: 120, mental: 1, days: 5 },
-    note: 'Aynı alıştırmayı yalnızca zihninde canlandıran grupta da yeniden haritalanma görüldü. Bu modelde zihinsel pratiğin payı fiziksel pratiğin yarısı kabul edildi (kitaptaki bulgu: etki var; replikasyon notu: genellikle daha küçük).' },
-  { n: 'Piyano, 4 hafta', p: { minutes: 120, mental: 0, days: 28 },
-    note: 'Dört haftalık alıştırmada genişleme pratikten sonra günlerce sürdü: uzun pratik kalıcı (yapısal) bir pay bırakır.' },
-  { n: 'Jonglörlük, 3 ay', p: { minutes: 60, mental: 0, days: 90 },
-    note: 'Draganski: üç ay jonglörlük öğrenenlerde hareketin görsel işlenmesiyle ilgili bölgede genişleme; bırakılınca artış kısmen geriledi. Günlük 60 dk bu modelin varsayımıdır.' },
-  { n: 'Londra taksi, ≈3 yıl', p: { minutes: 120, mental: 0, days: 1200 },
-    note: 'Maguire: taksi şoförlerinde arka hipokampüs büyüktü. Ölçülen bölge hipokampüs (hacim), motor harita değil; burada aynı iki bileşenli mantık (hızlı + kalıcı) uygulanıyor.' },
-  { n: 'Taksi adayı 4 ayda bırakır', p: { minutes: 120, mental: 0, days: 120 },
-    note: 'Woollett ve Maguire: hipokampüs yalnızca sınavı geçen adaylarda büyüdü. Erken bırakan adayda kalıcı pay zamanla söner (burada da hipokampüs hacmi yerine aynı mantık kullanılıyor).' },
+const PRAC_PRESETS: Array<{ p: PracticeInputs }> = [
+  { p: { minutes: 120, mental: 0, days: 5 } },
+  { p: { minutes: 120, mental: 1, days: 5 } },
+  { p: { minutes: 120, mental: 0, days: 28 } },
+  { p: { minutes: 60, mental: 0, days: 90 } },
+  { p: { minutes: 120, mental: 0, days: 1200 } },
+  { p: { minutes: 120, mental: 0, days: 120 } },
 ];
-const STRESS_KINDS: Array<{ k: StressKind; n: string; note: string }> = [
-  { k: 'kronik', n: 'Kronik stres', note: 'Kronik stres: hipokampüs dendritleri küçülür, bazolateral amigdala (BLA) dendritleri genişler (Vyas ve ark.).' },
-  { k: 'tek', n: 'Tek doz glukokortikoid', note: 'Mitra ve Sapolsky: tek bir kortikosteron dozu bile kaygıyı artırmaya ve BLA dendrit büyümesine yetti; sonuç 12 gün sonra ölçüldü.' },
-  { k: 'kosu', n: 'Gönüllü koşu', note: 'Bağlam: kitaba göre korkuyla salgılanan glukokortikoid hipokampüs dendritlerini küçültürken, gönüllü koşuyla salgılanan benzer miktar onları büyütür. Amigdalanın devrede olup olmaması farkı belirliyor gibidir.' },
-];
+const STRESS_KINDS: Array<{ k: StressKind }> = [{ k: 'kronik' }, { k: 'tek' }, { k: 'kosu' }];
 
-const TEMPLATE = (id: string): string => `
+const TEMPLATE = (id: string, s: Strings): string => `
 <div class="sim sim-nrp">
-  <p class="lede">Deneyim, günler ve aylar içinde beynin fiziksel yapısını nasıl değiştirir?</p>
+  <p class="lede">${s.lede}</p>
   <div data-ref="tourHost"></div>
 
-  <div class="tabs" role="tablist" aria-label="Simülasyon bölümleri">
-    <button class="tab" role="tab" id="${id}-tab-syn" data-pane="syn" aria-controls="${id}-pane-syn" aria-selected="true" type="button">Sinaps</button>
-    <button class="tab" role="tab" id="${id}-tab-prac" data-pane="prac" aria-controls="${id}-pane-prac" aria-selected="false" tabindex="-1" type="button">Pratik ve harita</button>
-    <button class="tab" role="tab" id="${id}-tab-str" data-pane="str" aria-controls="${id}-pane-str" aria-selected="false" tabindex="-1" type="button">Stres ve yapı</button>
+  <div class="tabs" role="tablist" aria-label="${s.tabsAria}">
+    <button class="tab" role="tab" id="${id}-tab-syn" data-pane="syn" aria-controls="${id}-pane-syn" aria-selected="true" type="button">${s.tabs.syn}</button>
+    <button class="tab" role="tab" id="${id}-tab-prac" data-pane="prac" aria-controls="${id}-pane-prac" aria-selected="false" tabindex="-1" type="button">${s.tabs.prac}</button>
+    <button class="tab" role="tab" id="${id}-tab-str" data-pane="str" aria-controls="${id}-pane-str" aria-selected="false" tabindex="-1" type="button">${s.tabs.str}</button>
   </div>
 
-  <div class="sim-bar" role="group" aria-label="Anlık açıklama"><div class="sim-bar-in">
+  <div class="sim-bar" role="group" aria-label="${s.sayAria}"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
     <div class="meters" data-ref="meters"></div>
   </div></div>
   <p class="sr-only" aria-live="polite" data-ref="live"></p>
 
   <section class="pane" role="tabpanel" id="${id}-pane-syn" data-pane="syn" aria-labelledby="${id}-tab-syn">
-    <p class="note">Tek bir sinaps. Presinaptik uç glutamat salar; glutamat AMPA ve NMDA reseptörlerine bağlanır. NMDA kanalı dinlenimde Mg²⁺ tıkacıyla kapalıdır; yeterli depolarizasyon tıkacı iter, kalsiyum (Ca²⁺) girer. Ca²⁺ düzeyi sinapsın kaderini belirler.</p>
-    <div class="chips" data-ref="synChips" role="group" aria-label="Hazır uyarım örnekleri"></div>
+    <p class="note">${s.synNote}</p>
+    <div class="chips" data-ref="synChips" role="group" aria-label="${s.synChipsAria}"></div>
     <div class="stage">
-      <svg data-ref="synSvg" viewBox="0 0 360 300" role="img" aria-label="Sinaps diyagramı: üstte presinaptik uç ve glutamat, altta AMPA ve NMDA reseptörlü postsinaptik dikencik; dikencikteki yeşil seviye kalsiyum düzeyini gösterir"></svg>
+      <svg data-ref="synSvg" viewBox="0 0 360 300" role="img" aria-label="${s.synSvgAria}"></svg>
       <div class="legend">
-        <span><i style="background:var(--dop)"></i>Glutamat</span>
-        <span><i class="sq" style="background:var(--pfc)"></i>AMPA reseptörü</span>
-        <span><i class="sq" style="background:var(--pit)"></i>NMDA kanalı</span>
-        <span><i style="background:var(--lesion)"></i>Mg²⁺ tıkacı</span>
-        <span><i style="background:var(--gld)"></i>Ca²⁺</span>
+        <span><i style="background:var(--dop)"></i>${s.synLegend.glu}</span>
+        <span><i class="sq" style="background:var(--pfc)"></i>${s.synLegend.ampa}</span>
+        <span><i class="sq" style="background:var(--pit)"></i>${s.synLegend.nmda}</span>
+        <span><i style="background:var(--lesion)"></i>${s.synLegend.mg}</span>
+        <span><i style="background:var(--gld)"></i>${s.synLegend.ca}</span>
       </div>
     </div>
     <p class="hebb" data-ref="hebb"></p>
-    <div class="row"><button class="btn" data-ref="synRun" type="button">Uyarımı yeniden oynat</button></div>
-    <section class="chart" aria-label="Sinaps gücü grafiği">
-      <h3 class="sim-h">Sinaps gücü zaman içinde</h3>
-      <svg data-ref="synChart" viewBox="0 0 360 172" role="img" aria-label="Uyarım sırasında ve sonraki dakika, saat ve günlerde sinaps gücünün seyri"></svg>
+    <div class="row"><button class="btn" data-ref="synRun" type="button">${s.synRun}</button></div>
+    <section class="chart" aria-label="${s.synChartAria}">
+      <h3 class="sim-h">${s.synChartH}</h3>
+      <svg data-ref="synChart" viewBox="0 0 360 172" role="img" aria-label="${s.synChartSvgAria}"></svg>
     </section>
-    <section aria-label="Uyarım girdileri"><h3 class="sim-h">Girdiler</h3><div class="sliders" data-ref="synSliders"></div></section>
+    <section aria-label="${s.synInputsAria}"><h3 class="sim-h">${s.inputs}</h3><div class="sliders" data-ref="synSliders"></div></section>
     <div class="notes" data-notes="syn"></div>
   </section>
 
   <section class="pane" role="tabpanel" id="${id}-pane-prac" data-pane="prac" aria-labelledby="${id}-tab-prac" hidden>
-    <p class="note">Motor korteks haritasında bir beceriyi yöneten alan, pratikle genişler. Hızlı bileşen (Hebb tipi güçlenme) pratikle kurulur ve bırakılınca bir günden kısa sürede söner. Yavaş bileşen (yapısal, yeni bağlantılar) birikir ve haftalarca kalır.</p>
-    <div class="chips" data-ref="pcChips" role="group" aria-label="Hazır senaryolar"></div>
+    <p class="note">${s.pracNote}</p>
+    <div class="chips" data-ref="pcChips" role="group" aria-label="${s.pcChipsAria}"></div>
     <p class="note pnote" data-ref="pcNote"></p>
     <div class="stage">
-      <svg data-ref="pcSvg" viewBox="0 0 360 232" role="img" aria-label="Motor korteks haritası: el ve parmak alanı pratikle genişler, komşu alanlar daralır"></svg>
+      <svg data-ref="pcSvg" viewBox="0 0 360 232" role="img" aria-label="${s.pcSvgAria}"></svg>
       <div class="legend">
-        <span><i class="sq" style="background:var(--pfc)"></i>Başlangıç alanı</span>
-        <span><i class="sq" style="background:var(--pit)"></i>Kalıcı (yapısal) genişleme</span>
-        <span><i class="sq" style="background:var(--dop)"></i>Hızlı, geçici genişleme</span>
+        <span><i class="sq" style="background:var(--pfc)"></i>${s.pcLegend.base}</span>
+        <span><i class="sq" style="background:var(--pit)"></i>${s.pcLegend.slow}</span>
+        <span><i class="sq" style="background:var(--dop)"></i>${s.pcLegend.fast}</span>
       </div>
     </div>
     <div class="row">
-      <button class="btn" data-ref="pcPlay" type="button">Duraklat</button>
-      <button class="btn" data-ref="pcStop" type="button">Pratiği şimdi bırak</button>
-      <button class="btn" data-ref="pcReset" type="button">Baştan</button>
+      <button class="btn" data-ref="pcPlay" type="button">${s.pcPlay.pause}</button>
+      <button class="btn" data-ref="pcStop" type="button">${s.pcStop}</button>
+      <button class="btn" data-ref="pcReset" type="button">${s.pcReset}</button>
     </div>
-    <section class="chart" aria-label="Harita alanı grafiği">
-      <h3 class="sim-h">Harita alanı zaman içinde</h3>
-      <svg data-ref="pcChart" viewBox="0 0 360 172" role="img" aria-label="Pratik sırasında ve bırakıldıktan sonra harita alanının seyri"></svg>
+    <section class="chart" aria-label="${s.pcChartAria}">
+      <h3 class="sim-h">${s.pcChartH}</h3>
+      <svg data-ref="pcChart" viewBox="0 0 360 172" role="img" aria-label="${s.pcChartSvgAria}"></svg>
     </section>
-    <section aria-label="Pratik girdileri"><h3 class="sim-h">Girdiler</h3><div class="sliders" data-ref="pcSliders"></div></section>
+    <section aria-label="${s.pcInputsAria}"><h3 class="sim-h">${s.inputs}</h3><div class="sliders" data-ref="pcSliders"></div></section>
     <div class="notes" data-notes="prac"></div>
   </section>
 
   <section class="pane" role="tabpanel" id="${id}-pane-str" data-pane="str" aria-labelledby="${id}-tab-str" hidden>
-    <p class="note">Aynı stres, iki bölgede zıt yönde iz bırakır. Hipokampüsün dendritleri ve dikenleri kısalır; bazolateral amigdalanın (BLA) dendritleri uzar. Stres bitince hipokampüs toparlanır; amigdaladaki değişiklik çok daha kalıcıdır.</p>
-    <div class="chips" data-ref="stChips" role="group" aria-label="Stres türü"></div>
+    <p class="note">${s.strNote}</p>
+    <div class="chips" data-ref="stChips" role="group" aria-label="${s.stChipsAria}"></div>
     <p class="note pnote" data-ref="stNote"></p>
     <div class="stage">
-      <svg data-ref="stSvg" viewBox="0 0 360 250" role="img" aria-label="İki nöronun dendrit çizimi: solda hipokampüs nöronu, sağda amigdala nöronu"></svg>
+      <svg data-ref="stSvg" viewBox="0 0 360 250" role="img" aria-label="${s.stSvgAria}"></svg>
       <div class="legend">
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--hyp)" stroke-width="2.4" stroke-linecap="round"/></svg>Hipokampüs dendriti</span>
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--amy)" stroke-width="2.4" stroke-linecap="round"/></svg>Amigdala (BLA) dendriti</span>
-        <span><i style="background:var(--muted)"></i>Dendrit dikeni</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--hyp)" stroke-width="2.4" stroke-linecap="round"/></svg>${s.stLegend.hip}</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--amy)" stroke-width="2.4" stroke-linecap="round"/></svg>${s.stLegend.amy}</span>
+        <span><i style="background:var(--muted)"></i>${s.stLegend.spine}</span>
       </div>
     </div>
     <div class="row">
-      <button class="btn" data-ref="stPlay" type="button">Duraklat</button>
-      <button class="btn" data-ref="stReset" type="button">Baştan</button>
+      <button class="btn" data-ref="stPlay" type="button">${s.pcPlay.pause}</button>
+      <button class="btn" data-ref="stReset" type="button">${s.pcReset}</button>
     </div>
-    <section class="chart" aria-label="Dendrit grafiği">
-      <h3 class="sim-h">Dendrit uzunluğu zaman içinde</h3>
-      <svg data-ref="stChart" viewBox="0 0 360 172" role="img" aria-label="Stres sırasında ve sonrasında hipokampüs ve amigdala dendrit uzunluğunun seyri"></svg>
+    <section class="chart" aria-label="${s.stChartAria}">
+      <h3 class="sim-h">${s.stChartH}</h3>
+      <svg data-ref="stChart" viewBox="0 0 360 172" role="img" aria-label="${s.stChartSvgAria}"></svg>
     </section>
-    <section aria-label="Stres girdileri"><h3 class="sim-h">Girdiler</h3><div class="sliders" data-ref="stSliders"></div></section>
+    <section aria-label="${s.stInputsAria}"><h3 class="sim-h">${s.inputs}</h3><div class="sliders" data-ref="stSliders"></div></section>
     <div class="notes" data-notes="str"></div>
   </section>
 </div>`;
@@ -150,7 +143,8 @@ function niceStep(total: number): number {
 export function mount(container: HTMLElement): () => void {
   const scope = new Scope();
   const id = uid('nrp');
-  container.innerHTML = TEMPLATE(id);
+  const S = L();
+  container.innerHTML = TEMPLATE(id, S);
   const root = container.firstElementChild as HTMLElement;
   const $ = <T extends Element = HTMLElement>(name: string) => ref<T>(root, name);
   const reduce = reducedMotion();
@@ -231,13 +225,13 @@ export function mount(container: HTMLElement): () => void {
     '<circle class="mg" data-ref="plug" cx="180" cy="128" r="6"/>' +
     '<g data-ref="gluG"></g><g data-ref="caG"></g>' +
     '<rect class="flash" data-ref="flash" x="0" y="252" width="360" height="48"/>' +
-    '<text class="lab" x="5" y="52">Presinaptik</text><text class="lab" x="5" y="64">uç</text>' +
-    '<text class="lab" x="294" y="112">Sinaptik</text><text class="lab" x="294" y="124">aralık</text>' +
-    '<text class="lab" x="3" y="196">Dikencik</text><text class="lab" x="3" y="208">(postsin.)</text>' +
-    '<text class="lab" x="52" y="119">AMPA</text><line class="lead" x1="80" y1="116" x2="114" y2="127"/>' +
-    '<text class="lab" x="262" y="150">NMDA</text><line class="lead" x1="196" y1="140" x2="258" y2="147"/>' +
-    '<text class="lab" x="214" y="114">Mg²⁺ tıkacı</text><line class="lead" x1="212" y1="112" x2="187" y2="124"/><text class="lab" data-ref="post" x="180" y="290" text-anchor="middle">Dendrit</text>' +
-    '<text class="lab eff" x="12" y="14">Glutamat salımı</text>';
+    `<text class="lab" x="5" y="52">${S.synLab.pre1}</text><text class="lab" x="5" y="64">${S.synLab.pre2}</text>` +
+    `<text class="lab" x="294" y="112">${S.synLab.cleft1}</text><text class="lab" x="294" y="124">${S.synLab.cleft2}</text>` +
+    `<text class="lab" x="3" y="196">${S.synLab.spine1}</text><text class="lab" x="3" y="208">${S.synLab.spine2}</text>` +
+    `<text class="lab" x="52" y="119">${S.synLab.ampa}</text><line class="lead" x1="80" y1="116" x2="114" y2="127"/>` +
+    `<text class="lab" x="262" y="150">${S.synLab.nmda}</text><line class="lead" x1="196" y1="140" x2="258" y2="147"/>` +
+    `<text class="lab" x="214" y="114">${S.synLab.mg}</text><line class="lead" x1="212" y1="112" x2="187" y2="124"/><text class="lab" data-ref="post" x="180" y="290" text-anchor="middle">${S.synLab.dend}</text>` +
+    `<text class="lab eff" x="12" y="14">${S.synLab.release}</text>`;
 
   // Titreşim: vezikül konumları
   const vesEls: SVGElement[] = [];
@@ -253,7 +247,7 @@ export function mount(container: HTMLElement): () => void {
   // eşik çizgileri
   const yOfPos = (p: number) => VBOT - p * (VBOT - TOPY - 4);
   const thr = $('thr');
-  for (const [v, label] of [[SYN.thD, 'LTD eşiği'], [SYN.thP, 'LTP eşiği']] as const) {
+  for (const [v, label] of [[SYN.thD, S.synLab.thrD], [SYN.thP, S.synLab.thrP]] as const) {
     const y = yOfPos(caPos(v));
     svg('line', { class: 'thr', x1: 96, x2: 264, y1: y, y2: y }, thr);
     const t = svg('text', { class: 'lab', x: 268, y: y + 3 }, thr);
@@ -353,7 +347,7 @@ export function mount(container: HTMLElement): () => void {
     $('axon').setAttribute('class', apT > 0 ? 'axon hot' : 'axon');
     flashA = Math.max(0, flashA - dt * 2.5);
     $('flash').setAttribute('opacity', (SY.post > 0 ? flashA * SY.post : 0).toFixed(2));
-    ($('post') as unknown as SVGElement).textContent = SY.post > 0 ? `Dendrit: postsinaptik nöron ateşleniyor (%${pctOf(SY.post)})` : 'Dendrit (postsinaptik nöron)';
+    ($('post') as unknown as SVGElement).textContent = SY.post > 0 ? S.synLab.dendFiring(pct(SY.post)) : S.synLab.dendPlain;
     if (dirty || SY.run < 1) applySyn();
   }
 
@@ -382,16 +376,16 @@ export function mount(container: HTMLElement): () => void {
     const cy = gy(wNow());
     let s = '';
     for (const w of [0.5, 1, 1.5, 2]) {
-      s += `<line class="${w === 1 ? 'base' : 'grid'}" x1="${GX0}" x2="${GX1}" y1="${gy(w)}" y2="${gy(w)}"/><text x="${GX0 - 4}" y="${gy(w) + 3}" text-anchor="end">%${w * 100}</text>`;
+      s += `<line class="${w === 1 ? 'base' : 'grid'}" x1="${GX0}" x2="${GX1}" y1="${gy(w)}" y2="${gy(w)}"/><text x="${GX0 - 4}" y="${gy(w) + 3}" text-anchor="end">${percent(String(w * 100))}</text>`;
     }
-    s += `<line class="grid dash" x1="${GXS}" x2="${GXS}" y1="${GY0}" y2="${GY1}"/><text x="${(GX0 + GXS) / 2}" y="${GY1 + 14}" text-anchor="middle">uyarım</text>`;
-    for (const [m, l] of [[10, '10 dk'], [60, '1 sa'], [1440, '1 gün'], [10080, '1 hf']] as const) {
+    s += `<line class="grid dash" x1="${GXS}" x2="${GXS}" y1="${GY0}" y2="${GY1}"/><text x="${(GX0 + GXS) / 2}" y="${GY1 + 14}" text-anchor="middle">${S.synChart.stim}</text>`;
+    for (const [m, l] of ([[10, S.synChart.ticks[0]], [60, S.synChart.ticks[1]], [1440, S.synChart.ticks[2]], [10080, S.synChart.ticks[3]]] as const)) {
       s += `<line class="grid" x1="${gxm(m)}" x2="${gxm(m)}" y1="${GY1}" y2="${GY1 + 4}"/><text x="${gxm(m)}" y="${GY1 + 14}" text-anchor="middle">${l}</text>`;
     }
-    s += `<text x="${GX1}" y="${GY1 + 28}" text-anchor="end">uyarımdan sonraki süre (logaritmik)</text>`;
+    s += `<text x="${GX1}" y="${GY1 + 28}" text-anchor="end">${S.synChart.axis}</text>`;
     s += `<polyline class="ln" points="${pts.join(' ')}" style="stroke:${col}"/>`;
     s += `<line class="cur" x1="${cx}" x2="${cx}" y1="${GY0}" y2="${GY1}"/><circle cx="${cx}" cy="${cy}" r="4.5" fill="${col}" stroke="var(--panel)" stroke-width="1.5"/>`;
-    const lab = r.zone === 'ltp' ? 'LTP' : r.zone === 'ltd' ? 'LTD' : 'değişim yok';
+    const lab = r.zone === 'ltp' ? S.synChart.ltp : r.zone === 'ltd' ? S.synChart.ltd : S.synChart.none;
     const lcol = r.zone === 'ltp' ? 'var(--eff-text)' : r.zone === 'ltd' ? 'var(--pit)' : 'var(--muted)';
     s += `<text x="${GX1 - 2}" y="${GY0 + 10}" text-anchor="end" style="fill:${lcol};font-weight:600">${lab}</text>`;
     $('synChart').innerHTML = s;
@@ -399,10 +393,10 @@ export function mount(container: HTMLElement): () => void {
 
   const afterText = (v: number): string => fmtMin(minutesOfSlider(v));
   let slF: SliderHandle, slD: SliderHandle, slP: SliderHandle, slA: SliderHandle;
-  const setPresetChip = makeChips($('synChips'), SYN_PRESETS.map((p) => p.n), (i) => { const p = SYN_PRESETS[i]; setSyn(p.f, p.d, p.post, true); SY.preset = i; setPresetChip(i); });
+  const setPresetChip = makeChips($('synChips'), S.synPresets, (i) => { const p = SYN_PRESETS[i]; setSyn(p.f, p.d, p.post, true); SY.preset = i; setPresetChip(i); });
   function setSyn(f: number, d: number, post: number, run: boolean): void {
     SY.f = f; SY.d = d; SY.post = post; SY.after = 0; SY.preset = -1;
-    slF.set(logPos(f, 0.5, 100), fmtHz(f)); slD.set(logPos(d, 1, 900), fmtSec(d)); slP.set(Math.round(post * 100), `%${pctOf(post)}`); slA.set(0);
+    slF.set(logPos(f, 0.5, 100), fmtHz(f)); slD.set(logPos(d, 1, 900), fmtSec(d)); slP.set(Math.round(post * 100), pct(post)); slA.set(0);
     recompute();
     if (run) SY.run = 0;
     setPresetChip(-1);
@@ -410,42 +404,43 @@ export function mount(container: HTMLElement): () => void {
   }
   const onSyn = () => { recompute(); SY.run = 1; setPresetChip(-1); dirty = true; };
   const synSl = $('synSliders');
-  slF = makeSlider(scope, synSl, `${id}-f`, { name: 'Presinaptik uyarım frekansı', hint: 'Saniyedeki uyarı sayısı. Seyrek uyarı sinapsı etkilemez; çok sık uyarı dendriti depolarize eder.', min: 0, max: 100, step: 1, value: logPos(1, 0.5, 100), fmt: (v) => fmtHz(niceFreq(logVal(v, 0.5, 100))), color: 'var(--dop)' },
+  slF = makeSlider(scope, synSl, `${id}-f`, { name: S.synSliders.f.name, hint: S.synSliders.f.hint, min: 0, max: 100, step: 1, value: logPos(1, 0.5, 100), fmt: (v) => fmtHz(niceFreq(logVal(v, 0.5, 100))), color: 'var(--dop)' },
     (v) => { SY.f = niceFreq(logVal(v, 0.5, 100)); onSyn(); });
-  slD = makeSlider(scope, synSl, `${id}-d`, { name: 'Uyarımın süresi', hint: 'Toplam uyarı sayısı = frekans × süre. Etki uyarı sayısıyla büyür ve doyar.', min: 0, max: 100, step: 1, value: logPos(900, 1, 900), fmt: (v) => fmtSec(niceSec(logVal(v, 1, 900))), color: 'var(--dop)' },
+  slD = makeSlider(scope, synSl, `${id}-d`, { name: S.synSliders.d.name, hint: S.synSliders.d.hint, min: 0, max: 100, step: 1, value: logPos(900, 1, 900), fmt: (v) => fmtSec(niceSec(logVal(v, 1, 900))), color: 'var(--dop)' },
     (v) => { SY.d = niceSec(logVal(v, 1, 900)); onSyn(); });
-  slP = makeSlider(scope, synSl, `${id}-p`, { name: 'Postsinaptik nöron aynı anda ateşleniyor', hint: 'Hebb: alıcı nöron da ateşlenirse zar daha çok depolarize olur ve Mg²⁺ tıkacı kalkar.', min: 0, max: 100, step: 5, value: 0, fmt: (v) => `%${v}`, color: 'var(--pit)' },
+  slP = makeSlider(scope, synSl, `${id}-p`, { name: S.synSliders.p.name, hint: S.synSliders.p.hint, min: 0, max: 100, step: 5, value: 0, fmt: (v) => percent(String(v)), color: 'var(--pit)' },
     (v) => { SY.post = v / 100; onSyn(); });
-  slA = makeSlider(scope, synSl, `${id}-a`, { name: 'Uyarımdan sonra bak', hint: 'Zamanda ileri git: erken evredeki değişim saatler içinde söner, kalıcılaşan değişim sürer.', min: 0, max: 100, step: 1, value: 0, fmt: afterText, color: 'var(--ink)' },
+  slA = makeSlider(scope, synSl, `${id}-a`, { name: S.synSliders.a.name, hint: S.synSliders.a.hint, min: 0, max: 100, step: 1, value: 0, fmt: afterText, color: 'var(--ink)' },
     (v) => { SY.after = v; SY.run = 1; dirty = true; });
   scope.on($('synRun'), 'click', () => { SY.run = 0; SY.after = 0; slA.set(0); dirty = true; });
 
-  const zoneText = (z: string) => (z === 'ltp' ? 'LTP eşiğinin üstünde' : z === 'ltd' ? 'iki eşik arasında (LTD bölgesi)' : 'alt eşiğin altında');
+  const zoneText = (z: string) => (z === 'ltp' ? S.zoneText.ltp : z === 'ltd' ? S.zoneText.ltd : S.zoneText.yok);
   SAY.syn = () => {
     const r = SY.res;
-    const head = `${fmtHz(SY.f)} × ${fmtSec(SY.d)} (${r.pulses} uyarı)${SY.post > 0 ? `, postsinaptik ateşleme %${pctOf(SY.post)}` : ''}: Mg²⁺ tıkacı %${pctOf(r.unblock)} kalktı, Ca²⁺ ${zoneText(r.zone)}.`;
-    if (SY.run < 1) return `${head} Uyarım sürüyor…`;
-    const w = pctOf(synWeight(r.delta, minutesOfSlider(SY.after)));
-    if (Math.abs(r.delta) < 0.04) return `${head} Sinaps gücü belirgin değişmiyor.`;
-    const tail = r.late > 0.5 ? 'Değişim kalıcılaşıyor.' : r.late < 0.2 ? 'Değişim kalıcılaşmıyor, saatler içinde sönüyor.' : 'Değişimin bir kısmı kalıcılaşıyor.';
-    return `${head} Sinaps gücü %100 → %${pctOf(1 + r.delta)}${minutesOfSlider(SY.after) > 0 ? ` (şimdi %${w})` : ''}; ${r.delta > 0 ? 'yeni AMPA reseptörleri yerleşiyor' : 'AMPA reseptörleri azalıyor'}. ${tail}`;
+    const head = S.synHead(fmtHz(SY.f), fmtSec(SY.d), r.pulses, SY.post > 0 ? pct(SY.post) : '', pct(r.unblock), zoneText(r.zone));
+    if (SY.run < 1) return `${head} ${S.synRunning}`;
+    const w = pct(synWeight(r.delta, minutesOfSlider(SY.after)));
+    if (Math.abs(r.delta) < 0.04) return `${head} ${S.synNoChange}`;
+    const tail = r.late > 0.5 ? S.synTail.stays : r.late < 0.2 ? S.synTail.fades : S.synTail.part;
+    const change = (r.delta > 0 ? S.synUp : S.synDown)(pct(1), pct(1 + r.delta), minutesOfSlider(SY.after) > 0 ? w : '');
+    return `${head} ${change} ${tail}`;
   };
   METERS.syn = () => {
     const r = SY.res, w = wNow();
     return [
-      { label: 'Mg²⁺ tıkacı kalktı', text: `%${pctOf(r.unblock)}`, frac: r.unblock, color: 'var(--pit)' },
-      { label: 'Ca²⁺ düzeyi', text: r.zone === 'ltp' ? 'LTP' : r.zone === 'ltd' ? 'LTD' : 'eşik altı', frac: caPos(r.c), color: 'var(--gld)', mark: caPos(SYN.thP) },
-      { label: 'Sinaps gücü', text: `%${pctOf(w)}`, frac: w / 2.4, color: w >= 1.04 ? 'var(--dop)' : w <= 0.96 ? 'var(--pit)' : 'var(--muted)', mark: 1 / 2.4 },
+      { label: S.synMeters.unblock, text: pct(r.unblock), frac: r.unblock, color: 'var(--pit)' },
+      { label: S.synMeters.ca, text: r.zone === 'ltp' ? S.synMeters.ltp : r.zone === 'ltd' ? S.synMeters.ltd : S.synMeters.sub, frac: caPos(r.c), color: 'var(--gld)', mark: caPos(SYN.thP) },
+      { label: S.synMeters.w, text: pct(w), frac: w / 2.4, color: w >= 1.04 ? 'var(--dop)' : w <= 0.96 ? 'var(--pit)' : 'var(--muted)', mark: 1 / 2.4 },
     ];
   };
   const hebbEl = $('hebb');
   const updateHebb = () => {
     const r = SY.res;
-    let t = 'Hebb: birlikte ateşlenen birlikte bağlanır. Sinapsı uyaran nöronla alıcı nöron aynı anda etkinse bağ güçlenir.';
-    if (r.zone === 'ltp' && SY.post >= 0.6) t = 'Hebb ilkesi işliyor: sinaps uyarılırken alıcı nöron da ateşleniyor. Birlikte ateşlenen iki nöronun arasındaki bağ güçleniyor.';
-    else if (r.zone === 'ltp') t = 'Güçlenme bu kez postsinaptik ateşlemeden değil, çok sık gelen glutamatın tek başına yeterince sodyum sokup zarı depolarize etmesinden geliyor.';
-    else if (r.zone === 'ltd') t = 'Orta düzey Ca²⁺ girişi: sinaps zayıflıyor (LTD). Gereksiz sinyalleri silmek, önemli sinyali belirginleştirir; genel unutma değildir.';
-    else if (SY.post > 0) t = 'Postsinaptik ateşleme var ama kalsiyum girişi hâlâ eşiğin altında.';
+    let t = S.hebb.base;
+    if (r.zone === 'ltp' && SY.post >= 0.6) t = S.hebb.ltpPost;
+    else if (r.zone === 'ltp') t = S.hebb.ltpFreq;
+    else if (r.zone === 'ltd') t = S.hebb.ltd;
+    else if (SY.post > 0) t = S.hebb.postOnly;
     if (hebbEl.textContent !== t) hebbEl.textContent = t;
   };
 
@@ -460,13 +455,13 @@ export function mount(container: HTMLElement): () => void {
   const pcSim = () => { PC.ser = simulatePractice(PC.inp); };
   pcSim();
   const pcSvg = $<SVGElement>('pcSvg');
-  const TERR = [{ n: 'Gövde', w: 50 }, { n: 'Omuz, kol', w: 70 }, { n: 'Bilek', w: 40 }, { n: 'El', w: 70 }, { n: 'Yüz', w: 90 }];
+  const TERR = [{ n: S.terr[0], w: 50 }, { n: S.terr[1], w: 70 }, { n: S.terr[2], w: 40 }, { n: S.terr[3], w: 70 }, { n: S.terr[4], w: 90 }];
 
   function drawMap(): void {
     const a = practiceAt(PC.ser, PC.t);
     const base = 70, tw = base * a.area, others = TERR.reduce((s, t, i) => s + (i === 3 ? 0 : t.w), 0);
     const k = (320 - tw) / others;
-    let x = 20, s = '<text class="lab ctr" x="180" y="16">Motor korteks (şematik kesit)</text>';
+    let x = 20, s = `<text class="lab ctr" x="180" y="16">${S.map.title}</text>`;
     let tx = 0;
     TERR.forEach((t, i) => {
       if (i === 3) {
@@ -475,7 +470,7 @@ export function mount(container: HTMLElement): () => void {
         s += `<rect class="b-slow" x="${x + base}" y="52" width="${(base * a.slow).toFixed(1)}" height="60"/>`;
         s += `<rect class="b-fast" x="${x + base + base * a.slow}" y="52" width="${(base * a.fast).toFixed(1)}" height="60"/>`;
         s += `<rect class="terr tgt" x="${x}" y="52" width="${tw.toFixed(1)}" height="60" rx="6"/>`;
-        s += `<text class="lab ctr strong" x="${x + base / 2}" y="86">El</text>`;
+        s += `<text class="lab ctr strong" x="${x + base / 2}" y="86">${t.n}</text>`;
         x += tw;
       } else {
         const w = t.w * k;
@@ -484,8 +479,8 @@ export function mount(container: HTMLElement): () => void {
       }
     });
     const cx = tx + tw / 2;
-    s += `<path class="brk" d="M${cx - 35},44 v-5 h70 v5"/><text class="lab ctr" x="${cx}" y="34">başlangıç boyutu</text>`;
-    s += `<path class="brk" d="M${tx},120 v5 h${tw.toFixed(1)} v-5"/><text class="val ctr" x="${cx}" y="141">${signed(Math.round((a.area - 1) * 100))}% alan</text>`;
+    s += `<path class="brk" d="M${cx - 35},44 v-5 h70 v5"/><text class="lab ctr" x="${cx}" y="34">${S.map.baseSize}</text>`;
+    s += `<path class="brk" d="M${tx},120 v5 h${tw.toFixed(1)} v-5"/><text class="val ctr" x="${cx}" y="141">${S.map.area(signed(Math.round((a.area - 1) * 100)))}</text>`;
     // parmaklar: fiziksel pratikte oynar, hayal ederken kesik çizgili düşünce balonu belirir
     const active = PC.t < PC.inp.days && PC.inp.minutes > 0;
     const phys = active ? 1 - PC.inp.mental : 0;
@@ -495,11 +490,11 @@ export function mount(container: HTMLElement): () => void {
       s += `<rect class="fing${active ? ' act' : ''}" x="${cx - 36 + i * 15}" y="${186 - hs[i] - bob}" width="10" height="${hs[i]}" rx="5"/>`;
     }
     s += `<rect class="palm" x="${cx - 40}" y="186" width="80" height="14" rx="6"/>`;
-    if (active && PC.inp.mental > 0) s += `<ellipse class="thought" cx="${cx + 66}" cy="156" rx="30" ry="14"/><text class="lab ctr" x="${cx + 66}" y="159">hayal</text><circle class="thought" cx="${cx + 38}" cy="176" r="3"/><circle class="thought" cx="${cx + 31}" cy="184" r="1.8"/>`;
+    if (active && PC.inp.mental > 0) s += `<ellipse class="thought" cx="${cx + 66}" cy="156" rx="30" ry="14"/><text class="lab ctr" x="${cx + 66}" y="159">${S.map.imagine}</text><circle class="thought" cx="${cx + 38}" cy="176" r="3"/><circle class="thought" cx="${cx + 31}" cy="184" r="1.8"/>`;
     const st = PC.t < PC.inp.days
-      ? `Pratik sürüyor: gün ${Math.floor(PC.t) + 1} / ${PC.inp.days}`
-      : `Pratik bırakıldı: ${Math.floor(PC.t - PC.inp.days)} gün önce`;
-    s += `<text class="lab ctr strong" x="180" y="222">${PC.inp.minutes === 0 ? 'Pratik yok' : st}</text>`;
+      ? S.map.ongoing(Math.floor(PC.t) + 1, PC.inp.days)
+      : S.map.stopped(Math.floor(PC.t - PC.inp.days));
+    s += `<text class="lab ctr strong" x="180" y="222">${PC.inp.minutes === 0 ? S.map.none : st}</text>`;
     pcSvg.innerHTML = s;
   }
 
@@ -513,41 +508,41 @@ export function mount(container: HTMLElement): () => void {
     const stepY = amax - 1 > 0.5 ? 0.2 : 0.1;
     for (let v = 1; v <= amax; v += stepY) s += `<line class="${v === 1 ? 'base' : 'grid'}" x1="${GX0}" x2="${GX1}" y1="${y(v)}" y2="${y(v)}"/><text x="${GX0 - 4}" y="${y(v) + 3}" text-anchor="end">${signed(Math.round((v - 1) * 100))}%</text>`;
     s += `<rect class="shade" x="${GX0}" y="${GY0}" width="${Math.max(0, x(PC.inp.days) - GX0)}" height="${GY1 - GY0}"/>`;
-    s += `<text x="${GX0 + 3}" y="${GY0 + 9}">pratik</text>`;
+    s += `<text x="${GX0 + 3}" y="${GY0 + 9}">${S.pcChart.practice}</text>`;
     const stp = niceStep(H);
     for (let d = 0; d <= H; d += stp) s += `<line class="grid" x1="${x(d)}" x2="${x(d)}" y1="${GY1}" y2="${GY1 + 4}"/><text x="${x(d)}" y="${GY1 + 14}" text-anchor="middle">${d}</text>`;
-    s += `<text x="${GX1}" y="${GY1 + 28}" text-anchor="end">gün</text>`;
+    s += `<text x="${GX1}" y="${GY1 + 28}" text-anchor="end">${S.pcChart.days}</text>`;
     const every = Math.max(1, Math.floor(n / 160));
     const line = (arr: number[]) => arr.map((v, i) => [i, v] as const).filter(([i]) => i % every === 0 || i === n - 1).map(([i, v]) => `${x(i * ser.dt).toFixed(1)},${y(1 + v).toFixed(1)}`).join(' ');
     s += `<polyline class="ln" points="${line(ser.slow)}" style="stroke:var(--pit);stroke-width:1.6"/>`;
     s += `<polyline class="ln" points="${line(ser.area.map((v) => v - 1))}" style="stroke:var(--ink)"/>`;
     const a = practiceAt(ser, PC.t), cx = x(PC.t);
     s += `<line class="cur" x1="${cx}" x2="${cx}" y1="${GY0}" y2="${GY1}"/><circle cx="${cx}" cy="${y(a.area)}" r="4.5" fill="var(--ink)" stroke="var(--panel)" stroke-width="1.5"/>`;
-    s += `<g class="key"><line x1="${GX1 - 150}" x2="${GX1 - 134}" y1="${GY0 + 6}" y2="${GY0 + 6}" stroke="var(--ink)" stroke-width="2.2"/><text x="${GX1 - 130}" y="${GY0 + 9}">toplam</text><line x1="${GX1 - 80}" x2="${GX1 - 64}" y1="${GY0 + 6}" y2="${GY0 + 6}" stroke="var(--pit)" stroke-width="2"/><text x="${GX1 - 60}" y="${GY0 + 9}">kalıcı pay</text></g>`;
+    s += `<g class="key"><line x1="${GX1 - 150}" x2="${GX1 - 134}" y1="${GY0 + 6}" y2="${GY0 + 6}" stroke="var(--ink)" stroke-width="2.2"/><text x="${GX1 - 130}" y="${GY0 + 9}">${S.pcChart.total}</text><line x1="${GX1 - 80}" x2="${GX1 - 64}" y1="${GY0 + 6}" y2="${GY0 + 6}" stroke="var(--pit)" stroke-width="2"/><text x="${GX1 - 60}" y="${GY0 + 9}">${S.pcChart.slow}</text></g>`;
     pcChart.innerHTML = s;
   }
 
-  const setPcChip = makeChips($('pcChips'), PRAC_PRESETS.map((p) => p.n), (i) => { setPrac(PRAC_PRESETS[i].p, true); PC.preset = i; setPcChip(i); $('pcNote').textContent = PRAC_PRESETS[i].note; });
+  const setPcChip = makeChips($('pcChips'), S.pracPresets.map((p) => p.n), (i) => { setPrac(PRAC_PRESETS[i].p, true); PC.preset = i; setPcChip(i); $('pcNote').textContent = S.pracPresets[i].note; });
   let slPm: SliderHandle, slPx: SliderHandle, slPd: SliderHandle, slPt: SliderHandle;
   function setPrac(p: PracticeInputs, replay: boolean): void {
     PC.inp = { ...p };
-    slPm.set(p.minutes); slPd.set(logPos(p.days, 1, 1200), fmtDays(p.days)); slPx.set(Math.round(p.mental * 100), `%${Math.round(p.mental * 100)}`);
+    slPm.set(p.minutes); slPd.set(logPos(p.days, 1, 1200), fmtDays(p.days)); slPx.set(Math.round(p.mental * 100), pct(p.mental));
     pcSim();
     syncPcT();
     if (replay) { PC.t = 0; PC.playing = true; }
     PC.preset = -1; setPcChip(-1); $('pcNote').textContent = '';
     dirty = true;
   }
-  const syncPcT = () => { slPt.inp.max = String(PC.ser.horizon); slPt.set(Math.min(PC.t, PC.ser.horizon), `gün ${Math.round(PC.t)}`); };
+  const syncPcT = () => { slPt.inp.max = String(PC.ser.horizon); slPt.set(Math.min(PC.t, PC.ser.horizon), S.fmt.dayN(Math.round(PC.t))); };
   const onPrac = () => { pcSim(); PC.t = Math.min(PC.t, PC.ser.horizon); syncPcT(); PC.preset = -1; setPcChip(-1); $('pcNote').textContent = ''; dirty = true; };
   const pcSl = $('pcSliders');
-  slPm = makeSlider(scope, pcSl, `${id}-pm`, { name: 'Günlük pratik süresi', hint: 'Sürenin tamamı fiziksel ya da hayal edilen pratik olabilir. Süre arttıkça etki doyar.', min: 0, max: 240, step: 5, value: 120, fmt: (v) => `${v} dk`, color: 'var(--dop)' },
+  slPm = makeSlider(scope, pcSl, `${id}-pm`, { name: S.pcSliders.m.name, hint: S.pcSliders.m.hint, min: 0, max: 240, step: 5, value: 120, fmt: (v) => S.fmt.min(String(v)), color: 'var(--dop)' },
     (v) => { PC.inp.minutes = v; onPrac(); });
-  slPx = makeSlider(scope, pcSl, `${id}-px`, { name: 'Hayal ederek pratik oranı', hint: 'Zihinsel prova: parmak oynamadan alıştırmayı zihinde canlandırmak. Etkisi fiziksel pratiğin yarısı kabul edildi.', min: 0, max: 100, step: 5, value: 0, fmt: (v) => `%${v}`, color: 'var(--pit)' },
+  slPx = makeSlider(scope, pcSl, `${id}-px`, { name: S.pcSliders.x.name, hint: S.pcSliders.x.hint, min: 0, max: 100, step: 5, value: 0, fmt: (v) => percent(String(v)), color: 'var(--pit)' },
     (v) => { PC.inp.mental = v / 100; onPrac(); });
-  slPd = makeSlider(scope, pcSl, `${id}-pd`, { name: 'Pratik yapılan gün sayısı', hint: 'Sonra pratik bırakılır. Kısa pratik hızlı bileşeni, uzun pratik kalıcı payı doldurur.', min: 0, max: 100, step: 1, value: logPos(5, 1, 1200), fmt: (v) => fmtDays(niceDays(logVal(v, 1, 1200))), color: 'var(--dop)' },
+  slPd = makeSlider(scope, pcSl, `${id}-pd`, { name: S.pcSliders.d.name, hint: S.pcSliders.d.hint, min: 0, max: 100, step: 1, value: logPos(5, 1, 1200), fmt: (v) => fmtDays(niceDays(logVal(v, 1, 1200))), color: 'var(--dop)' },
     (v) => { PC.inp.days = niceDays(logVal(v, 1, 1200)); onPrac(); });
-  slPt = makeSlider(scope, pcSl, `${id}-pt`, { name: 'Zaman', hint: 'Oynatmayı duraklatıp kaydırarak istenen güne bak.', min: 0, max: PC.ser.horizon, step: 0.25, value: 0, fmt: (v) => `gün ${Math.round(v)}`, color: 'var(--ink)' },
+  slPt = makeSlider(scope, pcSl, `${id}-pt`, { name: S.pcSliders.t.name, hint: S.pcSliders.t.hint, min: 0, max: PC.ser.horizon, step: 0.25, value: 0, fmt: (v) => S.fmt.dayN(Math.round(v)), color: 'var(--ink)' },
     (v) => { PC.t = v; PC.playing = false; dirty = true; });
   scope.on($('pcPlay'), 'click', () => { if (PC.t >= PC.ser.horizon) PC.t = 0; PC.playing = !PC.playing; dirty = true; });
   scope.on($('pcReset'), 'click', () => { PC.t = 0; PC.playing = true; dirty = true; });
@@ -562,15 +557,15 @@ export function mount(container: HTMLElement): () => void {
   SAY.prac = () => {
     const a = practiceAt(PC.ser, PC.t);
     const gain = Math.round((a.area - 1) * 100), slowP = Math.round(a.slow * 100);
-    const state = PC.inp.minutes === 0 ? 'Pratik yapılmıyor.' : PC.t < PC.inp.days ? `Pratik sürüyor${PC.inp.mental > 0 ? ` (%${Math.round(PC.inp.mental * 100)} hayal)` : ''}.` : `Pratik ${Math.floor(PC.t - PC.inp.days)} gündür bırakıldı.`;
-    return `Gün ${Math.round(PC.t)}: el alanı ${signed(gain)}% (kalıcı pay ${signed(slowP)}%). ${state}`;
+    const state = PC.inp.minutes === 0 ? S.pracSay.none : PC.t < PC.inp.days ? S.pracSay.ongoing(PC.inp.mental > 0 ? pct(PC.inp.mental) : '') : S.pracSay.stopped(Math.floor(PC.t - PC.inp.days));
+    return S.pracSay.line(Math.round(PC.t), signed(gain), signed(slowP), state);
   };
   METERS.prac = () => {
     const a = practiceAt(PC.ser, PC.t);
     return [
-      { label: 'Harita alanı', text: `${signed(Math.round((a.area - 1) * 100))}%`, frac: (a.area - 1) / 0.6, color: 'var(--dop)' },
-      { label: 'Kalıcı pay', text: `${signed(Math.round(a.slow * 100))}%`, frac: a.slow / 0.6, color: 'var(--pit)' },
-      { label: 'Günlük etkin doz', text: `${Math.round(effort(PC.inp))} dk`, frac: effort(PC.inp) / 240, color: 'var(--ink)' },
+      { label: S.pracMeters.area, text: `${signed(Math.round((a.area - 1) * 100))}%`, frac: (a.area - 1) / 0.6, color: 'var(--dop)' },
+      { label: S.pracMeters.slow, text: `${signed(Math.round(a.slow * 100))}%`, frac: a.slow / 0.6, color: 'var(--pit)' },
+      { label: S.pracMeters.dose, text: S.fmt.min(String(Math.round(effort(PC.inp)))), frac: effort(PC.inp) / 240, color: 'var(--ink)' },
     ];
   };
 
@@ -588,8 +583,8 @@ export function mount(container: HTMLElement): () => void {
   svg('rect', { class: 'pnl', x: 2, y: 2, width: 176, height: 246, rx: 12 }, stSvg);
   svg('rect', { class: 'pnl', x: 182, y: 2, width: 176, height: 246, rx: 12 }, stSvg);
   const mkT = (x: number, y: number, s: string, cls = 'lab') => { const t = svg('text', { class: cls, x, y }, stSvg); t.textContent = s; return t; };
-  mkT(90, 20, 'Hipokampüs nöronu', 'lab ctr strong');
-  mkT(270, 20, 'Amigdala (BLA) nöronu', 'lab ctr strong');
+  mkT(90, 20, S.stNeurons.hip, 'lab ctr strong');
+  mkT(270, 20, S.stNeurons.amy, 'lab ctr strong');
   const treeHip: Tree = buildTree(stSvg, { seed: 11, x: 90, y: 214, roots: [-1.571, -2.2, -0.95], lens: [28, 23, 18, 13, 10.5], spread: 0.55, w: [0.25, 0.5, 0.9, 1.3, 1.6], color: 'var(--hyp)', spinesPer: 5, somaR: 8 });
   const treeAmy: Tree = buildTree(stSvg, { seed: 23, x: 270, y: 132, roots: [0, 1.05, 2.1, 3.14, 4.2, 5.24], lens: [19, 17, 14, 12], spread: 0.6, w: [0.4, 0.9, 1.4, 1.8], color: 'var(--amy)', spinesPer: 0, somaR: 8 });
   const stTxtH = mkT(90, 240, '', 'val ctr');
@@ -599,8 +594,8 @@ export function mount(container: HTMLElement): () => void {
     const e = stressAt(ST.ser, ST.t);
     treeHip.update(e.hip, e.spine);
     treeAmy.update(e.amy, 1);
-    stTxtH.textContent = `dendrit %${pctOf(e.hip)} · diken %${pctOf(e.spine)}`;
-    stTxtA.textContent = `dendrit %${pctOf(e.amy)}`;
+    stTxtH.textContent = S.stTxtH(pct(e.hip), pct(e.spine));
+    stTxtA.textContent = S.stTxtA(pct(e.amy));
   }
   const stChart = $<SVGElement>('stChart');
   const SYMIN = 0.55, SYMAX = 1.5;
@@ -609,11 +604,11 @@ export function mount(container: HTMLElement): () => void {
     const x = (d: number) => GX0 + (d / H) * (GX1 - GX0);
     const y = (v: number) => GY1 - ((clamp(v, SYMIN, SYMAX) - SYMIN) / (SYMAX - SYMIN)) * (GY1 - GY0);
     let s = '';
-    for (const v of [0.6, 0.8, 1, 1.2, 1.4]) s += `<line class="${v === 1 ? 'base' : 'grid'}" x1="${GX0}" x2="${GX1}" y1="${y(v)}" y2="${y(v)}"/><text x="${GX0 - 4}" y="${y(v) + 3}" text-anchor="end">%${Math.round(v * 100)}</text>`;
-    s += `<rect class="shade" x="${GX0}" y="${GY0}" width="${Math.max(0, x(ser.stressEnd) - GX0)}" height="${GY1 - GY0}"/><text x="${GX0 + 3}" y="${GY0 + 9}">${ST.inp.kind === 'kosu' ? 'koşu' : 'stres'}</text>`;
+    for (const v of [0.6, 0.8, 1, 1.2, 1.4]) s += `<line class="${v === 1 ? 'base' : 'grid'}" x1="${GX0}" x2="${GX1}" y1="${y(v)}" y2="${y(v)}"/><text x="${GX0 - 4}" y="${y(v) + 3}" text-anchor="end">${percent(String(Math.round(v * 100)))}</text>`;
+    s += `<rect class="shade" x="${GX0}" y="${GY0}" width="${Math.max(0, x(ser.stressEnd) - GX0)}" height="${GY1 - GY0}"/><text x="${GX0 + 3}" y="${GY0 + 9}">${ST.inp.kind === 'kosu' ? S.stChart.run : S.stChart.stress}</text>`;
     const stp = niceStep(H);
     for (let d = 0; d <= H; d += stp) s += `<line class="grid" x1="${x(d)}" x2="${x(d)}" y1="${GY1}" y2="${GY1 + 4}"/><text x="${x(d)}" y="${GY1 + 14}" text-anchor="middle">${d}</text>`;
-    s += `<text x="${GX1}" y="${GY1 + 28}" text-anchor="end">gün</text>`;
+    s += `<text x="${GX1}" y="${GY1 + 28}" text-anchor="end">${S.pcChart.days}</text>`;
     const every = Math.max(1, Math.floor(n / 160));
     const line = (arr: number[]) => arr.map((v, i) => [i, v] as const).filter(([i]) => i % every === 0 || i === n - 1).map(([i, v]) => `${x(i * ser.dt).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
     s += `<polyline class="ln" points="${line(ser.spine)}" style="stroke:var(--hyp);stroke-width:1.4;stroke-dasharray:4 3"/>`;
@@ -621,18 +616,18 @@ export function mount(container: HTMLElement): () => void {
     s += `<polyline class="ln" points="${line(ser.amy)}" style="stroke:var(--amy)"/>`;
     const e = stressAt(ser, ST.t), cx = x(ST.t);
     s += `<line class="cur" x1="${cx}" x2="${cx}" y1="${GY0}" y2="${GY1}"/><circle cx="${cx}" cy="${y(e.hip)}" r="4" fill="var(--hyp)" stroke="var(--panel)" stroke-width="1.5"/><circle cx="${cx}" cy="${y(e.amy)}" r="4" fill="var(--amy)" stroke="var(--panel)" stroke-width="1.5"/>`;
-    s += `<text x="${GX1 - 2}" y="${GY0 + 10}" text-anchor="end" style="fill:var(--red-text);font-weight:600">Amigdala</text><text x="${GX1 - 2}" y="${GY1 - 5}" text-anchor="end" style="fill:var(--hyp);font-weight:600">Hipokampüs (kesik: diken)</text>`;
+    s += `<text x="${GX1 - 2}" y="${GY0 + 10}" text-anchor="end" style="fill:var(--red-text);font-weight:600">${S.stChart.amy}</text><text x="${GX1 - 2}" y="${GY1 - 5}" text-anchor="end" style="fill:var(--hyp);font-weight:600">${S.stChart.hip}</text>`;
     stChart.innerHTML = s;
   }
 
-  const setStChip = makeChips($('stChips'), STRESS_KINDS.map((k) => k.n), (i) => { ST.inp.kind = STRESS_KINDS[i].k; onStress(true); });
+  const setStChip = makeChips($('stChips'), S.stressKinds.map((k) => k.n), (i) => { ST.inp.kind = STRESS_KINDS[i].k; onStress(true); });
   let slSd: SliderHandle, slSr: SliderHandle, slSt: SliderHandle;
   const stNote = $('stNote');
-  const syncStT = () => { slSt.inp.max = String(Math.round(ST.ser.total)); slSt.set(Math.min(ST.t, ST.ser.total), `gün ${Math.round(ST.t)}`); };
+  const syncStT = () => { slSt.inp.max = String(Math.round(ST.ser.total)); slSt.set(Math.min(ST.t, ST.ser.total), S.fmt.dayN(Math.round(ST.t))); };
   function onStress(replay: boolean): void {
     stSim();
     const i = STRESS_KINDS.findIndex((k) => k.k === ST.inp.kind);
-    setStChip(i); stNote.textContent = STRESS_KINDS[i].note;
+    setStChip(i); stNote.textContent = S.stressKinds[i].note;
     slSd.setDisabled(ST.inp.kind === 'tek');
     ST.t = replay ? 0 : Math.min(ST.t, ST.ser.total);
     if (replay) ST.playing = true;
@@ -644,11 +639,11 @@ export function mount(container: HTMLElement): () => void {
     onStress(true);
   }
   const stSl = $('stSliders');
-  slSd = makeSlider(scope, stSl, `${id}-sd`, { name: 'Kronik stres süresi', hint: 'Stres ne kadar uzun sürerse hipokampüs dendritleri o kadar kısalır, amigdala dendritleri o kadar uzar.', min: 1, max: 60, step: 1, value: 28, fmt: (v) => `${v} gün`, color: 'var(--red)' },
+  slSd = makeSlider(scope, stSl, `${id}-sd`, { name: S.stSliders.d.name, hint: S.stSliders.d.hint, min: 1, max: 60, step: 1, value: 28, fmt: (v) => S.fmt.days(v), color: 'var(--red)' },
     (v) => { ST.inp.days = v; onStress(false); });
-  slSr = makeSlider(scope, stSl, `${id}-sr`, { name: 'Stres bittikten sonra geçen süre', hint: 'Stres kalkınca hipokampüs toparlanır; amigdaladaki değişiklik çok daha yavaş geri döner.', min: 0, max: 180, step: 1, value: 84, fmt: (v) => `${v} gün`, color: 'var(--gld)' },
+  slSr = makeSlider(scope, stSl, `${id}-sr`, { name: S.stSliders.r.name, hint: S.stSliders.r.hint, min: 0, max: 180, step: 1, value: 84, fmt: (v) => S.fmt.days(v), color: 'var(--gld)' },
     (v) => { ST.inp.recover = v; onStress(false); });
-  slSt = makeSlider(scope, stSl, `${id}-st`, { name: 'Zaman', hint: 'Oynatmayı duraklatıp kaydırarak istenen güne bak.', min: 0, max: Math.round(ST.ser.total), step: 1, value: 0, fmt: (v) => `gün ${Math.round(v)}`, color: 'var(--ink)' },
+  slSt = makeSlider(scope, stSl, `${id}-st`, { name: S.stSliders.t.name, hint: S.stSliders.t.hint, min: 0, max: Math.round(ST.ser.total), step: 1, value: 0, fmt: (v) => S.fmt.dayN(Math.round(v)), color: 'var(--ink)' },
     (v) => { ST.t = v; ST.playing = false; dirty = true; });
   scope.on($('stPlay'), 'click', () => { if (ST.t >= ST.ser.total) ST.t = 0; ST.playing = !ST.playing; dirty = true; });
   scope.on($('stReset'), 'click', () => { ST.t = 0; ST.playing = true; dirty = true; });
@@ -656,61 +651,32 @@ export function mount(container: HTMLElement): () => void {
   SAY.str = () => {
     const e = stressAt(ST.ser, ST.t);
     const phase = ST.inp.kind === 'kosu'
-      ? (ST.t < ST.ser.stressEnd ? 'Gönüllü koşu sürüyor' : `Koşu ${Math.floor(ST.t - ST.ser.stressEnd)} gündür bitti`)
-      : (ST.t < ST.ser.stressEnd ? 'Stres sürüyor' : `Stres ${Math.floor(ST.t - ST.ser.stressEnd)} gündür bitti`);
+      ? (ST.t < ST.ser.stressEnd ? S.strSay.runOn : S.strSay.runOff(Math.floor(ST.t - ST.ser.stressEnd)))
+      : (ST.t < ST.ser.stressEnd ? S.strSay.stOn : S.strSay.stOff(Math.floor(ST.t - ST.ser.stressEnd)));
     const lostH = Math.round((1 - e.hip) * 100), gainA = Math.round((e.amy - 1) * 100);
-    return `Gün ${Math.round(ST.t)}: ${phase}. Hipokampüs dendritleri ${lostH >= 0 ? `%${lostH} kısalmış` : `%${-lostH} uzamış`}, amigdala dendritleri %${gainA} ${gainA >= 0 ? 'uzamış' : 'kısalmış'}.`;
+    return S.strSay.line(Math.round(ST.t), phase, percent(String(lostH >= 0 ? lostH : -lostH)), lostH >= 0, percent(String(gainA)), gainA >= 0);
   };
   METERS.str = () => {
     const e = stressAt(ST.ser, ST.t);
     return [
-      { label: 'Hipokampüs dendriti', text: `%${pctOf(e.hip)}`, frac: e.hip / 1.5, color: 'var(--hyp)', mark: 1 / 1.5 },
-      { label: 'Hipokampüs dikeni', text: `%${pctOf(e.spine)}`, frac: e.spine / 1.5, color: 'var(--hyp)', mark: 1 / 1.5 },
-      { label: 'Amigdala dendriti', text: `%${pctOf(e.amy)}`, frac: e.amy / 1.5, color: 'var(--amy)', mark: 1 / 1.5 },
+      { label: S.strMeters.hip, text: pct(e.hip), frac: e.hip / 1.5, color: 'var(--hyp)', mark: 1 / 1.5 },
+      { label: S.strMeters.spine, text: pct(e.spine), frac: e.spine / 1.5, color: 'var(--hyp)', mark: 1 / 1.5 },
+      { label: S.strMeters.amy, text: pct(e.amy), frac: e.amy / 1.5, color: 'var(--amy)', mark: 1 / 1.5 },
     ];
   };
 
   /* =====================================================================
      REHBERLİ TUR
      ===================================================================== */
-  const tour = createTour(scope, [
-    {
-      title: 'Yetersiz uyarım: sinaps değişmez',
-      text: 'Tek bir sinaps ve saniyede bir uyarı. Glutamat AMPA reseptörlerine bağlanır ama zar yeterince depolarize olmaz, Mg²⁺ tıkacı yerinde kalır ve NMDA kanalından neredeyse hiç kalsiyum girmez.',
-      look: 'dikenciğin içindeki yeşil Ca²⁺ seviyesi alt eşiğin altında kalıyor; grafik düz.',
-      apply: () => { showTab('syn'); setSyn(1, 900, 0, true); },
-    },
-    {
-      title: 'Orta düzey kalsiyum: LTD',
-      text: 'Frekans orta düzeye çıkınca Ca²⁺ iki eşik arasında kalır. Bu orta düzey sinapsı zayıflatır: AMPA reseptörleri azalır (uzun süreli depresyon, LTD). Böylece gereksiz sinyaller silinir.',
-      look: 'AMPA reseptörlerinin (mavi çubuklar) sayısı azalıyor, grafik aşağı iniyor.',
-      apply: () => { showTab('syn'); setSyn(5, 300, 0, true); },
-    },
-    {
-      title: 'Yoğun uyarım: LTP',
-      text: 'Lømo ve Bliss tipi yoğun uyarımda (saniyede 100 uyarı) glutamat o kadar sık gelir ki zar depolarize olur, Mg²⁺ tıkacı kalkar ve Ca²⁺ yüksek eşiği aşar. Yeni AMPA reseptörleri yerleşir ve sinaps saatler boyunca güçlü kalır.',
-      look: 'Mg²⁺ tıkacı kanaldan çıkıyor; grafikteki eğri yükselip uzun süre yüksek kalıyor.',
-      apply: () => { showTab('syn'); setSyn(100, 1, 0, true); },
-    },
-    {
-      title: 'Hebb: birlikte ateşlenen birlikte bağlanır',
-      text: 'Frekans yine saniyede bir, ama alıcı nöron da aynı anda ateşleniyor. Depolarizasyon tıkacı kaldırıyor; tek başına etkisiz olan uyarı artık sinapsı güçlendiriyor.',
-      look: 'aynı 1 Hz uyarının sonucu: ilk adımda düz, şimdi LTP.',
-      apply: () => { showTab('syn'); setSyn(1, 900, 1, true); },
-    },
-    {
-      title: 'Pratik haritayı büyütür, bırakmak geri alır',
-      text: 'Günde 2 saat, 5 gün piyano alıştırması el alanını büyütür. Pratik kesilince büyümenin çoğu bir günden kısa sürede kaybolur: kısa pratik yalnızca geçici, Hebb tipi bir genişleme bırakır.',
-      look: 'pratik bırakıldığında amber (hızlı) şeridin hızla küçülmesi.',
-      apply: () => { showTab('prac'); setPrac(PRAC_PRESETS[0].p, true); PC.preset = 0; setPcChip(0); $('pcNote').textContent = PRAC_PRESETS[0].note; },
-    },
-    {
-      title: 'Stres iki bölgeyi zıt yönde değiştirir',
-      text: 'Dört hafta kronik stres: hipokampüs dendritleri ve dikenleri kısalır, amigdala dendritleri uzar. Stres bitince hipokampüs toparlanır, amigdaladaki değişiklik ise aylarca kalır. Plastisite iyi ya da kötü değildir: hem öğrenmeyi hem kaygıyı kalıcılaştırabilir.',
-      look: 'oynatma sonunda mavi eğri 100%’e dönüyor, kırmızı eğri hâlâ yüksek.',
-      apply: () => { showTab('str'); setStress({ kind: 'kronik', days: 28, recover: 84 }); },
-    },
-  ]);
+  const applies: Array<() => void> = [
+    () => { showTab('syn'); setSyn(1, 900, 0, true); },
+    () => { showTab('syn'); setSyn(5, 300, 0, true); },
+    () => { showTab('syn'); setSyn(100, 1, 0, true); },
+    () => { showTab('syn'); setSyn(1, 900, 1, true); },
+    () => { showTab('prac'); setPrac(PRAC_PRESETS[0].p, true); PC.preset = 0; setPcChip(0); $('pcNote').textContent = S.pracPresets[0].note; },
+    () => { showTab('str'); setStress({ kind: 'kronik', days: 28, recover: 84 }); },
+  ];
+  const tour = createTour(scope, S.tour.map((st, i) => ({ ...st, apply: applies[i] })));
   $('tourHost').appendChild(tour.el);
 
   /* ---------- Döngü ---------- */
@@ -725,23 +691,23 @@ export function mount(container: HTMLElement): () => void {
       if (PC.playing) {
         PC.t += dt * warpSpeed(PC.t, PC.inp.days);
         if (PC.t >= PC.ser.horizon) { PC.t = PC.ser.horizon; PC.playing = false; }
-        slPt.set(PC.t, `gün ${Math.round(PC.t)}`);
+        slPt.set(PC.t, S.fmt.dayN(Math.round(PC.t)));
         dirty = true;
       }
       if (dirty) { drawMap(); drawPcChart(); }
-      $('pcPlay').textContent = PC.playing ? 'Duraklat' : PC.t >= PC.ser.horizon ? 'Yeniden oynat' : 'Oynat';
+      $('pcPlay').textContent = PC.playing ? S.pcPlay.pause : PC.t >= PC.ser.horizon ? S.pcPlay.replay : S.pcPlay.play;
       ($('pcStop') as HTMLButtonElement).disabled = !(PC.t < PC.inp.days);
     } else {
       if (ST.playing) {
         ST.t += dt * warpSpeed(ST.t, ST.ser.stressEnd);
         if (ST.t >= ST.ser.total) { ST.t = ST.ser.total; ST.playing = false; }
-        slSt.set(ST.t, `gün ${Math.round(ST.t)}`);
+        slSt.set(ST.t, S.fmt.dayN(Math.round(ST.t)));
         dirty = true;
       }
       if (dirty) { drawStress(); drawStChart(); }
-      $('stPlay').textContent = ST.playing ? 'Duraklat' : ST.t >= ST.ser.total ? 'Yeniden oynat' : 'Oynat';
+      $('stPlay').textContent = ST.playing ? S.pcPlay.pause : ST.t >= ST.ser.total ? S.pcPlay.replay : S.pcPlay.play;
     }
-    if (dirty && tab === 'syn' && drawnSyn) $('synRun').textContent = SY.run < 1 ? 'Uyarım sürüyor…' : 'Uyarımı yeniden oynat';
+    if (dirty && tab === 'syn' && drawnSyn) $('synRun').textContent = SY.run < 1 ? S.synRunning : S.synRun;
     dirty = false;
     tSay += dt;
     if (tSay > 0.25) { tSay = 0; say(); }
@@ -758,7 +724,7 @@ export function mount(container: HTMLElement): () => void {
   scope.on(root, 'click', onAction);
   scope.on(root, 'input', onAction);
   // Sayfa altı notları (nasıl çalışıyor + Kitapta + dipnot) ayrı parçadan gelir.
-  lazyNotes(scope, root, () => import('./notes').then((m) => m.NOTES));
+  lazyNotes(scope, root, () => import('./notes').then((m) => m.notes()));
   scope.loop(frame, { root, onResume: () => { last = performance.now(); dirty = true; } });
 
   return () => {

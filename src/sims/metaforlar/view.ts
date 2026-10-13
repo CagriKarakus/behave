@@ -4,6 +4,10 @@ import '../sim.css';
 import './view.css';
 import { Scope, ref, svg, svgText, uid } from '../kit';
 import { createTour } from '../tour';
+import { pct, percent } from '../../i18n/fmt';
+import { t } from '../../i18n/t';
+import type { MsgKey } from '../../i18n/messages';
+import { L } from './text';
 import {
   CARDS, CARD_IDS, DEFAULTS, K_REPL, SACRED, clamp, cyberNext, cyberShare, describeCard, describeSacred, expectedBacklash,
   expectedSupport, gauges, maxShift, offerParts, simulateCrowd, type CardId, type Holder, type Inputs, type Mode,
@@ -11,23 +15,28 @@ import {
 } from './model';
 
 type Tab = 'bed' | 'kut';
-const pc = (x: number): string => `%${Math.round(x * 100)}`;
 const n100 = (x: number): string => String(Math.round(x * 100));
 const GLYPH: Record<Status, string> = { sağlam: '✓', karışık: '~', tartışmalı: '✕', bilinmiyor: '?' };
-const tag = (st: Status): string => `<em class="tag" data-st="${st}"><span aria-hidden="true">${GLYPH[st]}</span> ${st}</em>`;
+const tag = (st: Status): string => `<em class="tag" data-st="${st}"><span aria-hidden="true">${GLYPH[st]}</span> ${t(`repl.${st}` as MsgKey)}</em>`;
 const sw = (w: number, inner: string): string => `<svg viewBox="0 0 ${w} 12" aria-hidden="true">${inner}</svg>`;
 const key = (...a: string[]): string => `<div class="legend">${a.map((t) => `<span>${t}</span>`).join('')}</div>`;
-const KINDS: Array<{ k: OfferKind; name: string }> = [{ k: 'maddi', name: 'Maddi teklif' }, { k: 'sembolik', name: 'Sembolik jest' }, { k: 'karma', name: 'İkisi birlikte' }];
+const KIND_IDS: OfferKind[] = ['maddi', 'sembolik', 'karma'];
+const BED_BOOK_IDS: string[][] = [['ch15-e1'], ['ch15-e6'], ['ch15-e4'], ['ch15-e11', 'ch15-e10'], ['ch15-e7', 'ch15-e8', 'ch15-e9'], ['ch15-e5']];
+const stText = (k: Status): string => t(`repl.${k}` as MsgKey);
+const bookList = (ids: string[][], items: Array<{ links: string[]; after: (st: (k: Status) => string) => string }>): string =>
+  items.map((it, i) => `<li>${it.links.map((l, j) => `<a href="#/bolum/ch15?deney=${ids[i][j]}">${l}</a>`).join(', ')}${it.after(stText)}</li>`).join('\n        ');
 
-const TEMPLATE = (id: string) => `
+const TEMPLATE = (id: string) => {
+  const X = L();
+  return `
 <div class="sim sim-met">
-  <p class="lede">Beyin "iğrenç" ile "ahlaksız", "sıcak" ile "cana yakın" arasındaki farkı neden karıştırır; bu karışıklık çatışmaları nasıl büyütür?</p>
-  <div class="tabs" role="tablist" aria-label="Simülasyon bölümleri">
-    <button class="tab" role="tab" id="${id}-tab-bed" data-pane="bed" aria-controls="${id}-pane-bed" aria-selected="true" type="button">Beden ve ahlak karışıklığı</button>
-    <button class="tab" role="tab" id="${id}-tab-kut" data-pane="kut" aria-controls="${id}-pane-kut" aria-selected="false" tabindex="-1" type="button">Kutsal değerler</button>
+  <p class="lede">${X.lede}</p>
+  <div class="tabs" role="tablist" aria-label="${X.tabsAria}">
+    <button class="tab" role="tab" id="${id}-tab-bed" data-pane="bed" aria-controls="${id}-pane-bed" aria-selected="true" type="button">${X.tabBed}</button>
+    <button class="tab" role="tab" id="${id}-tab-kut" data-pane="kut" aria-controls="${id}-pane-kut" aria-selected="false" tabindex="-1" type="button">${X.tabKut}</button>
   </div>
 
-  <div class="sim-bar" role="group" aria-label="Anlık çıktılar"><div class="sim-bar-in">
+  <div class="sim-bar" role="group" aria-label="${X.barAria}"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
     <div class="meters" data-ref="meters"></div>
   </div></div>
@@ -36,52 +45,47 @@ const TEMPLATE = (id: string) => `
   <!-- ============ 1 · Beden ve ahlak karışıklığı ============ -->
   <section class="pane" role="tabpanel" id="${id}-pane-bed" data-pane="bed" aria-labelledby="${id}-tab-bed">
     <div data-ref="tour1"></div>
-    <div class="chips" role="group" aria-label="Deney kartları" data-ref="cardChips"></div>
+    <div class="chips" role="group" aria-label="${X.cardChipsAria}" data-ref="cardChips"></div>
 
-    <section class="card" aria-label="Seçili deney kartı">
+    <section class="card" aria-label="${X.cardAria}">
       <div class="card-h"><h3 class="card-t" data-ref="cTitle"></h3><div class="tags" data-ref="cTags"></div></div>
       <div class="stage"><svg viewBox="0 0 360 180" role="img" data-ref="stage"></svg>
         <div class="legend" data-ref="stageKey"></div></div>
-      <div class="seg mode" role="group" aria-label="Hangi okuma gösterilsin" data-ref="modeSeg">
-        <button class="btn" type="button" aria-pressed="true" data-mode="book">Kitabın iddiası</button>
-        <button class="btn" type="button" aria-pressed="false" data-mode="repl">Replikasyon sonrası tahmin</button>
+      <div class="seg mode" role="group" aria-label="${X.modeAria}" data-ref="modeSeg">
+        <button class="btn" type="button" aria-pressed="true" data-mode="book">${X.modeBook}</button>
+        <button class="btn" type="button" aria-pressed="false" data-mode="repl">${X.modeRepl}</button>
       </div>
       <div class="gauges" data-ref="gauges"></div>
       ${key(
-        `<i class="sq" style="background:var(--dop)"></i>dolu çubuk: kitabın iddiası`,
-        `<i class="sq" style="background:var(--pfc)"></i>dolu çubuk: replikasyon sonrası`,
-        `<i class="bar2" style="background:var(--ink)"></i>etkisiz taban`,
-        `<i class="bar2 gh2"></i>öteki okuma`,
+        `<i class="sq" style="background:var(--dop)"></i>${X.keyBook}`,
+        `<i class="sq" style="background:var(--pfc)"></i>${X.keyRepl}`,
+        `<i class="bar2" style="background:var(--ink)"></i>${X.keyBase}`,
+        `<i class="bar2 gh2"></i>${X.keyOther}`,
       )}
       <div class="sliders" data-ref="inp"></div>
       <p class="note" data-ref="cMeta"></p>
       <p class="note" data-ref="cNote"></p>
     </section>
 
-    <section aria-label="Kartların karşılaştırması">
-      <h3 class="sim-h">Hangi etki replikasyondan sağ çıkıyor?</h3>
+    <section aria-label="${X.cmpAria}">
+      <h3 class="sim-h">${X.cmpTitle}</h3>
       <div class="ovs" data-ref="ovs"></div>
-      <p class="note">Her satır, kartın ana ölçüsünde en yüksek girdideki kaymayı (puan) gösterir. Cyberball'da ölçü dACC etkinliği, diğerlerinde yargı kayması. Yönler kitaptan, büyüklükler modelin varsayımı.</p>
+      <p class="note">${X.cmpNote}</p>
     </section>
 
     <details class="how">
-      <summary>Model nasıl çalışıyor?</summary>
+      <summary>${t('sim.how')}</summary>
       <div class="how-in">
-        <p>Her kartta bedensel girdi (sıcaklık, ağırlık, bozuk tat, dışlanma, ahlaki leke) bir yargı ölçüsünü tabandan uzaklaştırır; yön chapters.json'daki bulgudan, genlik modelin varsayımıdır. "Replikasyon sonrası tahmin", aynı kaymayı bir çarpanla küçültür: dACC ortak izi ${K_REPL.acc}, tat-yargı ${K_REPL.taste}, ihlal-tat ${K_REPL.vice}, sıcak fincan ${K_REPL.cup}, ağır pano ${K_REPL.clip}, Macbeth ${K_REPL.macbeth}, bakteri uyarısı ${K_REPL.germ}. Çarpanlar kitaptan gelmez; yalnızca chapters.json'daki replikasyon notlarının yönünü (başarısız, çok küçük, bilinmiyor) temsil eder.</p>
-        <p>Sağlam ölçüler (dışlanma acısı, insula etkinliği, adaletsiz teklifi reddetme) iki okumada da aynıdır. Cyberball'da atışları tohumlu rastgele sayı belirler; dışlanma arttıkça "Sen"e gelen pay 1/3'ten 0'a iner.</p>
-        <p>Karışıklığın çatışmaya bağlanışı: iğrenme devresi (insula) hem bozuk yemeği hem ahlaksızlığı işler; bu yüzden bir gruba hastalık ve bulaşma diliyle seslenmek ona karşı iğrenmeyi çağırır. İkinci sekme, böyle kimlik düzeyinde değerlerin (kutsal değerlerin) pazarlıkta nasıl davrandığını gösterir.</p>
+        <p>${X.howBed1(K_REPL)}</p>
+        <p>${X.howBed2}</p>
+        <p>${X.howBed3}</p>
       </div>
     </details>
 
-    <aside class="book" aria-label="Kitapta">
-      <h3 class="sim-h">Kitapta</h3>
+    <aside class="book" aria-label="${t('sim.book')}">
+      <h3 class="sim-h">${t('sim.book')}</h3>
       <ul>
-        <li><a href="#/bolum/ch15?deney=ch15-e1">Cyberball (Eisenberger 2003)</a>: dışlanınca ACC etkinleşti, arıza denince etkinleşmedi. Replikasyon: karışık; duygu sağlam, ortak dACC iddiası sorgulandı.</li>
-        <li><a href="#/bolum/ch15?deney=ch15-e6">Adaletsiz teklif ve insula (Sanfey 2003)</a>. Replikasyon: sağlam; insulanın ne yansıttığı tartışmalı.</li>
-        <li><a href="#/bolum/ch15?deney=ch15-e4">Ahlaki ihlal ve tat</a>. Replikasyon: tartışmalı (Ghelfi 2020 başarısız).</li>
-        <li><a href="#/bolum/ch15?deney=ch15-e11">Sıcak fincan (Williams ve Bargh 2008)</a>, <a href="#/bolum/ch15?deney=ch15-e10">ağır pano (Ackerman 2010)</a>. Replikasyon: tartışmalı.</li>
-        <li><a href="#/bolum/ch15?deney=ch15-e7">Macbeth etkisi</a>, <a href="#/bolum/ch15?deney=ch15-e8">ağız ve el</a>, <a href="#/bolum/ch15?deney=ch15-e9">el yıkama ve yardım</a>. Replikasyon: tartışmalı ya da karışık.</li>
-        <li><a href="#/bolum/ch15?deney=ch15-e5">Bakteri uyarısı ve göç (Landau 2009)</a>. Replikasyon: bilinmiyor.</li>
+        ${bookList(BED_BOOK_IDS, X.bookBed)}
       </ul>
     </aside>
   </section>
@@ -89,80 +93,76 @@ const TEMPLATE = (id: string) => `
   <!-- ============ 2 · Kutsal değerler ============ -->
   <section class="pane" role="tabpanel" id="${id}-pane-kut" data-pane="kut" aria-labelledby="${id}-tab-kut" hidden>
     <div data-ref="tour2"></div>
-    <div class="chips" role="group" aria-label="Teklif türü" data-ref="kindChips"></div>
+    <div class="chips" role="group" aria-label="${X.kindChipsAria}" data-ref="kindChips"></div>
 
-    <section aria-label="Teklif büyüdükçe destek">
-      <h3 class="sim-h">Uzlaşmaya destek ve teklif büyüklüğü</h3>
+    <section aria-label="${X.chartAria}">
+      <h3 class="sim-h">${X.chartTitle}</h3>
       <div class="stage"><svg viewBox="0 0 360 200" role="img" data-ref="chart"></svg><div class="legend" data-ref="chartKey"></div></div>
     </section>
 
-    <section aria-label="Kalabalık">
-      <h3 class="sim-h">100 kişilik kalabalık: kim kabul ediyor?</h3>
+    <section aria-label="${X.crowdAria}">
+      <h3 class="sim-h">${X.crowdTitle}</h3>
       <div class="stage"><svg viewBox="0 0 360 164" role="img" data-ref="crowd"></svg>
         ${key(
-          sw(16, '<circle cx="8" cy="6" r="5" fill="var(--gld)"/>') + 'kabul',
-          sw(16, '<circle cx="8" cy="6" r="4" fill="none" stroke="var(--edge)" stroke-width="1.8"/>') + 'ret',
-          sw(16, '<path d="M3 1L13 11M13 1L3 11" stroke="var(--amy)" stroke-width="2.2" stroke-linecap="round"/>') + 'ret ve öfke (ters tepki)',
+          sw(16, '<circle cx="8" cy="6" r="5" fill="var(--gld)"/>') + X.legAccept,
+          sw(16, '<circle cx="8" cy="6" r="4" fill="none" stroke="var(--edge)" stroke-width="1.8"/>') + X.legReject,
+          sw(16, '<path d="M3 1L13 11M13 1L3 11" stroke="var(--amy)" stroke-width="2.2" stroke-linecap="round"/>') + X.legAngry,
         )}</div>
     </section>
 
-    <section aria-label="Girdiler">
-      <h3 class="sim-h">Girdiler</h3>
+    <section aria-label="${X.inputsAria}">
+      <h3 class="sim-h">${X.inputsTitle}</h3>
       <div class="sliders" data-ref="kSl"></div>
-      <div class="row"><button class="btn" type="button" data-ref="rerun">Kalabalığı yeniden çek</button></div>
+      <div class="row"><button class="btn" type="button" data-ref="rerun">${X.rerun}</button></div>
     </section>
 
     <details class="how">
-      <summary>Model nasıl çalışıyor?</summary>
+      <summary>${t('sim.how')}</summary>
       <div class="how-in">
-        <p>Herkesin kutsallığı ortalama etrafında dağılır. Destek, üç şeyin toplamıdır: maddi teklifin araçsal değeri (kutsallık arttıkça küçülür), kutsala maddi karşılık önermenin ters tepkisi (kutsallıkla büyür, sembolik jest bunu siler) ve sembolik jestin değeri (kutsallıkla büyür). Toplam, uzlaşmaya başlangıç direncinden sonra olasılığa çevrilir; kalabalıkta herkes kendi olasılığına karşı bir zar atar (tohumlu).</p>
-        <p>Kitaptan gelen yönler: maddi teklif kutsal değerde ters teper, özür ve tanıma gibi sembolik jestler kapı açar (ch15-e12, Ginges ve ark. 2007 anket deneyleri). Katsayılar (${SACRED.A}, ${SACRED.B}, ${SACRED.C}) ve "kutsallık eşiği" modelin varsayımıdır; kitapta bu tür sayı yok.</p>
+        <p>${X.howKut1}</p>
+        <p>${X.howKut2(SACRED.A, SACRED.B, SACRED.C)}</p>
       </div>
     </details>
 
-    <aside class="book" aria-label="Kitapta">
-      <h3 class="sim-h">Kitapta</h3>
+    <aside class="book" aria-label="${t('sim.book')}">
+      <h3 class="sim-h">${t('sim.book')}</h3>
       <ul>
-        <li><a href="#/bolum/ch15?deney=ch15-e12">Atran, Axelrod ve Davis (2007)</a>: İsrail-Filistin çatışmasında her düzeyde kutsal değerler belirleyiciydi; taraflar özür ve karşı tarafın haklarını tanımayı maddi tavizin yanında barışın koşulu saydı. Replikasyon: bilinmiyor (görüşme ve vaka çalışması); maddi teklifin tepkiyi artırdığı bulgusu anket deneylerinde (Ginges 2007) desteklendi.</li>
+        ${bookList([['ch15-e12']], X.bookKut)}
       </ul>
     </aside>
   </section>
 
-  <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan (chapters.json ch15): her kartın yönü, replikasyon durumları, arıza koşulunda ACC'nin etkinleşmemesi, kutsal değerlerde maddi tekliflerin ters tepmesi ve sembolik jestlerin kapı açması. Etki büyüklükleri, replikasyon çarpanları ve kutsallık katsayıları modelin varsayımıdır; kitapta bu sayılar yoktur.</p>
+  <p class="foot">${X.foot}</p>
 </div>`;
+};
 
 interface SliderHandle { inp: HTMLInputElement; set: (v: number) => void }
 type Ctl =
   | { t: 'sl'; k: keyof Inputs; name: string; hint: string; fmt: (v: number) => string; color: string }
   | { t: 'seg'; k: keyof Inputs; name: string; opts: Array<[number, string]> }
   | { t: 'btn'; name: string };
-const p0 = (v: number): string => `%${v}`;
-const CTL: Record<CardId, Ctl[]> = {
-  cyber: [
-    { t: 'sl', k: 'excl', name: 'Dışlanma düzeyi', hint: 'Diğer iki oyuncu topu Sen\'e atmayı ne kadar bırakıyor.', fmt: p0, color: 'var(--amy)' },
-    { t: 'seg', k: 'glitch', name: 'Dışlanmanın nedeni', opts: [[0, 'Bilinmiyor'], [1, 'Arıza denildi']] },
-    { t: 'btn', name: 'Atışları yeniden başlat' },
-  ],
-  insula: [
-    { t: 'sl', k: 'gross', name: 'Bozuk tat ya da koku', hint: 'Fiziksel iğrenme: bozulmuş yemek.', fmt: p0, color: 'var(--gld)' },
-    { t: 'sl', k: 'viol', name: 'Ahlaki ihlal (adaletsiz teklif)', hint: 'Ahlaki iğrenme: haksız paylaşım, iğrenç eylem.', fmt: p0, color: 'var(--amy)' },
-  ],
-  cup: [{ t: 'sl', k: 'temp', name: 'Elde tutulan fincan', hint: 'Buzlu kahveden sıcak kahveye.', fmt: (v) => (v < 35 ? 'buzlu' : v > 65 ? 'sıcak' : 'ılık'), color: 'var(--dop)' }],
-  clip: [{ t: 'sl', k: 'weight', name: 'Panonun ağırlığı', hint: 'Özgeçmişi tutan panonun hafiften ağıra gidişi.', fmt: (v) => (v < 35 ? 'hafif' : v > 65 ? 'ağır' : 'orta'), color: 'var(--pfc)' }],
-  macbeth: [
-    { t: 'sl', k: 'mviol', name: 'Kendi ihlalinin ağırlığı', hint: 'Anımsanan ya da söylenen yalanın sonuçları ne kadar kötü.', fmt: p0, color: 'var(--amy)' },
-    { t: 'seg', k: 'chan', name: 'Yalanın kanalı', opts: [[0, 'Sözlü (ağız)'], [1, 'Yazılı (el)']] },
-    { t: 'seg', k: 'washed', name: 'Sonra ne oldu', opts: [[0, 'Yıkamadı'], [1, 'Ellerini yıkadı']] },
-  ],
-  germ: [{ t: 'sl', k: 'lang', name: 'Hastalık ve bulaşma dili', hint: 'Bakteri ve bulaşma uyarısının yoğunluğu.', fmt: p0, color: 'var(--red)' }],
-};
-const STAGE_KEY: Record<CardId, string> = {
-  cyber: 'Çizgi kalınlığı: o yönde atılan topun olasılığı. Turuncu top: sıradaki atış.',
-  insula: 'Ok kalınlığı girdinin gücü; dairenin koyuluğu insula etkinliği.',
-  cup: 'Fincanın rengi ve buhar ya da buz: sıcaklık duyumu.',
-  clip: 'Pano çerçevesinin kalınlığı: ağırlık duyumu.',
-  macbeth: 'Kutuların koyuluğu: ilgili temizlik ürününe istek.',
-  germ: 'Ok kalınlığı dilin yoğunluğu; kutunun koyuluğu göç karşıtı tutum.',
+const p0 = (v: number): string => percent(String(v));
+const ctls = (): Record<CardId, Ctl[]> => {
+  const C = L().ctl;
+  return {
+    cyber: [
+      { t: 'sl', k: 'excl', name: C.cyber.exclName, hint: C.cyber.exclHint, fmt: p0, color: 'var(--amy)' },
+      { t: 'seg', k: 'glitch', name: C.cyber.glitchName, opts: [[0, C.cyber.glitchOpts[0]], [1, C.cyber.glitchOpts[1]]] },
+      { t: 'btn', name: C.cyber.restart },
+    ],
+    insula: [
+      { t: 'sl', k: 'gross', name: C.insula.grossName, hint: C.insula.grossHint, fmt: p0, color: 'var(--gld)' },
+      { t: 'sl', k: 'viol', name: C.insula.violName, hint: C.insula.violHint, fmt: p0, color: 'var(--amy)' },
+    ],
+    cup: [{ t: 'sl', k: 'temp', name: C.cup.name, hint: C.cup.hint, fmt: C.cup.fmt, color: 'var(--dop)' }],
+    clip: [{ t: 'sl', k: 'weight', name: C.clip.name, hint: C.clip.hint, fmt: C.clip.fmt, color: 'var(--pfc)' }],
+    macbeth: [
+      { t: 'sl', k: 'mviol', name: C.macbeth.violName, hint: C.macbeth.violHint, fmt: p0, color: 'var(--amy)' },
+      { t: 'seg', k: 'chan', name: C.macbeth.chanName, opts: [[0, C.macbeth.chanOpts[0]], [1, C.macbeth.chanOpts[1]]] },
+      { t: 'seg', k: 'washed', name: C.macbeth.washedName, opts: [[0, C.macbeth.washedOpts[0]], [1, C.macbeth.washedOpts[1]]] },
+    ],
+    germ: [{ t: 'sl', k: 'lang', name: C.germ.name, hint: C.germ.hint, fmt: p0, color: 'var(--red)' }],
+  };
 };
 
 export function mount(container: HTMLElement): () => void {
@@ -262,7 +262,7 @@ export function mount(container: HTMLElement): () => void {
     inpEl.textContent = '';
     ctlSync = [];
     const X = S.x as unknown as Record<string, number>;
-    for (const c of CTL[S.card]) {
+    for (const c of ctls()[S.card]) {
       if (c.t === 'sl') {
         const h = makeSlider(inpEl, { name: c.name, hint: c.hint, min: 0, max: 100, step: 5, val: Math.round(X[c.k] * 100), fmt: c.fmt, color: c.color, cb: (v) => { X[c.k] = v / 100; dirty = true; } });
         ctlSync.push(() => h.set(Math.round(X[c.k] * 100)));
@@ -318,13 +318,13 @@ export function mount(container: HTMLElement): () => void {
 
   function drawStage(): void {
     stage.textContent = '';
-    const x = S.x;
+    const x = S.x, X = L(), Z = X.st;
     const g = Object.fromEntries(gauges(S.card, x).map((q) => [q.key, q.book])) as Record<string, number>;
     const cur = Object.fromEntries(gauges(S.card, x).map((q) => [q.key, q[S.mode]])) as Record<string, number>;
     ball = null; cyTxt = null;
     if (S.card === 'cyber') {
       const pS = 1 - x.excl;
-      stage.setAttribute('aria-label', `Cyberball: üç oyuncu top atıyor. Dışlanma %${n100(x.excl)}; sana gelen atış payı %${n100(cyberShare(x.excl))}.`);
+      stage.setAttribute('aria-label', Z.ariaCyber(pct(x.excl), pct(cyberShare(x.excl))));
       const link = (a: Holder, b: Holder, w: number, col: string, dash = ''): void => {
         const [x1, y1] = POS[a], [x2, y2] = POS[b];
         svg('line', { x1, y1, x2, y2, stroke: col, 'stroke-width': w.toFixed(1), 'stroke-linecap': 'round', 'stroke-opacity': 0.6, ...(dash ? { 'stroke-dasharray': dash } : {}) }, stage);
@@ -335,81 +335,83 @@ export function mount(container: HTMLElement): () => void {
       for (const h of ['a', 'b', 's'] as Holder[]) {
         const [cx, cy] = POS[h];
         svg('circle', { cx, cy, r: 19, ...NODE, 'stroke-width': h === 's' ? 3 : 1.6 }, stage);
-        T(stage, cx, cy + 4, h === 's' ? 'Sen' : h.toUpperCase(), 't1');
+        T(stage, cx, cy + 4, h === 's' ? Z.you : h.toUpperCase(), 't1');
       }
-      T(stage, 64, 82, 'Oyuncu A'); T(stage, 296, 82, 'Oyuncu B');
+      T(stage, 64, 82, Z.playerA); T(stage, 296, 82, Z.playerB);
       cyTxt = T(stage, 8, 172, '', 'st', 'start');
-      T(stage, 352, 172, x.glitch ? 'Bildirim: bağlantı arızası' : 'Bildirim: yok', 'st', 'end');
+      T(stage, 352, 172, x.glitch ? Z.noticeGlitch : Z.noticeNone, 'st', 'end');
       ball = svg('circle', { r: 6, fill: 'var(--dop)', stroke: 'var(--ink)', 'stroke-width': 1.2 }, stage);
       placeBall();
     } else if (S.card === 'insula') {
-      stage.setAttribute('aria-label', `Bozuk tat ve ahlaki ihlal aynı bölgeyi, insulayı çalıştırır. İnsula etkinliği ${n100(g.ins)} puan.`);
+      stage.setAttribute('aria-label', Z.ariaInsula(n100(g.ins)));
       const ins = g.ins;
-      box(stage, 6, 18, 104, 44, ['Bozuk tat', 'fiziksel iğrenme'], 'var(--gld)', 0.12 + 0.4 * x.gross);
-      box(stage, 6, 110, 104, 44, ['Ahlaki ihlal', 'adaletsiz teklif'], 'var(--amy)', 0.12 + 0.4 * x.viol);
+      box(stage, 6, 18, 104, 44, [Z.badTaste, Z.physDisgust], 'var(--gld)', 0.12 + 0.4 * x.gross);
+      box(stage, 6, 110, 104, 44, [Z.moralViol, Z.unfairOffer], 'var(--amy)', 0.12 + 0.4 * x.viol);
       arrow(stage, 112, 42, 152, 72, 1.5 + 4 * x.gross, 'var(--gld)');
       arrow(stage, 112, 132, 152, 98, 1.5 + 4 * x.viol, 'var(--amy)');
       svg('circle', { cx: 180, cy: 86, r: 30, fill: 'var(--amy)', 'fill-opacity': (0.1 + 0.7 * ins).toFixed(2), stroke: 'var(--ink)', 'stroke-width': 2 }, stage);
-      T(stage, 180, 134, 'Ön insula', 't1');
-      T(stage, 180, 148, `etkinlik ${n100(ins)}`);
+      T(stage, 180, 134, Z.antInsula, 't1');
+      T(stage, 180, 148, Z.activity(n100(ins)));
       arrow(stage, 210, 72, 248, 42, 1.5 + 4 * ins, 'var(--edge)');
       arrow(stage, 210, 100, 248, 132, 1.5 + 4 * ins, 'var(--edge)');
-      box(stage, 250, 18, 104, 44, ['Yargı sertleşir', 'tartışmalı'], 'var(--dop)', 0.1 + 0.5 * clamp((cur.sev - 0.5) * 4));
-      box(stage, 250, 110, 104, 44, ['Teklif reddedilir', 'sağlam'], 'var(--dop)', 0.1 + 0.5 * cur.rej);
+      box(stage, 250, 18, 104, 44, [Z.judgeHarsher, stText('tartışmalı')], 'var(--dop)', 0.1 + 0.5 * clamp((cur.sev - 0.5) * 4));
+      box(stage, 250, 110, 104, 44, [Z.offerRejected, stText('sağlam')], 'var(--dop)', 0.1 + 0.5 * cur.rej);
     } else if (S.card === 'cup') {
       const t = 2 * x.temp - 1, hot = t > 0.1, cold = t < -0.1;
       const col = hot ? 'var(--dop)' : cold ? 'var(--pfc)' : 'var(--lesion)';
-      stage.setAttribute('aria-label', `Elde ${hot ? 'sıcak' : cold ? 'buzlu' : 'ılık'} bir fincan. Kişiyi sıcak bulma ${n100(cur.warm)} puan.`);
+      const cupW = hot ? Z.cupHot : cold ? Z.cupCold : Z.cupMild;
+      stage.setAttribute('aria-label', Z.ariaCup(cupW, n100(cur.warm)));
       svg('path', { d: 'M70 64 H130 V108 Q130 134 100 134 Q70 134 70 108 Z', fill: col, 'fill-opacity': (0.25 + 0.55 * Math.abs(t)).toFixed(2), stroke: 'var(--ink)', 'stroke-width': 2 }, stage);
       svg('path', { d: 'M130 76 Q152 76 152 94 Q152 112 130 112', fill: 'none', stroke: 'var(--ink)', 'stroke-width': 2 }, stage);
       if (hot) for (const dx of [84, 100, 116]) svg('path', { d: `M${dx} 54 q-6 -8 0 -16 q6 -8 0 -16`, fill: 'none', stroke: 'var(--dop)', 'stroke-width': 2.2, 'stroke-linecap': 'round', 'stroke-opacity': 0.4 + 0.6 * t }, stage);
       if (cold) for (const [dx, dy] of [[84, 82], [104, 92], [90, 108]]) svg('rect', { x: dx, y: dy, width: 14, height: 14, rx: 3, fill: 'var(--panel)', stroke: 'var(--pfc)', 'stroke-width': 1.8, transform: `rotate(12 ${dx + 7} ${dy + 7})` }, stage);
-      T(stage, 100, 156, `Elde: ${hot ? 'sıcak' : cold ? 'buzlu' : 'ılık'} kahve`, 't1');
+      T(stage, 100, 156, Z.inHand(cupW), 't1');
       arrow(stage, 168, 92, 238, 92, 3, 'var(--edge)');
-      T(stage, 203, 82, 'yargı kayar');
+      T(stage, 203, 82, Z.judgeShifts);
       svg('circle', { cx: 290, cy: 62, r: 20, ...NODE }, stage);
       svg('path', { d: 'M254 128 Q254 94 290 94 Q326 94 326 128 Z', ...NODE }, stage);
       const mood = (cur.warm - 0.5) * 18;
       svg('path', { d: `M281 68 Q290 ${72 + mood} 299 68`, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1.8, 'stroke-linecap': 'round' }, stage);
-      T(stage, 290, 156, 'Tanımlanan kişi', 't1');
+      T(stage, 290, 156, Z.describedPerson, 't1');
     } else if (S.card === 'clip') {
       const w = 2 * x.weight - 1;
-      stage.setAttribute('aria-label', `Pano ${x.weight > 0.65 ? 'ağır' : x.weight < 0.35 ? 'hafif' : 'orta'}. Adayı ciddi bulma ${n100(cur.ser)} puan.`);
+      const clipW = x.weight > 0.65 ? Z.clipHeavy : x.weight < 0.35 ? Z.clipLight : Z.clipMid;
+      stage.setAttribute('aria-label', Z.ariaClip(clipW, n100(cur.ser)));
       svg('rect', { x: 110, y: 22, width: 100, height: 126, rx: 8, fill: 'var(--panel)', stroke: 'var(--ink)', 'stroke-width': (2 + 3.5 * x.weight).toFixed(1) }, stage);
       svg('rect', { x: 140, y: 14, width: 40, height: 14, rx: 4, fill: 'var(--ink)' }, stage);
       svg('rect', { x: 124, y: 40, width: 72, height: 98, rx: 3, fill: 'none', stroke: 'var(--line)', 'stroke-width': 1.5 }, stage);
       for (const dy of [54, 68, 82, 96, 110]) svg('line', { x1: 132, x2: dy % 28 ? 186 : 170, y1: dy, y2: dy, stroke: 'var(--muted)', 'stroke-width': 2, 'stroke-linecap': 'round' }, stage);
-      T(stage, 160, 166, 'Aday özgeçmişi', 't1');
+      T(stage, 160, 166, Z.candidateResume, 't1');
       const len = 20 + 44 * x.weight;
       arrow(stage, 262, 40, 262, 40 + len, 2 + 3 * x.weight, 'var(--pfc)');
-      T(stage, 262, 148, x.weight > 0.65 ? 'ağır' : x.weight < 0.35 ? 'hafif' : 'orta', 't1');
+      T(stage, 262, 148, clipW, 't1');
       const mood = clamp(0.5 + w * 0.5);
       svg('rect', { x: 296, y: 40, width: 50, height: 14, rx: 7, fill: 'none', stroke: 'var(--edge)', 'stroke-width': 1.4 }, stage);
       svg('rect', { x: 297, y: 41, width: Math.max(2, 48 * mood), height: 12, rx: 6, fill: 'var(--pfc)', 'fill-opacity': 0.7 }, stage);
-      T(stage, 321, 72, 'ciddi');
+      T(stage, 321, 72, Z.serious);
     } else if (S.card === 'macbeth') {
-      stage.setAttribute('aria-label', `Ahlaki leke ${n100(x.mviol)} puan; gargara isteği ${n100(cur.gar)}, sabun isteği ${n100(cur.sab)}.`);
+      stage.setAttribute('aria-label', Z.ariaMac(n100(x.mviol), n100(cur.gar), n100(cur.sab)));
       svg('circle', { cx: 56, cy: 78, r: 26, fill: 'var(--red)', 'fill-opacity': (0.1 + 0.6 * x.mviol).toFixed(2), stroke: 'var(--ink)', 'stroke-width': 2 }, stage);
-      T(stage, 56, 124, 'Ahlaki leke', 't1'); T(stage, 56, 138, x.chan ? 'yazılı yalan' : 'sözlü yalan');
+      T(stage, 56, 124, Z.stain, 't1'); T(stage, 56, 138, x.chan ? Z.lieWritten : Z.lieSpoken);
       arrow(stage, 86, 70, 188, 44, 1.5 + 5 * (cur.gar - 0.3) / 0.4, 'var(--edge)', x.chan ? '3 4' : '');
       arrow(stage, 86, 90, 188, 124, 1.5 + 5 * (cur.sab - 0.3) / 0.4, 'var(--edge)', x.chan ? '' : '3 4');
-      box(stage, 192, 20, 160, 48, ['Ağız: gargara', `istek ${n100(cur.gar)}`], 'var(--gld)', 0.08 + 0.5 * (cur.gar - 0.3) / 0.4);
-      box(stage, 192, 104, 160, 48, [x.washed ? 'El: sabun (yıkadı)' : 'El: sabun', `istek ${n100(cur.sab)}`], 'var(--gld)', 0.08 + 0.5 * (cur.sab - 0.3) / 0.4);
-      T(stage, 272, 87, x.washed ? 'yıkadı: yardım azalır' : 'yıkamadı: telafi yardımı');
+      box(stage, 192, 20, 160, 48, [Z.mouthBox, Z.wish(n100(cur.gar))], 'var(--gld)', 0.08 + 0.5 * (cur.gar - 0.3) / 0.4);
+      box(stage, 192, 104, 160, 48, [x.washed ? Z.handBoxWashed : Z.handBox, Z.wish(n100(cur.sab))], 'var(--gld)', 0.08 + 0.5 * (cur.sab - 0.3) / 0.4);
+      T(stage, 272, 87, x.washed ? Z.washedNote : Z.notWashedNote);
     } else {
-      stage.setAttribute('aria-label', `Hastalık dili %${n100(x.lang)}; göçe karşı tutum ${n100(cur.imm)} puan; ekonomi tutumu değişmedi.`);
+      stage.setAttribute('aria-label', Z.ariaGerm(pct(x.lang), n100(cur.imm)));
       for (let i = 0; i < 8; i++) { const a = (i * Math.PI) / 4; svg('line', { x1: 50 + Math.cos(a) * 16, y1: 80 + Math.sin(a) * 16, x2: 50 + Math.cos(a) * 26, y2: 80 + Math.sin(a) * 26, stroke: 'var(--red)', 'stroke-width': 2.4, 'stroke-linecap': 'round' }, stage); }
       svg('circle', { cx: 50, cy: 80, r: 16, fill: 'var(--red)', 'fill-opacity': (0.15 + 0.6 * x.lang).toFixed(2), stroke: 'var(--ink)', 'stroke-width': 1.8 }, stage);
-      T(stage, 50, 126, 'Bakteri ve', 't1'); T(stage, 50, 139, 'bulaşma dili', 't1');
+      T(stage, 50, 126, Z.germLang1, 't1'); T(stage, 50, 139, Z.germLang2, 't1');
       arrow(stage, 84, 80, 124, 80, 1.5 + 4 * x.lang, 'var(--red)');
       svg('ellipse', { cx: 180, cy: 80, rx: 46, ry: 32, ...NODE }, stage);
-      T(stage, 180, 77, 'Toplum bir', 't1'); T(stage, 180, 91, 'beden gibi', 't1');
+      T(stage, 180, 77, Z.society1, 't1'); T(stage, 180, 91, Z.society2, 't1');
       arrow(stage, 230, 80, 262, 80, 1.5 + 4 * x.lang, 'var(--red)');
-      box(stage, 266, 34, 88, 44, ['Göç', 'karşıtı tutum'], 'var(--red)', 0.08 + 0.55 * (cur.imm - 0.4) / 0.3);
-      box(stage, 266, 98, 88, 44, ['Ekonomi', 'tutumu'], 'var(--lesion)', 0.08);
-      T(stage, 354, 160, 'değişmez (kontrol)', 't2', 'end');
+      box(stage, 266, 34, 88, 44, [Z.antiImm1, Z.antiImm2], 'var(--red)', 0.08 + 0.55 * (cur.imm - 0.4) / 0.3);
+      box(stage, 266, 98, 88, 44, [Z.econ1, Z.econ2], 'var(--lesion)', 0.08);
+      T(stage, 354, 160, Z.unchanged, 't2', 'end');
     }
-    $('stageKey').textContent = STAGE_KEY[S.card];
+    $('stageKey').textContent = X.stageKey[S.card];
   }
 
   // Cyberball animasyonu: top atışları (tohumlu); az hareket tercihinde durur.
@@ -423,7 +425,7 @@ export function mount(container: HTMLElement): () => void {
     const sx = x1 + ux * 25, sy = y1 + uy * 25, ex = x2 - ux * 25, ey = y2 - uy * 25;
     ball.setAttribute('cx', (sx + (ex - sx) * t).toFixed(1));
     ball.setAttribute('cy', (sy + (ey - sy) * t - Math.sin(Math.PI * t) * 10).toFixed(1));
-    if (cyTxt) cyTxt.textContent = reduced ? `Beklenen pay: sana gelen atış %${n100(cyberShare(S.x.excl))} (adil oyunda %33)` : `Sana atılan: ${c.got} / ${c.throws} (kuramsal pay %${n100(cyberShare(S.x.excl))})`;
+    if (cyTxt) { const Z = L().st, sh = pct(cyberShare(S.x.excl)); cyTxt.textContent = reduced ? Z.cyReduced(sh, pct(1 / 3)) : Z.cyLive(c.got, c.throws, sh); }
   }
   function restartCyber(seed: number): void {
     S.cy = { rnd: mulberry32(seed), seed, holder: 'a', to: 'b', t: 0, throws: 0, got: 0 };
@@ -447,8 +449,8 @@ export function mount(container: HTMLElement): () => void {
   ovsEl.innerHTML = CARD_IDS.map((c) => {
     const s = maxShift(c);
     return `<button type="button" class="ov" data-card="${c}" aria-pressed="false"><span class="ov-n">${CARDS[c].short}</span><span class="ov-t">${Array.from(new Set(CARDS[c].exps.map((e) => e.status))).map(tag).join('')}</span>` +
-      `<span class="ov-r"><span>kitap</span><span class="track" style="--c:var(--dop)"><b style="width:${s.book}%"></b></span><b>${s.book}</b></span>` +
-      `<span class="ov-r"><span>replik.</span><span class="track" style="--c:var(--pfc)"><b style="width:${s.repl}%"></b></span><b>${s.repl}</b></span></button>`;
+      `<span class="ov-r"><span>${L().ovBook}</span><span class="track" style="--c:var(--dop)"><b style="width:${s.book}%"></b></span><b>${s.book}</b></span>` +
+      `<span class="ov-r"><span>${L().ovRepl}</span><span class="track" style="--c:var(--pfc)"><b style="width:${s.repl}%"></b></span><b>${s.repl}</b></span></button>`;
   }).join('');
   const ovBtns = Array.from(ovsEl.querySelectorAll<HTMLButtonElement>('.ov'));
   for (const b of ovBtns) scope.on(b, 'click', () => selectCard(b.dataset.card as CardId));
@@ -461,28 +463,28 @@ export function mount(container: HTMLElement): () => void {
     ctlSync.forEach((f) => f());
     $('cTitle').textContent = c.name;
     $('cTags').innerHTML = Array.from(new Set(c.exps.map((e) => e.status))).map(tag).join('') + `<span class="exps">${c.exps.map((e) => e.label).join(' · ')}</span>`;
-    $('cMeta').textContent = `Metafor: ${c.metaphor}`;
-    $('cNote').textContent = `Replikasyon: ${c.note}`;
+    $('cMeta').textContent = L().metaphorLine(c.metaphor);
+    $('cNote').textContent = L().replLine(c.note);
     drawStage();
     drawGauges();
     const gs = gauges(S.card, S.x), g = gs.find((q) => q.key === c.bar)!;
     setBar(describeCard(S.card, S.x, S.mode), [
-      { label: 'Seçili okuma', text: n100(g[S.mode]), frac: g[S.mode], color: S.mode === 'book' ? 'var(--dop)' : 'var(--pfc)' },
-      { label: 'Kitabın iddiası', text: n100(g.book), frac: g.book, color: 'var(--dop)' },
-      { label: 'Replik. sonrası', text: n100(g.repl), frac: g.repl, color: 'var(--pfc)' },
+      { label: L().meterSel, text: n100(g[S.mode]), frac: g[S.mode], color: S.mode === 'book' ? 'var(--dop)' : 'var(--pfc)' },
+      { label: L().meterBook, text: n100(g.book), frac: g.book, color: 'var(--dop)' },
+      { label: L().meterRepl, text: n100(g.repl), frac: g.repl, color: 'var(--pfc)' },
     ]);
   }
 
   /* =====================================================================
      2 · Kutsal değerler
      ===================================================================== */
-  const syncKind = chipGroup($('kindChips'), KINDS, (k) => { S.kind = k; });
+  const syncKind = chipGroup($('kindChips'), KIND_IDS.map((k) => ({ k, name: L().kinds[k] })), (k) => { S.kind = k; });
   const sizeSl = makeSlider($('kSl'), {
-    name: 'Teklifin büyüklüğü', hint: 'Maddi: para, toprak, yardım. Sembolik: özür, karşı tarafın değerini tanıma.',
+    name: L().sizeName, hint: L().sizeHint,
     min: 0, max: 100, step: 5, val: S.size * 100, fmt: p0, cb: (v) => { S.size = v / 100; dirty = true; }, color: 'var(--dop)',
   });
   const sacSl = makeSlider($('kSl'), {
-    name: 'Konunun kutsallığı (ortalama)', hint: '0: sıradan çıkar. 100: kimliğin parçası, pazarlığa kapalı.',
+    name: L().sacName, hint: L().sacHint,
     min: 0, max: 100, step: 5, val: S.sacred * 100, fmt: p0, cb: (v) => { S.sacred = v / 100; dirty = true; }, color: 'var(--amy)',
   });
   scope.on($('rerun'), 'click', () => { S.seed++; dirty = true; });
@@ -496,14 +498,14 @@ export function mount(container: HTMLElement): () => void {
   }
   function drawChart(): void {
     chart.textContent = '';
-    chart.setAttribute('aria-label', `Teklif büyüklüğüne göre uzlaşmaya destek. Kutsallık %${n100(S.sacred)}. ${describeSacred(S.sacred, S.kind, S.size)}`);
+    chart.setAttribute('aria-label', L().ariaChart(pct(S.sacred), describeSacred(S.sacred, S.kind, S.size)));
     for (const v of [0, 0.25, 0.5, 0.75, 1]) {
       svg('line', { class: 'grid', x1: CP.x0, x2: CP.x1, y1: cy(v), y2: cy(v) }, chart);
       svgText(chart, { class: 'ax', x: CP.x0 - 6, y: cy(v) + 3.5, 'text-anchor': 'end' }, n100(v));
     }
     for (const z of [0, 0.5, 1]) svgText(chart, { class: 'ax', x: cx(z), y: CP.y0 + 14, 'text-anchor': 'middle' }, p0(z * 100));
-    svgText(chart, { class: 'ax', x: (CP.x0 + CP.x1) / 2, y: 196, 'text-anchor': 'middle' }, 'teklifin büyüklüğü');
-    svgText(chart, { class: 'ax', x: 6, y: 10, 'text-anchor': 'start' }, 'destek %');
+    svgText(chart, { class: 'ax', x: (CP.x0 + CP.x1) / 2, y: 196, 'text-anchor': 'middle' }, L().axSize);
+    svgText(chart, { class: 'ax', x: 6, y: 10, 'text-anchor': 'start' }, L().axSupport);
     svg('path', { d: curve(0, 'maddi'), class: 'ln', stroke: 'var(--lesion)', 'stroke-width': 1.6, 'stroke-dasharray': '2 4' }, chart);
     svg('path', { d: curve(S.sacred, 'maddi'), class: 'ln', stroke: 'var(--dop)' }, chart);
     svg('path', { d: curve(S.sacred, 'sembolik'), class: 'ln', stroke: 'var(--pfc)', 'stroke-dasharray': '7 4' }, chart);
@@ -511,11 +513,11 @@ export function mount(container: HTMLElement): () => void {
     const { m, y } = offerParts(S.kind, S.size);
     svg('circle', { cx: cx(S.size), cy: cy(expectedSupport(S.sacred, m, y)), r: 6, fill: 'var(--ink)', stroke: 'var(--panel)', 'stroke-width': 2 }, chart);
     $('chartKey').innerHTML =
-      `<span>${sw(26, '<path d="M1 6H25" stroke="var(--dop)" stroke-width="2.4"/>')}maddi teklif</span>` +
-      `<span>${sw(26, '<path d="M1 6H25" stroke="var(--pfc)" stroke-width="2.4" stroke-dasharray="7 4"/>')}sembolik jest</span>` +
-      `<span>${sw(26, '<path d="M1 6H25" stroke="var(--lesion)" stroke-width="1.8" stroke-dasharray="2 4"/>')}sıradan çıkarda maddi teklif</span>` +
-      (S.kind === 'karma' ? `<span>${sw(26, '<path d="M1 6H25" stroke="var(--gld)" stroke-width="2.4"/>')}ikisi birlikte</span>` : '') +
-      `<span>${sw(14, '<circle cx="7" cy="6" r="5" fill="var(--ink)"/>')}seçili teklif</span>`;
+      `<span>${sw(26, '<path d="M1 6H25" stroke="var(--dop)" stroke-width="2.4"/>')}${L().keyMaterial}</span>` +
+      `<span>${sw(26, '<path d="M1 6H25" stroke="var(--pfc)" stroke-width="2.4" stroke-dasharray="7 4"/>')}${L().keySymbolic}</span>` +
+      `<span>${sw(26, '<path d="M1 6H25" stroke="var(--lesion)" stroke-width="1.8" stroke-dasharray="2 4"/>')}${L().keyOrdinary}</span>` +
+      (S.kind === 'karma' ? `<span>${sw(26, '<path d="M1 6H25" stroke="var(--gld)" stroke-width="2.4"/>')}${L().keyBoth}</span>` : '') +
+      `<span>${sw(14, '<circle cx="7" cy="6" r="5" fill="var(--ink)"/>')}${L().keySelected}</span>`;
   }
 
   const crowd = $<SVGElement>('crowd');
@@ -523,14 +525,14 @@ export function mount(container: HTMLElement): () => void {
     crowd.textContent = '';
     const { m, y } = offerParts(S.kind, S.size);
     const c = simulateCrowd(S.sacred, m, y, S.seed);
-    crowd.setAttribute('aria-label', `100 kişiden ${c.accept} kabul, ${c.reject} ret, ${c.angry} ret ve öfke.`);
+    crowd.setAttribute('aria-label', L().ariaCrowd(c.accept, c.reject, c.angry));
     c.dots.forEach((d, i) => {
       const px = 22 + (i % 10) * 35.5, py = 12 + Math.floor(i / 10) * 14.5;
       if (d === 'a') svg('circle', { cx: px, cy: py, r: 5, fill: 'var(--gld)' }, crowd);
       else if (d === 'r') svg('circle', { cx: px, cy: py, r: 4, fill: 'none', stroke: 'var(--edge)', 'stroke-width': 1.8 }, crowd);
       else svg('path', { d: `M${px - 4.5} ${py - 4.5}L${px + 4.5} ${py + 4.5}M${px + 4.5} ${py - 4.5}L${px - 4.5} ${py + 4.5}`, stroke: 'var(--amy)', 'stroke-width': 2.4, 'stroke-linecap': 'round' }, crowd);
     });
-    svgText(crowd, { class: 'ax', x: 352, y: 160, 'text-anchor': 'end' }, `kabul ${c.accept} · ret ${c.reject} · öfke ${c.angry}`);
+    svgText(crowd, { class: 'ax', x: 352, y: 160, 'text-anchor': 'end' }, L().crowdTotals(c.accept, c.reject, c.angry));
   }
 
   function renderKut(): void {
@@ -540,42 +542,33 @@ export function mount(container: HTMLElement): () => void {
     const { m, y } = offerParts(S.kind, S.size);
     const sup = expectedSupport(S.sacred, m, y), back = expectedBacklash(S.sacred, m, y), ord = expectedSupport(0, m, y);
     setBar(describeSacred(S.sacred, S.kind, S.size), [
-      { label: 'Destek', text: pc(sup), frac: sup, color: 'var(--gld)' },
-      { label: 'Ters tepki', text: pc(back), frac: back, color: 'var(--amy)' },
-      { label: 'Sıradan çıkarda', text: pc(ord), frac: ord, color: 'var(--lesion)' },
+      { label: L().meterSupport, text: pct(sup), frac: sup, color: 'var(--gld)' },
+      { label: L().meterBacklash, text: pct(back), frac: back, color: 'var(--amy)' },
+      { label: L().meterOrdinary, text: pct(ord), frac: ord, color: 'var(--lesion)' },
     ]);
   }
 
   /* ---------- Turlar ---------- */
-  const tour1 = createTour(scope, [
-    { title: 'Aynı bölge, iki iğrenme', text: 'Ön insula hem bozuk yemeğe hem adaletsiz bir teklife tepki verir. Burada yemek yok, yalnızca haksız bir teklif var; insula yine yükseliyor ve teklifi reddetme eğilimi artıyor (sağlam bulgu).',
-      look: 'Bozuk tat sıfırken insula ve reddetme çubukları. Tat kaydırıcısı insulayı da, kitaba göre yargıyı da kaydırır.', apply: () => setCard('insula', { viol: 0.9 }, 'book') },
-    { title: 'Sosyal acı: Cyberball', text: 'Diğer iki oyuncu topu Sen\'e atmayı bırakınca dışlanma acısı ve ACC çubuğu yükselir. Kitapta sosyal acı, fiziksel acıyla aynı bölgeye yazılıyor.',
-      look: 'Sana gelen atış payı 1/3\'ten 0\'a iner.', apply: () => setCard('cyber', { excl: 1 }, 'book') },
-    { title: 'Anlam acıyı belirler', text: 'Aynı dışlanma bir bağlantı arızasına bağlanınca ACC etkinleşmesi görülmedi. Beyin yalnızca olanı değil, olanın ne anlama geldiğini de işliyor.',
-      look: 'dACC çubuğu çöküyor, öznel acı kısmen duruyor.', apply: () => setCard('cyber', { excl: 1, glitch: 1 }, 'book') },
-    { title: 'Sıcak fincan: kitabın iddiası', text: 'Sıcak fincan tutanlar bir kişiyi daha cana yakın bulmuş; diğer özellikler yerinde kalmış. Kitaba göre sıcaklık metaforu bedene gerçekten karışıyor.',
-      look: 'Yalnızca sıcaklık yargısı tabandan ayrılıyor, kontrol çubuğu sabit.', apply: () => setCard('cup', { temp: 1 }, 'book') },
-    { title: 'Replikasyondan sonra', text: 'Daha büyük örneklemli replikasyonlar sıcak fincan etkisini bulamadı. Ağır pano, Macbeth ve tat kartlarında da kayma tabana iner; insula-ret bağı ve dışlanma acısı ayakta kalır (aşağıdaki karşılaştırma).',
-      look: 'Dolu çubuk tabana iniyor; renkli çizgi kitabın iddiasını gösteriyor.', apply: () => setCard('cup', { temp: 1 }, 'repl') },
-    { title: 'Karışıklık çatışmaya taşınır', text: 'Bir gruba hastalık ve bulaşma diliyle seslenmek iğrenmeyi çağırır; kitap bunu insanlıktan çıkarmanın zemini sayar. Landau çalışmasında bakteri uyarısı yalnızca göç tutumunu kaydırdı; ancak doğrudan replikasyonu bilinmiyor.',
-      look: 'Göç çubuğu yükselir, ekonomi (kontrol) sabit; rozet "bilinmiyor".', apply: () => setCard('germ', { lang: 1 }, 'book') },
-  ]);
+  const tour1Apply: Array<() => void> = [
+    () => setCard('insula', { viol: 0.9 }, 'book'),
+    () => setCard('cyber', { excl: 1 }, 'book'),
+    () => setCard('cyber', { excl: 1, glitch: 1 }, 'book'),
+    () => setCard('cup', { temp: 1 }, 'book'),
+    () => setCard('cup', { temp: 1 }, 'repl'),
+    () => setCard('germ', { lang: 1 }, 'book'),
+  ];
+  const tour1 = createTour(scope, L().tour1.map((st, i) => ({ ...st, apply: tour1Apply[i] })));
   $('tour1').appendChild(tour1.el);
 
   const kut = (kind: OfferKind, size: number, sacred: number, seed = S.seed): void => { S.kind = kind; S.size = size; S.sacred = sacred; S.seed = seed; dirty = true; };
-  const tour2 = createTour(scope, [
-    { title: 'Sıradan çıkar: para işe yarar', text: 'Kutsal olmayan bir çıkar konusunda teklif büyüdükçe uzlaşmaya destek artar. Pazarlığın bildik hâli.',
-      look: 'Turuncu eğri yukarı gidiyor.', apply: () => kut('maddi', 0.7, 0) },
-    { title: 'Kutsal değer: para ters teper', text: 'Aynı teklif kutsal bir değere yöneldiğinde destek düşer ve öfke yükselir. Maddi karşılık, değeri pazarlığa açmak sayılır (Ginges ve ark. anket deneyleri).',
-      look: 'Turuncu eğri aşağı iniyor; kalabalıkta çarpılar beliriyor.', apply: () => kut('maddi', 0.7, 1) },
-    { title: 'Sembolik jest: özür ve tanıma', text: 'Özür ya da karşı tarafın değerini tanıma, maddi karşılığı olmadan desteği artırır. Kitapta taraflar bunu barışın gerekli koşulu sayıyor.',
-      look: 'Mavi kesikli eğri yukarı çıkıyor.', apply: () => kut('sembolik', 0.7, 1) },
-    { title: 'Birlikte sunulunca', text: 'Para tek başına öfke yaratırken, jestle birlikte sunulunca ters tepki silinir (modelin varsayımı). Jest, parayı rüşvet olmaktan çıkarır.',
-      look: 'Ters tepki çubuğu sıfıra yakın.', apply: () => kut('karma', 0.7, 1) },
-    { title: 'Gerçekte karışık', text: 'Toplumda herkes aynı kutsallıkta değil. Orta kutsallıkta aynı para bir kesimi ikna ederken başka kesimi öfkelendirir.',
-      look: 'Aynı teklife kabul, ret ve öfke yan yana.', apply: () => kut('maddi', 0.7, 0.5, 4) },
-  ]);
+  const tour2Apply: Array<() => void> = [
+    () => kut('maddi', 0.7, 0),
+    () => kut('maddi', 0.7, 1),
+    () => kut('sembolik', 0.7, 1),
+    () => kut('karma', 0.7, 1),
+    () => kut('maddi', 0.7, 0.5, 4),
+  ];
+  const tour2 = createTour(scope, L().tour2.map((st, i) => ({ ...st, apply: tour2Apply[i] })));
   $('tour2').appendChild(tour2.el);
 
   /* ---------- Başlangıç ve döngü ---------- */

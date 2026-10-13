@@ -250,6 +250,37 @@ export const TR = {
     { title: 'Düşük ve yüksek ihlalli toplum', text: 'Kitapta kural ihlali arttıkça yalan arttı. Hazır karışımlar yalnızca bu yönü gösterir; oranlar varsayım.', look: 'Yüksek ihlalde beklenen ödeme belirgin yüksek.' },
     { title: 'Tam yalan nadir', text: 'Kitapta hiçbir kültürde en çok kazandıran sayı sık uydurulmadı; çoğu iki atıştan yükseğini bildirdi.', look: 'Kırmızı pay küçük; tam yalan %100 olunca tek sütun.' },
   ],
+
+  /* ---------- Sayfa altı notları (notes.ts) ---------- */
+  notes: {
+    tro: {
+      p1: 'Soğuk hesap kurtarılanların sayısının logaritmasıyla büyür. Sıcak sezgi üç parçadır: ölümü seçmenin genel bedeli (kaza değilse), kişisel güç x araç olma etkileşimi (en büyük parça), küçük bir yakınlık payı. Alarm niyete değil kişisel güce bağlıdır; döngüde araç olmak alarm çıkarmaz. Fark lojistik bir kuralla "evet" olasılığına çevrilir.',
+      p2: 'Ağırlıklar kitaptaki oranlara oturtuldu (anahtar ~%67, itme ~%30, kazara ~%80); sayının etkisi modelin varsayımı. İçi boş baklava, araç olmanın kassız da itme sayıldığı "tutarlı kuralı" gösterir (kitapta mantıken ~%30).',
+      book: {
+        greene: { text: 'Greene ve ark. (2001, 2004)', note: 'Anahtar %60-70, elle itme ~%30, kazara itme ~%80; döngü %60-70 (mantıken ~%30). Sopa direnci azaltmadı (sayı yok). Denekler: ~%30 tutarlı deontolog, ~%30 tutarlı faydacı. Davranış deseni 45 ülkede doğrulandı, fMRI yorumu tartışmalı.' },
+        knobe: { text: 'Knobe (2003)', note: 'Zarar %85, yarar %23. Yorumu tartışmalı.' },
+        hamlin: { text: 'Hamlin ve ark. (2007), bebek ahlakı', note: 'ManyBabies 4 (37 laboratuvar, 567 bebek) şans düzeyi (~%49) buldu. Modele katılmadı.' },
+      },
+    },
+    pg: {
+      p1: 'Oyuncu katkısını gruptakilerin önceki tur ortalamasının hafif altında tutar (koşullu işbirliği); bu yüzden cezasız oyunda katkılar erir. Düşük katkıyı cezalandırmak (mavi oklar) cezalananı bir sonraki turda daha çok koymaya iter.',
+      p2: (e: number, mult: number, cost: number, impact: number): string => `Antisosyal eğilimli oyuncular (elmas) kendilerinden fazla verenleri cezalandırır ve karşılık verir; cezalanan işbirlikçi katkısını düşürür, ahlaklı cezalandırıcı çekinir. Oranları ortalama sosyal sermaye ve hukukla düşer (varsayım). Oyun parametreleri (${e} jeton, havuz çarpanı ${mult}, ceza maliyeti ${cost}, etkisi ${impact}) da varsayımdır.`,
+      p3: "Henrich'te yalnızca uçlar kitaptandır: Hadza %27 verir, pazar ~%90'da ~%50; 50 kişiden küçük gruplarda pozitif teklifler kabul, 5000+ kişide adaletsizler ret. Arası varsayımdır.",
+      book: {
+        herrmann: { text: 'Herrmann ve ark. (2008)', note: "ABD ve Avustralya'da cömerdi cezalandırma neredeyse yoktu; Umman ve Yunanistan'da ona harcanan para bencilliği cezalandırana harcanandan fazlaydı. Sosyal sermaye düştükçe antisosyal ceza arttı (korelasyon, kentli öğrenciler). Ülke düzeyi genelleme sınırlı." },
+        henrich: { text: 'Henrich ve ark. (2010)', note: 'Pazar ve topluluk büyüdükçe teklifler adilleşti, ceza arttı; dünya dini oranıyla üçüncü taraf cezası arttı. Kitap "yirmi beş kültür" der, kaynak makale 15 toplum kapsar (birden çok çalışma birleşmiş olabilir). Lamba ve Mace (2011): tek etnik grubun köyleri arasında da kültürler arası kadar fark; din bulgusu tutarsız.' },
+        rand: { text: 'Rand ve ark. (2012)', note: 'Hızlı karar işbirliğini artırdı; 21 laboratuvarlı kayıtlı replikasyon tekrarlayamadı. Modellenmedi.' },
+      },
+    },
+    dice: {
+      p1: 'Dürüst oyuncu ilk atışı bildirir. Haklı dürüstlük iki atıştan daha çok kazandıranı bildirir. Tam yalancı hep 5 bildirir. İki atıştan iyisinin dağılımı hesapla çıkar: 5 için 11/36, 6 için 1/36.',
+      p2: 'Ödeme düzeni (1-5 yüzdeki sayı kadar, 6 sıfır) ve hazır toplum karışımları varsayımdır; kitaptan yön gelir. Sütunlar 300 kişilik tohumlu örneklemdir, işaretler beklenen oranı gösterir.',
+      book: {
+        gachter: { text: 'Gächter ve Schulz (2016)', note: "23 ülke, 2.500'ü aşkın öğrenci. Herkes dürüst olsa her sayı altıda bir çıkardı; ülkede yolsuzluk, vergi kaçakçılığı ve seçim hilesi arttıkça yalan arttı. Çoğu kişi en yüksek sayıyı uydurmadı, iki atıştan yükseğini bildirdi. Sağlam olan zar paradigmasıdır; ülke düzeyi ilişki daha az replike edildi." },
+        cohn: { text: 'Cohn ve ark. (2014)', note: 'Bankacı kimliği hileyi ~%20 artırdı (Rahwan ve ark. 2019 bulamadı). Modellenmedi.' },
+      },
+    },
+  },
 };
 
 export type Strings = typeof TR;

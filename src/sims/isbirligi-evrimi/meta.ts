@@ -6,4 +6,5 @@ export const meta: SimMeta = {
   title: 'İşbirliğinin evrimi',
   blurb: 'Tekrarlı tutsak ikilemi ve Hamilton kuralı',
   order: 1,
+  en: { title: 'The evolution of cooperation', blurb: "Iterated prisoner's dilemma and Hamilton's rule" },
 };

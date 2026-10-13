@@ -2,6 +2,7 @@ import { mulberry32 } from '../rng';
 import { repBadge, pc } from '../ui';
 import { percent } from '../../i18n/fmt';
 import { t } from '../../i18n/t';
+import type { MsgKey } from '../../i18n/messages';
 import { L } from './text';
 import { TR } from './text.tr';
 import '../sim.css';
@@ -244,7 +245,7 @@ const TEMPLATE = (id: string) => { const T = L(); return `
   <aside class="book" aria-label="${t('sim.book')}">
     <h3 class="sim-h">${t('sim.book')}</h3>
     <ul>
-      ${BOOK.map((b, i) => `<li><a href="#/bolum/ch06?deney=${b.id}">${T.book[i].link}</a>: ${T.book[i].body} ${t('repl.badge', { s: b.bold ? `<b>${t(`repl.${b.rep}`)}</b>` : t(`repl.${b.rep}`) })}${T.book[i].tail}</li>`).join('')}
+      ${BOOK.map((b, i) => `<li><a href="#/bolum/ch06?deney=${b.id}">${T.book[i].link}</a>: ${T.book[i].body} ${t('repl.badge', { s: b.bold ? `<b>${t(`repl.${b.rep}` as MsgKey)}</b>` : t(`repl.${b.rep}` as MsgKey) })}${T.book[i].tail}</li>`).join('')}
     </ul>
   </aside>
 
@@ -265,6 +266,7 @@ export function mount(container: HTMLElement): () => void {
   const scope = new Scope();
   const id = uid('erg');
   container.innerHTML = TEMPLATE(id);
+  const T = L();
   const root = container.firstElementChild as HTMLElement;
   const $ = <T extends Element = HTMLElement>(name: string) => ref<T>(root, name);
   const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -320,7 +322,7 @@ export function mount(container: HTMLElement): () => void {
     svgText(chart1, { x: CH.x0 - 5, y: yOf(v) + 3.5, 'text-anchor': 'end' }, String(pct(v)));
   }
   for (const a of [5, 10, 15, 20, 25, 30]) svgText(chart1, { x: xOf(a), y: CH.bot + 14, 'text-anchor': 'middle' }, String(a));
-  svgText(chart1, { x: (CH.x0 + CH.x1) / 2, y: CH.bot + 28, 'text-anchor': 'middle' }, 'yaş');
+  svgText(chart1, { x: (CH.x0 + CH.x1) / 2, y: CH.bot + 28, 'text-anchor': 'middle' }, T.axisAge);
   const curvePts = (f: (a: number) => number): string => {
     const pts: string[] = [];
     for (let a = AGE_MIN; a <= AGE_MAX + 1e-9; a += 0.5) pts.push(`${xOf(a).toFixed(1)},${yOf(f(a)).toFixed(1)}`);
@@ -334,10 +336,10 @@ export function mount(container: HTMLElement): () => void {
       bot.unshift(`${xOf(a).toFixed(1)},${yOf(frontal(a)).toFixed(1)}`);
     }
     svg('polygon', { class: 'gapfill', points: top.concat(bot).join(' ') }, chart1);
-    svgText(chart1, { class: 'gaplab', x: xOf(11.5), y: yOf(0.55), 'text-anchor': 'middle' }, 'boşluk');
+    svgText(chart1, { class: 'gaplab', x: xOf(11.5), y: yOf(0.55), 'text-anchor': 'middle' }, T.gapWord);
   }
   svg('line', { class: 'ref', x1: xOf(25), x2: xOf(25), y1: CH.top, y2: CH.bot }, chart1);
-  svgText(chart1, { x: xOf(25) - 3, y: CH.bot - 5, 'text-anchor': 'end' }, 'frontal ≈ olgun');
+  svgText(chart1, { x: xOf(25) - 3, y: CH.bot - 5, 'text-anchor': 'end' }, T.frontalMature);
   const lines1 = [
     { f: greyMatter, stroke: 'var(--lesion)', cls: 'ln dash' },
     { f: myelin, stroke: 'var(--pit)', cls: 'ln dot' },
@@ -369,20 +371,20 @@ export function mount(container: HTMLElement): () => void {
     const nVis = Math.round(c.grey * NDOT);
     dotEls.forEach((d, i) => d.setAttribute('opacity', i < nVis ? '0.8' : '0'));
     fibreEls.forEach((p, i) => { p.setAttribute('stroke-width', (0.5 + 3.4 * c.myelin - i * 0.2).toFixed(2)); p.setAttribute('opacity', (0.25 + 0.7 * c.myelin).toFixed(2)); });
-    $('fval').textContent = `%${pct(c.frontal)}`;
-    $('lval').textContent = `%${pct(c.dopamine)}`;
+    $('fval').textContent = pc(c.frontal);
+    $('lval').textContent = pc(c.dopamine);
     mk1.setAttribute('x1', String(xOf(a))); mk1.setAttribute('x2', String(xOf(a)));
     [c.grey, c.myelin, c.dopamine, c.frontal].forEach((v, i) => { dots1[i].setAttribute('cx', String(xOf(a))); dots1[i].setAttribute('cy', yOf(v).toFixed(1)); });
-    $('ageV').textContent = `${a} yaş`;
+    $('ageV').textContent = T.ageN(a);
     ($('age') as HTMLInputElement).value = String(a);
-    $('age').setAttribute('aria-valuetext', `${a} yaş`);
+    $('age').setAttribute('aria-valuetext', T.ageN(a));
     Array.from($('ageChips').children).forEach((b) => b.setAttribute('aria-pressed', String((b as HTMLElement).dataset.a === String(a))));
     sayEl.textContent = describeAge(a);
-    meter(0, 'Dopamin · limbik', c.dopamine, pct(c.dopamine) + '%', 'var(--dop)');
-    meter(1, 'Frontal olgunluk', c.frontal, pct(c.frontal) + '%', 'var(--pfc)');
-    meter(2, 'Boşluk', c.gap, pct(c.gap) + '%', 'var(--amy)');
+    meter(0, T.meters1[0], c.dopamine, pct(c.dopamine) + '%', 'var(--dop)');
+    meter(1, T.meters1[1], c.frontal, pct(c.frontal) + '%', 'var(--pfc)');
+    meter(2, T.meters1[2], c.gap, pct(c.gap) + '%', 'var(--amy)');
   }
-  for (const [label, a] of [['Çocuk · 8', 8], ['Ergen · 15', 15], ['Yirmilerin başı · 21', 21], ['Yirmilerin ortası · 25', 25]] as const) {
+  for (const [label, a] of ([8, 15, 21, 25] as const).map((age, i) => [T.ageChips[i], age] as const)) {
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'chip'; b.textContent = label; b.dataset.a = String(a); b.setAttribute('aria-pressed', 'false');
     scope.on(b, 'click', () => setAge(a));
@@ -410,7 +412,7 @@ export function mount(container: HTMLElement): () => void {
   const setLight = (c: 'r' | 'y' | 'g') => {
     sc.r.setAttribute('fill', 'var(--red)'); sc.y.setAttribute('fill', 'var(--dop)'); sc.g.setAttribute('fill', 'var(--gld)');
     sc.r.setAttribute('opacity', c === 'r' ? '1' : '0.22'); sc.y.setAttribute('opacity', c === 'y' ? '1' : '0.22'); sc.g.setAttribute('opacity', c === 'g' ? '1' : '0.22');
-    sc.lightTxt.textContent = c === 'r' ? 'KIRMIZI' : c === 'y' ? 'SARI' : 'YEŞİL';
+    sc.lightTxt.textContent = c === 'r' ? T.lights.r : c === 'y' ? T.lights.y : T.lights.g;
   };
   const carAt = (x: number) => sc.car.setAttribute('transform', `translate(${x.toFixed(1)},134)`);
   const ease = (t: number) => 1 - (1 - Math.min(1, Math.max(0, t))) ** 2;
@@ -418,16 +420,16 @@ export function mount(container: HTMLElement): () => void {
   function drawScene(now: number): void {
     const r = S.round;
     peerEls.forEach((g, i) => g.setAttribute('opacity', i < S.peers ? '1' : '0'));
-    sc.note.textContent = S.peers ? `${S.peers} akran izliyor` : 'yalnız';
+    sc.note.textContent = S.peers ? T.peerWatching(S.peers) : T.alone;
     if (!r) { setLight('g'); carAt(-40); sc.cross.setAttribute('transform', 'translate(262,240)'); sc.burst.setAttribute('opacity', '0'); sc.txt.textContent = S.lastMsg; return; }
     const t = (now - r.t0) / 1000;
     if (r.phase === 'approach') {
       setLight('g'); carAt(lerp(-40, 120, ease(t / (PHASE.approach * speed))));
       sc.cross.setAttribute('transform', 'translate(262,240)'); sc.burst.setAttribute('opacity', '0');
-      sc.txt.textContent = 'Araç kavşağa yaklaşıyor...';
+      sc.txt.textContent = T.approaching;
     } else if (r.phase === 'wait') {
       setLight('y'); carAt(120);
-      sc.txt.textContent = `Sarı: kalan süre ~${remainingFromRisk(r.risk).toFixed(1)} sn, geçersen çarpışma riski %${pct(r.risk)}.`;
+      sc.txt.textContent = T.yellowWait(remainingFromRisk(r.risk).toFixed(1), pc(r.risk));
     } else {
       const k = Math.min(1, t / (PHASE.resolve * speed));
       if (r.go) {
@@ -436,9 +438,9 @@ export function mount(container: HTMLElement): () => void {
           carAt(lerp(120, 222, ease(k * 1.2)));
           sc.cross.setAttribute('transform', `translate(262,${lerp(240, 150, ease(Math.min(1, k * 1.3))).toFixed(1)})`);
           sc.burst.setAttribute('opacity', k > 0.6 ? '1' : '0');
-          sc.txt.textContent = k > 0.6 ? `Çarpışma! ${-LOSS} puan.` : 'Geçiyor...';
-        } else { carAt(lerp(120, 330, k * k * 0.5 + k * 0.5)); sc.txt.textContent = k > 0.7 ? `Güvenle geçti: +${r.points} puan.` : 'Geçiyor...'; }
-      } else { setLight('r'); carAt(lerp(120, 190, ease(k))); sc.txt.textContent = k > 0.5 ? 'Durdu: 0 puan.' : 'Duruyor...'; }
+          sc.txt.textContent = k > 0.6 ? T.crashMsg(-LOSS) : T.crossing;
+        } else { carAt(lerp(120, 330, k * k * 0.5 + k * 0.5)); sc.txt.textContent = k > 0.7 ? T.safeMsg(r.points) : T.crossing; }
+      } else { setLight('r'); carAt(lerp(120, 190, ease(k))); sc.txt.textContent = k > 0.5 ? T.stoppedMsg : T.stopping; }
     }
   }
 
@@ -457,7 +459,7 @@ export function mount(container: HTMLElement): () => void {
     const r = S.round!;
     const t = r.user ? S.utally : S.tally;
     t.n++; if (r.go) t.go++; if (r.crash) t.crash++; t.score += r.points;
-    S.lastMsg = r.go ? (r.crash ? `Çarpışma! ${-LOSS} puan.` : `Güvenle geçti: +${r.points} puan.`) : 'Durdu: 0 puan.';
+    S.lastMsg = r.go ? (r.crash ? T.crashMsg(-LOSS) : T.safeMsg(r.points)) : T.stoppedMsg;
     S.round = null;
     syncButtons();
     dirty = true;
@@ -500,7 +502,7 @@ export function mount(container: HTMLElement): () => void {
     if (S.round) return;
     const p = { age: groupAge(S.group), peers: S.peers, reward: S.reward };
     for (let i = 0; i < 50; i++) { const r = agentRound(S.rng, p); S.tally.n++; if (r.go) S.tally.go++; if (r.crash) S.tally.crash++; S.tally.score += r.points; }
-    S.lastMsg = '50 tur çalıştırıldı.';
+    S.lastMsg = T.batchDone;
     dirty = true; render(); announce();
   });
   scope.on($('reset'), 'click', () => { resetTally(true); dirty = true; render(); });
@@ -516,9 +518,9 @@ export function mount(container: HTMLElement): () => void {
     ($('rew') as HTMLInputElement).value = String(Math.round(S.reward * 100));
     const gName = GROUPS[groupIdx()].name;
     $('grpV').textContent = gName; $('grp').setAttribute('aria-valuetext', gName);
-    $('peersV').textContent = S.peers === 0 ? 'yalnız' : `${S.peers} akran`; $('peers').setAttribute('aria-valuetext', $('peersV').textContent);
-    const rl = S.reward < 0.25 ? 'küçük' : S.reward > 0.75 ? 'büyük' : 'orta';
-    $('rewV').textContent = `${rl} (+${pointsFor(S.reward)} puan)`; $('rew').setAttribute('aria-valuetext', $('rewV').textContent);
+    $('peersV').textContent = S.peers === 0 ? T.alone : T.peersVal(S.peers); $('peers').setAttribute('aria-valuetext', $('peersV').textContent);
+    const rl = S.reward < 0.25 ? T.rewardLevels.small : S.reward > 0.75 ? T.rewardLevels.big : T.rewardLevels.mid;
+    $('rewV').textContent = T.rewardVal(rl, pointsFor(S.reward)); $('rew').setAttribute('aria-valuetext', $('rewV').textContent);
   };
   const configChanged = () => { resetTally(); S.lastMsg = ''; dirty = true; render(); };
   scope.on($('grp'), 'input', () => { S.group = GROUPS[Number(($('grp') as HTMLInputElement).value)].id; configChanged(); });
@@ -554,8 +556,8 @@ export function mount(container: HTMLElement): () => void {
     svg('line', { class: 'grid', x1: C3.x0, x2: C3.x1, y1: y3(v), y2: y3(v) }, chart3);
     svgText(chart3, { x: C3.x0 - 5, y: y3(v) + 3.5, 'text-anchor': 'end' }, String(pct(v)));
   }
-  [['küçük', 0], ['orta', 0.5], ['büyük', 1]].forEach(([l, r]) => svgText(chart3, { x: x3(r as number), y: C3.bot + 14, 'text-anchor': 'middle' }, l as string));
-  svgText(chart3, { x: (C3.x0 + C3.x1) / 2, y: C3.bot + 28, 'text-anchor': 'middle' }, 'ödül büyüklüğü');
+  [[T.rewardLevels.small, 0], [T.rewardLevels.mid, 0.5], [T.rewardLevels.big, 1]].forEach(([l, r]) => svgText(chart3, { x: x3(r as number), y: C3.bot + 14, 'text-anchor': 'middle' }, l as string));
+  svgText(chart3, { x: (C3.x0 + C3.x1) / 2, y: C3.bot + 28, 'text-anchor': 'middle' }, T.axisReward);
   const accLine = (age: number, stroke: string, cls: string) => {
     const pts = [0, 0.25, 0.5, 0.75, 1].map((r) => `${x3(r).toFixed(1)},${y3(accumbens(age, r)).toFixed(1)}`).join(' ');
     svg('polyline', { class: cls, stroke, points: pts }, chart3);
@@ -579,19 +581,19 @@ export function mount(container: HTMLElement): () => void {
       o.vp.setAttribute('y', (y2(b) - 4).toFixed(1)); o.vp.textContent = S.peers ? pct(b) + '%' : '';
       o.lab.classList.toggle('sel', i === gi);
     });
-    note2.textContent = S.peers ? '' : 'Akran sayısı 0: akranlarla çubuğu için kaydırıcıyı artır.';
+    note2.textContent = S.peers ? '' : T.chart2Note;
     accDot.setAttribute('cx', x3(S.reward).toFixed(1)); accDot.setAttribute('cy', y3(accumbens(age, S.reward)).toFixed(1));
     const t = S.mode === 'agent' ? S.tally : S.utally;
-    const who = S.mode === 'agent' ? 'Ajan' : 'Sen';
+    const who = S.mode === 'agent' ? T.agent : T.you;
     const exp = riskRate(p);
     $('tally').textContent = t.n
-      ? `${who}: ${t.n} tur, ${t.go} kez geçti (%${pct(t.go / t.n)}), ${t.crash} çarpışma, toplam ${t.score} puan.` + (S.mode === 'agent' ? ` Modelin beklentisi %${pct(exp)}.` : ` Aynı ayarda ${GROUPS[gi].name.toLowerCase()} ajanın beklentisi %${pct(exp)}. Akran ve yaş grubu yalnızca ajanı etkiler; sen oynarken akranlar seyirci olarak görünür.`)
-      : (S.mode === 'agent' ? 'Henüz tur yok. Ajan 1 tur ya da 50 tur çalıştır; ayar değişince sayım sıfırlanır.' : 'Henüz tur yok. Yeni tur başlat, sarıda Geç ya da Dur seç.');
+      ? T.tallyLine(who, t.n, t.go, pc(t.go / t.n), t.crash, t.score) + (S.mode === 'agent' ? T.tallyAgent(pc(exp)) : T.tallyUser(T.groupsLc[S.group], pc(exp)))
+      : (S.mode === 'agent' ? T.tallyEmptyAgent : T.tallyEmptyUser);
     const rs = rewardSignal(p), ct = control(p);
     sayEl.textContent = describeDrive(S.group, S.peers, S.reward);
-    meter(0, 'Risk alma oranı', exp, pct(exp) + '%', 'var(--amy)');
-    meter(1, 'Ödül sinyali · accumbens', rs / 2.2, pct(rs / 2.2) + '%', 'var(--dop)');
-    meter(2, 'Frontal denetim', ct, pct(ct) + '%', 'var(--pfc)');
+    meter(0, T.meters2[0], exp, pct(exp) + '%', 'var(--amy)');
+    meter(1, T.meters2[1], rs / 2.2, pct(rs / 2.2) + '%', 'var(--dop)');
+    meter(2, T.meters2[2], ct, pct(ct) + '%', 'var(--pfc)');
   }
 
   // ---------- 3. Haber güncelleme ----------
@@ -602,7 +604,7 @@ export function mount(container: HTMLElement): () => void {
     scope.on(b, 'click', () => setProfile(pr.id));
     profChips.appendChild(b);
   }
-  for (const [k, label] of [['auto', 'Haber: olayın kendi olasılığı'], ['good', 'İyi haber'], ['bad', 'Kötü haber']] as const) {
+  for (const [k, label] of ([['auto', T.kindChips[0]], ['good', T.kindChips[1]], ['bad', T.kindChips[2]]] as const)) {
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'chip'; b.textContent = label; b.dataset.k = k; b.setAttribute('aria-pressed', 'false');
     scope.on(b, 'click', () => { S.kind = k; dirty = true; render(); });
@@ -620,7 +622,7 @@ export function mount(container: HTMLElement): () => void {
     S.base = S.est;
     S.news = n;
     S.answered = false;
-    S.last = n ? '' : 'Tahmin gerçeğe çok yakın: bu olayda haber yok. Başka olay seç ya da tahmini değiştir.';
+    S.last = n ? '' : T.noNews;
     const sec = S.news ? Math.round(S.est) : S.est;
     ($('sec') as HTMLInputElement).value = String(sec);
     dirty = true; render();
@@ -641,13 +643,13 @@ export function mount(container: HTMLElement): () => void {
     svg('line', { class: 'grid', x1: C4.x0, x2: C4.x1, y1: y4(v), y2: y4(v) }, chart4);
     svgText(chart4, { x: C4.x0 - 5, y: y4(v) + 3.5, 'text-anchor': 'end' }, String(pct(v)));
   }
-  const clusters = [...PROFILES.map((p) => p.name), 'Sen'];
+  const clusters = [...PROFILES.map((p) => p.name), T.you];
   const bars4 = clusters.map((name, i) => {
     const cx = C4.x0 + ((i + 0.5) / clusters.length) * (C4.x1 - C4.x0);
     const mk = (dx: number, cls: string) => svg('rect', { class: cls, x: cx + dx, width: 16 }, chart4);
     const tx = (dx: number) => svgText(chart4, { x: cx + dx + 8, 'text-anchor': 'middle' }, '');
     const label = svgText(chart4, { class: 'glab', x: cx, y: C4.bot + 14, 'text-anchor': 'middle' }, name.replace(/ \(.*\)/, ''));
-    const sub = svgText(chart4, { class: 'glab sm', x: cx, y: C4.bot + 26, 'text-anchor': 'middle' }, (name.match(/\((\d+)\)/) ?? [])[1] ? (name.match(/\((\d+)\)/) as RegExpMatchArray)[1] + ' yaş' : '');
+    const sub = svgText(chart4, { class: 'glab sm', x: cx, y: C4.bot + 26, 'text-anchor': 'middle' }, (name.match(/\((\d+)\)/) ?? [])[1] ? T.ageN(Number((name.match(/\((\d+)\)/) as RegExpMatchArray)[1])) : '');
     void label; void sub;
     return { g: mk(-18, 'bar-g'), b: mk(2, 'bar-b'), tg: tx(-18), tb: tx(2) };
   });
@@ -665,7 +667,7 @@ export function mount(container: HTMLElement): () => void {
     Array.from(profChips.children).forEach((b) => b.setAttribute('aria-pressed', String((b as HTMLElement).dataset.p === S.profile)));
     Array.from(kindChips.children).forEach((b) => b.setAttribute('aria-pressed', String((b as HTMLElement).dataset.k === S.kind)));
     const ev = EVENTS[S.ev];
-    $('evK').textContent = `Olay ${S.ev + 1} / ${EVENTS.length}`;
+    $('evK').textContent = T.eventOf(S.ev + 1, EVENTS.length);
     $('evT').textContent = ev.name;
     ($('est') as HTMLInputElement).value = String(S.est);
     $('estV').textContent = S.est + '%'; $('est').setAttribute('aria-valuetext', S.est + '%');
@@ -674,8 +676,8 @@ export function mount(container: HTMLElement): () => void {
     if (S.news) {
       const n = S.news;
       $('newsTxt').innerHTML = n.kind === 'good'
-        ? `<b class="k-good">İyi haber:</b> gerçek olasılık %${n.actual}, düşündüğünden ${n.gap} puan düşük.`
-        : `<b class="k-bad">Kötü haber:</b> gerçek olasılık %${n.actual}, düşündüğünden ${n.gap} puan yüksek.`;
+        ? T.goodNews(percent(String(n.actual)), n.gap)
+        : T.badNews(percent(String(n.actual)), n.gap);
       ($('sec').closest('.sl') as HTMLElement).hidden = false;
       $('upd').parentElement!.hidden = false;
       $('secV').textContent = ($('sec') as HTMLInputElement).value + '%';
@@ -686,7 +688,7 @@ export function mount(container: HTMLElement): () => void {
       });
       if (S.answered) {
         const sec = Number(($('sec') as HTMLInputElement).value);
-        li.push(`<li class="me"><span>Sen</span><span class="v">${Math.round(S.base)}% → ${sec}% (${sec - S.base >= 0 ? '+' : '−'}${Math.abs(Math.round(sec - S.base))})</span></li>`);
+        li.push(`<li class="me"><span>${T.you}</span><span class="v">${Math.round(S.base)}% → ${sec}% (${sec - S.base >= 0 ? '+' : '−'}${Math.abs(Math.round(sec - S.base))})</span></li>`);
       }
       $('rows').innerHTML = li.join('');
     } else {
@@ -700,9 +702,9 @@ export function mount(container: HTMLElement): () => void {
     fix(bars4[4], mine('good'), mine('bad'));
     sayEl.textContent = describeNews(S.profile);
     const g = goodRate(pr.age), b = badRate(pr.age);
-    meter(0, 'İyi haber güncellemesi', g, pct(g) + '%', 'var(--gld)');
-    meter(1, 'Kötü haber güncellemesi', b, pct(b) + '%', 'var(--amy)');
-    meter(2, 'Asimetri (puan)', asymmetry(pr.age), pct(asymmetry(pr.age)) + '', 'var(--eff)');
+    meter(0, T.meters3[0], g, pct(g) + '%', 'var(--gld)');
+    meter(1, T.meters3[1], b, pct(b) + '%', 'var(--amy)');
+    meter(2, T.meters3[2], asymmetry(pr.age), pct(asymmetry(pr.age)) + '', 'var(--eff)');
   }
 
   // ---------- Çizim ve döngü ----------
@@ -732,20 +734,13 @@ export function mount(container: HTMLElement): () => void {
   // ---------- Rehberli tur ----------
   let tour: Tour;
   const steps = [
-    { title: 'Çocuk beyni', text: '8 yaşında hem ödül sistemi hem frontal korteks düşük düzeyde. İkisi de gelişmeye başlıyor.', look: 'Beyin silüetinin soluk renkleri ve çizelgedeki iki eğrinin düşük başlangıcı.',
-      apply: () => { selectTab(0); setAge(8); } },
-    { title: 'Ergenlikte boşluk', text: '15 yaşında dopamin sistemi tepe yapar, frontal korteks ise henüz yarı yolda. Gaz pedalı hazır, fren eksik: bu bir kusur değil, bir zamanlama farkı.', look: 'Çizelgede amber eğri ile mavi eğri arasındaki gölgeli boşluk.',
-      apply: () => { selectTab(0); setAge(15); } },
-    { title: 'Yirmilerin ortası', text: 'Frontal korteks en son olgunlaşır: 25 yaşında neredeyse tamamlanmıştır. Gri madde budanmış, miyelinli bağlantılar sağlamlaşmıştır, boşluk kapanmıştır.', look: 'Boşluğun sıfıra inmesi ve mor miyelin çizgilerinin kalınlaşması.',
-      apply: () => { selectTab(0); setAge(25); } },
-    { title: 'Yalnızken fark yok', text: 'Sarı ışık oyununda ergen, genç yetişkin ve yetişkin tek başına benzer sıklıkta geçer. Ergenin soğukkanlı muhakemesi yetişkininkine yakındır.', look: 'Üç grubun gri çubuklarının neredeyse aynı yüksekliği.',
-      apply: () => { selectTab(1); setMode('agent'); S.group = 'teen'; S.peers = 0; S.reward = 0.5; configChanged(); } },
-    { title: 'Akranlar izleyince', text: 'İki akran izlediğinde ergenin sarıda geçme oranı yaklaşık üç katına çıkar; yetişkinde neredeyse hiç değişmez. Modelde akranlar ergenin ödül sinyalini artırır, frontal denetimi azaltır.', look: 'Ergenin kırmızı çubuğu ile yetişkinin kırmızı çubuğu; ödül sinyali göstergesi.',
-      apply: () => { selectTab(1); setMode('agent'); S.group = 'teen'; S.peers = 2; S.reward = 0.5; configChanged(); } },
-    { title: 'Büyük ödül', text: 'Galvan örüntüsü: büyük ödülde ergenin accumbens tepkisi yetişkininkinin çok üstüne çıkar, küçük ödülde ise düşer. Ödül kaydırıcısını oynat; oyunu kendin de oynayabilirsin.', look: 'Accumbens grafiğinde seçili nokta; ödül büyüdükçe ergen eğrisinin yükselişi.',
-      apply: () => { selectTab(1); S.group = 'teen'; S.peers = 0; S.reward = 1; configChanged(); } },
-    { title: 'Kötü haber ve tartışma', text: 'Ergen profili iyi haberle tahminini günceller, kötü haberle neredeyse hiç. Ama bu bulgunun replikasyonu tartışmalı: asimetrinin istatistiksel bir yapaylık olabileceği öne sürüldü.', look: 'Ergen kümesinde yeşil ve kırmızı çubuk farkı; üstteki "tartışmalı" notu.',
-      apply: () => { selectTab(2); S.profile = 'teen'; S.ev = 0; S.est = 25; S.kind = 'bad'; S.nrng = mulberry32(5); giveNews(); } },
+    { ...T.tour[0], apply: () => { selectTab(0); setAge(8); } },
+    { ...T.tour[1], apply: () => { selectTab(0); setAge(15); } },
+    { ...T.tour[2], apply: () => { selectTab(0); setAge(25); } },
+    { ...T.tour[3], apply: () => { selectTab(1); setMode('agent'); S.group = 'teen'; S.peers = 0; S.reward = 0.5; configChanged(); } },
+    { ...T.tour[4], apply: () => { selectTab(1); setMode('agent'); S.group = 'teen'; S.peers = 2; S.reward = 0.5; configChanged(); } },
+    { ...T.tour[5], apply: () => { selectTab(1); S.group = 'teen'; S.peers = 0; S.reward = 1; configChanged(); } },
+    { ...T.tour[6], apply: () => { selectTab(2); S.profile = 'teen'; S.ev = 0; S.est = 25; S.kind = 'bad'; S.nrng = mulberry32(5); giveNews(); } },
   ];
   tour = createTour(scope, steps);
   $('tourHost').appendChild(tour.el);
