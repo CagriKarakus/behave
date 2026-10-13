@@ -2,26 +2,26 @@ import '../sim.css';
 import './view.css';
 import { Scope, ref, uid } from '../kit';
 import { lazyNotes, type Ctx, type Meter, type Panel } from '../ui';
+import { L } from './text';
 import { createBizPanel } from './biz-panel';
 import { createHaritaPanel } from './harita-panel';
 import { createOrtPanel } from './ort-panel';
 
 type Tab = 'ort' | 'biz' | 'harita';
-const TABS: Array<{ key: Tab; label: string }> = [
-  { key: 'ort', label: 'Ortalama mı, dağılım mı?' },
-  { key: 'biz', label: 'Biz/Onlar kaydırıcısı' },
-  { key: 'harita', label: 'Geri bakış: kitabın haritası' },
-];
+const TAB_KEYS: Tab[] = ['ort', 'biz', 'harita'];
 
-const TEMPLATE = (id: string) => `
+const TEMPLATE = (id: string) => {
+  const V = L().view;
+  const TABS = TAB_KEYS.map((key) => ({ key, label: V.tabs[key] }));
+  return `
 <div class="sim sim-so">
-  <p class="lede">"İnsanlar şöyledir" demek neden yanıltır, ve biz/onlar sınırı ne kadar kolay kayar?</p>
+  <p class="lede">${V.lede}</p>
 
-  <div class="tabs" role="tablist" aria-label="Simülasyon bölümleri">
+  <div class="tabs" role="tablist" aria-label="${V.tabsAria}">
     ${TABS.map((t, i) => `<button class="tab" role="tab" id="${id}-tab-${t.key}" data-pane="${t.key}" aria-controls="${id}-pane-${t.key}" aria-selected="${i === 0}" ${i ? 'tabindex="-1"' : ''} type="button">${t.label}</button>`).join('')}
   </div>
 
-  <div class="sim-bar" role="group" aria-label="Anlık çıktılar"><div class="sim-bar-in">
+  <div class="sim-bar" role="group" aria-label="${V.barAria}"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
     <div class="meters" data-ref="meters"></div>
   </div></div>
@@ -31,6 +31,7 @@ const TEMPLATE = (id: string) => `
 
   <div class="notes" data-notes="foot"></div>
 </div>`;
+};
 
 export function mount(container: HTMLElement): () => void {
   const scope = new Scope();
