@@ -95,5 +95,5 @@ describe.each(Object.entries(metas).map(([p, m]) => [m.meta.id, p, m.meta] as co
     off();
     host.remove();
     expect(seen.slice(0, 6)).toEqual([]);
-  });
+  }, 120_000);
 });

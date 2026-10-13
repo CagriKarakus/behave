@@ -387,9 +387,11 @@ export function mount(container: HTMLElement): () => void {
       row(T.rowT, ctl.dT, ins.dT, 'var(--eff)') + row(T.rowC, ctl.dC, ins.dC, 'var(--amy)') + row(T.rowV, ctl.violent, ins.violent, 'var(--red)') +
       `<div class="dots" role="img" aria-label="${T.dotsAria}">${dots.map((d) => `<i class="${d ? 'v' : ''}"></i>`).join('')}</div><p class="sl-hint">${(S.insult ? T.dotsNoteIns : T.dotsNoteCtl)(S.cseed, t('repl.badge', { s: t('repl.bilinmiyor') }))}</p>`;
   }
+  let sweepKey = '';
   function runPgg(): void {
     S.pg = playPgg({ ineq: S.ineq, trust: S.trust, cost: S.cost, seed: S.pseed });
-    S.sweep = pggSweep(S.trust, S.cost);
+    const key = `${S.trust}|${S.cost}`;
+    if (key !== sweepKey) { S.sweep = pggSweep(S.trust, S.cost); sweepKey = key; }
   }
   function drawPgg(): void {
     const T = L();

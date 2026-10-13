@@ -1,0 +1,74 @@
+.sim-sb { gap: 20px; }
+.sim-sb .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.sim-sb .card .stage { background: transparent; border: 0; padding: 0; }
+.sim-sb .card .sim-h { margin: 0; }
+.sim-sb .hide { display: none; }
+
+/* Çıktı çubuğu */
+
+/* SVG ortak */
+.sim-sb svg text { font: 400 10px var(--f-mono); fill: var(--muted); }
+.sim-sb svg text.tk { font: 500 10.5px var(--f-body); fill: var(--ink); }
+.sim-sb svg text.tl { font: 600 10.5px var(--f-body); fill: var(--muted); }
+.sim-sb svg text.lgt { fill: var(--ink); font-weight: 500; }
+.sim-sb svg text.pv { font: 500 10px var(--f-mono); fill: var(--ink); }
+.sim-sb .grid { stroke: var(--line); stroke-width: 1; }
+.sim-sb .ln { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.sim-sb .cursor { stroke: var(--ink); stroke-width: 1; stroke-dasharray: 2 3; }
+.sim-sb .offline { stroke: var(--edge); stroke-width: 1; stroke-dasharray: 2 3; }
+.sim-sb .cur-dot { fill: var(--ink); stroke: var(--panel); stroke-width: 2; }
+.sim-sb .legend i { border-radius: 2px; }
+
+/* Siperler */
+.sim-sb .t-base { stroke: var(--muted); stroke-width: 1.6; stroke-dasharray: 1 5; stroke-linecap: round; }
+.sim-sb .t-fire { fill: none; stroke: var(--amy); stroke-width: 1.8; stroke-linejoin: round; }
+.sim-sb .t-raid { fill: none; stroke: var(--ink); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.sim-sb .t-dot { fill: var(--pfc); }
+.sim-sb .t-flag { fill: var(--pfc); stroke: var(--panel); stroke-width: 1.6; }
+.sim-sb .t-post { fill: var(--panel); stroke: var(--ink); stroke-width: 1.4; }
+.sim-sb .t-trust { fill: var(--pfc); }
+.sim-sb .t-new { fill: none; stroke: var(--dop); stroke-width: 1.6; stroke-dasharray: 3 2; }
+.sim-sb .c-quiet { fill: var(--pfc); fill-opacity: .55; }
+.sim-sb .c-fire { fill: var(--amy); }
+.sim-sb .c-raid { fill: var(--ink); }
+.sim-sb .c-rot { stroke: var(--dop); stroke-width: 1.4; fill: none; }
+.sim-sb .c-area { fill: var(--pfc); fill-opacity: .18; }
+.sim-sb .c-line { stroke: var(--pfc); stroke-width: 1.8; }
+.sim-sb .s-iki { stroke: var(--pfc); stroke-width: 2.6; }
+.sim-sb .s-tam { stroke: var(--amy); stroke-width: 2.2; stroke-dasharray: 5 3; }
+
+/* Temas */
+.sim-sb .ct-dot { fill: var(--amy); stroke: var(--ink); stroke-width: 1.2; transition: fill-opacity .2s ease; }
+.sim-sb .ct-link { stroke: var(--muted); stroke-width: 1; opacity: .45; }
+.sim-sb .ln.ref-amy { stroke: var(--amy); stroke-dasharray: 5 3; }
+.sim-sb .ln.ref-pfc { stroke: var(--pfc); stroke-dasharray: 2 3; }
+.sim-sb .ln.cur { stroke: var(--ink); stroke-width: 2.8; }
+.sim-sb .v-dot { fill: var(--lesion); fill-opacity: .7; }
+.sim-sb .me-dot { fill: var(--pfc); stroke: var(--ink); stroke-width: 1.8; }
+.sim-sb .py-hl { fill: none; stroke: transparent; stroke-width: 1.5; }
+.sim-sb .py-hl.on { stroke: var(--ink); fill: var(--bg); fill-opacity: .6; }
+
+/* Babunlar */
+.sim-sb .b-f { fill: var(--dop); stroke: var(--ink); stroke-width: 1.2; }
+.sim-sb .b-m { fill: var(--amy); stroke: var(--ink); stroke-width: 1.2; }
+.sim-sb .b-dump { stroke-width: 2.6; stroke-dasharray: 3 2; }
+.sim-sb .b-f.dead, .sim-sb .b-m.dead { stroke: var(--line); stroke-dasharray: 2 2; stroke-width: 1; }
+.sim-sb .b-x { stroke: var(--muted); stroke-width: 1.6; stroke-linecap: round; fill: none; }
+.sim-sb .b-n { fill: var(--amy); stroke: var(--pfc); stroke-width: 2.4; }
+.sim-sb .b-badge { fill: var(--pfc); stroke: var(--panel); stroke-width: 1; }
+.sim-sb .ln.b-male { stroke: var(--amy); stroke-width: 2.4; }
+.sim-sb .ln.b-str { stroke: var(--dop); stroke-dasharray: 5 3; }
+.sim-sb .ln.b-new { stroke: var(--pfc); stroke-width: 3; }
+.sim-sb .b-tick { stroke: var(--pfc); stroke-width: 2; fill: none; }
+
+/* Çıktı kutuları ve ortak */
+.sim-sb .play { gap: 8px; }
+.sim-sb .readout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.sim-sb .ro { border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sim-sb .ro span { font-size: 11.5px; color: var(--muted); }
+.sim-sb .ro b { font: 500 15px var(--f-mono); font-variant-numeric: tabular-nums; }
+.sim-sb .how-in a, .sim-sb .book-list a { color: var(--ink); font-weight: 600; text-underline-offset: 2px; }
+.sim-sb .sl { --c: var(--ink); }
+
+@media (max-width: 480px) {
+}

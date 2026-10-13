@@ -4,6 +4,9 @@ import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, svg, svgText, uid } from '../kit';
 import { createTour } from '../tour';
+import { t } from '../../i18n/t';
+import type { MsgKey } from '../../i18n/messages';
+import { L } from './text';
 import {
   ASCH_DEFAULT, LEVELS, MIL, MIL_DEFAULT, aschCurve, aschTrial, describeAsch, describeMilgram,
   simulateAsch, simulateMilgram, volts,
@@ -129,6 +132,7 @@ const TEMPLATE = (id: string) => {
 export function mount(container: HTMLElement): () => void {
   const scope = new Scope();
   const id = uid('uyma');
+  const T = L();
   container.innerHTML = TEMPLATE(id);
   const root = container.firstElementChild as HTMLElement;
   const $ = <T extends Element = HTMLElement>(name: string) => ref<T>(root, name);
@@ -164,14 +168,14 @@ export function mount(container: HTMLElement): () => void {
   function renderBar(): void {
     if (S.tab === 'asch') {
       sayEl.textContent = describeAsch(S.a, cohort);
-      meter(0, 'Uyma oranı', cohort.rate);
-      meter(1, 'En az bir kez uyan', cohort.anyShare);
-      meter(2, 'Hiç uymayan', cohort.neverShare);
+      meter(0, T.asch.meterRate, cohort.rate);
+      meter(1, T.asch.meterAny, cohort.anyShare);
+      meter(2, T.asch.meterNever, cohort.neverShare);
     } else {
       sayEl.textContent = describeMilgram(S.m, run);
-      meter(0, "450 V'a ulaşan", run.full);
-      meter(1, '150 V öncesi bırakan', run.early);
-      meter(2, 'Ortanca son şok', run.median / LEVELS, run.median === 0 ? '0 V' : volts(run.median) + ' V');
+      meter(0, T.mil.meterFull, run.full);
+      meter(1, T.mil.meterEarly, run.early);
+      meter(2, T.mil.meterMedian, run.median / LEVELS, run.median === 0 ? '0 V' : volts(run.median) + ' V');
     }
   }
 
@@ -203,10 +207,10 @@ export function mount(container: HTMLElement): () => void {
     });
     return (i) => bs.forEach((b, j) => { b.setAttribute('aria-checked', String(i === j)); b.setAttribute('aria-pressed', String(i === j)); });
   }
-  function addPresets<T>(host: HTMLElement, list: Array<{ id: string; name: string; u: T }>, apply: (u: T) => void): (cur: T) => void {
-    const bs = list.map((p) => {
+  function addPresets<U>(host: HTMLElement, list: Array<{ id: string; u: U }>, names: string[], apply: (u: U) => void): (cur: U) => void {
+    const bs = list.map((p, i) => {
       const b = document.createElement('button');
-      b.type = 'button'; b.className = 'chip'; b.textContent = p.name; b.setAttribute('aria-pressed', 'false');
+      b.type = 'button'; b.className = 'chip'; b.textContent = names[i]; b.setAttribute('aria-pressed', 'false');
       scope.on(b, 'click', () => apply({ ...p.u }));
       host.appendChild(b);
       return b;
@@ -219,9 +223,9 @@ export function mount(container: HTMLElement): () => void {
   const REF_LEN = 70, BASE_Y = 128;
   // Kartlar
   svg('rect', { class: 'card', x: 10, y: 8, width: 100, height: 140, rx: 8 }, aStage);
-  svgText(aStage, { class: 'cap', x: 60, y: 24, 'text-anchor': 'middle' }, 'Referans');
+  svgText(aStage, { class: 'cap', x: 60, y: 24, 'text-anchor': 'middle' }, T.asch.capRef);
   svg('rect', { class: 'card', x: 120, y: 8, width: 230, height: 140, rx: 8 }, aStage);
-  svgText(aStage, { class: 'cap', x: 235, y: 24, 'text-anchor': 'middle' }, 'Hangisi referansla aynı uzunlukta?');
+  svgText(aStage, { class: 'cap', x: 235, y: 24, 'text-anchor': 'middle' }, T.asch.capWhich);
   const refLine = svg('line', { class: 'bar', x1: 60, x2: 60, y1: BASE_Y, y2: BASE_Y - REF_LEN }, aStage);
   void refLine;
   const optX = [168, 235, 302];
@@ -259,8 +263,8 @@ export function mount(container: HTMLElement): () => void {
       seats.push({ c, t, ally });
     }
     const subjX = x0 + (count - 1) * step;
-    svgText(seatsG, { class: 'cap', x: Math.max(40, (x0 + subjX - step) / 2), y: 218, 'text-anchor': 'middle' }, `${trial.speakers.length} ortak sırayla konuşur`);
-    svgText(seatsG, { class: 'cap', x: Math.min(330, subjX), y: 230, 'text-anchor': 'middle' }, 'denek');
+    svgText(seatsG, { class: 'cap', x: Math.max(40, (x0 + subjX - step) / 2), y: 218, 'text-anchor': 'middle' }, T.asch.seatsCap(trial.speakers.length));
+    svgText(seatsG, { class: 'cap', x: Math.min(330, subjX), y: 230, 'text-anchor': 'middle' }, T.asch.subject);
   }
   /** Animasyonun o anki durumunu (kaç kişi konuştu, denek cevapladı mı) çizer. */
   function drawSeats(now: number): void {
@@ -285,13 +289,13 @@ export function mount(container: HTMLElement): () => void {
     subj.c.classList.toggle('bad', decided && trial.conforms);
     subj.c.classList.toggle('good', decided && !trial.conforms);
     subj.t.textContent = decided ? LETTERS[pick] : '?';
-    if (!anim && S.trialNo === 0) aStatus.textContent = 'Deneme oynat: ortaklar sırayla cevap verir, denek en sona kalır.';
+    if (!anim && S.trialNo === 0) aStatus.textContent = T.asch.statusIdle;
     else if (!decided) {
-      aStatus.textContent = spoken < n ? `${spoken} / ${n} ortak konuştu…` : S.a.open ? 'Sıra denekte…' : 'Denek cevabını gizlice yazıyor…';
+      aStatus.textContent = spoken < n ? T.asch.statusSpoken(spoken, n) : S.a.open ? T.asch.statusOpenTurn : T.asch.statusPrivate;
     } else {
       aStatus.textContent = trial.conforms
-        ? `Denek çoğunluğa uydu: yanlış cevap ${LETTERS[trial.wrong]}.`
-        : `Denek bağımsız kaldı: doğru cevap ${LETTERS[trial.correct]}.`;
+        ? T.asch.statusConform(LETTERS[trial.wrong])
+        : T.asch.statusIndep(LETTERS[trial.correct]);
       if (anim && !anim.counted) {
         anim.counted = true;
         S.tally.played++; if (trial.conforms) S.tally.conformed++;
@@ -304,7 +308,7 @@ export function mount(container: HTMLElement): () => void {
   const aTally = $('a-tally');
   function drawTally(): void {
     aTally.textContent = S.tally.played
-      ? `Oynatılan denemeler: ${S.tally.played}, uyma: ${S.tally.conformed} (tek tek denemelerde sonuç şansa bağlıdır; modelin oranı ${pct(cohort.p)}%).`
+      ? T.asch.tally(S.tally.played, S.tally.conformed, pct(cohort.p))
       : '';
   }
   function newTrial(): void {
@@ -327,8 +331,8 @@ export function mount(container: HTMLElement): () => void {
     svgText(aChart, { x: AC.x0 - 6, y: ayP(v) + 3.5, 'text-anchor': 'end' }, pct(v) + '%');
   }
   for (const n of [1, 3, 6, 9, 12, 15]) svgText(aChart, { x: axN(n), y: AC.bot + 14, 'text-anchor': 'middle' }, String(n));
-  svgText(aChart, { x: (AC.x0 + AC.x1) / 2, y: AC.bot + 30, 'text-anchor': 'middle' }, 'Oybirliğiyle yanlış söyleyen ortak sayısı');
-  for (const [n, t] of [[3, 'belirgin'], [6, 'doyum']] as const) {
+  svgText(aChart, { x: (AC.x0 + AC.x1) / 2, y: AC.bot + 30, 'text-anchor': 'middle' }, T.asch.axisX);
+  for (const [n, t] of [[3, T.asch.markNoticeable], [6, T.asch.markPlateau]] as const) {
     svg('line', { class: 'grid dash', x1: axN(n), x2: axN(n), y1: AC.top, y2: AC.bot }, aChart);
     svgText(aChart, { x: axN(n) + 3, y: AC.top + 8 }, t);
   }
@@ -352,14 +356,14 @@ export function mount(container: HTMLElement): () => void {
 
   // Girdiler
   const aIn = $('a-in');
-  const setN = addSlider(aIn, 'n', 'Çoğunluk büyüklüğü', 'Yanlışı oybirliğiyle söyleyen ortak sayısı; denek her zaman en son konuşur', 1, 15, 1,
-    (v) => `${v} ortak + 1 denek`, (v) => { S.a.n = v; changeAsch(); }, 'sl-amy');
-  const setAlly = addToggle(aIn, 'Müttefik (doğruyu söyleyen bir muhalif) var', 'Odadaki tek bir kişi bile doğruyu söylerse oybirliği bozulur', () => { S.a.ally = !S.a.ally; changeAsch(); });
-  const setOpen = addChoice(aIn, 'Cevap nasıl veriliyor', ['Açıkça, yüksek sesle', 'Gizlice, yazılı'], 'Gizli cevapta kimse denekle yüz yüze değildir', (i) => { S.a.open = i === 0; changeAsch(); });
-  const setEasy = addSlider(aIn, 'easy', 'Çizgi farkı', 'Seçenekler birbirine ne kadar yakın: sola doğru ayırt etmek zorlaşır', 0, 1, 0.05,
-    (v) => (v < 0.34 ? 'çok yakın' : v < 0.67 ? 'orta' : 'belirgin'), (v) => { S.a.easy = v; changeAsch(); }, 'sl-pfc');
+  const setN = addSlider(aIn, 'n', T.asch.nameN, T.asch.hintN, 1, 15, 1,
+    T.asch.fmtN, (v) => { S.a.n = v; changeAsch(); }, 'sl-amy');
+  const setAlly = addToggle(aIn, T.asch.nameAlly, T.asch.hintAlly, () => { S.a.ally = !S.a.ally; changeAsch(); });
+  const setOpen = addChoice(aIn, T.asch.nameOpen, T.asch.optOpen, T.asch.hintOpen, (i) => { S.a.open = i === 0; changeAsch(); });
+  const setEasy = addSlider(aIn, 'easy', T.asch.nameEasy, T.asch.hintEasy, 0, 1, 0.05,
+    (v) => (v < 0.34 ? T.asch.fmtEasy[0] : v < 0.67 ? T.asch.fmtEasy[1] : T.asch.fmtEasy[2]), (v) => { S.a.easy = v; changeAsch(); }, 'sl-pfc');
   const markAschPresets = addPresets(
-    $('a-presets'), ASCH_PRESETS, (u) => { S.a = u; changeAsch(true); });
+    $('a-presets'), ASCH_PRESETS, T.asch.presets, (u) => { S.a = u; changeAsch(true); });
 
   function syncAschInputs(): void {
     setN(S.a.n); setAlly(S.a.ally); setOpen(S.a.open ? 0 : 1); setEasy(S.a.easy); markAschPresets(S.a);
@@ -388,7 +392,7 @@ export function mount(container: HTMLElement): () => void {
     svg('line', { class: 'tick', x1: rungX(j) - 5, x2: rungX(j) - 5, y1: 10, y2: 32 }, mStage);
     svgText(mStage, { class: 'cap', x: rungX(j) - 5, y: 42, 'text-anchor': 'middle' }, volts(j) + ' V');
   }
-  svgText(mStage, { class: 'cap', x: 180, y: 56, 'text-anchor': 'middle' }, 'Çizgiler: modelde öğrencinin tepkisinin sertleştiği varsayılan eşikler');
+  svgText(mStage, { class: 'cap', x: 180, y: 56, 'text-anchor': 'middle' }, T.mil.stageThresholds);
   const DX = 24, DY = 74, DS = 14;
   const dots: SVGElement[] = [];
   for (let i = 0; i < MIL.agents; i++) {
@@ -416,13 +420,13 @@ export function mount(container: HTMLElement): () => void {
       dots[i].classList.toggle('quit', quit);
     });
     const going = MIL.agents - stopped;
-    mVolt.textContent = shown === 0 ? 'Başlangıç' : volts(shown) + ' V';
-    mGo.textContent = `Şok vermeye devam eden: ${going}`;
-    mStop.textContent = `Bırakan: ${stopped}`;
+    mVolt.textContent = shown === 0 ? T.mil.start : volts(shown) + ' V';
+    mGo.textContent = T.mil.going(going);
+    mStop.textContent = T.mil.stopped(stopped);
     if (shown >= LEVELS) {
-      mNote.textContent = `450 V'a kadar giden: ${run.hist[LEVELS]}`;
-      mNote2.textContent = `Modelin beklentisi %${pct(run.expected)}`;
-    } else { mNote.textContent = S.playing ? 'Merdiven çıkılıyor…' : ''; mNote2.textContent = ''; }
+      mNote.textContent = T.mil.reachedFull(run.hist[LEVELS]);
+      mNote2.textContent = T.mil.expected(pct(run.expected));
+    } else { mNote.textContent = S.playing ? T.mil.climbing : ''; mNote2.textContent = ''; }
   }
 
   // Bırakma grafiği
@@ -435,7 +439,7 @@ export function mount(container: HTMLElement): () => void {
     svgText(mChart, { x: MC.x0 - 6, y: my(v) + 3.5, 'text-anchor': 'end' }, pct(v) + '%');
   }
   for (const d of [1, 10, 20, 30]) svgText(mChart, { x: mx(d), y: MC.bot + 14, 'text-anchor': d === 30 ? 'end' : 'middle' }, volts(d) + ' V');
-  svgText(mChart, { x: (MC.x0 + MC.x1) / 2, y: MC.bot + 30, 'text-anchor': 'middle' }, 'Son verilen şokun gerilimi');
+  svgText(mChart, { x: (MC.x0 + MC.x1) / 2, y: MC.bot + 30, 'text-anchor': 'middle' }, T.mil.axisX);
   const barsG = svg('g', {}, mChart);
   const survLine = svg('polyline', { class: 'ln surv', points: '' }, mChart);
   function drawMilChart(): void {
@@ -460,14 +464,14 @@ export function mount(container: HTMLElement): () => void {
 
   // Girdiler
   const mIn = $('m-in');
-  const setAuth = addSlider(mIn, 'auth', 'Otoritenin yakınlığı', 'Sağa doğru: araştırmacı yanı başında. Sola doğru: telefonla emir veriyor', 0, 1, 0.05,
-    (v) => (v < 0.34 ? 'uzakta' : v < 0.67 ? 'ara' : 'yanında'), (v) => { S.m.authority = v; changeMil(); }, 'sl-amy');
-  const setPres = addSlider(mIn, 'pres', 'Kurumun prestiji', 'Sola doğru: sıradan bir büro. Sağa doğru: saygın bir üniversite', 0, 1, 0.05,
-    (v) => (v < 0.34 ? 'sıradan büro' : v < 0.67 ? 'orta' : 'saygın'), (v) => { S.m.prestige = v; changeMil(); }, 'sl-dop');
-  const setLearn = addChoice(mIn, 'Öğrencinin yakınlığı', LEARNERS, 'Acıyı duymak, görmek ve dokunmak arttıkça şok vermek zorlaşır', (i) => { S.m.learner = i as Learner; changeMil(); });
-  const setDiff = addToggle(mIn, 'Şoku başkası basıyor', 'Sorumluluk dağılır: öğretmen yalnızca yardımcı bir iş yapıyor', () => { S.m.diffused = !S.m.diffused; changeMil(); });
-  const setPeer = addToggle(mIn, 'İtaat etmeyen bir akran var', 'Yanındaki bir kişi bırakıp gidiyor: itirazın mümkün olduğunu gösterir', () => { S.m.peer = !S.m.peer; changeMil(); });
-  const markMilPresets = addPresets($('m-presets'), MIL_PRESETS, (u) => { S.m = u; changeMil(true); });
+  const setAuth = addSlider(mIn, 'auth', T.mil.nameAuth, T.mil.hintAuth, 0, 1, 0.05,
+    (v) => (v < 0.34 ? T.mil.fmtAuth[0] : v < 0.67 ? T.mil.fmtAuth[1] : T.mil.fmtAuth[2]), (v) => { S.m.authority = v; changeMil(); }, 'sl-amy');
+  const setPres = addSlider(mIn, 'pres', T.mil.namePres, T.mil.hintPres, 0, 1, 0.05,
+    (v) => (v < 0.34 ? T.mil.fmtPres[0] : v < 0.67 ? T.mil.fmtPres[1] : T.mil.fmtPres[2]), (v) => { S.m.prestige = v; changeMil(); }, 'sl-dop');
+  const setLearn = addChoice(mIn, T.mil.nameLearn, T.mil.learners, T.mil.hintLearn, (i) => { S.m.learner = i as Learner; changeMil(); });
+  const setDiff = addToggle(mIn, T.mil.nameDiff, T.mil.hintDiff, () => { S.m.diffused = !S.m.diffused; changeMil(); });
+  const setPeer = addToggle(mIn, T.mil.namePeer, T.mil.hintPeer, () => { S.m.peer = !S.m.peer; changeMil(); });
+  const markMilPresets = addPresets($('m-presets'), MIL_PRESETS, T.mil.presets, (u) => { S.m = u; changeMil(true); });
 
   function syncMilInputs(): void {
     setAuth(S.m.authority); setPres(S.m.prestige); setLearn(S.m.learner); setDiff(S.m.diffused); setPeer(S.m.peer); markMilPresets(S.m);
@@ -510,44 +514,15 @@ export function mount(container: HTMLElement): () => void {
   changeAsch(true);
 
   // =================================================================== Tur
-  const tour = createTour(scope, [
-    {
-      title: 'Asch: oybirlikli çoğunluk',
-      text: 'Yedi ortak sırayla aynı yanlış çizgiyi seçer; gerçek denek en son cevap verir. Kitaba göre denemelerin yaklaşık üçte birinde denek de yanlışa uyar. Tek başına cevaplayanlar ise yaklaşık %1 hata yapar.',
-      look: 'Alt çubuktaki uyma oranı ve "Denemeyi oynat" ile sırayla cevap veren ortaklar.',
-      apply: () => { setTab('asch'); S.a = { ...ASCH_DEFAULT }; changeAsch(true); playTrial(); },
-    },
-    {
-      title: 'Asch: kaç kişi yeter?',
-      text: 'Çoğunluk üç kişiye çıkınca uyma belirgin artar. Kaydırıcıyı altıya, sonra on beşe çek: eğri düzleşir ve yeni kişiler pek bir şey eklemez.',
-      look: 'Grafikte eğrinin 3 ile 6 arasında yükselip sonra düzleşmesi.',
-      apply: () => { setTab('asch'); S.a = { ...ASCH_DEFAULT, n: 3 }; changeAsch(true); },
-    },
-    {
-      title: 'Asch: tek bir muhalif',
-      text: 'Aynı yedi ortağa doğruyu söyleyen bir müttefik eklenince oybirliği bozulur ve uyma belirgin biçimde düşer. Denek artık tek başına olmadığını görür. Büyüklük nitel bir varsayımdır.',
-      look: 'Kırmızı eğrinin kesikli temel eğrinin çok altına inmesi.',
-      apply: () => { setTab('asch'); S.a = { ...ASCH_DEFAULT, ally: true }; changeAsch(true); playTrial(); },
-    },
-    {
-      title: 'Milgram: temel koşul',
-      text: 'Yüz ajan voltaj merdivenini (15 V ile 450 V) tırmanır; ayrı odadaki "öğrenciye" şok verdiklerini sanırlar. Kitaptaki ilk çalışmada %65 en yüksek gerilime kadar çıktı.',
-      look: 'Izgarada kırmızı dolu noktaların sonda %65 civarında kalması.',
-      apply: () => { setTab('mil'); S.m = { ...MIL_DEFAULT }; changeMil(true); playMil(); },
-    },
-    {
-      title: 'Milgram: mesafe',
-      text: 'Öğrenci aynı odaya, sonra eli tutulacak kadar yakına gelince ya da otorite uzaklaşınca itaat düşer. Kitap da bu yönü anlatır: araştırmacı başka odadayken, sıradan bir büroda ya da öğrenci aynı odadayken itaat azaldı.',
-      look: 'Bırakma noktalarının sola kayması ve 450 V sütununun küçülmesi.',
-      apply: () => { setTab('mil'); S.m = { ...MIL_DEFAULT, learner: 2 }; changeMil(true); playMil(); },
-    },
-    {
-      title: 'Ne kırar? Direniş mümkün',
-      text: 'İtaat etmeyen tek bir akran, itirazın mümkün olduğunu gösterir ve 450 V\'a giden oranı çok düşürür. Sorumluluğu başkasına devretmek ise tersini yapar. Perry\'nin arşiv çalışması, öğretmenlerin kitapta anlatılandan daha sık reddettiğini ve çoğunun öğrencinin oyuncu olduğunu fark ettiğini öne sürer; sonuçların anlamı tartışmalı.',
-      look: 'Akran direniyor çipine, sonra "Sorumluluk dağıldı" çipine bas ve 450 V oranını karşılaştır.',
-      apply: () => { setTab('mil'); S.m = { ...MIL_DEFAULT, peer: true }; changeMil(true); playMil(); },
-    },
-  ]);
+  const tourApply: Array<() => void> = [
+    () => { setTab('asch'); S.a = { ...ASCH_DEFAULT }; changeAsch(true); playTrial(); },
+    () => { setTab('asch'); S.a = { ...ASCH_DEFAULT, n: 3 }; changeAsch(true); },
+    () => { setTab('asch'); S.a = { ...ASCH_DEFAULT, ally: true }; changeAsch(true); playTrial(); },
+    () => { setTab('mil'); S.m = { ...MIL_DEFAULT }; changeMil(true); playMil(); },
+    () => { setTab('mil'); S.m = { ...MIL_DEFAULT, learner: 2 }; changeMil(true); playMil(); },
+    () => { setTab('mil'); S.m = { ...MIL_DEFAULT, peer: true }; changeMil(true); playMil(); },
+  ];
+  const tour = createTour(scope, T.tour.map((st, i) => ({ ...st, apply: tourApply[i] })));
   root.querySelector('.lede')!.after(tour.el);
 
   // =================================================================== Başlangıç ve döngü
