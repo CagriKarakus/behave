@@ -1,5 +1,9 @@
 import { mulberry32 } from '../rng';
-import { repBadge } from '../ui';
+import { repBadge, pc } from '../ui';
+import { percent } from '../../i18n/fmt';
+import { t } from '../../i18n/t';
+import { L } from './text';
+import { TR } from './text.tr';
 import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, svg, svgText, uid } from '../kit';
@@ -11,26 +15,21 @@ import {
   type GroupId, type News, type NewsKind, type ProfileId,
 } from './model';
 
-export const EVENTS: Array<{ name: string; actual: number }> = [
-  { name: 'Bir yıl içinde cep telefonunu kaybetmek', actual: 25 },
-  { name: 'Bir yıl içinde bisikletinin çalınması', actual: 12 },
-  { name: 'Hayatın boyunca ciddi bir araba kazası geçirmek', actual: 30 },
-  { name: 'Hayatın boyunca kemik kırığı yaşamak', actual: 45 },
-  { name: 'Bir yıl içinde ağır bir gıda zehirlenmesi geçirmek', actual: 8 },
-];
+export const EVENTS: Array<{ name: string; actual: number }> = [25, 12, 30, 45, 8].map((actual, i) => ({ get name() { return L().events[i]; }, actual }));
 
-export const TABS = ['Olgunlaşma çizelgesi', 'Akranlarla sürüş', 'Haber güncelleme'] as const;
+/** Sekme başlıkları (Türkçe; görünürde `L().tabs` kullanılır). */
+export const TABS = TR.tabs;
 export const PHASE = { approach: 0.9, wait: 0.8, resolve: 1.15 } as const;
 
-const TEMPLATE = (id: string) => `
+const TEMPLATE = (id: string) => { const T = L(); return `
 <div class="sim sim-erg">
-  <p class="lede">Ergenler neden daha fazla risk alır, ve bu neden bir "kusur" değil de bir gelişim dengesizliğidir?</p>
+  <p class="lede">${T.lede}</p>
   <div data-ref="tourHost"></div>
-  <div class="tabs" role="tablist" aria-label="Üç bakış" data-ref="tabs">
-    ${TABS.map((t, i) => `<button type="button" class="tab" role="tab" id="${id}-t${i}" aria-controls="${id}-p${i}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-i="${i}">${i + 1}. ${t}</button>`).join('')}
+  <div class="tabs" role="tablist" aria-label="${T.tabsAria}" data-ref="tabs">
+    ${T.tabs.map((tb, i) => `<button type="button" class="tab" role="tab" id="${id}-t${i}" aria-controls="${id}-p${i}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-i="${i}">${i + 1}. ${tb}</button>`).join('')}
   </div>
 
-  <div class="sim-bar" role="group" aria-label="Anlık çıktılar">
+  <div class="sim-bar" role="group" aria-label="${T.outputsAria}">
     <div class="sim-bar-in">
       <p class="say" data-ref="say"></p>
       <div class="meters">
@@ -43,7 +42,7 @@ const TEMPLATE = (id: string) => `
   <!-- 1. Olgunlaşma çizelgesi -->
   <section role="tabpanel" id="${id}-p0" aria-labelledby="${id}-t0" class="panel" data-ref="p0">
     <div class="stage">
-      <svg viewBox="0 0 360 232" role="img" aria-label="Beyin silüeti: frontal korteks ve limbik sistem yaşa göre renk yoğunluğu değiştirir" data-ref="brain">
+      <svg viewBox="0 0 360 232" role="img" aria-label="${T.brainAria}" data-ref="brain">
         <defs><clipPath id="${id}-clip"><path d="M62,118 C50,78 84,34 140,28 C190,18 252,26 290,62 C322,92 326,138 296,162 C280,176 258,176 244,170 C240,184 232,190 214,190 C196,190 192,184 192,178 C160,188 112,186 88,162 C72,148 64,134 62,118 Z"/></clipPath></defs>
         <ellipse class="b-cb" cx="268" cy="172" rx="38" ry="19"/>
         <path class="b-stem" d="M206,176 L200,224 L226,224 L228,176 Z"/>
@@ -56,41 +55,41 @@ const TEMPLATE = (id: string) => `
         <g data-ref="fibres" class="b-fibres"></g>
         <ellipse data-ref="limb" class="b-limb" cx="204" cy="122" rx="36" ry="22"/>
         <circle data-ref="nacc" class="b-nacc" cx="172" cy="140" r="6"/>
-        <text class="b-lab" x="108" y="92" text-anchor="middle">Frontal</text>
+        <text class="b-lab" x="108" y="92" text-anchor="middle">${T.brainLabels.frontal}</text>
         <text class="b-val" x="108" y="106" text-anchor="middle" data-ref="fval"></text>
-        <text class="b-lab" x="206" y="119" text-anchor="middle">Limbik</text>
+        <text class="b-lab" x="206" y="119" text-anchor="middle">${T.brainLabels.limbic}</text>
         <text class="b-val" x="206" y="132" text-anchor="middle" data-ref="lval"></text>
-        <text class="b-small" x="172" y="160" text-anchor="middle">akumbens</text>
-        <text class="b-small" x="272" y="204" text-anchor="middle">beyincik</text>
-        <text class="b-small" x="118" y="196" text-anchor="middle">ön</text>
-        <text class="b-small" x="298" y="196" text-anchor="middle">arka</text>
+        <text class="b-small" x="172" y="160" text-anchor="middle">${T.brainLabels.accumbens}</text>
+        <text class="b-small" x="272" y="204" text-anchor="middle">${T.brainLabels.cerebellum}</text>
+        <text class="b-small" x="118" y="196" text-anchor="middle">${T.brainLabels.front}</text>
+        <text class="b-small" x="298" y="196" text-anchor="middle">${T.brainLabels.back}</text>
       </svg>
       <div class="legend">
-        <span><i style="background:var(--pfc)"></i>Frontal korteks (olgunluk)</span>
-        <span><i style="background:var(--dop)"></i>Limbik sistem, dopamin (etkinlik)</span>
-        <span><i style="background:var(--ink)"></i>Noktalar: gri madde (sinaps yoğunluğu)</span>
-        <span><i style="background:var(--pit)"></i>Mor çizgiler: miyelinli bağlantı</span>
+        <span><i style="background:var(--pfc)"></i>${T.brainLegend[0]}</span>
+        <span><i style="background:var(--dop)"></i>${T.brainLegend[1]}</span>
+        <span><i style="background:var(--ink)"></i>${T.brainLegend[2]}</span>
+        <span><i style="background:var(--pit)"></i>${T.brainLegend[3]}</span>
       </div>
     </div>
 
-    <div class="chips" role="group" aria-label="Hızlı yaş seçimi" data-ref="ageChips"></div>
+    <div class="chips" role="group" aria-label="${T.ageChipsAria}" data-ref="ageChips"></div>
     <div class="sliders">
       <div class="sl">
-        <div class="sl-top"><label class="sl-name" for="${id}-age">Yaş</label><span class="sl-val" data-ref="ageV"></span></div>
+        <div class="sl-top"><label class="sl-name" for="${id}-age">${T.ageLabel}</label><span class="sl-val" data-ref="ageV"></span></div>
         <input type="range" id="${id}-age" min="${AGE_MIN}" max="${AGE_MAX}" step="1" data-ref="age">
-        <p class="sl-hint">5 ile 30 arasında gez. Frontal korteks en son, yirmili yaşların ortasında olgunlaşır; dopamin sistemi ergenlikte tepe yapar.</p>
+        <p class="sl-hint">${T.ageHint}</p>
       </div>
     </div>
 
-    <section class="chart" aria-label="Olgunlaşma eğrileri">
-      <h3 class="sim-h">Yaşa göre olgunlaşma</h3>
-      <svg viewBox="0 0 360 188" role="img" aria-label="Dopamin sistemi ergenlikte tepe yapar, frontal korteks yirmilerin ortasına kadar yükselir; aradaki boşluk gölgeli" data-ref="chart1"></svg>
+    <section class="chart" aria-label="${T.chart1Aria}">
+      <h3 class="sim-h">${T.chart1H}</h3>
+      <svg viewBox="0 0 360 188" role="img" aria-label="${T.chart1Svg}" data-ref="chart1"></svg>
       <div class="legend">
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--dop)" stroke-width="2.4"/></svg>Dopamin / limbik</span>
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--pfc)" stroke-width="2.4"/></svg>Frontal korteks</span>
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--lesion)" stroke-width="2.2" stroke-dasharray="5 3"/></svg>Gri madde (budanma)</span>
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--pit)" stroke-width="2.2" stroke-dasharray="1.5 3"/></svg>Miyelinleşme</span>
-        <span><i style="background:var(--dop);opacity:.35;border-radius:2px"></i>Boşluk</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--dop)" stroke-width="2.4"/></svg>${T.chart1Legend[0]}</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--pfc)" stroke-width="2.4"/></svg>${T.chart1Legend[1]}</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--lesion)" stroke-width="2.2" stroke-dasharray="5 3"/></svg>${T.chart1Legend[2]}</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--pit)" stroke-width="2.2" stroke-dasharray="1.5 3"/></svg>${T.chart1Legend[3]}</span>
+        <span><i style="background:var(--dop);opacity:.35;border-radius:2px"></i>${T.chart1Legend[4]}</span>
       </div>
     </section>
   </section>
@@ -98,7 +97,7 @@ const TEMPLATE = (id: string) => `
   <!-- 2. Akranlarla sürüş -->
   <section role="tabpanel" id="${id}-p1" aria-labelledby="${id}-t1" class="panel" data-ref="p1" hidden>
     <div class="stage">
-      <svg viewBox="0 0 360 214" role="img" aria-label="Sarı ışıklı kavşak: araç sarıda geçer ya da durur; kenarda izleyen akranlar" data-ref="scene">
+      <svg viewBox="0 0 360 214" role="img" aria-label="${T.sceneAria}" data-ref="scene">
         <rect class="s-road" x="0" y="118" width="360" height="56"/>
         <rect class="s-road" x="236" y="84" width="52" height="130"/>
         <line class="s-dash" x1="0" y1="146" x2="236" y2="146"/>
@@ -122,72 +121,72 @@ const TEMPLATE = (id: string) => `
         </g>
         <g data-ref="burst" class="s-burst" transform="translate(262,146)" opacity="0">
           <path d="M-14,-14 L14,14 M14,-14 L-14,14" />
-          <text y="-22" text-anchor="middle">Çarpışma!</text>
+          <text y="-22" text-anchor="middle">${T.crashWord}</text>
         </g>
         <text class="s-status" x="8" y="203" data-ref="sceneTxt"></text>
       </svg>
       <div class="legend">
-        <span><i style="background:var(--red)"></i>Kırmızı</span>
-        <span><i style="background:var(--dop)"></i>Sarı</span>
-        <span><i style="background:var(--gld)"></i>Yeşil</span>
-        <span>Kenardaki yüzler: izleyen akranlar</span>
+        <span><i style="background:var(--red)"></i>${T.sceneLegend[0]}</span>
+        <span><i style="background:var(--dop)"></i>${T.sceneLegend[1]}</span>
+        <span><i style="background:var(--gld)"></i>${T.sceneLegend[2]}</span>
+        <span>${T.sceneLegend[3]}</span>
       </div>
     </div>
 
-    <div class="row" role="group" aria-label="Oynayan">
-      <button type="button" class="btn" data-ref="modeAgent" aria-pressed="true">Ajan oynasın</button>
-      <button type="button" class="btn" data-ref="modeUser" aria-pressed="false">Ben oynayayım</button>
+    <div class="row" role="group" aria-label="${T.playerAria}">
+      <button type="button" class="btn" data-ref="modeAgent" aria-pressed="true">${T.modeAgent}</button>
+      <button type="button" class="btn" data-ref="modeUser" aria-pressed="false">${T.modeUser}</button>
     </div>
     <div class="row" data-ref="agentRow">
-      <button type="button" class="btn go" data-ref="agent1">Ajan: 1 tur</button>
-      <button type="button" class="btn" data-ref="agent50">50 tur hızlı</button>
-      <button type="button" class="btn" data-ref="reset">Yeniden çalıştır</button>
+      <button type="button" class="btn go" data-ref="agent1">${T.agent1}</button>
+      <button type="button" class="btn" data-ref="agent50">${T.agent50}</button>
+      <button type="button" class="btn" data-ref="reset">${T.reset}</button>
     </div>
     <div class="row" data-ref="userRow" hidden>
-      <button type="button" class="btn go" data-ref="uNew">Yeni tur</button>
-      <button type="button" class="btn dec" data-ref="uGo" disabled>Geç</button>
-      <button type="button" class="btn dec" data-ref="uStop" disabled>Dur</button>
-      <button type="button" class="btn" data-ref="uReset">Sıfırla</button>
+      <button type="button" class="btn go" data-ref="uNew">${T.uNew}</button>
+      <button type="button" class="btn dec" data-ref="uGo" disabled>${T.uGo}</button>
+      <button type="button" class="btn dec" data-ref="uStop" disabled>${T.uStop}</button>
+      <button type="button" class="btn" data-ref="uReset">${T.uReset}</button>
     </div>
     <p class="tally" data-ref="tally"></p>
 
-    <section aria-label="Girdiler">
-      <h3 class="sim-h">Girdiler</h3>
+    <section aria-label="${T.inputsH}">
+      <h3 class="sim-h">${T.inputsH}</h3>
       <div class="sliders">
         <div class="sl">
-          <div class="sl-top"><label class="sl-name" for="${id}-grp">Yaş grubu</label><span class="sl-val" data-ref="grpV"></span></div>
+          <div class="sl-top"><label class="sl-name" for="${id}-grp">${T.grpLabel}</label><span class="sl-val" data-ref="grpV"></span></div>
           <input type="range" id="${id}-grp" min="0" max="2" step="1" data-ref="grp">
-          <p class="sl-hint">Ergen (~15), genç yetişkin (~21), yetişkin (~30). Yalnızken üçü de benzer davranır.</p>
+          <p class="sl-hint">${T.grpHint}</p>
         </div>
         <div class="sl sl-amy">
-          <div class="sl-top"><label class="sl-name" for="${id}-peers">İzleyen akran</label><span class="sl-val" data-ref="peersV"></span></div>
+          <div class="sl-top"><label class="sl-name" for="${id}-peers">${T.peersLabel}</label><span class="sl-val" data-ref="peersV"></span></div>
           <input type="range" id="${id}-peers" min="0" max="${MAX_PEERS}" step="1" data-ref="peers">
-          <p class="sl-hint">Kitaptaki deneyde iki akran vardı. Etki, yaşa bağlı olarak ergende büyür.</p>
+          <p class="sl-hint">${T.peersHint}</p>
         </div>
         <div class="sl sl-dop">
-          <div class="sl-top"><label class="sl-name" for="${id}-rew">Ödül büyüklüğü</label><span class="sl-val" data-ref="rewV"></span></div>
+          <div class="sl-top"><label class="sl-name" for="${id}-rew">${T.rewLabel}</label><span class="sl-val" data-ref="rewV"></span></div>
           <input type="range" id="${id}-rew" min="0" max="100" step="1" data-ref="rew">
-          <p class="sl-hint">Sarıda geçince kazanılan puan. Büyük ödülde ergen accumbens tepkisi yetişkininkinin çok üstüne çıkar.</p>
+          <p class="sl-hint">${T.rewHint}</p>
         </div>
       </div>
     </section>
 
-    <section class="chart" aria-label="Risk alma oranı">
-      <h3 class="sim-h">Sarıda geçme oranı (modelin beklentisi)</h3>
-      <svg viewBox="0 0 360 170" role="img" aria-label="Üç yaş grubunda yalnızken ve akranlarla sarıda geçme oranı" data-ref="chart2"></svg>
+    <section class="chart" aria-label="${T.chart2Aria}">
+      <h3 class="sim-h">${T.chart2H}</h3>
+      <svg viewBox="0 0 360 170" role="img" aria-label="${T.chart2Svg}" data-ref="chart2"></svg>
       <div class="legend">
-        <span><i style="background:var(--lesion)"></i>Yalnız</span>
-        <span><i style="background:var(--amy)"></i>Akranlarla</span>
+        <span><i style="background:var(--lesion)"></i>${T.chart2Legend[0]}</span>
+        <span><i style="background:var(--amy)"></i>${T.chart2Legend[1]}</span>
       </div>
     </section>
-    <section class="chart" aria-label="Accumbens tepkisi">
-      <h3 class="sim-h">Ödüle accumbens tepkisi (Galvan)</h3>
-      <svg viewBox="0 0 360 160" role="img" aria-label="Çocukta düz, yetişkinde orantılı artan, ergende büyük ödülde çok yüksek accumbens tepkisi" data-ref="chart3"></svg>
+    <section class="chart" aria-label="${T.chart3Aria}">
+      <h3 class="sim-h">${T.chart3H}</h3>
+      <svg viewBox="0 0 360 160" role="img" aria-label="${T.chart3Svg}" data-ref="chart3"></svg>
       <div class="legend">
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--lesion)" stroke-width="2.2" stroke-dasharray="5 3"/></svg>Çocuk</span>
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--amy)" stroke-width="2.4"/></svg>Ergen</span>
-        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--pfc)" stroke-width="2.4"/></svg>Yetişkin</span>
-        <span><i style="background:var(--ink)"></i>Seçili grup</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--lesion)" stroke-width="2.2" stroke-dasharray="5 3"/></svg>${T.chart3Legend[0]}</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--amy)" stroke-width="2.4"/></svg>${T.chart3Legend[1]}</span>
+        <span><svg viewBox="0 0 26 10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--pfc)" stroke-width="2.4"/></svg>${T.chart3Legend[2]}</span>
+        <span><i style="background:var(--ink)"></i>${T.chart3Legend[3]}</span>
       </div>
     </section>
   </section>
@@ -196,66 +195,68 @@ const TEMPLATE = (id: string) => `
   <section role="tabpanel" id="${id}-p2" aria-labelledby="${id}-t2" class="panel" data-ref="p2" hidden>
     <div class="contested" role="note">
       ${repBadge('tartışmalı')}
-      <p>Ergenlerin kötü haberi tahminlerine katmadığı bulgusu, kullanılan iyi/kötü haber paradigmasının asimetriyi istatistiksel bir yapaylıktan üretebileceği gerekçesiyle eleştirildi (Shah ve ark. 2016). Sharot'un ekibi yeni çalışmalarla asimetriyi savundu; tartışma sürüyor. Aşağıdaki profiller kitaptaki sonucun basit bir modelidir, kesin bir bilgi değil.</p>
+      <p>${T.contestedNote}</p>
     </div>
-    <div class="chips" role="group" aria-label="Yaş profili" data-ref="profChips"></div>
+    <div class="chips" role="group" aria-label="${T.profAria}" data-ref="profChips"></div>
 
     <div class="card">
       <p class="card-k" data-ref="evK"></p>
       <p class="card-t" data-ref="evT"></p>
       <div class="sl">
-        <div class="sl-top"><label class="sl-name" for="${id}-est">İlk tahminin</label><span class="sl-val" data-ref="estV"></span></div>
+        <div class="sl-top"><label class="sl-name" for="${id}-est">${T.estLabel}</label><span class="sl-val" data-ref="estV"></span></div>
         <input type="range" id="${id}-est" min="1" max="99" step="1" data-ref="est">
-        <p class="sl-hint">Bu olay sana ya da yaşıtlarına ne olasılıkla olur? Oyundaki gerçek olasılıklar kurgusaldır.</p>
+        <p class="sl-hint">${T.estHint}</p>
       </div>
-      <div class="chips" role="group" aria-label="Haber türü" data-ref="kindChips"></div>
+      <div class="chips" role="group" aria-label="${T.kindAria}" data-ref="kindChips"></div>
       <div class="row">
-        <button type="button" class="btn go" data-ref="news">Haberi öğren</button>
-        <button type="button" class="btn" data-ref="nextEv">Başka olay</button>
+        <button type="button" class="btn go" data-ref="news">${T.newsBtn}</button>
+        <button type="button" class="btn" data-ref="nextEv">${T.nextEv}</button>
       </div>
     </div>
 
     <div class="card" data-ref="result" hidden>
       <p class="news" data-ref="newsTxt"></p>
       <div class="sl">
-        <div class="sl-top"><label class="sl-name" for="${id}-sec">Yeni tahminin</label><span class="sl-val" data-ref="secV"></span></div>
+        <div class="sl-top"><label class="sl-name" for="${id}-sec">${T.secLabel}</label><span class="sl-val" data-ref="secV"></span></div>
         <input type="range" id="${id}-sec" min="0" max="100" step="1" data-ref="sec">
-        <p class="sl-hint">Haberi ne kadar dikkate alırsan o kadar kaydır.</p>
+        <p class="sl-hint">${T.secHint}</p>
       </div>
-      <div class="row"><button type="button" class="btn go" data-ref="upd">Güncelle</button></div>
+      <div class="row"><button type="button" class="btn go" data-ref="upd">${T.upd}</button></div>
       <ul class="rows" data-ref="rows"></ul>
     </div>
 
-    <section class="chart" aria-label="Güncelleme oranları">
-      <h3 class="sim-h">Habere güncelleme oranı</h3>
-      <svg viewBox="0 0 360 176" role="img" aria-label="Her yaş profilinde iyi ve kötü haberde güncelleme oranı" data-ref="chart4"></svg>
+    <section class="chart" aria-label="${T.chart4Aria}">
+      <h3 class="sim-h">${T.chart4H}</h3>
+      <svg viewBox="0 0 360 176" role="img" aria-label="${T.chart4Svg}" data-ref="chart4"></svg>
       <div class="legend">
-        <span><i style="background:var(--gld)"></i>İyi haber</span>
-        <span><i style="background:var(--amy)"></i>Kötü haber</span>
-        <span>Oran: tahminin haber yönünde kat ettiği payı (haber farkının yüzdesi)</span>
+        <span><i style="background:var(--gld)"></i>${T.chart4Legend[0]}</span>
+        <span><i style="background:var(--amy)"></i>${T.chart4Legend[1]}</span>
+        <span>${T.chart4Legend[2]}</span>
       </div>
     </section>
   </section>
 
   <details class="how">
-    <summary>Model nasıl çalışıyor?</summary>
-    <p><b>Çizelge.</b> Frontal korteks olgunluğu yaşa göre S biçimli bir eğridir ve yirmilerin ortasında doyar. Dopamin / limbik etkinlik ~15 yaşında tepe yapar, sonra söner. İkisi arasındaki fark "boşluk"tur. Gri madde çocuklukta artar, tepe yaptıktan sonra budanır; miyelinleşme tek yönlü artar. Eğrilerin biçimi çizimsel bir varsayımdır.</p>
-    <p><b>Sürüş.</b> Her turda sarının kalan süresi çarpışma riskini belirler. Ajan, sarıda geçme olasılığını şu kuralla bulur: ödül sinyali (Galvan accumbens eğrisi) eksi frontal denetim çarpı çarpışma riski. Akranlar yalnızca "akran duyarlılığı" yüksek yaşlarda (ödül sistemi güçlü ve frontal olgunluk düşük) accumbens sinyalini artırır ve vmPFC denetimini azaltır (Chein). Yalnızken denetim üç grupta da yeterli olduğundan oranlar benzerdir.</p>
-    <p><b>Haber.</b> İyi haberde güncelleme oranı her profilde aynıdır; kötü haberde oran yaşla artar. Yeni tahmin = ilk tahmin + oran × haber farkı. Kötü haber oranının yaş eğrisi, kitaptaki "ergen neredeyse hiç güncellemez, yetişkin ikisini de eder" bulgusuna uydurulmuş bir varsayımdır.</p>
+    <summary>${t('sim.how')}</summary>
+    ${T.how.map((h) => `<p>${h}</p>`).join('')}
   </details>
 
-  <aside class="book" aria-label="Kitapta">
-    <h3 class="sim-h">Kitapta</h3>
+  <aside class="book" aria-label="${t('sim.book')}">
+    <h3 class="sim-h">${t('sim.book')}</h3>
     <ul>
-      <li><a href="#/bolum/ch06?deney=ch06-e6">Gardner ve Steinberg 2005; Chein ve ark. 2011</a>: yalnızken ergen ve yetişkin benzer risk alır; iki akran ergende riski yaklaşık üç katına çıkarır, yetişkinde değiştirmez. Akranlar varken ergende vmPFC etkinliği azalır, ventral striatum artar. Replikasyon: karışık (etki büyüklükleri değişken, bazı çalışmalar yaşa özgü etkiyi bulamadı).</li>
-      <li><a href="#/bolum/ch06?deney=ch06-e5">Galvan ve ark. 2006</a>: çocukta accumbens tepkisi ödülden bağımsız; yetişkinde ödülle orantılı; ergende büyük ödülde çok güçlü, küçükte zayıf. Replikasyon: karışık (örneklem 37 kişi; bazı çalışmalar azalmış tepki buldu).</li>
-      <li><a href="#/bolum/ch06?deney=ch06-e4">Moutsiana ve ark. 2013</a>: ergenler iyi haberle tahminini yetişkin gibi günceller, kötü haberle neredeyse hiç. Replikasyon: <b>tartışmalı</b>.</li>
-      <li><a href="#/bolum/ch06?deney=ch06-e1">Shaw ve ark. 2006</a>: gri madde kalınlaşma ve budanma zamanlaması. Replikasyon: karışık.</li>
+      ${BOOK.map((b, i) => `<li><a href="#/bolum/ch06?deney=${b.id}">${T.book[i].link}</a>: ${T.book[i].body} ${t('repl.badge', { s: b.bold ? `<b>${t(`repl.${b.rep}`)}</b>` : t(`repl.${b.rep}`) })}${T.book[i].tail}</li>`).join('')}
     </ul>
   </aside>
 
-  <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan gelenler: frontal korteksin yirmili yaşların ortasında olgunlaşması, ergenlikte dopamin tepesi, akranlarla ergen riskinin yaklaşık üç katına çıkması ve yetişkinde değişmemesi, Galvan'ın ödül büyüklüğü örüntüsü, ergenlerde kötü habere zayıf güncelleme. Tepe yaşları, eğri biçimleri, genç yetişkin değerleri ve haber oyunundaki olasılıklar modelin varsayımıdır.</p>
-</div>`;
+  <p class="foot">${T.foot}</p>
+</div>`; };
+
+const BOOK: Array<{ id: string; rep: 'karışık' | 'tartışmalı'; bold?: boolean }> = [
+  { id: 'ch06-e6', rep: 'karışık' },
+  { id: 'ch06-e5', rep: 'karışık' },
+  { id: 'ch06-e4', rep: 'tartışmalı', bold: true },
+  { id: 'ch06-e1', rep: 'karışık' },
+];
 
 interface Round { phase: 'approach' | 'wait' | 'resolve'; t0: number; risk: number; go: boolean; crash: boolean; points: number; decided: boolean; user: boolean }
 interface Tally { n: number; go: number; crash: number; score: number }

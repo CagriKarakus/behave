@@ -2,12 +2,16 @@
 import { svg as svgEl, svgText } from '../kit';
 import { DEFAULT_MARSH, MAX_WAIT, STRATEGIES, histogram, lateLife, makeCohort, summarize, waitOf, waits, type Late, type MarshInput, type Strategy } from './model';
 import { bookBox, chipRow, el, f1, f2, makeSlider, pc, type Ctx, type Meter, type Panel } from '../ui';
+import { pct } from '../../i18n/fmt';
+import { t as tr } from '../../i18n/t';
+import { L } from './text';
 
 const N = 400, SHOWN = 160, SPEED = 60;
 type Mode = 'raw' | 'ctrl';
 const mmss = (s: number): string => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
 export function createMarshPanel(ctx: Ctx, host: HTMLElement) {
+  const T = L().marsh;
   let seed = 9;
   let cohort = makeCohort(seed, N);
   const inp: MarshInput = { ...DEFAULT_MARSH };
@@ -22,22 +26,22 @@ export function createMarshPanel(ctx: Ctx, host: HTMLElement) {
   const stopAt = () => Math.min(waitOf(cohort[idx], inp), MAX_WAIT);
 
   host.innerHTML =
-    `<p class="note">Çocuk masada, önünde bir marshmallow. Deneyci odadan çıktı: 15 dakika beklerse ikinci bir tane alacak. Girdileri değiştirip aynı çocukların nasıl davrandığına bak.</p>` +
-    `<div class="stage"><svg viewBox="0 0 320 150" role="img" aria-label="Masada oturan çocuk ve önündeki marshmallow" data-ref="scene"></svg></div>` +
-    `<div class="row"><button type="button" class="btn" data-ref="go">Başlat (×60 hızlı)</button><button type="button" class="btn" data-ref="next">Başka çocuk</button><button type="button" class="btn" data-ref="reseed">Yeni grup</button></div>` +
-    `<div class="card"><h3 class="sim-h">Girdiler</h3><div class="sliders" data-ref="ctl"></div></div>` +
-    `<div class="card"><h3 class="sim-h">Sanal grup: bekleme süresi dağılımı</h3><div class="chart"><svg viewBox="0 0 320 140" role="img" aria-label="Bekleme süresi dağılımı" data-ref="hist"></svg></div>` +
-    `<div class="legend"><span><i style="background:var(--dop)"></i>Yedi (bekleyemedi)</span><span><i style="background:var(--pfc)"></i>15 dk tamamladı (ikinci ödül)</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M5 9 L13 1 L21 9 Z" fill="var(--ink)"/></svg>Yukarıdaki çocuk</span></div></div>` +
-    `<div class="card"><h3 class="sim-h">Yıllar sonra: bekleme süresi sonraki yaşamı öngörür mü?</h3><div class="row" data-ref="modes"></div>` +
-    `<div class="chart"><svg viewBox="0 0 320 170" role="img" aria-label="Bekleme süresi ile sonraki yaşam göstergesi dağılım grafiği" data-ref="late"></svg></div>` +
-    `<div class="readout3"><div class="ro"><span class="k">Ham ilişki (r)</span><span class="v" data-ref="rraw"></span></div><div class="ro"><span class="k">Aile geçmişi kontrol edilince (r)</span><span class="v" data-ref="rctrl"></span></div><div class="ro"><span class="k">Kalan pay</span><span class="v" data-ref="rleft"></span></div></div>` +
-    `<div class="callout"><strong>Replikasyon durumu: karışık.</strong><span>Dikkat dağıtma stratejileriyle daha uzun beklemek sağlam bir bulgu. Beş yaşta beklemenin yıllar sonraki sonuçları (SAT, sosyal başarı, frontal görevler) öngörmesi ise daha büyük ve çeşitli bir örneklemde belirgin biçimde zayıf çıktı ve aile geçmişi ile erken bilişsel beceriler hesaba katılınca büyük ölçüde kayboldu (Watts, Duncan ve Quan 2018).</span></div>` +
-    `<p class="note">Bu simülasyonda r değerleri kitaptan değil, modelin varsayımından gelir; ilişkinin yönü ve aile geçmişi kontrolünün onu eritmesi kitaptaki desene dayanır.</p></div>` +
+    `<p class="note">${T.note}</p>` +
+    `<div class="stage"><svg viewBox="0 0 320 150" role="img" aria-label="${T.sceneAria}" data-ref="scene"></svg></div>` +
+    `<div class="row"><button type="button" class="btn" data-ref="go">${T.start}</button><button type="button" class="btn" data-ref="next">${T.another}</button><button type="button" class="btn" data-ref="reseed">${T.newGroup}</button></div>` +
+    `<div class="card"><h3 class="sim-h">${T.inputs}</h3><div class="sliders" data-ref="ctl"></div></div>` +
+    `<div class="card"><h3 class="sim-h">${T.groupH}</h3><div class="chart"><svg viewBox="0 0 320 140" role="img" aria-label="${T.histAria}" data-ref="hist"></svg></div>` +
+    `<div class="legend"><span><i style="background:var(--dop)"></i>${T.legendAte}</span><span><i style="background:var(--pfc)"></i>${T.legendDone}</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M5 9 L13 1 L21 9 Z" fill="var(--ink)"/></svg>${T.legendMine}</span></div></div>` +
+    `<div class="card"><h3 class="sim-h">${T.lateH}</h3><div class="row" data-ref="modes"></div>` +
+    `<div class="chart"><svg viewBox="0 0 320 170" role="img" aria-label="${T.lateAria}" data-ref="late"></svg></div>` +
+    `<div class="readout3"><div class="ro"><span class="k">${T.roRaw}</span><span class="v" data-ref="rraw"></span></div><div class="ro"><span class="k">${T.roCtrl}</span><span class="v" data-ref="rctrl"></span></div><div class="ro"><span class="k">${T.roLeft}</span><span class="v" data-ref="rleft"></span></div></div>` +
+    `<div class="callout"><strong>${T.calloutHead}</strong><span>${T.calloutBody}</span></div>` +
+    `<p class="note">${T.rNote}</p></div>` +
     bookBox([
-      { id: 'ch07-e5', text: 'Marshmallow testi (Mischel; 40 yıllık izleme): replikasyon karışık' },
-      { id: 'ch07-e12', text: 'Anne bakımı ve epigenetik iz: ikinci sekmede' },
+      { id: 'ch07-e5', text: T.book[0] },
+      { id: 'ch07-e12', text: T.book[1] },
     ]) +
-    `<details class="more"><summary>Model nasıl çalışıyor?</summary><p>Her sanal çocuk sabit bir "beklemeye yatkınlık" özelliğiyle gelir. Bekleme süresi bu özelliğin, yaşın, stratejinin ve güvenin toplamıdır; 0 ile 15 dakika arasında kırpılır. Taban durum (5 yaş, ödül görünür, deneyciye güven var) kitaptaki özete göre ayarlıdır: grubun yaklaşık üçte biri 15 dakikayı tamamlar, ortalama 11 dakikaya yakındır. Kitaptaki cümle ortalamanın kime ait olduğunda belirsiz; model tüm grubu ortalar. Yaşın, stratejinin ve güvenin saniye cinsinden büyüklükleri modelin varsayımıdır; yalnızca yönleri kitaptandır.</p><p>Sonraki yaşam göstergesi, aile geçmişinden (hem beklemeyi hem sonucu etkiler) ve küçük bir doğrudan bekleme etkisinden oluşur. "Aile geçmişi kontrol edilince" seçeneği bu ortak etkiyi çıkarıp kalan ilişkiyi gösterir. Stratejiyle uzatılan bekleme, özelliği değiştirmediği için sonucu da değiştirmez.</p></details>`;
+    `<details class="more"><summary>${tr('sim.how')}</summary><p>${T.how[0]}</p><p>${T.how[1]}</p></details>`;
 
   const q = <T extends Element = HTMLElement>(n: string) => host.querySelector<T>(`[data-ref="${n}"]`)!;
   const scene = q<SVGSVGElement>('scene');
@@ -58,7 +62,7 @@ export function createMarshPanel(ctx: Ctx, host: HTMLElement) {
     `<path data-r="mouth" d="M215 69 q6 4 12 0" fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round"/>`;
   const r = (n: string) => scene.querySelector<SVGElement>(`[data-r="${n}"]`)!;
   const timer = svgText(scene, { x: 16, y: 24, class: 'big' }, '0:00');
-  svgText(scene, { x: 16, y: 38, class: 'ax-t' }, 'üst sınır 15:00');
+  svgText(scene, { x: 16, y: 38, class: 'ax-t' }, T.cap);
   svgEl('rect', { x: 16, y: 44, width: 130, height: 6, rx: 3, fill: 'var(--line)' }, scene);
   const barFg = svgEl('rect', { x: 16, y: 44, width: 0, height: 6, rx: 3, fill: 'var(--pfc)' }, scene);
   const status = svgText(scene, { x: 16, y: 68, class: 'v-lbl' }, '');
@@ -72,7 +76,7 @@ export function createMarshPanel(ctx: Ctx, host: HTMLElement) {
     timer.textContent = mmss(t);
     barFg.setAttribute('width', String((130 * t) / MAX_WAIT));
     barFg.setAttribute('fill', ate ? 'var(--dop)' : 'var(--pfc)');
-    status.textContent = ate ? `Yedi (${mmss(stop)})` : won ? 'Tamamladı: ikinci ödül!' : running ? 'Bekliyor…' : t > 0 ? 'Duraklatıldı' : 'Hazır';
+    status.textContent = ate ? T.ate(mmss(stop)) : won ? T.won : running ? T.waiting : t > 0 ? T.paused : T.ready;
     r('mm1').toggleAttribute('hidden', ate);
     r('mm2').toggleAttribute('hidden', !won);
     const s = inp.strategy;
@@ -81,23 +85,23 @@ export function createMarshPanel(ctx: Ctx, host: HTMLElement) {
     r('eyesShut').toggleAttribute('hidden', s !== 'eyes' || ate);
     r('eyesOpen').toggleAttribute('hidden', s === 'eyes' && !ate);
     r('mouth').setAttribute('d', ate ? 'M215 71 q6 -5 12 0 q-6 4 -12 0' : won ? 'M214 68 q7 7 14 0' : 'M215 69 q6 4 12 0');
-    caption.textContent = (inp.trust ? 'Deneyci sözünü tutmuş' : 'Deneyci sözünü tutmamış') + ' · ' + STRATEGIES[s].label;
+    caption.textContent = (inp.trust ? T.trustYes : T.trustNo) + ' · ' + STRATEGIES[s].label;
   }
 
   /* ---- Girdiler ---- */
   const ctl = q('ctl');
   const stratRow = el(ctl, 'div', 'chips');
-  const setStrat = chipRow(stratRow, ctx, (Object.keys(STRATEGIES) as Strategy[]).map((k) => ({ key: k, label: STRATEGIES[k].label })), (k) => { inp.strategy = k as Strategy; changed(); }, 'Dikkat stratejisi');
-  el(ctl, 'p', 'sl-hint', 'Strateji: ödüle bakmak, gözleri kapatmak ya da marshmallow\'u bulut gibi düşünmek.');
+  const setStrat = chipRow(stratRow, ctx, (Object.keys(STRATEGIES) as Strategy[]).map((k) => ({ key: k, label: STRATEGIES[k].label })), (k) => { inp.strategy = k as Strategy; changed(); }, T.strategyGroup);
+  el(ctl, 'p', 'sl-hint', T.strategyHint);
   const trustRow = el(ctl, 'div', 'chips');
-  const setTrust = chipRow(trustRow, ctx, [{ key: 'y', label: 'Deneyci sözünü tutmuş' }, { key: 'n', label: 'Deneyci sözünü tutmamış' }], (k) => { inp.trust = k === 'y'; changed(); }, 'Deneyciye güven');
-  el(ctl, 'p', 'sl-hint', 'Önceki sözünü tutmayan deneyciye güven az; bekleme kısalır.');
-  const age = makeSlider(ctx, ctl, 'age', 'Yaş', 'Üç ile altı yaş arası; büyüdükçe beklemek kolaylaşır.', 3, 6, inp.age, (v) => { inp.age = v; changed(); }, (v) => `${v} yaş`, 'var(--pfc)');
+  const setTrust = chipRow(trustRow, ctx, [{ key: 'y', label: T.trustYes }, { key: 'n', label: T.trustNo }], (k) => { inp.trust = k === 'y'; changed(); }, T.trustGroup);
+  el(ctl, 'p', 'sl-hint', T.trustHint);
+  const age = makeSlider(ctx, ctl, 'age', T.ageName, T.ageHint, 3, 6, inp.age, (v) => { inp.age = v; changed(); }, (v) => L().ageFmt(v), 'var(--pfc)');
 
   function changed(): void {
     groupDirty = lateDirty = sceneDirty = true;
     running = false; t = 0;
-    goBtn.textContent = 'Başlat (×60 hızlı)';
+    goBtn.textContent = T.start;
     syncUi();
   }
   function syncUi(): void {
@@ -108,12 +112,12 @@ export function createMarshPanel(ctx: Ctx, host: HTMLElement) {
   const goBtn = q<HTMLButtonElement>('go');
   ctx.scope.on(goBtn, 'click', () => {
     if (!running && t >= stopAt()) t = 0;
-    running = !running; last = 0; sceneDirty = true; goBtn.textContent = running ? 'Duraklat' : 'Başlat (×60 hızlı)'; ctx.touch();
+    running = !running; last = 0; sceneDirty = true; goBtn.textContent = running ? T.pause : T.start; ctx.touch();
   });
-  ctx.scope.on(q('next'), 'click', () => { idx = (idx * 7 + 5) % SHOWN; running = false; t = 0; sceneDirty = groupDirty = true; goBtn.textContent = 'Başlat (×60 hızlı)'; ctx.touch(); });
-  ctx.scope.on(q('reseed'), 'click', () => { seed += 1; cohort = makeCohort(seed, N); running = false; t = 0; groupDirty = lateDirty = sceneDirty = true; goBtn.textContent = 'Başlat (×60 hızlı)'; ctx.touch(); });
+  ctx.scope.on(q('next'), 'click', () => { idx = (idx * 7 + 5) % SHOWN; running = false; t = 0; sceneDirty = groupDirty = true; goBtn.textContent = T.start; ctx.touch(); });
+  ctx.scope.on(q('reseed'), 'click', () => { seed += 1; cohort = makeCohort(seed, N); running = false; t = 0; groupDirty = lateDirty = sceneDirty = true; goBtn.textContent = T.start; ctx.touch(); });
 
-  const setMode = chipRow(q('modes'), ctx, [{ key: 'raw', label: 'Ham ilişki' }, { key: 'ctrl', label: 'Aile geçmişi kontrol edilince' }], (k) => { mode = k as Mode; lateDirty = true; }, 'İlişki görünümü');
+  const setMode = chipRow(q('modes'), ctx, [{ key: 'raw', label: T.modeRaw }, { key: 'ctrl', label: T.modeCtrl }], (k) => { mode = k as Mode; lateDirty = true; }, T.modeGroup);
 
   /* ---- Grup ve sonraki yaşam çizimi ---- */
   const hist = q<SVGSVGElement>('hist'), lateSvg = q<SVGSVGElement>('late');
@@ -124,14 +128,14 @@ export function createMarshPanel(ctx: Ctx, host: HTMLElement) {
     const h = histogram(w), n = w.length;
     const X0 = 30, W = 280, bw = W / 11, base = 108, top = 14, scale = (base - top) / (0.7 * n);
     let s = `<line class="grid" x1="${X0}" y1="${base}" x2="${X0 + W}" y2="${base}"/>`;
-    for (const f of [0.2, 0.4, 0.6]) { const y = base - f * n * scale; s += `<line class="grid" x1="${X0}" y1="${y}" x2="${X0 + W}" y2="${y}"/><text x="${X0 - 4}" y="${y + 3}" text-anchor="end">%${Math.round(f * 100)}</text>`; }
+    for (const f of [0.2, 0.4, 0.6]) { const y = base - f * n * scale; s += `<line class="grid" x1="${X0}" y1="${y}" x2="${X0 + W}" y2="${y}"/><text x="${X0 - 4}" y="${y + 3}" text-anchor="end">${pct(f)}</text>`; }
     h.forEach((c, i) => {
       const hh = Math.min(base - top + 6, c * scale), x = X0 + i * bw + 2;
       s += `<rect x="${x}" y="${base - hh}" width="${bw - 4}" height="${hh}" rx="2" fill="${i === 10 ? 'var(--pfc)' : 'var(--dop)'}"/>`;
     });
     s += `<text class="v-lbl" x="${X0 + 10.5 * bw}" y="${Math.max(10, base - Math.min(base - top + 6, h[10] * scale) - 4)}" text-anchor="middle">${pc(h[10] / n)}</text>`;
     for (let m = 0; m <= 12; m += 3) s += `<text x="${X0 + (m / 1.5) * bw}" y="${base + 12}" text-anchor="middle">${m}</text>`;
-    s += `<text x="${X0 + 10.5 * bw}" y="${base + 12}" text-anchor="middle">15</text><text class="ax-t" x="${X0 + W / 2}" y="${base + 26}" text-anchor="middle">Bekleme süresi (dakika); son sütun: 15 dakikayı tamamlayanlar</text>`;
+    s += `<text x="${X0 + 10.5 * bw}" y="${base + 12}" text-anchor="middle">15</text><text class="ax-t" x="${X0 + W / 2}" y="${base + 26}" text-anchor="middle">${T.histAxis}</text>`;
     const mine = Math.min(w[idx] >= MAX_WAIT ? 10 : Math.floor(w[idx] / 90), 10), cx = X0 + mine * bw + bw / 2;
     s += `<path d="M${cx - 5} ${base + 1} L${cx} ${base - 6} L${cx + 5} ${base + 1}Z" fill="var(--ink)"/>`;
     hist.innerHTML = s;
@@ -150,8 +154,8 @@ export function createMarshPanel(ctx: Ctx, host: HTMLElement) {
     for (let i = 0; i < n; i++) { sxy += (xs[i] - mx) * (ys[i] - my); sxx += (xs[i] - mx) ** 2; }
     const b = sxx ? sxy / sxx : 0;
     s += `<line x1="${px(xmin)}" y1="${py(my + b * (xmin - mx))}" x2="${px(xmax)}" y2="${py(my + b * (xmax - mx))}" stroke="var(--red)" stroke-width="2.4" stroke-linecap="round"/>`;
-    s += `<text class="ax-t" x="${X0 + W / 2}" y="${Y0 + H + 18}" text-anchor="middle">${raw ? 'Beş yaşında bekleme (dk)' : 'Bekleme (aile etkisi çıkarılmış)'}</text>`;
-    s += `<text class="ax-t" x="10" y="${Y0 + H / 2}" text-anchor="middle" transform="rotate(-90 10 ${Y0 + H / 2})">Sonraki yaşam göstergesi</text>`;
+    s += `<text class="ax-t" x="${X0 + W / 2}" y="${Y0 + H + 18}" text-anchor="middle">${raw ? T.lateAxisRaw : T.lateAxisCtrl}</text>`;
+    s += `<text class="ax-t" x="10" y="${Y0 + H / 2}" text-anchor="middle" transform="rotate(-90 10 ${Y0 + H / 2})">${T.lateAxisY}</text>`;
     s += `<text class="v-lbl" x="${X0 + W - 4}" y="${Y0 + 12}" text-anchor="end">r = ${f2(raw ? late.rawR : late.ctrlR)}</text>`;
     lateSvg.innerHTML = s;
     q('rraw').textContent = f2(late.rawR);
@@ -161,15 +165,14 @@ export function createMarshPanel(ctx: Ctx, host: HTMLElement) {
   }
 
   function say(): string {
-    return `${inp.age} yaş, ${STRATEGIES[inp.strategy].label.toLowerCase()}, deneyciye ${inp.trust ? 'güveniyor' : 'güvenmiyor'}: grubun ${pc(sum.completed)}'i 15 dakikayı tamamlıyor, ortalama ${f1(sum.meanMin)} dk. ` +
-      `Sonraki yaşamla ham ilişki r = ${f2(late.rawR)}; aile geçmişi kontrol edilince ${f2(late.ctrlR)} (karışık replikasyon).`;
+    return T.say(inp.age, L().strategies[inp.strategy].low, inp.trust, pc(sum.completed), f1(sum.meanMin), f2(late.rawR), f2(late.ctrlR));
   }
   function meters(): Meter[] {
     const raw = mode === 'raw';
     return [
-      { label: '15 dk tamamlayan', value: pc(sum.completed), frac: sum.completed, color: 'var(--pfc)' },
-      { label: 'Ortalama bekleme', value: `${f1(sum.meanMin)} dk`, frac: sum.meanMin / 15, color: 'var(--dop)' },
-      { label: raw ? 'Sonraki yaşamla r (ham)' : 'Sonraki yaşamla r (kontrollü)', value: f2(raw ? late.rawR : late.ctrlR), frac: Math.abs(raw ? late.rawR : late.ctrlR) / 0.5, color: 'var(--pit)' },
+      { label: T.mDone, value: pc(sum.completed), frac: sum.completed, color: 'var(--pfc)' },
+      { label: T.mMean, value: T.mMeanVal(f1(sum.meanMin)), frac: sum.meanMin / 15, color: 'var(--dop)' },
+      { label: raw ? T.mRRaw : T.mRCtrl, value: f2(raw ? late.rawR : late.ctrlR), frac: Math.abs(raw ? late.rawR : late.ctrlR) / 0.5, color: 'var(--pit)' },
     ];
   }
 
@@ -184,7 +187,7 @@ export function createMarshPanel(ctx: Ctx, host: HTMLElement) {
         const dt = Math.min(0.1, Math.max(0, (now - last) / 1000));
         last = now;
         t = Math.min(stopAt(), t + dt * SPEED);
-        if (t >= stopAt()) { running = false; goBtn.textContent = 'Yeniden oyna'; ctx.touch(); }
+        if (t >= stopAt()) { running = false; goBtn.textContent = T.replay; ctx.touch(); }
         sceneDirty = true;
       }
       if (groupDirty) { drawGroup(); redrew = true; }

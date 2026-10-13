@@ -1,5 +1,7 @@
 // Ergen beyni: saf model çekirdeği (DOM yok). Sayılar illüstratiftir; yönleri Bölüm 6'daki bulgulardan gelir.
 import { mulberry32 } from '../rng';
+import { pct as pc } from '../../i18n/fmt';
+import { L } from './text';
 
 export const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 export const sigmoid = (x: number): number => 1 / (1 + Math.exp(-x));
@@ -46,10 +48,11 @@ export function ageCurves(age: number) {
 export function describeAge(age: number): string {
   const f = frontal(age), d = dopamine(age), g = gap(age);
   const a = Math.round(age);
-  if (g > 0.3) return `${a} yaş: ödül sistemi güçlü (%${Math.round(d * 100)}), frontal korteks ancak %${Math.round(f * 100)} olgun. Gaz pedalı hazır, fren henüz tam değil.`;
-  if (age < 10) return `${a} yaş: ödül sistemi ve frontal korteks henüz düşük düzeyde; ikisi de gelişiyor.`;
-  if (f < 0.9) return `${a} yaş: ödül sistemi sönmeye başladı, frontal korteks (%${Math.round(f * 100)}) yetişiyor; boşluk kapanıyor.`;
-  return `${a} yaş: frontal korteks olgun (%${Math.round(f * 100)}), ödül sistemi daha sakin; denge yetişkin düzeyinde.`;
+  const T = L();
+  if (g > 0.3) return T.ageHigh(a, pc(d), pc(f));
+  if (age < 10) return T.ageChild(a);
+  if (f < 0.9) return T.ageMid(a, pc(f));
+  return T.ageAdult(a, pc(f));
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -82,9 +85,9 @@ export function accumbens(age: number, reward: number): number {
 // ---------------------------------------------------------------------------------------------
 export type GroupId = 'teen' | 'young' | 'adult';
 export const GROUPS: Array<{ id: GroupId; name: string; age: number }> = [
-  { id: 'teen', name: 'Ergen', age: 15 },
-  { id: 'young', name: 'Genç yetişkin', age: 21 },
-  { id: 'adult', name: 'Yetişkin', age: 30 },
+  { id: 'teen', get name() { return L().groups.teen; }, age: 15 },
+  { id: 'young', get name() { return L().groups.young; }, age: 21 },
+  { id: 'adult', get name() { return L().groups.adult; }, age: 30 },
 ];
 export const groupAge = (g: GroupId): number => GROUPS.find((x) => x.id === g)!.age;
 
@@ -153,11 +156,11 @@ export function describeDrive(g: GroupId, peers: number, reward: number): string
   const p = { age: groupAge(g), peers, reward };
   const alone = riskRate({ ...p, peers: 0 });
   const now = riskRate(p);
-  const name = GROUPS.find((x) => x.id === g)!.name.toLowerCase();
-  if (peers === 0) return `Yalnız ${name}: sarıda geçme oranı yaklaşık %${Math.round(now * 100)}.`;
+  const name = L().groupsLc[g];
+  if (peers === 0) return L().driveAlone(name, pc(now));
   const ratio = now / Math.max(alone, 0.001);
-  if (ratio < 1.15) return `${peers} akran izliyor ama ${name} grubunda risk neredeyse değişmiyor: %${Math.round(alone * 100)} → %${Math.round(now * 100)}.`;
-  return `${peers} akran izliyor: ${name} grubunda risk %${Math.round(alone * 100)} → %${Math.round(now * 100)} (yaklaşık ${ratio.toFixed(1)} kat).`;
+  if (ratio < 1.15) return L().driveSame(peers, name, pc(alone), pc(now));
+  return L().driveRatio(peers, name, pc(alone), pc(now), ratio.toFixed(1));
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -165,10 +168,10 @@ export function describeDrive(g: GroupId, peers: number, reward: number): string
 // ---------------------------------------------------------------------------------------------
 export type ProfileId = 'child' | 'teen' | 'young' | 'adult';
 export const PROFILES: Array<{ id: ProfileId; name: string; age: number }> = [
-  { id: 'child', name: 'Çocuk (10)', age: 10 },
-  { id: 'teen', name: 'Ergen (15)', age: 15 },
-  { id: 'young', name: 'Genç yetişkin (21)', age: 21 },
-  { id: 'adult', name: 'Yetişkin (26)', age: 26 },
+  { id: 'child', get name() { return L().profiles.child; }, age: 10 },
+  { id: 'teen', get name() { return L().profiles.teen; }, age: 15 },
+  { id: 'young', get name() { return L().profiles.young; }, age: 21 },
+  { id: 'adult', get name() { return L().profiles.adult; }, age: 26 },
 ];
 
 /** İyi haberde güncelleme oranı: her yaşta benzer. */
@@ -211,7 +214,7 @@ export function updateFraction(estimate: number, second: number, news: News): nu
 
 export function describeNews(profile: ProfileId): string {
   const pr = PROFILES.find((p) => p.id === profile)!;
-  const g = Math.round(goodRate(pr.age) * 100), b = Math.round(badRate(pr.age) * 100);
-  if (b >= g * 0.85) return `${pr.name}: iyi haberde farkın %${g}'i, kötü haberde %${b}'i kadar güncelleme. İki haber de tahmine işliyor.`;
-  return `${pr.name}: iyi haberde farkın %${g}'i, kötü haberde yalnızca %${b}'i kadar güncelleme. Kötü haber büyük ölçüde işlenmiyor.`;
+  const g = pc(goodRate(pr.age)), b = pc(badRate(pr.age));
+  if (Math.round(badRate(pr.age) * 100) >= Math.round(goodRate(pr.age) * 100) * 0.85) return L().newsBoth(pr.name, g, b);
+  return L().newsBadWeak(pr.name, g, b);
 }

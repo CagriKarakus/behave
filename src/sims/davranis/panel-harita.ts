@@ -1,36 +1,34 @@
 // Sekme 1: Saldırganlık haritası. Yedi tür üç eksende (reaktif-proaktif, sıcak-soğuk, dürtüsel-planlı).
 import { ref, svg, svgText } from '../kit';
 import { createTour } from '../tour';
+import { t } from '../../i18n/t';
 import { chipRow, makeSlider, pc, type Ctx, type Meter, type Panel } from '../ui';
 import { AXIS_INFO, SCENARIOS, SYSTEM_INFO, blur, coherence, nearest, pole, profile, systems, type Axes } from './model';
 import { bars, chLink } from './bars';
+import { L } from './text';
 
 const ROW_Y = [68, 138, 208], X0 = 24, X1 = 336, LANES = [0, -16, 16];
-const AX_CAP = [
-  'Reaktif: bir uyarana karşılık. Proaktif: kendiliğinden, bir amaca doğru.',
-  'Sıcakkanlı: öfke ve heyecan eşlik eder. Soğukkanlı: duygusuz, araçsal.',
-  'Dürtüsel: o an, düşünmeden. Planlı: önceden tasarlanmış.',
-];
 
 export interface HaritaPanel extends Panel { select(i: number): void; reset(i?: number): void; place(i: number, p: Partial<Axes>): void }
 
 export function createHaritaPanel(ctx: Ctx, host: HTMLElement): HaritaPanel {
+  const T = L().harita;
   const preset = (): Axes[] => SCENARIOS.map((s) => ({ ...s.axes }));
   const pos = preset();
   let sel = 0, dirty = true;
 
   host.innerHTML =
     `<div class="chips" data-ref="chips"></div>` +
-    `<div class="stage"><svg viewBox="0 0 360 250" role="group" aria-label="Saldırganlık türlerinin üç eksendeki konumu. Şeride dokunmak seçili türü taşır; kaydırıcılar da aynısını yapar." data-ref="map"></svg>` +
-    `<div class="legend"><span>Dolu daire: seçili tür (şeride dokun ya da kaydırıcıyı kullan)</span><span>Boş daire: diğer türler, numara = çip sırası</span><span>Kesikli çizgi: seçili türün profili</span></div></div>` +
+    `<div class="stage"><svg viewBox="0 0 360 250" role="group" aria-label="${T.mapLabel}" data-ref="map"></svg>` +
+    `<div class="legend">${T.legend.map((x) => `<span>${x}</span>`).join('')}</div></div>` +
     `<div class="card"><h3 class="sim-h" data-ref="h"></h3><p class="note" data-ref="desc"></p><p data-ref="prof"></p><p class="note" data-ref="blur"></p>` +
-    `<h3 class="sim-h sys-h">İlgili sistemler (modelin eşlemesi)</h3><div class="sys" data-ref="sys"></div><p class="note" data-ref="where"></p></div>` +
-    `<section><h3 class="sim-h">Seçili türü yerleştir</h3><div class="sliders" data-ref="sl"></div><div class="row"><button type="button" class="btn" data-ref="r1">Bu türü hazır konuma döndür</button><button type="button" class="btn" data-ref="rall">Hepsini hazır konuma al</button></div></section>` +
+    `<h3 class="sim-h sys-h">${T.sysHeading}</h3><div class="sys" data-ref="sys"></div><p class="note" data-ref="where"></p></div>` +
+    `<section><h3 class="sim-h">${T.placeHeading}</h3><div class="sliders" data-ref="sl"></div><div class="row"><button type="button" class="btn" data-ref="r1">${T.resetOne}</button><button type="button" class="btn" data-ref="rall">${T.resetAll}</button></div></section>` +
     `<div class="notes" data-notes="n1"></div>`;
   const $ = <T extends Element = HTMLElement>(n: string) => ref<T>(host, n);
 
   /* ---- Çipler ---- */
-  const setChip = chipRow($('chips'), ctx, SCENARIOS.map((s, i) => ({ key: String(i), label: `${i + 1} ${s.name}` })), (k) => select(+k), 'Saldırganlık türü');
+  const setChip = chipRow($('chips'), ctx, SCENARIOS.map((s, i) => ({ key: String(i), label: `${i + 1} ${s.name}` })), (k) => select(+k), T.chipsLabel);
 
   /* ---- Harita ---- */
   const map = $<SVGElement>('map');
@@ -71,13 +69,13 @@ export function createHaritaPanel(ctx: Ctx, host: HTMLElement): HaritaPanel {
 
   /* ---- Kaydırıcılar ---- */
   const txt = (r: number, v: number): string => `${pole(AXIS_INFO[r], v / 100)} ${v}`;
-  const sliders = AXIS_INFO.map((info, r) => makeSlider(ctx, $('sl'), info.key, `${info.lo} ↔ ${info.hi}`, AX_CAP[r], 0, 100, 0,
+  const sliders = AXIS_INFO.map((info, r) => makeSlider(ctx, $('sl'), info.key, `${info.lo} ↔ ${info.hi}`, T.axCap[r], 0, 100, 0,
     (v) => { pos[sel][info.key] = v / 100; dirty = true; }, (v) => txt(r, v), 'var(--ink)'));
   function syncSliders(): void { AXIS_INFO.forEach((info, r) => { const v = Math.round(pos[sel][info.key] * 100); sliders[r].set(v, txt(r, v)); }); }
   ctx.scope.on($('r1'), 'click', () => { reset(); ctx.touch(); });
   ctx.scope.on($('rall'), 'click', () => { pos.splice(0, pos.length, ...preset()); syncSliders(); dirty = true; ctx.touch(); });
 
-  const sysSet = bars($('sys'), SYSTEM_INFO.map((s) => ({ label: `${s.name} <a href="#/bolum/${s.ch}">B${+s.ch.slice(2)}</a>`, color: `var(${s.color})` })));
+  const sysSet = bars($('sys'), SYSTEM_INFO.map((s) => ({ label: `${s.name} <a href="#/bolum/${s.ch}">${L().chapterShort(+s.ch.slice(2))}</a>`, color: `var(${s.color})` })));
 
   function select(i: number): void { sel = i; syncSliders(); dirty = true; }
   function reset(i = sel): void { pos[i] = { ...SCENARIOS[i].axes }; if (i === sel) syncSliders(); dirty = true; }
@@ -109,45 +107,34 @@ export function createHaritaPanel(ctx: Ctx, host: HTMLElement): HaritaPanel {
     setChip(String(sel));
     const ax = p, n = SCENARIOS[near()];
     $('h').textContent = `${sel + 1} ${sc.name}`;
-    $('desc').textContent = sc.desc + (moved(sel) ? ' (Konum elle değiştirildi.)' : '');
-    $('prof').innerHTML = `<b>Profil:</b> ${profile(ax)}. <b>Eksen uyumu:</b> ${pc(coherence(ax))}. <b>En yakın tür:</b> ${n.name}.`;
+    $('desc').textContent = sc.desc + (moved(sel) ? T.moved : '');
+    $('prof').innerHTML = T.profile(profile(ax), pc(coherence(ax)), n.name);
     const b = blur(ax);
-    $('blur').textContent = b ? `Eksenler ayrışıyor: ${b}. Bu tür tek bir kutuya sığmaz.` : 'Üç eksen aynı yönü gösteriyor; sınıflamalar bu türde birbirini doğruluyor.';
+    $('blur').textContent = b ? T.diverge(b) : T.aligned;
     const s = systems(ax, sc);
     sysSet(SYSTEM_INFO.map((i) => s[i.key]));
-    $('where').innerHTML = `<b>Kitapta:</b> ` + sc.where.map(([ch, why]) => `${chLink(ch)} (${why})`).join('; ') + '.';
+    $('where').innerHTML = `<b>${t('sim.book')}:</b> ` + sc.where.map(([ch, why]) => `${chLink(ch)} (${why})`).join('; ') + '.';
   }
 
   const say = (): string => {
     const sc = SCENARIOS[sel], b = blur(pos[sel]);
-    return `${sc.name}: ${profile(pos[sel])}. ${b ? `Eksenler ayrışıyor (${b}).` : 'Eksenler aynı yönde.'} En yakın tür: ${SCENARIOS[near()].name}.`;
+    return b ? T.sayDiverge(sc.name, profile(pos[sel]), b, SCENARIOS[near()].name) : T.sayAligned(sc.name, profile(pos[sel]), SCENARIOS[near()].name);
   };
   const panel: HaritaPanel = {
     say,
     meters(): Meter[] {
       const s = systems(pos[sel], SCENARIOS[sel]);
       return [
-        { label: 'Eksen uyumu', value: pc(coherence(pos[sel])), frac: coherence(pos[sel]), color: 'var(--ink)' },
-        { label: 'Tehdit devresi', value: pc(s.amy), frac: s.amy, color: 'var(--amy)' },
-        { label: 'Planlama', value: pc(s.pfc), frac: s.pfc, color: 'var(--pfc)' },
+        { label: T.meters[0], value: pc(coherence(pos[sel])), frac: coherence(pos[sel]), color: 'var(--ink)' },
+        { label: T.meters[1], value: pc(s.amy), frac: s.amy, color: 'var(--amy)' },
+        { label: T.meters[2], value: pc(s.pfc), frac: s.pfc, color: 'var(--pfc)' },
       ];
     },
     draw(): boolean { if (!dirty) return false; dirty = false; render(); return true; },
     select, reset, place,
   };
 
-  const tour = createTour(ctx.scope, [
-    { title: 'Savunma: üç eksen aynı uçta', text: 'Bir saldırganlık türü tek bir kutu değil, üç ayrı eksendeki konumdur. Tehdit altındaki savunma reaktif, sıcakkanlı ve dürtüseldir.',
-      look: 'Üç şeritte de seçili dairenin sol uçta olması ve yüksek eksen uyumu.', apply: () => { panel.reset(0); select(0); } },
-    { title: 'Planlı şiddet: tam ters uç', text: 'Önceden tasarlanmış soğukkanlı şiddet proaktif, duygusuz ve planlıdır. Öne çıkan sistemler de değişir (modelin eşlemesi).',
-      look: 'Tehdit devresi çubuğunun düşmesi, planlama ve dopamin çubuklarının yükselmesi.', apply: () => { panel.reset(4); select(4); } },
-    { title: 'Ara türler kutuya sığmaz', text: 'Statü kavgası kasıtlı ama öfkeli, sıcak ama hesaplı. Üç eksen artık aynı yönü göstermez; sınıflamaların sınırı bulanıktır.',
-      look: 'Eksen uyumunun düşmesi ve kartta "ayrışıyor" uyarısı.', apply: () => { panel.reset(2); select(2); } },
-    { title: 'Yer değiştirme: stres yükü', text: 'Hedef tehdit eden kişi değil, ulaşılabilen zayıf biri. Profili savunmaya yakın ama stres sistemi en yüksek. Mekanizma üçüncü sekmede.',
-      look: 'Glukokortikoid çubuğu ve "en yakın tür" satırı.', apply: () => { panel.reset(3); select(3); } },
-    { title: 'Sen yerleştir', text: 'Kurguda şiddetin mağduru yoktur ama aynı sözcük kullanılır. Daireyi şeritlerde sürükleyerek ya da kaydırıcıyla taşı; kitap her ayrımın farklı biyolojiye işaret ettiğini söyler.',
-      look: 'Bir ekseni uca çektiğinde sistem çubuklarının hangi yöne kaydığı.', apply: () => { panel.reset(6); select(6); } },
-  ]);
+  const tour = createTour(ctx.scope, T.tour.map((st, k) => ({ ...st, apply: () => { const i = [0, 4, 2, 3, 6][k]; panel.reset(i); select(i); } })));
   host.prepend(tour.el);
   return panel;
 }

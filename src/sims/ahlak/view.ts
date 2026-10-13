@@ -1,5 +1,8 @@
 import { mulberry32 } from '../rng';
-import { lazyNotes, slider } from '../ui';
+import { lazyNotes, pc, f1, slider } from '../ui';
+import { getLocale, decimalSep } from '../../i18n/locale';
+import { percent } from '../../i18n/fmt';
+import { L } from './text';
 import '../sim.css';
 import './view.css';
 import { Scope, ref, svg, svgText, uid } from '../kit';
@@ -12,24 +15,25 @@ import {
 } from './model';
 
 type Tab = 'tro' | 'pg' | 'dice';
-const f1 = (x: number): string => x.toFixed(1).replace('.', ',');
-const pc = (x: number): string => `%${Math.round(x * 100)}`;
-const band = (b: [number, number] | null): string => (!b ? 'sayı yok' : b[0] === b[1] ? `~${pc(b[0])}` : `${pc(b[0])}-${b[1] * 100}`);
+const N_DICE = 300;
+const band = (b: [number, number] | null): string => (!b ? L().noNumber : b[0] === b[1] ? `~${pc(b[0])}` : percent(`${Math.round(b[0] * 100)}-${b[1] * 100}`));
 
 const sv = (w: number, h: number, inner: string): string => `<svg viewBox="0 0 ${w} ${h}" aria-hidden="true">${inner}</svg>`;
 const arrow = (c: string, dash: string): string => sv(26, 10, `<path d="M1 5H19" stroke="${c}" stroke-width="2.2"${dash}/><path d="M17 1L25 5L17 9z" fill="${c}"/>`);
 const dotI = (c: string): string => `<i style="background:${c}"></i>`;
 const key = (...a: [string, string][]): string => `<div class="legend">${a.map(([i, t]) => `<span>${i}${t}</span>`).join('')}</div>`;
-const TEMPLATE = (id: string) => `
+const TEMPLATE = (id: string) => {
+  const T = L();
+  return `
 <div class="sim sim-ahl">
-  <p class="lede">Ahlaki kararlarımızı akıl mı verir, sezgi mi; ve kültürler "adil"i neden farklı tanımlar?</p>
-  <div class="tabs" role="tablist" aria-label="Simülasyon bölümleri">
-    <button class="tab" role="tab" id="${id}-tab-tro" data-pane="tro" aria-controls="${id}-pane-tro" aria-selected="true" type="button">Trolley</button>
-    <button class="tab" role="tab" id="${id}-tab-pg" data-pane="pg" aria-controls="${id}-pane-pg" aria-selected="false" tabindex="-1" type="button">Kamu malı ve ceza</button>
-    <button class="tab" role="tab" id="${id}-tab-dice" data-pane="dice" aria-controls="${id}-pane-dice" aria-selected="false" tabindex="-1" type="button">Zar ve dürüstlük</button>
+  <p class="lede">${T.lede}</p>
+  <div class="tabs" role="tablist" aria-label="${T.tabsLabel}">
+    <button class="tab" role="tab" id="${id}-tab-tro" data-pane="tro" aria-controls="${id}-pane-tro" aria-selected="true" type="button">${T.tabs.tro}</button>
+    <button class="tab" role="tab" id="${id}-tab-pg" data-pane="pg" aria-controls="${id}-pane-pg" aria-selected="false" tabindex="-1" type="button">${T.tabs.pg}</button>
+    <button class="tab" role="tab" id="${id}-tab-dice" data-pane="dice" aria-controls="${id}-pane-dice" aria-selected="false" tabindex="-1" type="button">${T.tabs.dice}</button>
   </div>
 
-  <div class="sim-bar" role="group" aria-label="Anlık çıktılar"><div class="sim-bar-in">
+  <div class="sim-bar" role="group" aria-label="${T.barLabel}"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
     <div class="meters" data-ref="meters"></div>
   </div></div>
@@ -38,63 +42,63 @@ const TEMPLATE = (id: string) => `
   <!-- ============ 1 · Trolley ============ -->
   <section class="pane" role="tabpanel" id="${id}-pane-tro" data-pane="tro" aria-labelledby="${id}-tab-tro">
     <div data-ref="tour1"></div>
-    <div class="chips" role="group" aria-label="Senaryolar" data-ref="scChips"></div>
-    <section class="card" aria-label="Senaryo ve karar">
+    <div class="chips" role="group" aria-label="${T.scenariosLabel}" data-ref="scChips"></div>
+    <section class="card" aria-label="${T.scenarioDecisionLabel}">
       <p class="sc-text" data-ref="scText"></p>
       <div class="row decide" role="group" data-ref="decide">
-        <button class="btn btn-yes" type="button" data-ref="yes">Evet</button>
-        <button class="btn btn-no" type="button" data-ref="no">Hayır</button>
+        <button class="btn btn-yes" type="button" data-ref="yes">${T.yes}</button>
+        <button class="btn btn-no" type="button" data-ref="no">${T.no}</button>
       </div>
       <p class="sc-res" data-ref="scRes"></p>
     </section>
 
-    <section aria-label="İki sistem">
-      <h3 class="sim-h">İki sistem</h3>
+    <section aria-label="${T.systemsLabel}">
+      <h3 class="sim-h">${T.systemsTitle}</h3>
       <div class="sys">
         <div class="sys-box cold">
-          <p class="sys-t">Soğuk hesap</p><p class="sys-s">dlPFC · faydacı</p>
+          <p class="sys-t">${T.cold}</p><p class="sys-s">${T.coldSub}</p>
           <div class="track"><b data-ref="coldB"></b></div>
           <p class="sys-n" data-ref="coldT"></p>
         </div>
         <div class="sys-box hot">
-          <p class="sys-t">Sıcak sezgi</p><p class="sys-s">vmPFC · amigdala · insula</p>
+          <p class="sys-t">${T.hot}</p><p class="sys-s">${T.hotSub}</p>
           <div class="track"><b data-ref="hotB"></b></div>
           <ul class="parts" data-ref="parts"></ul>
         </div>
       </div>
     </section>
 
-    <section aria-label="Senaryo karşılaştırması">
-      <h3 class="sim-h">Evet oranı: model ve kitap</h3>
+    <section aria-label="${T.compareLabel}">
+      <h3 class="sim-h">${T.compareTitle}</h3>
       <div class="stage">
-        <svg viewBox="0 0 360 232" role="group" aria-label="Beş senaryo ve ayarların için model tahmini ile kitaptaki evet oranları" data-ref="plot"></svg>
-        ${key([sv(14, 12, '<circle cx="7" cy="6" r="4.5" fill="var(--ink)"/>'), 'model (ortalama kişi)'], [sv(16, 12, '<rect x="1" y="2" width="14" height="8" rx="2" fill="var(--dop)" fill-opacity=".55" stroke="var(--dop)"/>'), 'kitaptaki oran'], [sv(14, 12, '<path d="M7 1.5L12 6L7 10.5L2 6z" fill="none" stroke="var(--ink)" stroke-width="1.6"/>'), 'tutarlı niyet kuralı'])}
+        <svg viewBox="0 0 360 232" role="group" aria-label="${T.plotLabel}" data-ref="plot"></svg>
+        ${key([sv(14, 12, '<circle cx="7" cy="6" r="4.5" fill="var(--ink)"/>'), T.legendModel], [sv(16, 12, '<rect x="1" y="2" width="14" height="8" rx="2" fill="var(--dop)" fill-opacity=".55" stroke="var(--dop)"/>'), T.legendBook], [sv(14, 12, '<path d="M7 1.5L12 6L7 10.5L2 6z" fill="none" stroke="var(--ink)" stroke-width="1.6"/>'), T.legendConsistent])}
       </div>
     </section>
 
-    <section aria-label="Girdiler">
-      <h3 class="sim-h">Girdiler: üç boyut</h3>
+    <section aria-label="${T.inputsLabel}">
+      <h3 class="sim-h">${T.inputsTitle}</h3>
       <div class="dims" data-ref="dims"></div>
       <div class="sliders" data-ref="savedSl"></div>
     </section>
 
 
-    <section class="card" aria-label="Sonuç">
-      <h3 class="sim-h">Sonuç: kararların ve kitap</h3>
+    <section class="card" aria-label="${T.resultLabel}">
+      <h3 class="sim-h">${T.resultTitle}</h3>
       <ul class="res" data-ref="res"></ul>
       <p class="note" data-ref="prof"></p>
-      <div class="seg" role="group" aria-label="Greene'in iki sorun türü">
-        <button class="btn" type="button" aria-pressed="true" data-ref="gMe">Ben mi, Biz mi?</button>
-        <button class="btn" type="button" aria-pressed="false" data-ref="gThem">Biz mi, Onlar mı?</button>
+      <div class="seg" role="group" aria-label="${T.greeneLabel}">
+        <button class="btn" type="button" aria-pressed="true" data-ref="gMe">${T.gMe}</button>
+        <button class="btn" type="button" aria-pressed="false" data-ref="gThem">${T.gThem}</button>
       </div>
       <p class="note" data-ref="gText"></p>
     </section>
 
-    <section class="card" aria-label="Knobe etkisi">
-      <h3 class="sim-h">Knobe etkisi: niyet yargısı</h3>
-      <div class="seg" role="group" aria-label="Senaryo"><button class="btn" type="button" aria-pressed="true" data-ref="kHarm">Plan zarar verir</button><button class="btn" type="button" aria-pressed="false" data-ref="kHelp">Plan yarar sağlar</button></div>
+    <section class="card" aria-label="${T.knobeLabel}">
+      <h3 class="sim-h">${T.knobeTitle}</h3>
+      <div class="seg" role="group" aria-label="${T.knobeScenarioLabel}"><button class="btn" type="button" aria-pressed="true" data-ref="kHarm">${T.kHarm}</button><button class="btn" type="button" aria-pressed="false" data-ref="kHelp">${T.kHelp}</button></div>
       <p class="note" data-ref="kText"></p>
-      <div class="row decide"><button class="btn" type="button" data-ref="kYes">İsteyerek yaptı</button><button class="btn" type="button" data-ref="kNo">İsteyerek yapmadı</button></div>
+      <div class="row decide"><button class="btn" type="button" data-ref="kYes">${T.kYes}</button><button class="btn" type="button" data-ref="kNo">${T.kNo}</button></div>
       <div class="kn" data-ref="kRes" hidden></div>
     </section>
 
@@ -104,28 +108,28 @@ const TEMPLATE = (id: string) => `
   <!-- ============ 2 · Kamu malı ve ceza ============ -->
   <section class="pane" role="tabpanel" id="${id}-pane-pg" data-pane="pg" aria-labelledby="${id}-tab-pg" hidden>
     <div data-ref="tour2"></div>
-    <section class="card" aria-label="Kamu malı oyunu ve ceza">
-      <h3 class="sim-h">1 · Kamu malı oyunu ve ceza (Herrmann)</h3>
-      <p class="note">16 oyuncu, her biri 4 kişilik bir grupta, ${PG.rounds} tur. Her turda 0-${PG.E} jeton ortak havuza girer; sonra isteyen, diğerlerini ceza puanıyla cezalandırır.</p>
-      <div class="chips" role="group" aria-label="Toplum" data-ref="socChips"></div>
-      <div class="chips" role="group" aria-label="Ceza aşaması" data-ref="punChips"></div>
+    <section class="card" aria-label="${T.pgLabel}">
+      <h3 class="sim-h">${T.pgTitle}</h3>
+      <p class="note">${T.pgIntro(PG.rounds, PG.E)}</p>
+      <div class="chips" role="group" aria-label="${T.societyLabel}" data-ref="socChips"></div>
+      <div class="chips" role="group" aria-label="${T.punishLabel}" data-ref="punChips"></div>
       <div class="stage">
-        <svg viewBox="0 0 360 306" role="img" aria-label="Dört grup ve oyuncular: dolgu katkıyı, oklar cezayı gösterir" data-ref="groups"></svg>
-        ${key([sv(16, 14, '<circle cx="8" cy="7" r="6" fill="none" stroke="var(--pfc)" stroke-width="1.6"/><circle cx="8" cy="7" r="3" fill="var(--pfc)"/>'), 'normal oyuncu'], [sv(16, 14, '<path d="M8 .8L15 7L8 13.2L1 7z" fill="none" stroke="var(--amy)" stroke-width="1.6"/><circle cx="8" cy="7" r="2.6" fill="var(--amy)"/>'), 'antisosyal eğilimli'], [arrow('var(--pfc)', ''), 'bedava binene ceza'], [arrow('var(--amy)', ' stroke-dasharray="4 2"'), 'işbirlikçiye ceza'])}
+        <svg viewBox="0 0 360 306" role="img" aria-label="${T.groupsLabel}" data-ref="groups"></svg>
+        ${key([sv(16, 14, '<circle cx="8" cy="7" r="6" fill="none" stroke="var(--pfc)" stroke-width="1.6"/><circle cx="8" cy="7" r="3" fill="var(--pfc)"/>'), T.legendNormal], [sv(16, 14, '<path d="M8 .8L15 7L8 13.2L1 7z" fill="none" stroke="var(--amy)" stroke-width="1.6"/><circle cx="8" cy="7" r="2.6" fill="var(--amy)"/>'), T.legendAnti], [arrow('var(--pfc)', ''), T.legendPro], [arrow('var(--amy)', ' stroke-dasharray="4 2"'), T.legendAntiArrow])}
       </div>
-      <div class="row play"><button class="btn" type="button" data-ref="replay">Yeniden oyna</button><button class="btn" type="button" data-ref="reseed">Başka oyuncular</button></div>
+      <div class="row play"><button class="btn" type="button" data-ref="replay">${T.replay}</button><button class="btn" type="button" data-ref="reseed">${T.reseed}</button></div>
       <div class="sliders" data-ref="roundSl"></div>
-      <div class="chart" aria-label="Katkı grafiği"><h4 class="sim-h">Ortalama katkı</h4>
-        <svg viewBox="0 0 360 188" role="img" aria-label="Turlara göre ortalama katkı: cezalı ve cezasız oyun" data-ref="chart1"></svg></div>
-      <div class="chart" aria-label="Ceza grafiği"><h4 class="sim-h">Ceza puanları</h4>
-        <svg viewBox="0 0 360 150" role="img" aria-label="Turlara göre ceza puanları: bedava binene ve işbirlikçiye" data-ref="chart2"></svg></div>
+      <div class="chart" aria-label="${T.chartContribLabel}"><h4 class="sim-h">${T.chartContribTitle}</h4>
+        <svg viewBox="0 0 360 188" role="img" aria-label="${T.chartContribAria}" data-ref="chart1"></svg></div>
+      <div class="chart" aria-label="${T.chartPunLabel}"><h4 class="sim-h">${T.chartPunTitle}</h4>
+        <svg viewBox="0 0 360 150" role="img" aria-label="${T.chartPunAria}" data-ref="chart2"></svg></div>
       <div class="sliders" data-ref="socSl"></div>
     </section>
 
-    <section class="card" aria-label="Adalet eğrisi">
-      <h3 class="sim-h">2 · Adalet pazarla ve topluluk büyüklüğüyle değişir (Henrich)</h3>
-      <div class="chips" role="group" aria-label="Topluluk" data-ref="mkChips"></div>
-      <div class="chart"><svg viewBox="0 0 360 206" role="img" aria-label="Teklif edilen paya göre reddedilme olasılığı: seçili topluluk ve iki referans" data-ref="chart3"></svg></div>
+    <section class="card" aria-label="${T.fairnessLabel}">
+      <h3 class="sim-h">${T.fairnessTitle}</h3>
+      <div class="chips" role="group" aria-label="${T.communityLabel}" data-ref="mkChips"></div>
+      <div class="chart"><svg viewBox="0 0 360 206" role="img" aria-label="${T.chart3Aria}" data-ref="chart3"></svg></div>
       <div class="readout" data-ref="mkRead"></div>
       <div class="sliders" data-ref="mkSl"></div>
     </section>
@@ -137,30 +141,31 @@ const TEMPLATE = (id: string) => `
   <!-- ============ 3 · Zar ve dürüstlük ============ -->
   <section class="pane" role="tabpanel" id="${id}-pane-dice" data-pane="dice" aria-labelledby="${id}-tab-dice" hidden>
     <div data-ref="tour3"></div>
-    <section class="card" aria-label="Tek bir atış">
-      <h3 class="sim-h">1 · Zar iki kez atılır, yalnızca ilki sayılır</h3>
-      <div class="row play"><button class="btn tour-next" type="button" data-ref="roll">Zarları at</button></div>
-      <div class="dice" data-ref="dice" role="group" aria-label="Atılan zarlar"></div>
+    <section class="card" aria-label="${T.singleRollLabel}">
+      <h3 class="sim-h">${T.singleRollTitle}</h3>
+      <div class="row play"><button class="btn tour-next" type="button" data-ref="roll">${T.roll}</button></div>
+      <div class="dice" data-ref="dice" role="group" aria-label="${T.rolledLabel}"></div>
       <ul class="res" data-ref="rollRes"></ul>
     </section>
-    <section class="card" aria-label="Toplumun bildirdiği dağılım">
-      <h3 class="sim-h">2 · ${300} kişinin bildirdiği sonuçlar</h3>
-      <div class="chips" role="group" aria-label="Toplum" data-ref="mixChips"></div>
+    <section class="card" aria-label="${T.distLabel}">
+      <h3 class="sim-h">${T.distTitle(N_DICE)}</h3>
+      <div class="chips" role="group" aria-label="${T.societyLabel}" data-ref="mixChips"></div>
       <div class="stage">
-        <svg viewBox="0 0 360 232" role="img" aria-label="Bildirilen sayıların dağılımı; tipe göre renkli sütunlar" data-ref="hist"></svg>
-        ${key([dotI('var(--pfc)'), 'dürüst'], [dotI('var(--dop)'), 'haklı dürüstlük'], [dotI('var(--amy)'), 'tam yalan'], [sv(24, 10, '<path d="M1 5H23" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="4 3"/>'), 'düz dağılım (%17)'])}
+        <svg viewBox="0 0 360 232" role="img" aria-label="${T.histAria}" data-ref="hist"></svg>
+        ${key([dotI('var(--pfc)'), T.legHonest], [dotI('var(--dop)'), T.legJustified], [dotI('var(--amy)'), T.legLiar], [sv(24, 10, '<path d="M1 5H23" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="4 3"/>'), T.legFlat(pc(1 / 6))])}
       </div>
       <div class="readout" data-ref="diceRead"></div>
       <div class="sliders" data-ref="mixSl"></div>
-      <div class="row play"><button class="btn" type="button" data-ref="rerun">Yeniden çalıştır</button></div>
+      <div class="row play"><button class="btn" type="button" data-ref="rerun">${T.rerun}</button></div>
     </section>
 
 
     <div class="notes" data-notes="dice"></div>
   </section>
 
-  <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan: trolley oranları, Knobe %85 ve %23, Hadza %73, pazar ~%90, 50 ve 5000 kişi eşikleri, ceza ve sosyal sermaye yönü, zarın iki atış düzeni. Oyun parametreleri, ağırlıklar, hazır karışımlar ve eğri biçimleri modelin varsayımıdır.</p>
+  <p class="foot">${T.foot}</p>
 </div>`;
+};
 
 interface SliderHandle { inp: HTMLInputElement; set: (v: number) => void }
 

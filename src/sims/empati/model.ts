@@ -5,6 +5,8 @@
 // Sekme 3: zorunlu vergi ve gönüllü bağışta ödül devresi (Harbaugh e12), parayı başkasına harcamak (Dunn e11).
 // Tüm katsayılar modelin varsayımıdır; kitaptan gelen, bulguların yönü ve birkaç sayıdır (ör. "zamanın yarısından fazlası").
 import { mulberry32 } from '../rng';
+import { num, pct as fpct } from '../../i18n/fmt';
+import { L } from './text';
 
 export const clamp = (v: number, lo = 0, hi = 1): number => Math.min(hi, Math.max(lo, v));
 const sig = (x: number): number => 1 / (1 + Math.exp(-x));
@@ -96,13 +98,9 @@ export function simulateEmpathy(u: EmpathyInputs, seed = 1, n = 40): EmpathyResu
 }
 
 export function describeEmpathy(u: EmpathyInputs, r: EmpathyResult): string {
-  const focus = u.selfFocus >= 0.6 ? 'Dikkat çoğunlukla gözlemcinin kendi sıkıntısında' : u.selfFocus <= 0.35 ? 'Dikkat acı çeken kişide' : 'Dikkat kendisi ile acı çeken arasında bölünmüş';
-  const tail = r.dEnd >= THETA
-    ? `sıkıntı eşiğin üstünde; %${P(r.avoid)} kaçınıyor, yalnızca %${P(r.help)} yardım ediyor.`
-    : r.wEnd >= 0.5
-      ? `şefkat yükseliyor, sıkıntı eşiğin altında kalıyor; %${P(r.help)} yardım ediyor.`
-      : `sıkıntı eşiğin altında ama şefkat zayıf; %${P(r.help)} yardım ediyor.`;
-  return `${focus}: ${tail}`;
+  const focus = u.selfFocus >= 0.6 ? 'self' : u.selfFocus <= 0.35 ? 'other' : 'split';
+  const kind = r.dEnd >= THETA ? 'over' : r.wEnd >= 0.5 ? 'warm' : 'weak';
+  return L().e.say(focus, kind, fpct(r.avoid), fpct(r.help));
 }
 
 // ============================================================ Sekme 2: kime yardım?
@@ -149,15 +147,8 @@ export function bondResult(b: BondInputs): BondResult {
   return { rows, sel: rows[b.target] };
 }
 
-export const STRAIN_NAME: Record<Strain, string> = { light: 'açık renkli', dark: 'koyu renkli' };
-export const TARGET_NAME: Record<Target, string> = { cage: 'kafes arkadaşı', light: 'açık renkli yabancı', dark: 'koyu renkli yabancı' };
-
 export function describeBond(b: BondInputs, r: BondResult): string {
-  const head = `Hedef: ${TARGET_NAME[b.target]}. Kurtarma %${P(r.sel.rescue)}, kurtarılırsa çikolata paylaşımı %${P(r.sel.share)}.`;
-  const mouse = r.sel.w > 0.5
-    ? ' Fare tanıdıksa izlenen acı bulaşıyor.'
-    : ' Fare yabancıysa izlenen acı neredeyse bulaşmıyor.';
-  return head + mouse;
+  return L().b.say(L().targetName[b.target], fpct(r.sel.rescue), fpct(r.sel.share), r.sel.w > 0.5);
 }
 
 // ============================================================ Sekme 3: bağış ve ödül
@@ -202,7 +193,6 @@ export const forecast = (onSelf: boolean, amount: 5 | 20): number => 0.2 * (onSe
 
 export function describeGive(r: GiveResult): string {
   const gain = r.vol - r.tax;
-  const rr = r.r >= 0.5 ? 'güçlü' : r.r > 0.2 ? 'orta' : 'zayıf';
-  return `Gönüllü bağışta ödül devresi zorunlu vergiye göre ${gain > 0.02 ? `${P(gain)} puan yüksek` : 'hemen hemen aynı'}; ` +
-    `vergi sırasındaki ödül ile cömertlik arasındaki ilişki ${rr} (r = ${r.r.toFixed(2).replace('.', ',')}).`;
+  const level = r.r >= 0.5 ? 'strong' : r.r > 0.2 ? 'moderate' : 'weak';
+  return L().g.say(gain > 0.02 ? P(gain) : 0, level, num(r.r, 2));
 }

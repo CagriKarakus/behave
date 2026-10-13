@@ -3,6 +3,9 @@
 //  2) MAO-A × çocuklukta kötü muamele (Caspi tarzı etkileşim, sembolik)
 //  3) boy gibi poligenik bir özellik ve GWAS keşif gücü
 import { mulberry32 } from '../rng';
+import { int, num, pct, pct1 } from '../../i18n/fmt';
+import { t } from '../../i18n/t';
+import { L } from './text';
 
 /** Standart normal (Box-Muller). */
 export function gauss(rng: () => number): number {
@@ -37,7 +40,7 @@ export interface Table {
 }
 
 export const DEFAULT_PARAMS: TableParams = { n: 4, gen: 0.7, spread: 0.5, inter: 0 };
-export const genericEnvNames = (n: number): string[] => Array.from({ length: n }, (_, i) => `Ortam ${i + 1}`);
+export const genericEnvNames = (n: number): string[] => Array.from({ length: n }, (_, i) => L().model.envName(i + 1));
 
 /** gen/spread/inter: 0..1; n: 1..6. Ortamlar kötüden iyiye, eşit aralıklı; sayı arttıkça aralık genişler. */
 export function genCells(p: TableParams): number[][] {
@@ -52,7 +55,7 @@ export function genCells(p: TableParams): number[][] {
 
 export function tableFromParams(p: TableParams): Table {
   const n = clamp(Math.round(p.n), 1, MAX_ENV);
-  return { cells: genCells({ ...p, n }), envNames: genericEnvNames(n), axis: 'Ortam kalitesi (→ daha zengin)', yLabel: 'Sonuç (sembolik ölçek)' };
+  return { cells: genCells({ ...p, n }), envNames: genericEnvNames(n), axis: L().model.axis, yLabel: L().model.yLabel };
 }
 
 export interface Preset { id: string; name: string; params?: TableParams; table?: Table; note: string }
@@ -64,9 +67,9 @@ export interface Preset { id: string; name: string; params?: TableParams; table?
  */
 export const CRABBE_TABLE: Table = {
   cells: [[13, 100, 14], [33, 40, 36], [58, 52, 60]],
-  envNames: ['Oregon', 'Alberta', 'Albany'],
-  axis: 'Laboratuvar',
-  yLabel: 'Kokainle artan hareket (5.000 cm = 100)',
+  get envNames() { return L().model.crabbe.envNames.slice(); },
+  get axis() { return L().model.crabbe.axis; },
+  get yLabel() { return L().model.crabbe.yLabel; },
 };
 
 /**
@@ -75,16 +78,16 @@ export const CRABBE_TABLE: Table = {
  */
 export const SES_TABLE: Table = {
   cells: [[36.7, 45.1], [40, 60], [43.3, 74.9]],
-  envNames: ['Düşük SES', 'Yüksek SES'],
-  axis: 'Ailenin sosyoekonomik düzeyi (→)',
-  yLabel: 'Bilişsel puan (sembolik)',
+  get envNames() { return L().model.ses.envNames.slice(); },
+  get axis() { return L().model.ses.axis; },
+  get yLabel() { return L().model.ses.yLabel; },
 };
 
 export const PRESETS: Preset[] = [
-  { id: 'none', name: 'Etkileşim yok', params: { n: 4, gen: 0.7, spread: 0.5, inter: 0 }, note: 'Üç varyant ortamdan aynı oranda etkilenir: çizgiler paralel. Gen farkı her ortamda aynı kalır.' },
-  { id: 'cross', name: 'Sıralama değişen etkileşim', params: { n: 4, gen: 0.7, spread: 0.6, inter: 1 }, note: 'Çizgiler kesişir: yoksul ortamda C, zengin ortamda A "en iyi" varyanttır. "Hangisi daha iyi?" sorusunun ortamsız cevabı yoktur.' },
-  { id: 'crabbe', name: 'Üç laboratuvar (Crabbe)', table: CRABBE_TABLE, note: 'Kitaptaki üç laboratuvar deneyi: A varyantı kokainle hareketliliği Oregon ve Albany\'de az, Alberta\'da çok artırır (667, 701 ve 5.000\'den fazla cm). B ve C üç yerde benzerdir. B ve C değerleri sembolik.' },
-  { id: 'ses', name: 'Yoksul ↔ zengin (Turkheimer)', table: SES_TABLE, note: 'Kitaptaki sonuç: kalıtılabilirlik yoksul ortamda yaklaşık %10, zengin ortamda yaklaşık %70. Replikasyon karışık: ABD örneklerinde görüldü, Batı Avrupa ve Avustralya\'da görülmedi ya da tersine döndü.' },
+  { id: 'none', get name() { return L().model.presets.none.name; }, params: { n: 4, gen: 0.7, spread: 0.5, inter: 0 }, get note() { return L().model.presets.none.note; } },
+  { id: 'cross', get name() { return L().model.presets.cross.name; }, params: { n: 4, gen: 0.7, spread: 0.6, inter: 1 }, get note() { return L().model.presets.cross.note; } },
+  { id: 'crabbe', get name() { return L().model.presets.crabbe.name; }, table: CRABBE_TABLE, get note() { return L().model.presets.crabbe.note; } },
+  { id: 'ses', get name() { return L().model.presets.ses.name; }, table: SES_TABLE, get note() { return L().model.presets.ses.note(t('repl.karışık')); } },
 ];
 
 export interface Pop { g: Uint8Array; e: Uint8Array; y: Float64Array; nE: number; perCell: number }
@@ -164,12 +167,12 @@ export function rankFlips(cells: number[][], m = cells[0].length): number {
 }
 
 export function describeTable(d: Decomp, curve: number[], flips: number, nEnv: number): string {
-  const p = (v: number) => Math.round(v * 100);
+  const T = L().model.table;
   const lo = Math.min(...d.perEnv), hi = Math.max(...d.perEnv);
-  if (nEnv === 1) return `Tek ortamda bakılınca h² %${p(d.h2)}: fark neredeyse tümüyle genlere yazılabilir. Ama bu sayı yalnızca bu ortam için geçerli.`;
-  if (flips > 0 && d.gxe > 0.08) return `Çizgiler kesişiyor: hangi varyantın "iyi" olduğu ortama göre değişiyor. Ortam içi h² %${p(lo)} ile %${p(hi)} arasında; tek bir "yüzde kaç genetik" yok.`;
-  if (hi - lo > 0.3) return `Ortam içi h² %${p(lo)} ile %${p(hi)} arasında değişiyor: gen farkı aynı, ama gen farklarının ne kadar görüneceğini ortam belirliyor.`;
-  return `${nEnv} ortam birlikte: h² %${p(d.h2)} (yalnızca ilk ortamda %${p(curve[0])} idi). Gen etkisi aynı kaldı; ortam farkı toplam çeşitliliğe girince genetik pay küçüldü.`;
+  if (nEnv === 1) return T.one(pct(d.h2));
+  if (flips > 0 && d.gxe > 0.08) return T.cross(pct(lo), pct(hi));
+  if (hi - lo > 0.3) return T.spread(pct(lo), pct(hi));
+  return T.many(nEnv, pct(d.h2), pct(curve[0]));
 }
 
 /* =====================================================
@@ -199,12 +202,13 @@ export function maoPopulationRisk(lowActivity: boolean, share: number, ratio: nu
 }
 
 export function describeMao(level: number, ratio: number, share: number): string {
-  const pc = (v: number) => Math.round(v * 100);
+  const M = L().model.mao;
+  const pc = (v: number) => String(Math.round(v * 100));
   const lo = maoRisk(true, level, ratio), hi = maoRisk(false, level, ratio);
-  if (ratio <= 1.05) return `Etkileşim yok varsayımı: iki varyantın riski aynı, kötü muamele ikisini de aynı oranda artırıyor. Büyük çalışmaların çoğunun gördüğü buna daha yakın.`;
-  if (level < 0.3) return `Kötü muamele yok ya da hafif: iki varyant arasında fark yok (yüz kişide ${pc(lo)} ve ${pc(hi)}). Varyant tek başına bir şey söylemiyor.`;
+  if (ratio <= 1.05) return M.noInter;
+  if (level < 0.3) return M.mild(pc(lo), pc(hi));
   const popRatio = maoPopulationRisk(true, share, ratio) / maoPopulationRisk(false, share, ratio);
-  return `Kötü muamele düzeyi yüksek: düşük aktiviteli varyantta yüz kişide ${pc(lo)}, yüksekte ${pc(hi)} (≈${(lo / hi).toFixed(1).replace('.', ',')} kat). Herkes birlikte sayılınca fark yalnızca ≈${popRatio.toFixed(2).replace('.', ',')} kat: etki ortama bağlı.`;
+  return M.high(pc(lo), pc(hi), num(lo / hi, 1), num(popRatio, 2));
 }
 
 /* =====================================================
@@ -331,10 +335,10 @@ export function simulateGwas(M: number, envShare: number, seed = 1, people = N_P
 }
 
 export function describeGwas(M: number, envShare: number, d: Discovery): string {
-  const pc = (v: number) => (v * 100).toFixed(v < 0.01 ? 2 : 1).replace('.', ',');
+  const G = L().model.gwas;
   const h2 = 1 - envShare;
-  if (h2 <= 0.001) return 'Çevre tüm farkı belirliyor: genler boy farkına katkı vermiyor, çan eğrisi yalnızca çevreden geliyor.';
-  if (M === 1) return `Tek bir gen: boy yalnızca birkaç kümeye ayrılıyor (sivri tepeler). Gerçek boy dağılımı böyle değil, çünkü tek bir "boy geni" yok.`;
-  if (M < 30) return `${M} varyantla dağılım hâlâ pürüzlü. Her varyantın payı büyük (en güçlüsü varyansın %${pc(d.top)}'i).`;
-  return `${M.toLocaleString('tr-TR')} varyantla düzgün bir çan eğrisi çıkıyor. En güçlü tek varyant farkın yalnızca %${pc(d.top)}'ini açıklıyor: gen sayısı arttıkça "boy geni" aramak anlamsızlaşıyor.`;
+  if (h2 <= 0.001) return G.envOnly;
+  if (M === 1) return G.one;
+  if (M < 30) return G.few(M, pct1(d.top));
+  return G.many(int(M), pct1(d.top));
 }

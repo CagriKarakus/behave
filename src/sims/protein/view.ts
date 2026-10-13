@@ -4,23 +4,23 @@ import { Scope, ref, uid } from '../kit';
 import { createTour, type TourStep } from '../tour';
 import { lazyNotes, type Ctx, type Meter, type Panel } from '../ui';
 import { createCodePanel } from './panel-code';
+import { L } from './text';
 
 type Tab = 'code' | 'reg' | 'conf';
-const TABS: Array<{ key: Tab; label: string }> = [
-  { key: 'code', label: 'Kodon çevirisi' },
-  { key: 'reg', label: 'Gen düzenlenmesi' },
-  { key: 'conf', label: 'Şekil ve işlev' },
-];
+const TAB_KEYS: Tab[] = ['code', 'reg', 'conf'];
 
-const TEMPLATE = (id: string) => `
+const TEMPLATE = (id: string) => {
+  const s = L();
+  const TABS = TAB_KEYS.map((key) => ({ key, label: s.tabs[key] }));
+  return `
 <div class="sim sim-pr">
-  <p class="lede">DNA'daki tek bir harf değişikliği neden bazen hiçbir şey yapmaz, bazen her şeyi değiştirir?</p>
+  <p class="lede">${s.lede}</p>
 
-  <div class="tabs" role="tablist" aria-label="Simülasyon bölümleri">
+  <div class="tabs" role="tablist" aria-label="${s.tabsAria}">
     ${TABS.map((t, i) => `<button class="tab" role="tab" id="${id}-tab-${t.key}" data-pane="${t.key}" aria-controls="${id}-pane-${t.key}" aria-selected="${i === 0}" ${i ? 'tabindex="-1"' : ''} type="button">${t.label}</button>`).join('')}
   </div>
 
-  <div class="sim-bar" role="group" aria-label="Anlık açıklama"><div class="sim-bar-in">
+  <div class="sim-bar" role="group" aria-label="${s.barAria}"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
     <div class="meters" data-ref="meters"></div>
   </div></div>
@@ -30,6 +30,7 @@ const TEMPLATE = (id: string) => `
 
   <div class="notes"><div data-notes="how"></div><div data-notes="book"></div><div data-notes="foot"></div></div>
 </div>`;
+};
 
 export function mount(container: HTMLElement): () => void {
   const scope = new Scope();
@@ -117,118 +118,29 @@ export function mount(container: HTMLElement): () => void {
   const after = () => { barDirty = true; poke(); };
   const addTour = (key: Tab, steps: TourStep[]) => hostOf(key).prepend(createTour(scope, steps, { onExit: after }).el);
 
-  addTour('code', [
-    {
-      title: 'Normal gen',
-      text: 'DNA\'daki üçlüler (kodon) mRNA\'ya kopyalanır; her kodon bir amino asidi belirtir. ATG ile başlar, TAA ile durur.',
-      look: 'Kutuların altındaki zincir: on amino asit, işlev %100.',
-      apply: () => code.setPreset('none'),
-    },
-    {
-      title: 'Sessiz: hiçbir şey olmaz',
-      text: 'Alanin kodonunun üçüncü harfi T yerine C oldu. GCT de GCC de alanin: 61 kodon yalnızca 20 amino asidi paylaşır (kodon fazlalığı).',
-      look: 'Kodon değişti (işaretli harf) ama zincir ve işlev aynı.',
-      apply: () => code.setPreset('sessiz'),
-    },
-    {
-      title: 'Yanlış anlamlı: bir amino asit değişir',
-      text: 'CAC yerine GAC: artı yüklü histidin, eksi yüklü aspartata döndü. Üstelik modelin aktif bölgesinde (varsayım).',
-      look: 'Mutant zincirde çerçeveli tek kutu ve işlev çubuğunun düşüşü.',
-      apply: () => code.setPreset('yanlis'),
-    },
-    {
-      title: 'Anlamsız: erken dur',
-      text: 'Triptofan kodonu TGG, TGA oldu; TGA bir dur kodonudur. Zincir beşinci amino asitte kesilir, kalan yarısı hiç yapılmaz.',
-      look: 'Kutular DUR\'dan sonra sönük, zincir kısaldı.',
-      apply: () => code.setPreset('anlamsiz'),
-    },
-    {
-      title: 'Çerçeve kayması: her şey değişir',
-      text: 'Tek bir harf silinince sonraki bütün üçlüler bir harf kayar. Üçüncü amino asitten sonrası tamamen başka bir dizi olur.',
-      look: 'Mutant zincirde ikinci amino asitten sonraki bütün kutular çerçeveli.',
-      apply: () => code.setPreset('sil1'),
-    },
-    {
-      title: 'Üç harf silmek çerçeveyi korur',
-      text: 'Aynı kadar zarar sanılır, ama üç harf tam bir kodon eder: yalnızca bir amino asit eksilir, geri kalanı yerinde. Etki harf sayısından çok çerçeveye bağlı.',
-      look: 'Zincir 9 amino asit; 1 harf silmeyle işlev karşılaştırması.',
-      apply: () => code.setPreset('sil3'),
-    },
+  const withText = (texts: Array<{ title: string; text: string; look: string }>, applies: Array<() => void>): TourStep[] =>
+    texts.map((x, i) => ({ ...x, apply: applies[i] }));
+
+  addTour('code', withText(L().tourCode, (['none', 'sessiz', 'yanlis', 'anlamsiz', 'sil1', 'sil3'] as const).map((k) => () => code.setPreset(k))));
+
+  const regTour = (p: RegP): TourStep[] => withText(L().tourReg, [
+    () => p.set({ a: 10, b: 80, tf: 100, meA: false, meB: false }),
+    () => p.set({ a: 90, b: 90, tf: 0, meA: false, meB: false }),
+    () => p.set({ a: 90, b: 90, tf: 100, meA: false, meB: true }),
+    () => p.set({ a: 90, b: 90, tf: 100, meA: false, meB: false, e2: true, e3: true }),
+    () => p.set({ e2: true, e3: false }),
   ]);
 
-  const regTour = (p: RegP): TourStep[] => [
-    {
-      title: 'Aynı gen, iki ortam',
-      text: 'İki ortamda DNA da promotör de aynı. Yalnızca hormon sinyali farklı: düşük sinyalde TF etkinleşmez ve gen kapalı kalır; yüksek sinyalde TF promotöre oturur.',
-      look: 'A ve B\'de gen kutusunun rengi ve mRNA sayısı.',
-      apply: () => p.set({ a: 10, b: 80, tf: 100, meA: false, meB: false }),
-    },
-    {
-      title: 'TF yoksa sinyal yetmez',
-      text: 'Sinyal yüksek ama hücrede TF yok. Promotöre oturacak bir protein olmadığı için gen yine kapalı.',
-      look: 'TF dairesi boş, oturma %0.',
-      apply: () => p.set({ a: 90, b: 90, tf: 0, meA: false, meB: false }),
-    },
-    {
-      title: 'Metilasyon kilidi',
-      text: 'Sinyal ve TF var ama B\'de promotöre metil işaretleri yapışmış: TF oturamıyor. DNA dizisi aynı kaldı; susturan şey epigenetik bir işaret.',
-      look: 'B\'de dolu TF, kırmızı çarpı ve kapalı gen; A\'da açık gen.',
-      apply: () => p.set({ a: 90, b: 90, tf: 100, meA: false, meB: true }),
-    },
-    {
-      title: 'Bir gen, birden çok protein',
-      text: 'Gen eksonlara bölünür; hücre hangilerini birleştireceğini seçer. E2 ve E3 birlikte alınırsa protein hem bağlanır hem iş yapar.',
-      look: 'Alttaki birleştirilmiş mRNA\'da dört eksonun hepsi var: 210 amino asit.',
-      apply: () => p.set({ a: 90, b: 90, tf: 100, meA: false, meB: false, e2: true, e3: true }),
-    },
-    {
-      title: 'Aynı gen, başka ürün',
-      text: 'E3 atlanınca daha kısa bir protein çıkar: bağlanır ama işi yapamaz. "Bir gen, bir protein" kuralı geçerli değil.',
-      look: 'E3 (atlandı) ve ürün satırındaki yeni uzunluk.',
-      apply: () => p.set({ e2: true, e3: false }),
-    },
-  ];
+  const confTour = (p: ConfP): TourStep[] => withText(L().tourConf, [
+    () => p.set({ lig: 'none', conc: 3, temp: 37, ph: 7.4 }),
+    () => p.set({ lig: 'good', conc: 3, temp: 37, ph: 7.4 }),
+    () => p.set({ lig: 'good', conc: 10, temp: 37, ph: 7.4 }),
+    () => p.set({ lig: 'like', conc: 10, temp: 37, ph: 7.4 }),
+    () => p.set({ lig: 'good', conc: 5, temp: 52, ph: 7.4 }),
+    () => p.set({ lig: 'good', conc: 3, temp: 37, ph: 7.4 }),
+  ]);
 
-  const confTour = (p: ConfP): TourStep[] => [
-    {
-      title: 'Molekül yokken',
-      text: 'Protein çoğunlukla açık duruyor; ara sıra kendiliğinden kapanıp açılıyor ama bir iş yapmıyor.',
-      look: 'İşlev hızı 0, kapalı şekil payı küçük.',
-      apply: () => p.set({ lig: 'none', conc: 3, temp: 37, ph: 7.4 }),
-    },
-    {
-      title: 'Doğru molekül: şekil değişir',
-      text: 'Uyan molekül çukura oturunca iki lob kapanır ve iş yapılır. Ürün çıkınca protein yeniden açılır: iki şekil arasında gidip gelir.',
-      look: 'Zaman çizgisinde açık ile kapalı arası geçişler ve yeşil noktalar.',
-      apply: () => p.set({ lig: 'good', conc: 3, temp: 37, ph: 7.4 }),
-    },
-    {
-      title: 'Daha çok molekül, doyum',
-      text: 'Derişimi artırmak hızı bir yere kadar artırır. Tüm moleküller meşgulken ekstra molekül bir şey katmaz.',
-      look: 'İşlev hızı çubuğunun artışı yavaşlıyor.',
-      apply: () => p.set({ lig: 'good', conc: 10, temp: 37, ph: 7.4 }),
-    },
-    {
-      title: 'Benzer ama uymayan',
-      text: 'Şekli çukura tam uymayan benzer molekül zayıf bağlanır, çabuk ayrılır ve lobları kapatamaz. Anahtar-kilit eşleşmesi işlevi belirler.',
-      look: 'Elmas şekilli molekül ve çok düşük işlev hızı.',
-      apply: () => p.set({ lig: 'like', conc: 10, temp: 37, ph: 7.4 }),
-    },
-    {
-      title: 'Sıcaklık ve asitlik şekli kaydırır',
-      text: 'Kitaba göre çevre koşulları şekli hafifçe değiştirebilir. Modelde uç değerlerde şekil bozulur ve işlev çöker (varsayım).',
-      look: '"Şekil bozulması" yazısı ve şeklin sağlamlığı çubuğu.',
-      apply: () => p.set({ lig: 'good', conc: 5, temp: 52, ph: 7.4 }),
-    },
-    {
-      title: 'Reseptör de böyle çalışır',
-      text: 'Hormon ya da nörotransmitter reseptöre bağlanınca reseptör şekil değiştirir ve hücreye sinyal gider. Yanlış hormon aynı kilidi açamaz.',
-      look: '"Kapalı" şekil payı: reseptörde etkin sinyal payı gibi okunur.',
-      apply: () => p.set({ lig: 'good', conc: 3, temp: 37, ph: 7.4 }),
-    },
-  ];
-
-  lazyNotes(scope, root, () => import('./notes').then((m) => m.NOTES));
+  lazyNotes(scope, root, () => import('./notes').then((m) => m.notes()));
 
   /* ---- Döngü: yalnızca durum değiştiğinde ya da molekül akarken çizer; ekran dışında durur ---- */
   function frame(now: number): void {

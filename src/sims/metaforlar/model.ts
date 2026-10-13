@@ -5,6 +5,8 @@
 // chapters.json ch15 deneylerinde etki büyüklüğü sayısı YOK; yönler kitaptan, büyüklükler ve çarpanlar
 // modelin varsayımıdır ("ASSUME" ile işaretli).
 import { mulberry32, shuffle } from '../rng';
+import { pct } from '../../i18n/fmt';
+import { L } from './text';
 
 export const clamp = (x: number, lo = 0, hi = 1): number => Math.min(hi, Math.max(lo, x));
 const sigmoid = (z: number): number => 1 / (1 + Math.exp(-z));
@@ -76,46 +78,46 @@ export function gauges(id: CardId, x: Inputs): Gauge[] {
     case 'cyber': {
       const att = x.glitch ? 0.1 : 1; // kitap: arıza koşulunda ACC etkinleşmesi görülmedi
       return [
-        same('pain', 'Dışlanma acısı (öznel)', 0, x.excl * (x.glitch ? 0.5 : 1), 'sağlam'),
-        mk('acc', 'dACC: fiziksel acıyla ortak iz', 0, x.excl * att, K_REPL.acc, 'karışık'),
+        same('pain', L().gauge.pain, 0, x.excl * (x.glitch ? 0.5 : 1), 'sağlam'),
+        mk('acc', L().gauge.acc, 0, x.excl * att, K_REPL.acc, 'karışık'),
       ];
     }
     case 'insula': {
       const ins = 1 - (1 - 0.6 * x.gross) * (1 - 0.7 * x.viol);
       return [
-        same('ins', 'İnsula etkinliği', 0, ins, 'sağlam'),
-        same('rej', 'Adaletsiz teklifi reddetme eğilimi', 0.1, 0.1 + 0.8 * x.viol ** 1.2, 'sağlam'),
-        mk('sev', 'Ahlaki yargı sertliği (bozuk tat etkisi)', 0.5, 0.5 + AMP.taste * x.gross, K_REPL.taste, 'tartışmalı'),
-        mk('tas', 'İçeceğin tadını kötü bulma (ihlal etkisi)', 0.5, 0.5 + AMP.vice * x.viol, K_REPL.vice, 'tartışmalı'),
+        same('ins', L().gauge.ins, 0, ins, 'sağlam'),
+        same('rej', L().gauge.rej, 0.1, 0.1 + 0.8 * x.viol ** 1.2, 'sağlam'),
+        mk('sev', L().gauge.sev, 0.5, 0.5 + AMP.taste * x.gross, K_REPL.taste, 'tartışmalı'),
+        mk('tas', L().gauge.tas, 0.5, 0.5 + AMP.vice * x.viol, K_REPL.vice, 'tartışmalı'),
       ];
     }
     case 'cup': {
       const t = 2 * x.temp - 1;
       return [
-        mk('warm', 'Kişiyi sıcak (cana yakın) bulma', 0.5, 0.5 + AMP.warmth * t, K_REPL.cup, 'tartışmalı'),
-        mk('gen', 'Cömertlik ve güven', 0.5, 0.5 + AMP.gener * t, K_REPL.cup, 'tartışmalı'),
-        mk('oth', 'Diğer özellikler (kontrol)', 0.5, 0.5, 1, 'tartışmalı', true),
+        mk('warm', L().gauge.warm, 0.5, 0.5 + AMP.warmth * t, K_REPL.cup, 'tartışmalı'),
+        mk('gen', L().gauge.gen, 0.5, 0.5 + AMP.gener * t, K_REPL.cup, 'tartışmalı'),
+        mk('oth', L().gauge.oth, 0.5, 0.5, 1, 'tartışmalı', true),
       ];
     }
     case 'clip': {
       const w = 2 * x.weight - 1;
       return [
-        mk('ser', 'Adayı ciddi bulma', 0.5, 0.5 + AMP.serious * w, K_REPL.clip, 'tartışmalı'),
-        mk('oth', 'Diğer özellikler (kontrol)', 0.5, 0.5, 1, 'tartışmalı', true),
+        mk('ser', L().gauge.ser, 0.5, 0.5 + AMP.serious * w, K_REPL.clip, 'tartışmalı'),
+        mk('oth', L().gauge.oth, 0.5, 0.5, 1, 'tartışmalı', true),
       ];
     }
     case 'macbeth': {
       const mouth = x.chan === 0 ? 1 : 0.25, hand = x.chan === 1 ? 1 : 0.25; // beden bölgesi özgüllüğü (e8)
       return [
-        mk('gar', 'Gargara isteği (ağız)', 0.3, 0.3 + AMP.wash * x.mviol * mouth, K_REPL.macbeth, 'karışık'),
-        mk('sab', 'El sabunu isteği (el)', 0.3, 0.3 + AMP.wash * x.mviol * hand, K_REPL.macbeth, 'karışık'),
-        mk('hlp', 'Yardım talebine yanıt (telafi)', 0.4, 0.4 + AMP.help * x.mviol * (x.washed ? 0.1 : 1), K_REPL.macbeth, 'tartışmalı'),
+        mk('gar', L().gauge.gar, 0.3, 0.3 + AMP.wash * x.mviol * mouth, K_REPL.macbeth, 'karışık'),
+        mk('sab', L().gauge.sab, 0.3, 0.3 + AMP.wash * x.mviol * hand, K_REPL.macbeth, 'karışık'),
+        mk('hlp', L().gauge.hlp, 0.4, 0.4 + AMP.help * x.mviol * (x.washed ? 0.1 : 1), K_REPL.macbeth, 'tartışmalı'),
       ];
     }
     case 'germ':
       return [
-        mk('imm', 'Göçe karşı olumsuz tutum', 0.4, 0.4 + AMP.germ * x.lang, K_REPL.germ, 'bilinmiyor'),
-        mk('eco', 'Ekonomik konuya tutum (kontrol)', 0.4, 0.4, 1, 'bilinmiyor', true),
+        mk('imm', L().gauge.imm, 0.4, 0.4 + AMP.germ * x.lang, K_REPL.germ, 'bilinmiyor'),
+        mk('eco', L().gauge.eco, 0.4, 0.4, 1, 'bilinmiyor', true),
       ];
   }
 }

@@ -5,6 +5,9 @@
 //  - Oksitosin (ch04-e5, e7, e8): iç gruba cömertliği büyütür, dış gruba önyargıyı büyütebilir.
 //  - Stres (ch04-e9, e10, e11, e12): ters U; kronikleşince bozulur; var olan eğilimleri büyütür.
 
+import { money, num, pct } from '../../i18n/fmt';
+import { L } from './text';
+
 export const clamp = (x: number, lo = 0, hi = 1): number => Math.max(lo, Math.min(hi, x));
 export const sigmoid = (z: number): number => 1 / (1 + Math.exp(-z));
 
@@ -124,10 +127,10 @@ export function lieRate(i: TIn): number {
 
 export function describeT(i: TIn): string {
   const c = choice(i);
-  const ch = (x: number) => Math.round(x * 100);
-  const ctx = !i.challenge ? 'Statü meydan okuması yok' : i.route === 'saldiri' ? 'Meydan okuma var, statü saldırıyla korunuyor' : 'Meydan okuma var, statü cömertlikle korunuyor';
-  const hor = i.dose < 0.05 ? 'hormon yok' : `hormon %${ch(i.dose)}`;
-  return `${ctx}; ${hor}: saldırı %${ch(c.saldiri)}, cömertlik %${ch(c.comertlik)}, geri çekilme %${ch(c.cekil)}.`;
+  const X = L().model;
+  const ctx = !i.challenge ? X.tCtxNone : i.route === 'saldiri' ? X.tCtxAtk : X.tCtxGen;
+  const hor = i.dose < 0.05 ? X.tHorNone : X.tHor(pct(i.dose));
+  return X.tLine(ctx, hor, pct(c.saldiri), pct(c.comertlik), pct(c.cekil));
 }
 
 /* ============================ Oksitosin ============================ */
@@ -162,9 +165,10 @@ export function prejudice(o: OIn): number {
 }
 
 export function describeO(o: OIn): string {
-  const f = (x: number) => x.toFixed(1).replace('.', ',');
-  if (o.dose < 0.05) return `Oksitosin yok: iç gruba ${f(transfer('biz', o))} ₺, dış gruba ${f(transfer('onlar', o))} ₺ güveniliyor; fark kişinin kendi eğiliminden.`;
-  return `Oksitosin %${Math.round(o.dose * 100)}: iç gruba ${f(transfer('biz', o))} ₺, dış gruba ${f(transfer('onlar', o))} ₺; dış gruba önyargı %${Math.round(prejudice(o) * 100)}, önleyici ihanet %${Math.round(betray(o) * 100)}.`;
+  const f = (x: number) => money(num(x, 1));
+  const X = L().model;
+  if (o.dose < 0.05) return X.oNone(f(transfer('biz', o)), f(transfer('onlar', o)));
+  return X.oDose(pct(o.dose), f(transfer('biz', o)), f(transfer('onlar', o)), pct(prejudice(o)), pct(betray(o)));
 }
 
 /* ---- Tarla faresi: vazopressin reseptörü ve eş bağı ---- */
@@ -233,17 +237,17 @@ export function empathy(s: SIn): { yakin: number; yabanci: number } {
 
 /** Card ve Dahl: maçın sonucuna göre aile içi şiddet bildirimindeki göreli artış (kitaptaki yüzdeler). */
 export const MATCHES = [
-  { id: 'galibiyet', label: 'Takım kazandı', up: 0 },
-  { id: 'beklenen', label: 'Beklenen yenilgi', up: 0 },
-  { id: 'beklenmedik', label: 'Beklenmedik yenilgi', up: 10 },
-  { id: 'playoff', label: 'Playoff yarışında beklenmedik yenilgi', up: 13 },
-  { id: 'rakip', label: 'Rakibe yenilgi', up: 20 },
+  { id: 'galibiyet', up: 0 },
+  { id: 'beklenen', up: 0 },
+  { id: 'beklenmedik', up: 10 },
+  { id: 'playoff', up: 13 },
+  { id: 'rakip', up: 20 },
 ] as const;
 
 export function describeS(s: SIn): string {
-  const p = Math.round(perf(s.sev, s.minutes) * 100);
   const c = chronic(s.minutes);
-  const tip = s.sev < 0.15 ? 'Düşük stres' : s.sev <= 0.6 ? 'Orta stres' : 'Aşırı stres';
-  const sure = c < 0.15 ? 'kısa süreli' : c < 0.7 ? 'giderek süren' : 'kronik';
-  return `${tip}, ${sure}: performans %${p}, alışkanlığa kayma %${Math.round(habit(s.sev, s.minutes) * 100)}, yabancıya empati %${Math.round(empathy(s).yabanci * 100)}.`;
+  const X = L().model;
+  const tip = s.sev < 0.15 ? X.sLow : s.sev <= 0.6 ? X.sMid : X.sHigh;
+  const sure = c < 0.15 ? X.sShort : c < 0.7 ? X.sGrowing : X.sChronic;
+  return X.sLine(tip, sure, pct(perf(s.sev, s.minutes)), pct(habit(s.sev, s.minutes)), pct(empathy(s).yabanci));
 }

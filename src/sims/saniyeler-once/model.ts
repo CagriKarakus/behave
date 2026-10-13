@@ -2,20 +2,22 @@
 // Saf model: DOM yok. Zamanlar ms. "Kitap" etiketli değerler chapters.json'daki bulgulardan gelir; diğer tüm
 // sabitler (gecikmeler, zaman sabitleri, taban oranlar) modelin varsayımıdır ve ilişkilerin yönünü gösterir.
 import { mulberry32 } from '../rng';
+import { num, pct as pctText } from '../../i18n/fmt';
+import { L } from './text';
 
 const clamp = (v: number, lo = 0, hi = 1): number => Math.min(hi, Math.max(lo, v));
 
 // ===================================================================== 1) Hızlı yol ve düşünce
 export type Stim = 'fear' | 'calm' | 'sign' | 'faceB' | 'faceW';
 /** Tehdit çağrışımı: korkulu göz akları (Whalen), nötr yüz, soyut uyarı işareti. Değerler modelin varsayımı. */
-export const STIM: Record<Stim, { name: string; threat: number }> = {
-  fear: { name: 'Korkulu göz', threat: 0.85 },
-  calm: { name: 'Nötr yüz', threat: 0.2 },
-  sign: { name: 'Uyarı işareti', threat: 0.6 },
+export const STIM: Record<Stim, { threat: number }> = {
+  fear: { threat: 0.85 },
+  calm: { threat: 0.2 },
+  sign: { threat: 0.6 },
   // Yüz kategorileri çalışmaların kendi terimleriyle (Beyaz katılımcılar için Siyah/Beyaz yüz). Siyah yüz için eşik
   // threatOf() içinde öğrenilmiş çağrışım ve tanıdıklıkla belirlenir.
-  faceB: { name: 'Siyah yüz', threat: 0.2 },
-  faceW: { name: 'Beyaz yüz', threat: 0.2 },
+  faceB: { threat: 0.2 },
+  faceW: { threat: 0.2 },
 };
 /** Öğrenilmiş çağrışımın en fazla eklediği tehdit (varsayım). */
 export const ASSOC_MAX = 0.5;
@@ -119,14 +121,14 @@ export function simulateFast(u: FastInputs): FastResult {
 }
 
 export function describeFast(u: FastInputs, r: FastResult): string {
+  const T = L().descFast;
   const seen = r.awareness >= 0.5;
-  const amy = Math.round(r.peakA * 100);
-  const brake = Math.round(r.brake * 100);
-  if (r.peakA < 0.3) return `Uyaran (${STIM[u.stim].name.toLowerCase()}) az tehdit taşıyor: amigdala tepkisi küçük (%${amy}), frenlenecek bir şey yok.`;
-  if (!seen) return `Uyaran fark edilmedi (algı %${Math.round(r.awareness * 100)}), ama amigdala yine de %${amy} düzeyine çıktı. Frontal fren devreye girmedi.`;
-  if (r.brake < 0.25) return `Uyaran fark edildi, ama süre kısa ya da frontal güç düşük: amigdala %${amy}'e çıktı, fren tepkiyi yalnızca %${brake} azalttı.`;
-  const load = u.load > 0.5 ? ' Yük frenin gücünü azaltıyor.' : '';
-  return `Uyaran fark edildi. Amigdala ~${r.tA50} ms'de yükseldi, frontal korteks ~${r.tF50} ms'de devreye girip tepkiyi %${brake} azalttı.${load}`;
+  const amy = pctText(r.peakA);
+  const brake = pctText(r.brake);
+  if (r.peakA < 0.3) return T.low(L().stimLow[u.stim], amy);
+  if (!seen) return T.unseen(pctText(r.awareness), amy);
+  if (r.brake < 0.25) return T.weak(amy, brake);
+  return (u.load > 0.5 ? T.seenLoad : T.seen)(r.tA50, r.tF50, brake);
 }
 
 // ===================================================================== 2) Norm ihlallerinin yayılması (Keizer)
@@ -231,14 +233,13 @@ export function compare(cfg: StreetCfg, n = 600, seed = 1): Comparison {
   return { orderly, current, ratio };
 }
 
-const pc = (v: number): number => Math.round(v * 100);
-export const times = (r: number): string => `×${r.toFixed(1).replace('.', ',')}`;
+export const times = (r: number): string => `×${num(r, 1)}`;
 
 export function describeStreet(cfg: StreetCfg, c: Comparison): string {
+  const T = L().descStreet;
   if (!(cfg.graffiti || cfg.litter || cfg.bikes)) {
-    return `Düzenli sokak: ilan atan %${pc(c.current.flyer)}, yasak aralıktan geçen %${pc(c.current.shortcut)}, zarfı alan %${pc(c.current.steal)}.`;
+    return T.orderly(pctText(c.current.flyer), pctText(c.current.shortcut), pctText(c.current.steal));
   }
   const top = KINDS.reduce((a, k) => (c.ratio[k] > c.ratio[a] ? k : a), 'flyer' as Kind);
-  const name = { flyer: 'ilan atma', shortcut: 'yasak aralıktan geçme', steal: 'zarfı alma' }[top];
-  return `Görünür ihlal varken ${name} %${pc(c.orderly[top])}'den %${pc(c.current[top])}'e çıkıyor (${times(c.ratio[top])}).`;
+  return T.rise(L().kindLow[top], pctText(c.orderly[top]), pctText(c.current[top]), times(c.ratio[top]));
 }
