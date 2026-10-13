@@ -271,7 +271,6 @@ export const TR = {
 
   /* ---------- Kitapta ---------- */
   book: {
-    notModeled: 'Modellenmedi:',
     dweck: 'Dweck',
     tms: 'TMS ile ahlaki karar',
     // lead: bağlantıdan sonra gelen ayraç; pre: replikasyon rozetinden önceki cümleler; sep: rozetten sonraki ayraç; post: sonrası
@@ -298,7 +297,7 @@ export const TR = {
     steinberg: {
       cite: 'Steinberg ve ark. (2009)', lead: ', ergen vakası: ', sep: '. ',
       pre: 'ergen frontal korteksinin olgunlaşmamışlığı saniyelik dürtü kontrolü için belirleyicidir.',
-      post: '',
+      post: 'Modellenmedi:',
     },
   },
 

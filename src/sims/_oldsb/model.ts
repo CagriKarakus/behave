@@ -3,14 +3,12 @@
 //  2) Temas ve itibar: gruplar arası temas (ajan), orman ortak malı ve ceza, hatıra fotoğrafı satışı.
 //  3) Garbage Dump babun sürüsü: salgın sonrası kültür ve yeni gelen erkekler.
 // Kitaptan gelen yönler/sayılar BOOK içinde; geri kalan sayılar modelin varsayımıdır.
-import { num, pct } from '../../i18n/fmt';
 import { mulberry32 } from '../rng';
-import { L } from './text';
 
 export const clamp = (v: number, lo = 0, hi = 1): number => Math.min(hi, Math.max(lo, v));
 const gauss = (r: () => number): number => Math.sqrt(-2 * Math.log(1 - r())) * Math.cos(2 * Math.PI * r());
 const mean = (xs: ArrayLike<number>): number => { let s = 0; for (let i = 0; i < xs.length; i++) s += xs[i]; return xs.length ? s / xs.length : 0; };
-const pc = pct;
+const pc = (x: number): string => `%${Math.round(x * 100)}`;
 
 /** Kitaptan (content/chapters.json, ch17) alınan sayılar. */
 export const BOOK = {
@@ -131,8 +129,9 @@ export function ensembleTruce(p: TrenchParams, seeds = 6, from = 28): number {
 
 export function describeTrench(run: TrenchRun, d: number): string {
   const t = truceCount(run, d), wf = weekFire(run, d), first = firstTruceDay(run);
-  if (first === null || first > d) return L().trenchNoTruce(d + 1, t, TR.S, wf);
-  return L().trenchTruce(d + 1, t, TR.S, wf, first + 1);
+  const day = `${d + 1}. gün`;
+  if (first === null || first > d) return `${day}: ateşkes henüz kurulmadı (${t}/${TR.S} sektör); son hafta ${wf} gerçek atış var.`;
+  return `${day}: ateşkesteki sektör ${t}/${TR.S}, son hafta ${wf} gerçek atış; ilk ateşkes ${first + 1}. günde.`;
 }
 
 /* ===================================================================== */
@@ -182,9 +181,9 @@ export const conditionsMet = (p: ContactParams): number => [p.status, p.goal, p.
 
 export function describeContact(run: ContactRun, t: number): string {
   const m = run.mean[t], m0 = run.mean[0];
-  const phase = t <= CT.program ? 'on' : run.p.follow < 0.5 ? 'cut' : 'go';
-  const dir = m < m0 - 0.02 ? 'down' : m > m0 + 0.02 ? 'up' : 'same';
-  return L().ct.describe(t, conditionsMet(run.p), phase, dir, pc(m0), pc(m));
+  const phase = t <= CT.program ? 'program sürüyor' : run.p.follow < 0.5 ? 'program bitti, çoğu temas kesildi' : 'temas sürüyor';
+  const dir = m < m0 - 0.02 ? `önyargı ${pc(m0)}'den ${pc(m)}'e düştü` : m > m0 + 0.02 ? `önyargı ${pc(m0)}'den ${pc(m)}'e çıktı` : `önyargı yerinde (${pc(m)})`;
+  return `${t}. tur, 3 koşuldan ${conditionsMet(run.p)}'ü sağlanıyor, ${phase}: ${dir}.`;
 }
 
 /* ===================================================================== */
@@ -232,8 +231,8 @@ export function correlation(xs: number[], ys: number[]): number {
 }
 
 export function describeVillage(r: VillageRun, p: VillageParams): string {
-  const health = r.end > 0.55 ? 'ok' : r.end > 0.25 ? 'weak' : 'bad';
-  return L().fo.describe(pc(p.free), r.patrollers, pc(r.coverage), FO.years, health, pc(r.end));
+  const health = r.end > 0.55 ? 'orman sağlıklı' : r.end > 0.25 ? 'orman zayıflıyor' : 'orman çöküyor';
+  return `Bedavacı payı ${pc(p.free)}, devriyeci ${r.patrollers} kişi (kapsama ${pc(r.coverage)}): ${FO.years} yıl sonra ${health} (stok ${pc(r.end)}).`;
 }
 
 /* ===================================================================== */
@@ -245,7 +244,7 @@ export const CONDS: Cond[] = ['sabit', 'pwyw', 'sabitHayir', 'pwywHayir'];
 export const PY = { price: 10, cost: 1.2, n: 800, amp: 2 } as const;
 export interface PayParams { share: number; glow: number; norm: number }
 export const PAY_DEFAULT: PayParams = { share: 0.5, glow: 0.4, norm: 0.5 };
-export const condName = (c: Cond): string => L().py.cond[c];
+export const COND_NAME: Record<Cond, string> = { sabit: 'Sabit fiyat', pwyw: 'İstediğin kadar öde', sabitHayir: 'Sabit fiyat + hayır payı', pwywHayir: 'Öde + hayır payı' };
 export interface CondOut { cond: Cond; buyers: number; sales: number; avgPaid: number; profit: number; donation: number }
 
 export function simulatePay(p: PayParams, seed: number): Record<Cond, CondOut> {
@@ -337,17 +336,17 @@ export function simulateBaboons(p: BabParams, seed: number): BabRun {
 }
 
 export function describeBaboons(run: BabRun, d: number): string {
-  const month = Math.floor(d / 30) + 1;
+  const ay = `${Math.floor(d / 30) + 1}. ay`;
   const approach = Math.round(approachDays(run.stress[d]));
   const arrived = run.newcomers.filter((n) => n.arrive <= d).length;
-  if (d < BB.outbreak) return L().bb.before(month, pc(run.maleAgg[d]), pc(run.stress[d]), approach);
+  if (d < BB.outbreak) return `${ay}: çöplükçü erkekler sağ; erkek saldırganlığı ${pc(run.maleAgg[d])}, dişi gerginliği ${pc(run.stress[d])}. Dişiler yeni bir erkeğe ortalama ${approach} günde yaklaşır.`;
   const f = run.females[d], m = run.resMales[d];
-  const nw = arrived ? L().bb.nwSome(arrived, pc(run.newAgg[d])) : L().bb.nwNone;
-  return L().bb.after(month, num(m ? f / m : 0, 1), pc(run.maleAgg[d]), pc(run.stress[d]), approach, nw);
+  const nw = arrived ? ` ${arrived} yeni erkek geldi, ortalama saldırganlıkları ${pc(run.newAgg[d])}.` : ' Henüz yeni erkek gelmedi.';
+  return `${ay}: dişi:erkek ${(m ? f / m : 0).toFixed(1).replace('.', ',')}:1, erkek saldırganlığı ${pc(run.maleAgg[d])}, dişi gerginliği ${pc(run.stress[d])}; dişiler yeni gelene ortalama ${approach} günde yaklaşır.${nw}`;
 }
 
-const f1 = (x: number): string => num(x, 1);
+const f1 = (x: number): string => x.toFixed(1).replace('.', ',');
 export function describePay(o: Record<Cond, CondOut>, c: Cond): string {
   const r = o[c];
-  return L().py.describe(condName(c), f1(r.sales), f1(r.avgPaid), PY.price, f1(r.profit), f1(r.donation));
+  return `${COND_NAME[c]}: 100 ziyaretçiden ${f1(r.sales)}'i alır, alıcı ortalama ${f1(r.avgPaid)} öder (sabit fiyat ${PY.price}); kâr ${f1(r.profit)}, hayra giden ${f1(r.donation)}.`;
 }

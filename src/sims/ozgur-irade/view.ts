@@ -142,7 +142,7 @@ const TEMPLATE = (id: string, T: Strings) => `
     ${bookAside(
       bookLi('ch16-e7', T.book.quervain, 'karışık') +
       bookLi('ch16-e6', T.book.buckholtz, 'bilinmiyor') +
-      bookLi('ch16-e1', T.book.steinberg, 'sağlam', `${T.book.notModeled} <a href="#/bolum/ch16?deney=ch16-e3">${T.book.dweck}</a> (${t('repl.tartışmalı')}), <a href="#/bolum/ch16?deney=ch16-e4">${T.book.tms}</a> (${t('repl.bilinmiyor')}).`),
+      bookLi('ch16-e1', T.book.steinberg, 'sağlam', ` <a href="#/bolum/ch16?deney=ch16-e3">${T.book.dweck}</a> (${t('repl.tartışmalı')}), <a href="#/bolum/ch16?deney=ch16-e4">${T.book.tms}</a> (${t('repl.bilinmiyor')}).`),
     )}
   </section>
 

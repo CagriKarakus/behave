@@ -1,76 +1,69 @@
 // Savaş ve barış, "Temas ve itibar" sekmesi: ayrı (tembel yüklenen) parça. Siperler sekmesi ilk açılışta gelir;
 // bu panel yalnızca sekme seçilince yüklenir ve kurulur.
-import { num } from '../../i18n/fmt';
-import { t } from '../../i18n/t';
 import { svg, svgText } from '../kit';
 import { createTour } from '../tour';
 import {
-  BOOK, CONDS, CT, FO, PAY_DEFAULT, PY,
-  conditionsMet, correlation, describeContact, describePay, describeVillage, condName, simulateContact, simulatePay, simulateVillage, simulateVillages,
+  BOOK, CONDS, COND_NAME, CT, FO, PAY_DEFAULT,
+  conditionsMet, correlation, describeContact, describePay, describeVillage, simulateContact, simulatePay, simulateVillage, simulateVillages,
   type Cond, type ContactParams, type ContactRun, type PayParams, type VillageParams,
 } from './model';
-import { L } from './text';
 import { LG, dotI, f1, key, pc, pctFmt, sv, type Env, type PanelApi } from './env';
 
-export const TEM_HTML = (): string => {
-  const x = L();
-  const c = x.ct, f = x.fo, p = x.py;
-  return `
+export const TEM_HTML = (): string => `
     <div data-ref="tour2"></div>
 
-    <section class="card" data-card="ct" aria-label="${c.cardAria}">
-      <h3 class="sim-h">${c.h}</h3>
-      <div class="chips" role="group" aria-label="${c.presetsAria}" data-ref="ctChips"></div>
+    <section class="card" data-card="ct" aria-label="Gruplar arası temas">
+      <h3 class="sim-h">1 · Temas önyargıyı ne zaman azaltır? (Pettigrew ve Tropp)</h3>
+      <div class="chips" role="group" aria-label="Hazır koşullar" data-ref="ctChips"></div>
       <div class="stage">
-        <svg viewBox="0 0 360 154" role="img" aria-label="${c.stageAria}" data-ref="ctStage"></svg>
-        ${key([sv(14, 12, '<circle cx="7" cy="6" r="5" fill="var(--amy)" fill-opacity=".2" stroke="var(--ink)"/>'), c.lgLow], [sv(14, 12, '<circle cx="7" cy="6" r="5" fill="var(--amy)" fill-opacity=".95" stroke="var(--ink)"/>'), c.lgHigh], [LG.line('var(--muted)'), c.lgPair])}
+        <svg viewBox="0 0 360 154" role="img" aria-label="İki grup ve her turdaki eşleşmeler" data-ref="ctStage"></svg>
+        ${key([sv(14, 12, '<circle cx="7" cy="6" r="5" fill="var(--amy)" fill-opacity=".2" stroke="var(--ink)"/>'), 'önyargı düşük (açık)'], [sv(14, 12, '<circle cx="7" cy="6" r="5" fill="var(--amy)" fill-opacity=".95" stroke="var(--ink)"/>'), 'yüksek (koyu)'], [LG.line('var(--muted)'), 'bu turdaki temas'])}
       </div>
       <div data-ref="tp2"></div>
-      <div class="chart"><svg viewBox="0 0 360 172" role="img" aria-label="${c.chartAria}" data-ref="ctChart"></svg>
-        ${key([LG.line('var(--ink)'), c.lgSel], [LG.line('var(--amy)', ' stroke-dasharray="5 3"'), c.lgNone], [LG.line('var(--pfc)', ' stroke-dasharray="2 3"'), c.lgAll])}
+      <div class="chart"><svg viewBox="0 0 360 172" role="img" aria-label="Turlara göre ortalama önyargı: seçili koşullar, koşulsuz temas ve üç koşul" data-ref="ctChart"></svg>
+        ${key([LG.line('var(--ink)'), 'seçili'], [LG.line('var(--amy)', ' stroke-dasharray="5 3"'), 'koşulsuz temas'], [LG.line('var(--pfc)', ' stroke-dasharray="2 3"'), 'üç koşul'])}
       </div>
       <div class="sliders" data-ref="ctSl"></div>
-      <div class="chips" role="group" aria-label="${c.strengthAria}" data-ref="ctStrength"></div>
-      <p class="sl-hint">${c.strengthHint}</p>
+      <div class="chips" role="group" aria-label="Etki büyüklüğü" data-ref="ctStrength"></div>
+      <p class="sl-hint">Etki büyüklüğü: meta-analiz ortalaması ya da randomize, gecikmeli ölçümlerde bulunan küçük etki (Paluck ve ark. 2019).</p>
     </section>
 
-    <section class="card" data-card="fo" aria-label="${f.cardAria}">
-      <h3 class="sim-h">${f.h}</h3>
-      <div class="chart"><svg viewBox="0 0 360 196" role="img" aria-label="${f.scatterAria(BOOK.villages, FO.years)}" data-ref="foScatter"></svg>
-        ${key([dotI('var(--lesion)'), f.lgVillages(BOOK.villages)], [sv(14, 12, '<circle cx="7" cy="6" r="4.5" fill="var(--pfc)" stroke="var(--ink)" stroke-width="1.6"/>'), f.lgMine])}
+    <section class="card" data-card="fo" aria-label="Orman toplulukları">
+      <h3 class="sim-h">2 · Cezalandırmaya hazır köyün ormanı (Rustagi ve ark.)</h3>
+      <div class="chart"><svg viewBox="0 0 360 196" role="img" aria-label="49 köyde cezalandırma isteğine göre ormanın 40. yıldaki sağlığı" data-ref="foScatter"></svg>
+        ${key([dotI('var(--lesion)'), '49 köy'], [sv(14, 12, '<circle cx="7" cy="6" r="4.5" fill="var(--pfc)" stroke="var(--ink)" stroke-width="1.6"/>'), 'senin köyün'])}
       </div>
-      <div class="chart"><svg viewBox="0 0 360 120" role="img" aria-label="${f.lineAria}" data-ref="foLine"></svg></div>
+      <div class="chart"><svg viewBox="0 0 360 120" role="img" aria-label="Seçili köyde yıllara göre orman stoku" data-ref="foLine"></svg></div>
       <div class="readout" data-ref="foRead"></div>
       <div class="sliders" data-ref="foSl"></div>
     </section>
 
-    <section class="card" data-card="py" aria-label="${p.cardAria}">
-      <h3 class="sim-h">${p.h}</h3>
-      <div class="chips" role="group" aria-label="${p.condsAria}" data-ref="pyChips"></div>
-      <div class="chart"><svg viewBox="0 0 360 186" role="img" aria-label="${p.chartAria}" data-ref="pyChart"></svg></div>
-      <p class="note">${p.note(PY.price)}</p>
+    <section class="card" data-card="py" aria-label="Hatıra fotoğrafı satışı">
+      <h3 class="sim-h">3 · İstediğin kadar öde ve hayır kurumu (Gneezy ve ark.)</h3>
+      <div class="chips" role="group" aria-label="Satış koşulu" data-ref="pyChips"></div>
+      <div class="chart"><svg viewBox="0 0 360 186" role="img" aria-label="Dört satış koşulunda satış, ortalama ödeme, kâr ve bağış" data-ref="pyChart"></svg></div>
+      <p class="note">Değerler 100 ziyaretçi başınadır; sabit fiyat ${10} birimdir (modelin varsayımı).</p>
       <div class="sliders" data-ref="pySl"></div>
     </section>
 
     <details class="how">
-      <summary>${t('sim.how')}</summary>
+      <summary>Model nasıl çalışıyor?</summary>
       <div class="how-in">
-        <p>${x.temHow.contact}</p>
-        <p>${x.temHow.forest}</p>
-        <p>${x.temHow.photo}</p>
+        <p><b>Temas.</b> 12 + 12 ajan, her turda karşı gruptan rastgele biriyle buluşur. Üç koşulun ortalaması temasın niteliğidir: 0,5 üstü önyargıyı azaltır, altı artırır; önyargılı eş etkiyi zayıflatır. Programdan sonra temasa devam etmeyenlerin önyargısı eski düzeyine döner.</p>
+        <p><b>Orman.</b> 24 kişi her yıl pay çeker. Bedavacılar olabildiğince keser, koşullu işbirlikçiler ortalamaya uyar. Cezalandırma isteği maliyeti aşanlar devriye atar; devriye kesimi azaltır. Kitaptaki bulgu ilişkiseldir, modelde yol varsayıldı.</p>
+        <p><b>Fotoğraf.</b> Ziyaretçinin değeri, hayra ve norma duyarlılığı var. İstediğin kadar öde koşulunda kişi az ödemenin rahatsızlığı ile parayı dengeler; hayır payı hem rahatsızlığı büyütür hem verme memnuniyeti getirir. Fiyat, maliyet ve dağılımlar varsayımdır.</p>
       </div>
     </details>
 
-    <aside class="book" aria-label="${t('sim.book')}">
-      <h3 class="sim-h">${t('sim.book')}</h3>
+    <aside class="book" aria-label="Kitapta">
+      <h3 class="sim-h">Kitapta</h3>
       <ul>
-        <li>${x.temBook.e3(t('repl.karışık'))}</li>
-        <li>${x.temBook.e4(t('repl.bilinmiyor'))}</li>
-        <li>${x.temBook.e5(t('repl.bilinmiyor'))}</li>
+        <li><a href="#/bolum/ch17?deney=ch17-e3">Pettigrew ve Tropp (2006)</a>: ~500 çalışma, 250.000'i aşkın katılımcı; eşit statü, ortak hedef ve kurumsal destek varken temas önyargıyı azalttı; gençlerin %91'i program sonrası iletişimi sürdürmedi. Replikasyon: karışık; randomize ve gecikmeli ölçümlerde etki daha küçük (Paluck ve ark. 2019).</li>
+        <li><a href="#/bolum/ch17?deney=ch17-e4">Rustagi ve ark. (2010)</a>: 49 orman grubunda cezalandırmaya istekli köylerde devriye sık, orman sağlıklıydı. Tek, ilişkisel saha çalışması; replikasyon bilinmiyor.</li>
+        <li><a href="#/bolum/ch17?deney=ch17-e5">Gneezy ve ark. (2010)</a>: ~113.000 alıcı, dört koşul; yönler kitaptan, sayılar yok. Replikasyon: bilinmiyor.</li>
       </ul>
     </aside>
 `;
-};
 
 export function createTemPanel(env: Env, host: HTMLElement): PanelApi {
   const { scope, id, $, S, need, touch, setBar, makeSlider, toggles, makeTransport, tiles, yGrid, poly, clipRect } = env;
@@ -80,8 +73,8 @@ export function createTemPanel(env: Env, host: HTMLElement): PanelApi {
   const cs = $<SVGElement>('ctStage');
 const CP = { ax: 80, bx: 280, y0: 28, dy: 21, dx: 14 };
   const cpos = (g: 0 | 1, i: number): [number, number] => [(g ? CP.bx : CP.ax) + (i % 2 ? CP.dx : -CP.dx), CP.y0 + Math.floor(i / 2) * CP.dy];
-  svgText(cs, { class: 'tl', x: CP.ax, y: 12, 'text-anchor': 'middle' }, L().ct.groupA);
-  svgText(cs, { class: 'tl', x: CP.bx, y: 12, 'text-anchor': 'middle' }, L().ct.groupB);
+  svgText(cs, { class: 'tl', x: CP.ax, y: 12, 'text-anchor': 'middle' }, 'Grup A');
+  svgText(cs, { class: 'tl', x: CP.bx, y: 12, 'text-anchor': 'middle' }, 'Grup B');
   const ctLinks = svg('g', {}, cs);
   const ctDots = [0, 1].map((g) => Array.from({ length: CT.n }, (_, i) => { const [x, y] = cpos(g as 0 | 1, i); return svg('circle', { class: 'ct-dot', cx: x, cy: y, r: 8 }, cs); }));
   const ctMid = svgText(cs, { class: 'tl', x: 180, y: 146, 'text-anchor': 'middle' }, '');
@@ -92,9 +85,9 @@ const CP = { ax: 80, bx: 280, y0: 28, dy: 21, dx: 14 };
   const cry = (v: number): number => CC.bot - (CC.bot - CC.top) * v;
   yGrid(cch, CC.x0, CC.x1, cry, [0, 0.5, 1], pc);
   for (let t = 0; t <= CT.rounds; t += 10) svgText(cch, { class: 'ax', x: crx(t), y: CC.bot + 14, 'text-anchor': t === 0 ? 'start' : 'middle' }, String(t));
-  svgText(cch, { class: 'ax', x: (CC.x0 + CC.x1) / 2, y: CC.bot + 30, 'text-anchor': 'middle' }, L().ct.axRound);
+  svgText(cch, { class: 'ax', x: (CC.x0 + CC.x1) / 2, y: CC.bot + 30, 'text-anchor': 'middle' }, 'temas turu');
   svg('line', { class: 'offline', x1: crx(CT.program), x2: crx(CT.program), y1: CC.top, y2: CC.bot }, cch);
-  svgText(cch, { class: 'ax', x: crx(CT.program) + 4, y: CC.top + 9 }, L().ct.programEnds);
+  svgText(cch, { class: 'ax', x: crx(CT.program) + 4, y: CC.top + 9 }, 'program biter');
   const ctRefN = svg('polyline', { class: 'ln ref-amy' }, cch), ctRefA = svg('polyline', { class: 'ln ref-pfc' }, cch);
   const ctClip = clipRect(cch, `${id}-clipC`, 172);
   const ctLine = svg('polyline', { class: 'ln cur', 'clip-path': `url(#${id}-clipC)` }, cch);
@@ -104,12 +97,12 @@ const CP = { ax: 80, bx: 280, y0: 28, dy: 21, dx: 14 };
     ctDots.forEach((arr, g) => arr.forEach((c, i) => c.setAttribute('fill-opacity', (0.12 + 0.88 * runC.agents[t][g * CT.n + i]).toFixed(2))));
     ctLinks.replaceChildren();
     runC.pairs[t].forEach((b, i) => { if (b >= 0) { const [x1, y1] = cpos(0, i), [x2, y2] = cpos(1, b); svg('line', { class: 'ct-link', x1: x1 + 8, y1, x2: x2 - 8, y2 }, ctLinks); } });
-    ctMid.textContent = t === 0 ? '' : t > CT.program && runC.p.follow < 0.5 ? L().ct.midCut : t > CT.program ? L().ct.midOn : '';
+    ctMid.textContent = t === 0 ? '' : t > CT.program && runC.p.follow < 0.5 ? 'program bitti: temas kesildi' : t > CT.program ? 'temas sürüyor' : '';
     ctClip.setAttribute('width', (crx(t) + 1).toFixed(1));
     ctCur.setAttribute('cx', String(crx(t))); ctCur.setAttribute('cy', String(cry(runC.mean[t])));
     cs.setAttribute('aria-label', describeContact(runC, t));
   }
-  const tC = makeTransport($('tp2'), { max: CT.rounds + 1, speed: 3, unit: 'round', seed: () => { S.cseed++; need.c = true; } });
+  const tC = makeTransport($('tp2'), { max: CT.rounds + 1, speed: 3, unit: 'Tur', seed: () => { S.cseed++; need.c = true; } });
   const ctSl = $('ctSl');
   const setC = (patch: Partial<ContactParams>) => {
     S.c = { ...S.c, ...patch };
@@ -119,13 +112,13 @@ const CP = { ax: 80, bx: 280, y0: 28, dy: 21, dx: 14 };
     if (patch.follow !== undefined) hFo.set(Math.round(patch.follow * 100));
     need.c = true; touch(); S.focus = 'ct';
   };
-  const hSt = makeSlider(ctSl, { name: L().ct.status.name, hint: L().ct.status.hint, min: 0, max: 100, step: 10, val: 100, fmt: pctFmt, cb: (v) => setC({ status: v / 100 }), color: 'var(--pfc)' });
-  const hGo = makeSlider(ctSl, { name: L().ct.goal.name, hint: L().ct.goal.hint, min: 0, max: 100, step: 10, val: 100, fmt: pctFmt, cb: (v) => setC({ goal: v / 100 }), color: 'var(--pfc)' });
-  const hSu = makeSlider(ctSl, { name: L().ct.support.name, hint: L().ct.support.hint, min: 0, max: 100, step: 10, val: 100, fmt: pctFmt, cb: (v) => setC({ support: v / 100 }), color: 'var(--pfc)' });
-  const hFo = makeSlider(ctSl, { name: L().ct.follow.name, hint: L().ct.follow.hint, min: 0, max: 100, step: 1, val: 100, fmt: pctFmt, cb: (v) => setC({ follow: v / 100 }), color: 'var(--dop)' });
-  const CT_PRE = [{ k: 'none', name: L().ct.preNone, v: [0, 0, 0] }, { k: 'one', name: L().ct.preOne, v: [1, 0, 0] }, { k: 'all', name: L().ct.preAll, v: [1, 1, 1] }];
+  const hSt = makeSlider(ctSl, { name: 'Eşit statü', hint: 'İki grup temasta aynı konumda mı, yoksa biri üstte mi', min: 0, max: 100, step: 10, val: 100, fmt: pctFmt, cb: (v) => setC({ status: v / 100 }), color: 'var(--pfc)' });
+  const hGo = makeSlider(ctSl, { name: 'Ortak hedef', hint: 'Birlikte ulaşılacak bir amaç var mı', min: 0, max: 100, step: 10, val: 100, fmt: pctFmt, cb: (v) => setC({ goal: v / 100 }), color: 'var(--pfc)' });
+  const hSu = makeSlider(ctSl, { name: 'Kurumsal destek', hint: 'Otorite ve kurallar temasa arka çıkıyor mu', min: 0, max: 100, step: 10, val: 100, fmt: pctFmt, cb: (v) => setC({ support: v / 100 }), color: 'var(--pfc)' });
+  const hFo = makeSlider(ctSl, { name: 'Programdan sonra temasa devam eden', hint: 'Kitapta gençlerin %91\'i iletişimi sürdürmedi; yani yaklaşık %9 devam etti', min: 0, max: 100, step: 1, val: 100, fmt: pctFmt, cb: (v) => setC({ follow: v / 100 }), color: 'var(--dop)' });
+  const CT_PRE = [{ k: 'none', name: 'Koşulsuz temas', v: [0, 0, 0] }, { k: 'one', name: 'Yalnızca eşit statü', v: [1, 0, 0] }, { k: 'all', name: 'Üç koşul', v: [1, 1, 1] }];
   const syncCtPre = toggles($('ctChips'), CT_PRE.map((p) => ({ k: p.k, name: p.name })), () => CT_PRE.find((p) => p.v[0] === S.c.status && p.v[1] === S.c.goal && p.v[2] === S.c.support)?.k ?? null, (k) => { const p = CT_PRE.find((x) => x.k === k)!; setC({ status: p.v[0], goal: p.v[1], support: p.v[2] }); });
-  const syncStr = toggles($('ctStrength'), [{ k: '1', name: L().ct.strAvg }, { k: '0.4', name: L().ct.strCaution }], () => String(S.c.strength), (k) => setC({ strength: Number(k) }));
+  const syncStr = toggles($('ctStrength'), [{ k: '1', name: 'Ortalama etki' }, { k: '0.4', name: 'Temkinli (Paluck 2019)' }], () => String(S.c.strength), (k) => setC({ strength: Number(k) }));
   const refOf = (p: Partial<ContactParams>): ContactRun => simulateContact({ ...S.c, ...p }, S.cseed);
 
   // --- 2b Orman
@@ -134,15 +127,15 @@ const CP = { ax: 80, bx: 280, y0: 28, dy: 21, dx: 14 };
   const fx = (w: number): number => FS.x0 + (FS.x1 - FS.x0) * w, fy = (v: number): number => FS.bot - (FS.bot - FS.top) * v;
   yGrid(fsc, FS.x0, FS.x1, fy, [0, 0.5, 1], pc);
   for (const w of [0, 0.25, 0.5, 0.75, 1]) svgText(fsc, { class: 'ax', x: fx(w), y: FS.bot + 14, 'text-anchor': w === 0 ? 'start' : w === 1 ? 'end' : 'middle' }, pc(w));
-  svgText(fsc, { class: 'ax', x: (FS.x0 + FS.x1) / 2, y: FS.bot + 30, 'text-anchor': 'middle' }, L().fo.axWilling);
-  svgText(fsc, { class: 'ax', x: FS.x0, y: 8 }, L().fo.axStock(FO.years));
+  svgText(fsc, { class: 'ax', x: (FS.x0 + FS.x1) / 2, y: FS.bot + 30, 'text-anchor': 'middle' }, 'maliyetli cezalandırmaya ortalama istek (köy)');
+  svgText(fsc, { class: 'ax', x: FS.x0, y: 8 }, 'ormanın 40. yıldaki stoku');
   const fsDots = svg('g', {}, fsc), fsMe = svg('circle', { class: 'me-dot', r: 6 }, fsc);
   const FL = { x0: 36, x1: 346, top: 8, bot: 90 };
   const fln = $<SVGElement>('foLine');
   const lx = (y: number): number => FL.x0 + ((FL.x1 - FL.x0) * y) / FO.years, ly = (v: number): number => FL.bot - (FL.bot - FL.top) * v;
   yGrid(fln, FL.x0, FL.x1, ly, [0, 0.5, 1], pc);
   for (let y = 0; y <= FO.years; y += 10) svgText(fln, { class: 'ax', x: lx(y), y: FL.bot + 14, 'text-anchor': y === 0 ? 'start' : 'middle' }, String(y));
-  svgText(fln, { class: 'ax', x: (FL.x0 + FL.x1) / 2, y: FL.bot + 28, 'text-anchor': 'middle' }, L().fo.axYear);
+  svgText(fln, { class: 'ax', x: (FL.x0 + FL.x1) / 2, y: FL.bot + 28, 'text-anchor': 'middle' }, 'yıl');
   const flLine = svg('polyline', { class: 'ln cur' }, fln);
   let runV: ReturnType<typeof simulateVillage>, vil: ReturnType<typeof simulateVillages> = [];
   let vilCost = -1;
@@ -154,9 +147,9 @@ const CP = { ax: 80, bx: 280, y0: 28, dy: 21, dx: 14 };
     if (patch.cost !== undefined) hCo.set(Math.round(patch.cost * 100));
     need.v = true; touch(); S.focus = 'fo';
   };
-  const hFr = makeSlider(foSl, { name: L().fo.free.name, hint: L().fo.free.hint, min: 0, max: 60, step: 5, val: S.v.free * 100, fmt: pctFmt, cb: (v) => setV({ free: v / 100 }), color: 'var(--amy)' });
-  const hWi = makeSlider(foSl, { name: L().fo.willing.name, hint: L().fo.willing.hint, min: 0, max: 100, step: 5, val: S.v.willing * 100, fmt: pctFmt, cb: (v) => setV({ willing: v / 100 }), color: 'var(--pfc)' });
-  const hCo = makeSlider(foSl, { name: L().fo.cost.name, hint: L().fo.cost.hint, min: 0, max: 100, step: 5, val: S.v.cost * 100, fmt: pctFmt, cb: (v) => setV({ cost: v / 100 }), color: 'var(--dop)' });
+  const hFr = makeSlider(foSl, { name: 'Bedavacı payı', hint: 'Ormanı olabildiğince kesenlerin payı', min: 0, max: 60, step: 5, val: S.v.free * 100, fmt: pctFmt, cb: (v) => setV({ free: v / 100 }), color: 'var(--amy)' });
+  const hWi = makeSlider(foSl, { name: 'Cezalandırmaya hazırlık', hint: 'Maliyete rağmen bedavacıyı cezalandırmaya hazır olma (senin köyünün ortalaması)', min: 0, max: 100, step: 5, val: S.v.willing * 100, fmt: pctFmt, cb: (v) => setV({ willing: v / 100 }), color: 'var(--pfc)' });
+  const hCo = makeSlider(foSl, { name: 'Devriye maliyeti', hint: 'Zaman ve emek. Hazırlığı bunu aşanlar devriyeye çıkar', min: 0, max: 100, step: 5, val: S.v.cost * 100, fmt: pctFmt, cb: (v) => setV({ cost: v / 100 }), color: 'var(--dop)' });
   function drawForest(): void {
     if (vilCost !== S.v.cost) {
       vilCost = S.v.cost; vil = simulateVillages(S.v.cost, S.vseed);
@@ -166,16 +159,16 @@ const CP = { ax: 80, bx: 280, y0: 28, dy: 21, dx: 14 };
     fsMe.setAttribute('cx', String(fx(S.v.willing))); fsMe.setAttribute('cy', String(fy(runV.end)));
     flLine.setAttribute('points', poly(runV.stock.map((v, y) => [lx(y), ly(v)])));
     const r = correlation(vil.map((p) => p.willing), vil.map((p) => p.end));
-    $('foRead').innerHTML = tiles([[L().fo.tPatrol, `${runV.patrollers} / ${Math.round((1 - S.v.free) * FO.n)}`], [L().fo.tCover, pc(runV.coverage)], [L().fo.tStock(FO.years), pc(runV.end)], [L().fo.tCorr(BOOK.villages), num(r, 2)]]);
+    $('foRead').innerHTML = tiles([['Devriyeci', `${runV.patrollers} / ${Math.round((1 - S.v.free) * FO.n)}`], ['Devriye kapsaması', pc(runV.coverage)], ['40. yıl stoku', pc(runV.end)], [`${BOOK.villages} köyde ilişki (r)`, r.toFixed(2).replace('.', ',')]]);
   }
 
   // --- 2c Fotoğraf
   const PC = { x0: 108, cw: 62, bw: 34, top: 28, rh: 36 };
-  const LBL: Record<Cond, string[]> = L().py.rowLbl;
+  const LBL: Record<Cond, string[]> = { sabit: ['Sabit fiyat'], pwyw: ['İstediğin', 'kadar öde'], sabitHayir: ['Sabit fiyat', '+ hayır payı'], pwywHayir: ['Öde', '+ hayır payı'] };
   const pyc = $<SVGElement>('pyChart');
   const METS: { k: 'sales' | 'avgPaid' | 'profit' | 'donation'; name: string; color: string }[] = [
-    { k: 'sales', name: L().py.metSales, color: 'var(--pfc)' }, { k: 'avgPaid', name: L().py.metPaid, color: 'var(--dop)' },
-    { k: 'profit', name: L().py.metProfit, color: 'var(--ink)' }, { k: 'donation', name: L().py.metDonation, color: 'var(--gld)' },
+    { k: 'sales', name: 'Satış', color: 'var(--pfc)' }, { k: 'avgPaid', name: 'Ödenen', color: 'var(--dop)' },
+    { k: 'profit', name: 'Kâr', color: 'var(--ink)' }, { k: 'donation', name: 'Bağış', color: 'var(--gld)' },
   ];
   METS.forEach((m, j) => svgText(pyc, { class: 'tl', x: PC.x0 + j * PC.cw, y: 16 }, m.name));
   const pyRows = CONDS.map((c, i) => {
@@ -194,10 +187,10 @@ const CP = { ax: 80, bx: 280, y0: 28, dy: 21, dx: 14 };
     if (patch.norm !== undefined) hNo.set(Math.round(patch.norm * 100));
     need.y = true; touch(); S.focus = 'py';
   };
-  const hSh = makeSlider(pySl, { name: L().py.share.name, hint: L().py.share.hint, min: 0, max: 100, step: 10, val: S.y.share * 100, fmt: pctFmt, cb: (v) => setY({ share: v / 100 }), color: 'var(--gld)' });
-  const hGl = makeSlider(pySl, { name: L().py.glow.name, hint: L().py.glow.hint, min: 0, max: 100, step: 10, val: S.y.glow * 100, fmt: pctFmt, cb: (v) => setY({ glow: v / 100 }), color: 'var(--gld)' });
-  const hNo = makeSlider(pySl, { name: L().py.norm.name, hint: L().py.norm.hint, min: 10, max: 100, step: 10, val: S.y.norm * 100, fmt: pctFmt, cb: (v) => setY({ norm: v / 100 }), color: 'var(--dop)' });
-  const syncCond = toggles<Cond>($('pyChips'), CONDS.map((c) => ({ k: c, name: condName(c) })), () => S.cond, (k) => { S.cond = k; S.focus = 'py'; });
+  const hSh = makeSlider(pySl, { name: 'Hayır payı', hint: 'Ödemenin hayır kurumuna giden payı (iki hayır koşulunda)', min: 0, max: 100, step: 10, val: S.y.share * 100, fmt: pctFmt, cb: (v) => setY({ share: v / 100 }), color: 'var(--gld)' });
+  const hGl = makeSlider(pySl, { name: 'Hayra duyarlılık', hint: 'Hayra katkıdan duyulan memnuniyet', min: 0, max: 100, step: 10, val: S.y.glow * 100, fmt: pctFmt, cb: (v) => setY({ glow: v / 100 }), color: 'var(--gld)' });
+  const hNo = makeSlider(pySl, { name: 'Norm duyarlılığı', hint: 'Az ödemekten duyulan rahatsızlık (öz imaj)', min: 10, max: 100, step: 10, val: S.y.norm * 100, fmt: pctFmt, cb: (v) => setY({ norm: v / 100 }), color: 'var(--dop)' });
+  const syncCond = toggles<Cond>($('pyChips'), CONDS.map((c) => ({ k: c, name: COND_NAME[c] })), () => S.cond, (k) => { S.cond = k; S.focus = 'py'; });
   function drawPay(): void {
     METS.forEach((m, j) => {
       const mx = Math.max(1e-9, ...CONDS.map((c) => Math.abs(outP[c][m.k])));
@@ -209,29 +202,29 @@ const CP = { ax: 80, bx: 280, y0: 28, dy: 21, dx: 14 };
       });
     });
     pyRows.forEach((r, i) => r.hl.setAttribute('class', `py-hl${CONDS[i] === S.cond ? ' on' : ''}`));
-    pyc.setAttribute('aria-label', `${L().py.chartPrefix} ${describePay(outP, S.cond)}`);
+    pyc.setAttribute('aria-label', `Satış koşulları. ${describePay(outP, S.cond)}`);
   }
 
   function barTemas(): void {
     if (S.focus === 'ct') {
       const t = tC.idx(), m = runC.mean[t];
       setBar(describeContact(runC, t), [
-        { label: L().ct.meterPrej, text: pc(m), frac: m, color: 'var(--amy)' },
-        { label: L().ct.meterCond, text: `${conditionsMet(S.c)}/3`, frac: conditionsMet(S.c) / 3, color: 'var(--pfc)' },
-        { label: L().ct.meterRound, text: `${t}/${CT.rounds}`, frac: t / CT.rounds, color: 'var(--ink)' },
+        { label: 'Ortalama önyargı', text: pc(m), frac: m, color: 'var(--amy)' },
+        { label: 'Sağlanan koşul', text: `${conditionsMet(S.c)}/3`, frac: conditionsMet(S.c) / 3, color: 'var(--pfc)' },
+        { label: 'Temas turu', text: `${t}/${CT.rounds}`, frac: t / CT.rounds, color: 'var(--ink)' },
       ]);
     } else if (S.focus === 'fo') {
       setBar(describeVillage(runV, S.v), [
-        { label: L().fo.meterStock, text: pc(runV.end), frac: runV.end, color: 'var(--pfc)' },
-        { label: L().fo.meterCover, text: pc(runV.coverage), frac: runV.coverage, color: 'var(--dop)' },
-        { label: L().fo.meterFree, text: pc(S.v.free), frac: S.v.free / 0.6, color: 'var(--amy)' },
+        { label: 'Orman stoku', text: pc(runV.end), frac: runV.end, color: 'var(--pfc)' },
+        { label: 'Devriye kapsaması', text: pc(runV.coverage), frac: runV.coverage, color: 'var(--dop)' },
+        { label: 'Bedavacı payı', text: pc(S.v.free), frac: S.v.free / 0.6, color: 'var(--amy)' },
       ]);
     } else {
       const r = outP[S.cond];
       setBar(describePay(outP, S.cond), [
-        { label: L().py.meterSales, text: f1(r.sales), frac: r.sales / 50, color: 'var(--pfc)' },
-        { label: L().py.meterPaid, text: f1(r.avgPaid), frac: r.avgPaid / 10, color: 'var(--dop)' },
-        { label: L().py.meterProfit, text: f1(r.profit), frac: Math.max(0, r.profit) / 80, color: 'var(--ink)' },
+        { label: 'Satış /100 ziyaretçi', text: f1(r.sales), frac: r.sales / 50, color: 'var(--pfc)' },
+        { label: 'Ortalama ödeme', text: f1(r.avgPaid), frac: r.avgPaid / 10, color: 'var(--dop)' },
+        { label: 'Şirket kârı', text: f1(r.profit), frac: Math.max(0, r.profit) / 80, color: 'var(--ink)' },
       ]);
     }
   }
@@ -244,15 +237,20 @@ const CP = { ax: 80, bx: 280, y0: 28, dy: 21, dx: 14 };
   }
 
   const seekC = (t: number, play = false) => tC.set(t, play);
-  const apply2: (() => void)[] = [
-    () => { S.focus = 'ct'; S.cseed = 5; setC({ status: 0, goal: 0, support: 0, follow: 1, strength: 1 }); seekC(0, true); },
-    () => { S.focus = 'ct'; S.cseed = 5; setC({ status: 1, goal: 1, support: 1, follow: 1, strength: 1 }); seekC(CT.rounds); },
-    () => { S.focus = 'ct'; S.cseed = 5; setC({ status: 1, goal: 1, support: 1, follow: 0.09, strength: 1 }); seekC(CT.rounds); },
-    () => { S.focus = 'fo'; setV({ free: 0.2, willing: 0.15, cost: 0.4 }); },
-    () => { setY({ ...PAY_DEFAULT }); S.cond = 'pwyw'; },
-    () => { setY({ ...PAY_DEFAULT }); S.cond = 'pwywHayir'; },
-  ];
-  const tour2 = createTour(scope, L().tour2.map((st, i) => ({ ...st, apply: apply2[i] })));
+  const tour2 = createTour(scope, [
+    { title: 'Koşulsuz temas', text: 'Çok buluşma var ama statü eşit değil, ortak hedef ve kurumsal destek yok.',
+      look: 'Önyargı düşmüyor, yükseliyor (koyu noktalar çoğalır).', apply: () => { S.focus = 'ct'; S.cseed = 5; setC({ status: 0, goal: 0, support: 0, follow: 1, strength: 1 }); seekC(0, true); } },
+    { title: 'Üç koşul: önyargı düşer', text: 'Üç koşul varken aynı temas önyargıyı belirgin azaltıyor (Pettigrew ve Tropp).',
+      look: 'Çizgi mavi kesikli "üç koşul" referansına yakın iner.', apply: () => { S.focus = 'ct'; S.cseed = 5; setC({ status: 1, goal: 1, support: 1, follow: 1, strength: 1 }); seekC(CT.rounds); } },
+    { title: 'Program bitince etki söner', text: 'Kitapta gençlerin %91\'i program sonrası iletişimi sürdürmedi. Temas kesilince önyargı eski düzeyine doğru geri dönüyor.',
+      look: '20. turdan sonra çizgi yeniden yükselir.', apply: () => { S.focus = 'ct'; S.cseed = 5; setC({ status: 1, goal: 1, support: 1, follow: 0.09, strength: 1 }); seekC(CT.rounds); } },
+    { title: 'Cezalandırmaya hazır köy', text: 'Cezalandırmaya hazırlık arttıkça devriye artıyor, orman sağlıklı kalıyor. Kitapta bulgu ilişkisel; burada yol varsayıldı.',
+      look: 'Noktalar sağa doğru yükselir; kaydırıcı seni bir noktaya taşır.', apply: () => { S.focus = 'fo'; setV({ free: 0.2, willing: 0.15, cost: 0.4 }); } },
+    { title: 'İstediğin kadar öde', text: 'Satışlar fırlıyor ama ödemeler çok küçük; şirket zararda. Kimse izlemiyorsa az ödemek ucuz.',
+      look: '"Satış" sütunu uzun, "Ödenen" ve "Kâr" sütunları kısa ya da kırmızı.', apply: () => { setY({ ...PAY_DEFAULT }); S.cond = 'pwyw'; } },
+    { title: 'Ödemenin yarısı hayra', text: 'Hem satış hem ödeme artıyor; şirket kâr ediyor, büyük bağış toplanıyor.',
+      look: 'Ödenen ve bağış sütunları yükselir.', apply: () => { setY({ ...PAY_DEFAULT }); S.cond = 'pwywHayir'; } },
+  ]);
   $('tour2').appendChild(tour2.el);
   return { render: renderTemas, tp: tC };
 }

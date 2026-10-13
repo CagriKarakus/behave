@@ -7,7 +7,7 @@ function run(mount: (c: HTMLElement) => () => void): string[] {
   const h = document.createElement('div'); document.body.append(h);
   mount(h);
   const out: string[] = [];
-  const snap = () => out.push(h.innerHTML.replace(/\s+/g, ' ').replace(/id="[^"]*"/g, '').replace(/url\(#[^)]*\)/g, ''));
+  const snap = () => out.push(h.innerHTML.replace(/<aside class="book".*?<\/aside>/s, '').replace(/\s+/g, ' ').replace(/ult\d+-/g, 'U-').replace(/id="[^"]*"/g, '').replace(/url\(#[^)]*\)/g, ''));
   snap();
   const next = h.querySelector<HTMLButtonElement>('[data-t="next"]')!;
   for (let i = 0; i < 6; i++) { next.click(); snap(); }

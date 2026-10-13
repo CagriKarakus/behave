@@ -1,9 +1,6 @@
 import '../sim.css';
 import './view.css';
 import { Scope, ref, svg, svgText, uid } from '../kit';
-import { decimalSep } from '../../i18n/locale';
-import { percent } from '../../i18n/fmt';
-import { t } from '../../i18n/t';
 import { createTour } from '../tour';
 import { slider } from '../ui';
 import {
@@ -11,21 +8,18 @@ import {
   clamp, describeTrench, ensembleTruce, meanKnow, simulateTrench, truceCount, weekFire,
   type Rule, type TrenchParams, type TrenchRun,
 } from './model';
-import { L } from './text';
 import { LG, cls, dotI, key, pc, type Card, type Env, type Meter, type PanelApi, type SliderHandle, type SliderOpts, type State, type Tab, type Transport } from './env';
 
-const TEMPLATE = (id: string): string => {
-  const x = L();
-  return `
+const TEMPLATE = (id: string) => `
 <div class="sim sim-sb">
-  <p class="lede">${x.lede}</p>
-  <div class="tabs" role="tablist" aria-label="${x.tabsAria}">
-    <button class="tab" role="tab" id="${id}-tab-sip" data-pane="sip" aria-controls="${id}-pane-sip" aria-selected="true" type="button">${x.tabSip}</button>
-    <button class="tab" role="tab" id="${id}-tab-tem" data-pane="tem" aria-controls="${id}-pane-tem" aria-selected="false" tabindex="-1" type="button">${x.tabTem}</button>
-    <button class="tab" role="tab" id="${id}-tab-bab" data-pane="bab" aria-controls="${id}-pane-bab" aria-selected="false" tabindex="-1" type="button">${x.tabBab}</button>
+  <p class="lede">Düşmanlar arasında bile işbirliği nasıl kendiliğinden doğar ve onu ne güçlendirir?</p>
+  <div class="tabs" role="tablist" aria-label="Simülasyon bölümleri">
+    <button class="tab" role="tab" id="${id}-tab-sip" data-pane="sip" aria-controls="${id}-pane-sip" aria-selected="true" type="button">Yaşa ve yaşat siperleri</button>
+    <button class="tab" role="tab" id="${id}-tab-tem" data-pane="tem" aria-controls="${id}-pane-tem" aria-selected="false" tabindex="-1" type="button">Temas ve itibar</button>
+    <button class="tab" role="tab" id="${id}-tab-bab" data-pane="bab" aria-controls="${id}-pane-bab" aria-selected="false" tabindex="-1" type="button">Babunlar</button>
   </div>
 
-  <div class="sim-bar" role="group" aria-label="${x.barAria}"><div class="sim-bar-in">
+  <div class="sim-bar" role="group" aria-label="Anlık çıktılar"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
     <div class="meters" data-ref="meters"></div>
   </div></div>
@@ -34,67 +28,66 @@ const TEMPLATE = (id: string): string => {
   <!-- ============ 1 · Siperler ============ -->
   <section class="pane" role="tabpanel" id="${id}-pane-sip" data-pane="sip" aria-labelledby="${id}-tab-sip">
     <div data-ref="tour1"></div>
-    <section class="card" aria-label="${x.trench.cardAria}">
-      <h3 class="sim-h">${x.trench.h}</h3>
+    <section class="card" aria-label="Siper hatları">
+      <h3 class="sim-h">Karşılıklı iki siper hattı, sekiz sektör</h3>
       <div class="stage">
-        <svg viewBox="0 0 360 172" role="img" aria-label="${x.trench.svgAria}" data-ref="trench"></svg>
-        ${key([LG.quiet, x.trench.lgQuiet], [LG.two, x.trench.lgTwo], [LG.fire, x.trench.lgFire], [LG.raid, x.trench.lgRaid], [LG.flag, x.trench.lgFlag], [LG.neu, x.trench.lgNew])}
-        <p class="note">${x.trench.trustNote}</p>
+        <svg viewBox="0 0 360 172" role="img" aria-label="İki siper hattı" data-ref="trench"></svg>
+        ${key([LG.quiet, 'sessiz ya da ritüel atış'], [LG.two, 'iki mermi karşılığı'], [LG.fire, 'gerçek ateş'], [LG.raid, 'baskın emri'], [LG.flag, 'ateşkes (5 gün gerçek ateş yok)'], [LG.neu, 'yeni birlik'])}
+        <p class="note">Birliğin içindeki mavi çubuk güvenidir: karşısındakinin kısıtlamaya uyduğuna inanç.</p>
       </div>
       <div data-ref="tp1"></div>
     </section>
 
-    <section class="card" aria-label="${x.tl.cardAria}">
-      <h3 class="sim-h">${x.tl.h}</h3>
-      <div class="chart"><svg viewBox="0 0 360 178" role="img" aria-label="${x.tl.svgAria}" data-ref="tl"></svg>
-        ${key([dotI('var(--pfc)'), x.tl.lgTruce], [dotI('var(--amy)'), x.tl.lgFire], [dotI('var(--ink)'), x.tl.lgRaid], [LG.line('var(--dop)'), x.tl.lgRot])}
+    <section class="card" aria-label="Ateşkesin doğuşu ve çöküşü">
+      <h3 class="sim-h">Ateşkesin doğuşu ve çöküşü</h3>
+      <div class="chart"><svg viewBox="0 0 360 178" role="img" aria-label="Sektör ve güne göre ateşkes ve gerçek ateş; altında ateşkesteki sektör sayısı" data-ref="tl"></svg>
+        ${key([dotI('var(--pfc)'), 'ateşkes'], [dotI('var(--amy)'), 'gerçek ateş'], [dotI('var(--ink)'), 'baskın'], [LG.line('var(--dop)'), 'birlik değişimi'])}
       </div>
     </section>
 
-    <section class="card" aria-label="${x.inputs.cardAria}">
-      <h3 class="sim-h">${x.inputs.h}</h3>
-      <div class="chips" role="group" aria-label="${x.inputs.ruleAria}" data-ref="ruleChips"></div>
-      <p class="sl-hint">${x.inputs.ruleHint}</p>
+    <section class="card" aria-label="Girdiler">
+      <h3 class="sim-h">Girdiler</h3>
+      <div class="chips" role="group" aria-label="Karşılık kuralı" data-ref="ruleChips"></div>
+      <p class="sl-hint">İhlale karşılık: iki mermi ölçülüdür; tam karşılık gerçek ateştir ve karşılık doğurur.</p>
       <div class="sliders" data-ref="tSl"></div>
     </section>
 
-    <section class="card" aria-label="${x.sens.cardAria}">
-      <h3 class="sim-h">${x.sens.h}</h3>
-      <div class="chart"><svg viewBox="0 0 360 160" role="img" aria-label="${x.sens.svgAria}" data-ref="sens"></svg></div>
-      <p class="note">${x.sens.note}</p>
+    <section class="card" aria-label="Duyarlılık">
+      <h3 class="sim-h">Ateşkes oranı ve karşı karşıya kalma süresi</h3>
+      <div class="chart"><svg viewBox="0 0 360 160" role="img" aria-label="Karşı karşıya kalma süresine göre ortalama ateşkes oranı: iki mermi ve tam karşılık kuralları" data-ref="sens"></svg></div>
+      <p class="note">Her nokta 4 farklı tohumun ortalaması (28. günden sonra, sektör-gün payı).</p>
     </section>
 
     <details class="how">
-      <summary>${t('sim.how')}</summary>
+      <summary>Model nasıl çalışıyor?</summary>
       <div class="how-in">
-        <p>${x.sipHow.p1}</p>
-        <p>${x.sipHow.p2}</p>
-        <p>${x.sipHow.p3}</p>
+        <p>Her sektörde iki birlik (ajan) karşı karşıya. Sessiz gün güveni artırır, gerçek ateş ya da baskın düşürür; güven arttıkça gerçek ateş olasılığı hızla azalır, kaza atışı hep mümkündür. Yemek saati ve kötü hava günlerin bir kısmında iki tarafı rastlantıyla susturur: ateşkes buradan başlar.</p>
+        <p>İhlale ertesi gün karşılık verilir. İki mermi sınırlıdır ve çoğu zaman "hesap kapandı" diye okunur; ritüel düzenliliği bu okumayı güvenilir kılar. Tam karşılık gerçek ateştir ve yeni karşılık doğurur: tek kaza intikam döngüsüne dönebilir. Bu, <a href="#/bolum/ch10?sim=isbirligi-evrimi">Bölüm 10'daki</a> Tit for Tat'in yankı sorunudur; iki mermi onun ölçülü, affedici türevi gibi davranır.</p>
+        <p>Birlik değişince yeni birlik güvensiz başlar. Komuta baskısı baskın emri ve erken rotasyon ekler. Olasılıklar ve "5 gün" ateşkes tanımı modelin varsayımıdır.</p>
       </div>
     </details>
 
-    <aside class="book" aria-label="${t('sim.book')}">
-      <h3 class="sim-h">${t('sim.book')}</h3>
+    <aside class="book" aria-label="Kitapta">
+      <h3 class="sim-h">Kitapta</h3>
       <ul>
-        <li>${x.sipBook.e12}</li>
-        <li>${x.sipBook.unused(t('repl.tartışmalı'))}</li>
+        <li><a href="#/bolum/ch17?deney=ch17-e12">Ashworth (1980)</a>: ateşkesler yemek saatinde ve kötü havada pasif başladı; keskin nişancılar her gün aynı zararsız noktaya ateş etti; ihlale en yaygın yanıt iki mermiydi. Komutanlar birlik değiştirerek, divan-ı harp tehdidi ve baskın emriyle bozdu. Düşmanlığın cepheden uzaklaştıkça artması modellenmedi. Replikasyon: tarihsel belgeleme, uygulanamaz. Axelrod (1984) vakayı Tit for Tat örneği saydı.</li>
+        <li>Grossman/Marshall ateş oranları (<a href="#/bolum/ch17?deney=ch17-e9">e9</a>) ve dron pilotlarında PTSD iddiası (<a href="#/bolum/ch17?deney=ch17-e10">e10</a>) replikasyon notlarına göre tartışmalı; burada kullanılmadı.</li>
       </ul>
     </aside>
   </section>
 
   <!-- ============ 2 · Temas ve itibar ============ -->
   <section class="pane" role="tabpanel" id="${id}-pane-tem" data-pane="tem" aria-labelledby="${id}-tab-tem" hidden>
-    <p class="note" data-ref="load-tem" role="status">${x.loading}</p>
+    <p class="note" data-ref="load-tem" role="status">Yükleniyor…</p>
   </section>
 
   <!-- ============ 3 · Babunlar ============ -->
   <section class="pane" role="tabpanel" id="${id}-pane-bab" data-pane="bab" aria-labelledby="${id}-tab-bab" hidden>
-    <p class="note" data-ref="load-bab" role="status">${x.loading}</p>
+    <p class="note" data-ref="load-bab" role="status">Yükleniyor…</p>
   </section>
 
-  <p class="foot">${x.foot}</p>
+  <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan: iki karşılık mermisi, ritüel keskin nişancı atışları, rotasyon ve baskın emrinin ateşkesi bozması; temasın üç koşulu ve gençlerin %91'i; 49 orman grubu; yaklaşık 113.000 alıcı ve dört koşulun yönleri; dişi:erkek 2:1, yaklaşık altı ay uyum, tipik sürüde iki aydan uzun yaklaşma. Günlük olasılıklar, güven kuralları, ağırlıklar, fiyat ve maliyet, sürü sayıları ve eğri biçimleri modelin varsayımıdır.</p>
 </div>`;
-};
 
 export function mount(container: HTMLElement): () => void {
   const scope = new Scope();
@@ -133,9 +126,9 @@ export function mount(container: HTMLElement): () => void {
     });
     return () => items.forEach((it, i) => btns[i].setAttribute('aria-pressed', String(get() === it.k)));
   }
-  function makeTransport(parent: HTMLElement, o: { max: number; speed: number; unit: 'day' | 'round'; seed: () => void }): Transport {
+  function makeTransport(parent: HTMLElement, o: { max: number; speed: number; unit: string; seed: () => void }): Transport {
     const sid = `${id}-s${++slN}`;
-    parent.innerHTML = `<div class="row play"><button class="btn tour-next" type="button" data-k="play"></button><button class="btn" type="button" data-k="rew">${L().tpRew}</button><button class="btn" type="button" data-k="seed">${L().tpSeed}</button></div><div class="sl"><div class="sl-top"><label class="sl-name" for="${sid}">${L().tpTime}</label><span class="sl-val"></span></div><input type="range" id="${sid}" min="0" max="${o.max - 1}" step="1"></div>`;
+    parent.innerHTML = `<div class="row play"><button class="btn tour-next" type="button" data-k="play"></button><button class="btn" type="button" data-k="rew">Baştan</button><button class="btn" type="button" data-k="seed">Başka tohum</button></div><div class="sl"><div class="sl-top"><label class="sl-name" for="${sid}">Zaman</label><span class="sl-val"></span></div><input type="range" id="${sid}" min="0" max="${o.max - 1}" step="1"></div>`;
     const q = (k: string) => parent.querySelector<HTMLButtonElement>(`[data-k="${k}"]`)!;
     const inp = parent.querySelector<HTMLInputElement>('input')!, val = parent.querySelector<HTMLElement>('.sl-val')!;
     const tp: Transport = {
@@ -145,9 +138,9 @@ export function mount(container: HTMLElement): () => void {
       sync: () => {
         const i = tp.idx();
         inp.value = String(i);
-        val.textContent = o.unit === 'round' ? L().tpRound(i, o.max - 1) : L().tpDay(i + 1, o.max);
+        val.textContent = `${o.unit} ${i + (o.unit === 'Tur' ? 0 : 1)} / ${o.unit === 'Tur' ? o.max - 1 : o.max}`;
         inp.setAttribute('aria-valuetext', val.textContent);
-        q('play').textContent = tp.playing ? L().tpPause : tp.pos >= o.max - 1 ? L().tpReplay : L().tpPlay;
+        q('play').textContent = tp.playing ? 'Duraklat' : tp.pos >= o.max - 1 ? 'Baştan oynat' : 'Oynat';
       },
     };
     scope.on(q('play'), 'click', () => { if (tp.pos >= o.max - 1) tp.pos = 0; tp.playing = !tp.playing; dirty = true; });
@@ -240,8 +233,8 @@ export function mount(container: HTMLElement): () => void {
     return Array.from({ length: n + 1 }, (_, i) => `${i ? 'L' : 'M'}${(x + (i % 2 ? 3.5 : -3.5) * (i === 0 || i === n ? 0 : 1)).toFixed(1)},${(y0 + dy * i).toFixed(1)}`).join('');
   };
   const trSvg = $<SVGElement>('trench');
-  svgText(trSvg, { class: 'tl', x: 4, y: 13 }, L().trench.lineA);
-  svgText(trSvg, { class: 'tl', x: 4, y: 168 }, L().trench.lineB);
+  svgText(trSvg, { class: 'tl', x: 4, y: 13 }, 'A hattı');
+  svgText(trSvg, { class: 'tl', x: 4, y: 168 }, 'B hattı');
   const secs = Array.from({ length: S8 }, (_, s) => {
     const x = px(s), g = svg('g', {}, trSvg);
     svg('line', { class: 't-base', x1: x, x2: x, y1: 46, y2: 126 }, g);
@@ -263,7 +256,7 @@ export function mount(container: HTMLElement): () => void {
   const TL = { x0: 30, x1: 352, cy: 12, rh: 9, ly0: 112, ly1: 156 };
   const tlx = (d: number): number => TL.x0 + ((TL.x1 - TL.x0) * d) / TR.days;
   const tl = $<SVGElement>('tl');
-  for (let s = 0; s < S8; s++) if (s % 7 === 0) svgText(tl, { class: 'ax', x: TL.x0 - 6, y: TL.cy + s * TL.rh + 7, 'text-anchor': 'end' }, L().tl.sector(s + 1));
+  for (let s = 0; s < S8; s++) if (s % 7 === 0) svgText(tl, { class: 'ax', x: TL.x0 - 6, y: TL.cy + s * TL.rh + 7, 'text-anchor': 'end' }, `s${s + 1}`);
   const tlClip = clipRect(tl, `${id}-clipT`, 178);
   const tlG = svg('g', { 'clip-path': `url(#${id}-clipT)` }, tl);
   const tlCells = { quiet: svg('path', { class: 'c-quiet' }, tlG), fire: svg('path', { class: 'c-fire' }, tlG), raid: svg('path', { class: 'c-raid' }, tlG) };
@@ -271,7 +264,7 @@ export function mount(container: HTMLElement): () => void {
   const tlArea = svg('path', { class: 'c-area' }, tlG), tlLine = svg('polyline', { class: 'ln c-line' }, tlG);
   const ty = (n: number): number => TL.ly1 - ((TL.ly1 - TL.ly0) * n) / S8;
   yGrid(tl, TL.x0, TL.x1, ty, [0, 4, 8], String);
-  svgText(tl, { class: 'ax', x: TL.x0, y: TL.ly0 - 6 }, L().tl.axSectors);
+  svgText(tl, { class: 'ax', x: TL.x0, y: TL.ly0 - 6 }, 'ateşkesteki sektör');
   for (let w = 0; w <= 26; w += 4) svgText(tl, { class: 'ax', x: tlx(w * 7), y: 171, 'text-anchor': w === 0 ? 'start' : 'middle' }, String(w));
   const tlCur = svg('line', { class: 'cursor', y1: TL.cy - 4, y2: TL.ly1 }, tl);
   let runT: TrenchRun;
@@ -320,9 +313,9 @@ export function mount(container: HTMLElement): () => void {
   const sy = (v: number): number => SN.bot - (SN.bot - SN.top) * v;
   yGrid(sens, SN.x0, SN.x1, sy, [0, 0.5, 1], pc);
   for (const w of [1, 4, 8, 12, 16, 20, 26]) svgText(sens, { class: 'ax', x: sx(w), y: SN.bot + 14, 'text-anchor': w === 1 ? 'start' : w === 26 ? 'end' : 'middle' }, String(w));
-  svgText(sens, { class: 'ax', x: (SN.x0 + SN.x1) / 2, y: SN.bot + 30, 'text-anchor': 'middle' }, L().sens.axis);
+  svgText(sens, { class: 'ax', x: (SN.x0 + SN.x1) / 2, y: SN.bot + 30, 'text-anchor': 'middle' }, 'aynı birliklerin karşı karşıya kalma süresi (hafta)');
   const snIki = svg('polyline', { class: 'ln s-iki' }, sens), snTam = svg('polyline', { class: 'ln s-tam' }, sens);
-  const snLbI = svgText(sens, { class: 'ax lgt', x: SN.x1, y: 0, 'text-anchor': 'end' }, L().sens.lblTwo), snLbT = svgText(sens, { class: 'ax lgt', x: SN.x1, y: 0, 'text-anchor': 'end' }, L().sens.lblFull);
+  const snLbI = svgText(sens, { class: 'ax lgt', x: SN.x1, y: 0, 'text-anchor': 'end' }, 'iki mermi'), snLbT = svgText(sens, { class: 'ax lgt', x: SN.x1, y: 0, 'text-anchor': 'end' }, 'tam karşılık');
   const snDot = svg('circle', { class: 'cur-dot', r: 4.6 }, sens);
   let sensKey = '', sensVal: Record<Rule, number[]> = { iki: [], tam: [] };
   function drawSens(): void {
@@ -352,19 +345,18 @@ export function mount(container: HTMLElement): () => void {
     if (patch.command !== undefined) hCom.set(Math.round(patch.command * 100));
     need.t = need.sens = dirty = true;
   };
-  const sl = L().sipSliders;
-  const hTen = makeSlider(tSlH, { name: sl.tenure.name, hint: sl.tenure.hint, min: 1, max: 26, step: 1, val: S.t.tenure, fmt: (v) => L().weeks(v), cb: (v) => { setT({ tenure: v }); }, color: 'var(--pfc)' });
-  const hRit = makeSlider(tSlH, { name: sl.ritual.name, hint: sl.ritual.hint, min: 0, max: 100, step: 5, val: S.t.ritual * 100, fmt: (v) => percent(String(v)), cb: (v) => { setT({ ritual: v / 100 }); }, color: 'var(--pfc)' });
-  const hAcc = makeSlider(tSlH, { name: sl.accident.name, hint: sl.accident.hint, min: 0, max: 8, step: 0.5, val: S.t.accident * 100, fmt: (v) => percent(String(v).replace('.', decimalSep())), cb: (v) => { setT({ accident: v / 100 }); }, color: 'var(--amy)' });
-  const hCom = makeSlider(tSlH, { name: sl.command.name, hint: sl.command.hint, min: 0, max: 100, step: 5, val: S.t.command * 100, fmt: (v) => percent(String(v)), cb: (v) => { setT({ command: v / 100 }); }, color: 'var(--amy)' });
-  const syncRule = toggles<Rule>($('ruleChips'), [{ k: 'iki', name: L().inputs.ruleTwo }, { k: 'tam', name: L().inputs.ruleFull }], () => S.t.rule, (k) => setT({ rule: k }));
-  const tT = makeTransport($('tp1'), { max: TR.days, speed: 8, unit: 'day', seed: () => { S.tseed++; need.t = true; } });
+  const hTen = makeSlider(tSlH, { name: 'Karşı karşıya kalma süresi', hint: 'Aynı birlikler değişmeden kaç hafta aynı karşılarında kalır. Kısa olunca ateşkes yerleşemez', min: 1, max: 26, step: 1, val: S.t.tenure, fmt: (v) => `${v} hafta`, cb: (v) => { setT({ tenure: v }); }, color: 'var(--pfc)' });
+  const hRit = makeSlider(tSlH, { name: 'Ritüel düzenliliği', hint: 'Keskin nişancı her gün aynı zararsız noktaya ateş eder: sessizlik ve karşılık doğru okunur', min: 0, max: 100, step: 5, val: S.t.ritual * 100, fmt: (v) => `%${v}`, cb: (v) => { setT({ ritual: v / 100 }); }, color: 'var(--pfc)' });
+  const hAcc = makeSlider(tSlH, { name: 'Kaza atışı olasılığı', hint: 'Gergin bir nöbetçinin ya da şaşıran bir topçunun günlük hatası (birlik başına)', min: 0, max: 8, step: 0.5, val: S.t.accident * 100, fmt: (v) => `%${String(v).replace('.', ',')}`, cb: (v) => { setT({ accident: v / 100 }); }, color: 'var(--amy)' });
+  const hCom = makeSlider(tSlH, { name: 'Komuta baskısı', hint: 'Baskın emirleri ve erken birlik değişimi (divan-ı harp tehdidi)', min: 0, max: 100, step: 5, val: S.t.command * 100, fmt: (v) => `%${v}`, cb: (v) => { setT({ command: v / 100 }); }, color: 'var(--amy)' });
+  const syncRule = toggles<Rule>($('ruleChips'), [{ k: 'iki', name: 'İki mermi (ölçülü)' }, { k: 'tam', name: 'Tam karşılık' }], () => S.t.rule, (k) => setT({ rule: k }));
+  const tT = makeTransport($('tp1'), { max: TR.days, speed: 8, unit: 'Gün', seed: () => { S.tseed++; need.t = true; } });
   function barTrench(): void {
     const d = tT.idx(), tc = truceCount(runT, d), wf = weekFire(runT, d);
     setBar(describeTrench(runT, d), [
-      { label: L().meterTrench.sectors, text: `${tc}/${S8}`, frac: tc / S8, color: 'var(--pfc)' },
-      { label: L().meterTrench.week, text: String(wf), frac: wf / 40, color: 'var(--amy)' },
-      { label: L().meterTrench.trust, text: pc(meanKnow(runT, d)), frac: meanKnow(runT, d), color: 'var(--ink)' },
+      { label: 'Ateşkesteki sektör', text: `${tc}/${S8}`, frac: tc / S8, color: 'var(--pfc)' },
+      { label: 'Son 7 gün gerçek ateş', text: String(wf), frac: wf / 40, color: 'var(--amy)' },
+      { label: 'Ortalama güven', text: pc(meanKnow(runT, d)), frac: meanKnow(runT, d), color: 'var(--ink)' },
     ]);
   }
   function renderTrench(): void {
@@ -376,15 +368,20 @@ export function mount(container: HTMLElement): () => void {
 
   /* ---------- Rehberli turlar ---------- */
   const seekT = (d: number, play = false) => tT.set(d, play);
-  const apply1: (() => void)[] = [
-    () => { S.tseed = 3; setT({ ...TRENCH_DEFAULT }); seekT(0, true); },
-    () => { S.tseed = 3; setT({ ...TRENCH_DEFAULT }); seekT(110); },
-    () => { S.tseed = 3; setT({ ...TRENCH_DEFAULT, ritual: 0 }); seekT(TR.days - 1); },
-    () => { S.tseed = 3; setT({ ...TRENCH_DEFAULT, accident: 0.04, command: 0, rule: 'iki' }); seekT(TR.days - 1); },
-    () => { S.tseed = 3; setT({ ...TRENCH_DEFAULT, accident: 0.04, command: 0, rule: 'tam' }); seekT(TR.days - 1); },
-    () => { S.tseed = 3; setT({ ...TRENCH_DEFAULT, tenure: 4, command: 1, rule: 'iki' }); seekT(TR.days - 1); },
-  ];
-  const tour1 = createTour(scope, L().tour1.map((st, i) => ({ ...st, apply: apply1[i] })));
+  const tour1 = createTour(scope, [
+    { title: 'Savaş böyle başlar', text: 'İlk günlerde herkes ateş ediyor. Yemek saati ve kötü hava ara sıra iki tarafı rastlantıyla susturuyor.',
+      look: 'Kırmızı zikzaklar arasında ilk mavi noktalar belirir.', apply: () => { S.tseed = 3; setT({ ...TRENCH_DEFAULT }); seekT(0, true); } },
+    { title: 'Ateşkes kendiliğinden doğar', text: 'Sessiz günler güveni (mavi çubuk) artırıyor. Kimse emir vermedi.',
+      look: 'Çizelgede mavi alan yayılıyor, ateşkesteki sektör sayısı artıyor.', apply: () => { S.tseed = 3; setT({ ...TRENCH_DEFAULT }); seekT(110); } },
+    { title: 'Ritüel olmadan ateşkes tutmaz', text: 'Her gün aynı noktaya zararsız atış yoksa sessizlik yanlış okunuyor; güven yükselmiyor.',
+      look: 'Ateşkesteki sektör sayısı düşük kalır.', apply: () => { S.tseed = 3; setT({ ...TRENCH_DEFAULT, ritual: 0 }); seekT(TR.days - 1); } },
+    { title: 'İki mermi: kaza intikam olmaz', text: 'Kaza sık, ama karşılık iki mermi ve "hesap kapandı" diye okunuyor (kitaptaki en yaygın yanıt).',
+      look: 'Matriste kısa kırmızı lekeler, hemen ardından yine mavi.', apply: () => { S.tseed = 3; setT({ ...TRENCH_DEFAULT, accident: 0.04, command: 0, rule: 'iki' }); seekT(TR.days - 1); } },
+    { title: 'Tam karşılık: intikam döngüsü', text: 'Aynı kaza oranı, ama her atışa gerçek ateşle karşılık: karşılık yeni karşılık doğuruyor.',
+      look: 'Kırmızı uzun bloklar; ateşkesteki sektör az.', apply: () => { S.tseed = 3; setT({ ...TRENCH_DEFAULT, accident: 0.04, command: 0, rule: 'tam' }); seekT(TR.days - 1); } },
+    { title: 'Komuta karşılıklılığı bozar', text: 'Kitapta komutanlar birlik değiştirdi, baskın emri verdi. Burada güven her seferinde sıfırlanıyor.',
+      look: 'Turuncu birlik değişimi çizgileri ve siyah baskın blokları.', apply: () => { S.tseed = 3; setT({ ...TRENCH_DEFAULT, tenure: 4, command: 1, rule: 'iki' }); seekT(TR.days - 1); } },
+  ]);
   $('tour1').appendChild(tour1.el);
 
 
