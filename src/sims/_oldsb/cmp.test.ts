@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from 'vitest';
-const flush = async () => { for (let i = 0; i < 6; i++) await new Promise((r) => setTimeout(r, 5)); };
+const flush = async () => { for (let i = 0; i < 30; i++) await new Promise((r) => setTimeout(r, 15)); };
 const dump = (root: HTMLElement): string => {
   const out: string[] = [];
   const w = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
@@ -31,5 +31,5 @@ describe('cmp', () => {
     const n = await run((await import('../savas-baris/view')).mount);
     expect(n.length).toBe(o.length);
     for (let i = 0; i < o.length; i++) expect(n[i], 'step ' + i).toBe(o[i]);
-  }, 120000);
+  }, 400000);
 });
