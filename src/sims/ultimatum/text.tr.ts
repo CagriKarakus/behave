@@ -14,7 +14,7 @@ export const TR = {
 
   // Ağ diyagramındaki düğümler: kısaltma ve altyazı
   nodes: {
-    tek: { ab: 'TEKLİF', cap: '' },
+    tek: { ab: 'TEKLİF' },
     amy: { ab: 'AMG', cap: 'amigdala · kuşku' },
     insula: { ab: 'INS', cap: 'insula · haksızlık' },
     caud: { ab: 'KAU', cap: 'kaudat · ret tatmini' },

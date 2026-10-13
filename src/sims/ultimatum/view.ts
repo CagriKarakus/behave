@@ -145,7 +145,7 @@ export function mount(container: HTMLElement): () => void {
   const id = uid('ult');
   const T = L();
   container.innerHTML = TEMPLATE(id, T);
-  const NODES: NodeDef[] = NODE_BASE.map((n) => ({ ...n, ab: T.nodes[n.id].ab, cap: T.nodes[n.id].cap }));
+  const NODES: NodeDef[] = NODE_BASE.map((n) => { const nt: { ab: string; cap?: string } = T.nodes[n.id]; return { ...n, ab: nt.ab, cap: nt.cap ?? '' }; });
   const byId = Object.fromEntries(NODES.map((n) => [n.id, n])) as Record<NodeId, NodeDef>;
   const root = container.firstElementChild as HTMLElement;
   const $ = <T extends Element = HTMLElement>(name: string) => ref<T>(root, name);
