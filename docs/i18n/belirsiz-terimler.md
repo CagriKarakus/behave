@@ -136,3 +136,22 @@ Bölüm çevirisi sırasında çevirmenin emin olmadığı ya da bilinçli karar
 ## epilogue
 
 - epilogue links[3]: 'There is no clothing above the homunculus' is my literal rendering of the Turkish item title; the book's own wording may differ.
+
+## Simülasyon metinleri (sim çevirmenlerinin notları)
+Sözlükte karşılığı olmayan, çevirmenin kendi seçimi olan terimler. Kesinleştirilenler `content/glossary.json`'a eklenmeli.
+
+- **Ortak:** "ingroup / outgroup" (tek sözcük), "free rider" (bedava binen), "reaction norm" (reaksiyon normu), "warm glow" (sıcak ışıltı), "caudate nucleus", "cold pressor stress", "Preconventional / Conventional / Postconventional" (Kohlberg), "missing heritability", "justified honesty" (haklı dürüstlük), "contested" (tartışmalı; "disputed" alternatifi).
+- **ultimatum:** Kitapta kutusu bağlantıları `content/en` adlarının sonuna yıl eklenerek yazıldı; atıf biçimi tercihinize bağlı.
+- **uyma-itaat:** "confederate" (Asch'ın ortağı, standart terim; bölüm katmanı "working with the researcher" diyor), Milgram "teacher/learner".
+- **endokrin-eksen:** "Binding eagerness / Receptor fussiness" (kaydırıcı adları), GnRH/LH sözlükte yok.
+- **bir-saniye-once:** "domestication effect" (evcilleşme etkisi), "intercalated cells".
+- **hormon-baglam:** Türkçe metin aynı türe hem "bozkır" hem "çayır tarla faresi" diyor; İngilizce ikisi için "prairie vole".
+- **noron:** devre düğümleri G/H/A → I/T/N (input/target/interneuron) çevirmenin seçimi.
+- **savas-baris:** "female tension" (dişi gerginliği), "Charity sensitivity" (Hayra duyarlılık; modelin iç adı "glow").
+
+## Türkçe kaynakta bulunan tutarsızlıklar (canlı Türkçe içeriğe dokunulmadı)
+- `content/chapters.json` ch11-e11: "bebek bezi" yazılmış (doğrusu "oyuncak bebek"; Clark doll test). Denetim notları bunu düzeltilmiş saymıştı.
+- ch12: keyStudies "katılımcıların üçte biri" ile ch12-e8 "denemelerin üçte biri" tutarsız.
+- ch13-e8: kitap 25 küçük toplum diyor, atıf edilen makale 15 toplumu kapsıyor (Türkçe not zaten belirtiyor).
+- ch16-e6: "Ultimatom Oyunu" yazım hatası.
+- `ozgur-irade` sim'i (Türkçe): dağılım grafiğinin aria-label'ında sayı iki kez yazılıyor ("N oyuncudan N"); karakter-özdeşliği için Türkçede korundu, İngilizcesi doğru.
