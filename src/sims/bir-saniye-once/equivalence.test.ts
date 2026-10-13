@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { loadReferenceModel } from '../../test/reference';
 import * as ts from './model';
+import { TR } from './text.tr';
 
 // Orijinal HTML'deki model script'i ile TS portu aynı girdilerde birebir aynı sayıları vermeli.
 const ref = loadReferenceModel('bir-saniye-once.html');
@@ -21,7 +22,8 @@ const SCEN: Array<{ u: Partial<ts.Inputs>; lesion: ts.Lesion }> = [
 
 describe('orijinal HTML modeli ile eşdeğerlik (bir-saniye-once)', () => {
   it('sabitler aynı', () => {
-    expect(ts.NODES).toEqual(ref.NODES);
+    // Bölge alt başlıkları (cap) Türkçe metin dosyasına taşındı; burada geri eklenip karşılaştırılır.
+    expect(ts.NODES.map((n) => ({ ...n, cap: TR.caps[n.id] }))).toEqual(ref.NODES);
     expect(ts.EDGES).toEqual(ref.EDGES);
     expect(ts.REST).toEqual(ref.REST);
   });

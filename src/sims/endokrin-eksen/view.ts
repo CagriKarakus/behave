@@ -2,6 +2,7 @@ import { slider, type SliderHandle } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, svg, svgText, uid } from '../kit';
+import { L } from './text';
 import {
   U0, hormAt, msOfLog, MS, neuroAt, organ, receptor, settleAxis, stepAxis, describeAxis,
   type AxisInputs, type AxisKey, type AxisState, type ReceptorParams,
@@ -12,74 +13,39 @@ type Tab = 'axis' | 'rec' | 'time';
 interface StageDef { t: string; h: string; c: string }
 interface StructDef { chip: string; stages: StageDef[]; note: string; drive?: [string, string]; pulse: string; series: string[] }
 
-export const STRUCT: Record<AxisKey, StructDef> = {
-  hpa: {
-    chip: 'Stres (HPA)',
-    stages: [
-      { t: 'Hipotalamus', h: 'CRH (kortikotropin salgılatıcı hormon)', c: '--hyp' },
-      { t: 'Hipofiz', h: 'ACTH (adrenokortikotropik hormon)', c: '--pit' },
-      { t: 'Böbreküstü bezi', h: 'Glukokortikoid (insanda kortizol)', c: '--gld' },
-    ],
-    note: 'Stres sırasında hipotalamustaki nöronlar CRH salgılar. CRH hipofiz hücrelerinin ACTH salgılamasına, ACTH da böbreküstü bezlerinin glukokortikoid salgılamasına yol açar. Tek bir sinyal üç basamakta ilerleyip kana karışır ve her yere ulaşır.',
-    drive: ['Stres düzeyi', 'Hipotalamustaki CRH nöronlarını uyaran stres'],
-    pulse: 'Stres darbesi (30 dk)',
-    series: ['CRH', 'ACTH', 'Kortizol'],
-  },
-  hpg: {
-    chip: 'Üreme (HPG)',
-    stages: [
-      { t: 'Hipotalamus', h: 'GnRH (gonadotropin salgılayan hormon)', c: '--hyp' },
-      { t: 'Hipofiz', h: 'LH (luteinizan hormon)', c: '--pit' },
-      { t: 'Yumurtalık', h: 'Östrojen', c: '--gld' },
-    ],
-    note: 'Kitaptaki ikinci örnek: hipotalamus GnRH salgılar, hipofiz LH salgılar, en sonunda yumurtalıklar östrojen salgılar. Aynı üç basamaklı yapı, farklı hormonlarla. (Gerçek döngü dalgalıdır; burada yalnızca yapıyı gösteriyorum.)',
-    drive: ['Hipotalamik sürücü', 'GnRH nöronlarına gelen uyarı'],
-    pulse: 'Sinyal darbesi (30 dk)',
-    series: ['GnRH', 'LH', 'Östrojen'],
-  },
-  two: {
-    chip: 'İki aşamalı',
-    stages: [
-      { t: 'Hipotalamus', h: 'Hipotalamik hormon', c: '--hyp' },
-      { t: 'Hipofiz', h: 'Hipofiz hormonu (örn. büyüme hormonu)', c: '--pit' },
-    ],
-    note: 'Bazı eksenler iki aşamalıdır: hipotalamus hipofizi yönlendirir ve hipofiz hormonu etkisini doğrudan bütün vücuda yayar. Mesela büyüme hormonu genelde bu yolu izler. Üçüncü bir bez yoktur.',
-    drive: ['Hipotalamik sürücü', 'Hipofizi yönlendiren hipotalamik sinyal'],
-    pulse: 'Sinyal darbesi (30 dk)',
-    series: ['Hipotalamik hormon', 'Hipofiz hormonu'],
-  },
-  glu: {
-    chip: 'Pankreas',
-    stages: [
-      { t: 'Kandaki glikoz', h: 'Ana düzenleyici (dolaşımdaki glikoz)', c: '--red' },
-      { t: 'Pankreas', h: 'İnsülin', c: '--gld' },
-    ],
-    note: 'Her sistemde düzenleyici beyin değildir. Pankreas ve onun salgıladığı insülinde ana düzenleyici dolaşımdaki glikoz düzeyidir. Beyin yalnızca belli bir beze projeksiyon göndererek salgılanmasına yardımcı olur.',
-    pulse: 'Yemek ye (30 dk)',
-    series: ['Glikoz', 'İnsülin'],
-  },
+// Yapı (renk) burada; metin okuma anında `L()` ile gelir. Alanlar getter olduğu için dil değişince bayat kalmaz.
+const AXC: Record<AxisKey, string[]> = {
+  hpa: ['--hyp', '--pit', '--gld'],
+  hpg: ['--hyp', '--pit', '--gld'],
+  two: ['--hyp', '--pit'],
+  glu: ['--red', '--gld'],
 };
-export const FOOT: Record<AxisKey, string> = {
-  hpa: 'Ek 2 ayrıca şunu söyler: tek bir hipotalamik hormon her zaman tek başına yönetmez. CRH\'nin yanında ACTH\'yi hem uyaran hem engelleyen başka hipotalamik hormonlar vardır ve farklı stres kaynakları farklı kombinasyonlar üretir. "Diğer hipotalamik hormonlar" kaydırıcısı bunu temsil eder. Geri bildirim bu sayfalarda anlatılmıyor; modeli gerçekçi yapmak için ekledim.',
-  hpg: 'Geri bildirim bu sayfalarda anlatılmıyor; modeli gerçekçi yapmak için ekledim. Sayılar ölçüm değil, sembolik.',
-  two: 'Geri bildirim bu sayfalarda anlatılmıyor; modeli gerçekçi yapmak için ekledim. Sayılar ölçüm değil, sembolik.',
-  glu: 'Kitap ayrıca kalp ya da bağırsak gibi beklenmedik yerlerden salgılanan tuhaf hormonlardan söz eder; beyin bunların salgılanmasını dolaylı yollarla düzenler. Bunlar modele dahil değil.',
-};
+const mkStruct = (k: AxisKey): StructDef => ({
+  get chip() { return L().axes[k].chip; },
+  get stages() { return L().axes[k].stages.map((s, i) => ({ t: s.t, h: s.h, c: AXC[k][i] })); },
+  get note() { return L().axes[k].note; },
+  get drive() { return k === 'glu' ? undefined : (L().drive[k] as [string, string]); },
+  get pulse() { return L().axes[k].pulse; },
+  get series() { return L().axes[k].series; },
+});
+export const STRUCT: Record<AxisKey, StructDef> = { hpa: mkStruct('hpa'), hpg: mkStruct('hpg'), two: mkStruct('two'), glu: mkStruct('glu') };
+const mkFoot = (): Record<AxisKey, string> => ({
+  get hpa() { return L().axes.hpa.foot; },
+  get hpg() { return L().axes.hpg.foot; },
+  get two() { return L().axes.two.foot; },
+  get glu() { return L().axes.glu.foot; },
+});
+export const FOOT: Record<AxisKey, string> = mkFoot();
 
-export const RPRE: { n: string; v: ReceptorParams }[] = [
-  { n: 'Normal', v: { hormone: 0.5, number: 0.6, affinity: 0.5, specificity: 1, other: 0 } },
-  { n: 'Reseptör mutasyonu', v: { hormone: 0.9, number: 0, affinity: 0.5, specificity: 1, other: 0 } },
-  { n: 'Çok reseptör, az hormon', v: { hormone: 0.15, number: 1, affinity: 0.9, specificity: 1, other: 0 } },
-  { n: 'Az reseptör, çok hormon', v: { hormone: 0.95, number: 0.15, affinity: 0.5, specificity: 1, other: 0 } },
-  { n: 'Titiz olmayan reseptör', v: { hormone: 0.4, number: 0.6, affinity: 0.5, specificity: 0.15, other: 0.8 } },
+const RV: ReceptorParams[] = [
+  { hormone: 0.5, number: 0.6, affinity: 0.5, specificity: 1, other: 0 },
+  { hormone: 0.9, number: 0, affinity: 0.5, specificity: 1, other: 0 },
+  { hormone: 0.15, number: 1, affinity: 0.9, specificity: 1, other: 0 },
+  { hormone: 0.95, number: 0.15, affinity: 0.5, specificity: 1, other: 0 },
+  { hormone: 0.4, number: 0.6, affinity: 0.5, specificity: 0.15, other: 0.8 },
 ];
-export const RC_DEFS: [keyof ReceptorParams, string, string, string][] = [
-  ['hormone', 'Östrojen düzeyi', 'Konuşma sesi: kandaki hormon miktarı.', 'var(--hyp)'],
-  ['number', 'Reseptör sayısı', 'Kulak: hücre yüzeyindeki reseptör sayısı.', 'var(--eff)'],
-  ['affinity', 'Bağlanma isteği', 'Bağlanma alanının şekli: yüksekse az hormon yeter.', 'var(--eff)'],
-  ['specificity', 'Reseptör titizliği', 'Düşükse benzer bir steroid hormon da kilide girebilir.', 'var(--gld)'],
-  ['other', 'Benzer hormon (testosteron)', 'Yapısal olarak benzer, farklı bir steroid hormon.', 'var(--red)'],
-];
+export const RPRE: { n: string; v: ReceptorParams }[] = RV.map((v, i) => ({ get n() { return L().presets[i]; }, v }));
+const RC_KEYS: [keyof ReceptorParams, string][] = [['hormone', 'var(--hyp)'], ['number', 'var(--eff)'], ['affinity', 'var(--eff)'], ['specificity', 'var(--gld)'], ['other', 'var(--red)']];
 
 const TEMPLATE = (id: string) => `
 <div class="sim sim-endo">

@@ -2,6 +2,8 @@
 // Sayılar ölçüm değildir; Ek 2'de anlatılan yapıların yönünü ve göreli hızını gösterir.
 // Kaynak: reference/artifacts/endokrin-eksen.html (davranış değişmeden taşındı).
 
+import { L } from './text';
+
 export type AxisKey = 'hpa' | 'hpg' | 'two' | 'glu';
 export interface AxisInputs { drive: number; other: number; feedback: number; meal: number; brain: number }
 export interface AxisState { s: number[]; e: number }
@@ -50,19 +52,20 @@ export function settleAxis(axis: AxisKey, u: AxisInputs, minutes = 900): AxisSta
 }
 
 export function describeAxis(axis: AxisKey, x: AxisState, u: AxisInputs, pulsing: boolean): string {
+  const T = L().describe;
   const s = x.s, n = s.length, last = s[n - 1], top = s[0];
   if (axis === 'glu') {
-    if (u.meal < 0.1 && s[0] < 0.3) return 'Dinlenme: glikoz düşük, pankreas az insülin salgılıyor.';
-    if (s[0] > 0.45 && s[1] < s[0] - 0.05) return 'Glikoz yükseldi; insülin geriden geliyor. Düzenleyici beyin değil, kandaki glikoz.';
-    if (s[1] > 0.4) return 'İnsülin yükseldi ve glikozu aşağı çekiyor: kendi kendini söndüren döngü.';
-    return 'Glikoz ve insülin dengeye doğru ilerliyor.';
+    if (u.meal < 0.1 && s[0] < 0.3) return T.gluRest;
+    if (s[0] > 0.45 && s[1] < s[0] - 0.05) return T.gluLag;
+    if (s[1] > 0.4) return T.gluInsulin;
+    return T.gluBalance;
   }
-  if (Math.max(...s) < 0.22) return 'Dinlenme: eksen düşük, hedef hücreler sakin.';
-  if ((pulsing || u.drive > 0.3) && top > last + 0.2) return 'Sinyal yukarıdan aşağı ilerliyor: önce hipotalamus, sonra hipofiz, en son bez yanıt veriyor.';
-  if (u.drive < 0.2 && !pulsing && last > top + 0.1) return 'Üst basamaklar sakinleşti ama hormon kanda kalıyor; hedef hücrenin yanıtı saatlerce sürüyor.';
-  if (u.feedback && last > 0.3 && top < 0.7 * (0.1 + 0.9 * Math.max(u.drive, pulsing ? 1 : 0))) return 'Geri bildirim devrede: son hormon yükselince eksenin üst basamakları kısılıyor.';
-  if (!u.feedback && last > 0.6) return 'Geri bildirim yok: son hormon yükselse bile üst basamaklar kısılmıyor, düzey çok yüksek kalıyor.';
-  return 'Eksen çalışıyor: her basamak bir sonrakini yönlendiriyor.';
+  if (Math.max(...s) < 0.22) return T.rest;
+  if ((pulsing || u.drive > 0.3) && top > last + 0.2) return T.cascade;
+  if (u.drive < 0.2 && !pulsing && last > top + 0.1) return T.lingering;
+  if (u.feedback && last > 0.3 && top < 0.7 * (0.1 + 0.9 * Math.max(u.drive, pulsing ? 1 : 0))) return T.fbOn;
+  if (!u.feedback && last > 0.6) return T.fbOff;
+  return T.running;
 }
 
 // ---- Reseptör ----
