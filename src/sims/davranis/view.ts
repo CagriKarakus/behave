@@ -5,29 +5,27 @@ import { lazyNotes, type Ctx, type Meter, type Panel } from '../ui';
 import { createHaritaPanel } from './panel-harita';
 import { createBaglamPanel } from './panel-baglam';
 import { createYerPanel } from './panel-yer';
+import { L } from './text';
+import { getLocale } from '../../i18n/locale';
 
 type Tab = 'harita' | 'baglam' | 'yer';
-const TABS: Array<{ key: Tab; label: string }> = [
-  { key: 'harita', label: 'Saldırganlık haritası' },
-  { key: 'baglam', label: 'Bağlam kapısı' },
-  { key: 'yer', label: 'Yer değiştirme' },
-];
+const TABS: Tab[] = ['harita', 'baglam', 'yer'];
 
 const TEMPLATE = (id: string) => `
 <div class="sim sim-ad">
-  <p class="lede">Aynı hareket neden bazen kahramanlık bazen cinayettir, ve saldırganlık tek bir şey midir?</p>
+  <p class="lede">${L().lede}</p>
 
-  <div class="tabs" role="tablist" aria-label="Simülasyon bölümleri">
-    ${TABS.map((t, i) => `<button class="tab" role="tab" id="${id}-tab-${t.key}" data-pane="${t.key}" aria-controls="${id}-pane-${t.key}" aria-selected="${i === 0}" ${i ? 'tabindex="-1"' : ''} type="button">${t.label}</button>`).join('')}
+  <div class="tabs" role="tablist" aria-label="${L().tabsLabel}">
+    ${TABS.map((t, i) => `<button class="tab" role="tab" id="${id}-tab-${t}" data-pane="${t}" aria-controls="${id}-pane-${t}" aria-selected="${i === 0}" ${i ? 'tabindex="-1"' : ''} type="button">${L().tabs[t]}</button>`).join('')}
   </div>
 
-  <div class="sim-bar" role="group" aria-label="Anlık açıklama"><div class="sim-bar-in">
+  <div class="sim-bar" role="group" aria-label="${L().barLabel}"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
     <div class="meters" data-ref="meters"></div>
   </div></div>
   <p class="sr-only" aria-live="polite" data-ref="live"></p>
 
-  ${TABS.map((t, i) => `<section class="pane" role="tabpanel" id="${id}-pane-${t.key}" data-pane="${t.key}" aria-labelledby="${id}-tab-${t.key}" ${i ? 'hidden' : ''}></section>`).join('')}
+  ${TABS.map((t, i) => `<section class="pane" role="tabpanel" id="${id}-pane-${t}" data-pane="${t}" aria-labelledby="${id}-tab-${t}" ${i ? 'hidden' : ''}></section>`).join('')}
 </div>`;
 
 export function mount(container: HTMLElement): () => void {
@@ -51,7 +49,7 @@ export function mount(container: HTMLElement): () => void {
     baglam: createBaglamPanel(ctx, hostOf('baglam')),
     yer: createYerPanel(ctx, hostOf('yer')),
   };
-  lazyNotes(scope, root, () => import('./notes').then((m) => m.NOTES));
+  lazyNotes(scope, root, () => (getLocale() === 'en' ? import('./notes.en').then((m) => m.default()) : import('./notes').then((m) => m.default())));
 
   /* ---- Çıktı çubuğu ---- */
   metersEl.innerHTML = [0, 1, 2].map((i) => `<div class="m"><div class="m-top"><span data-ref="ml${i}"></span><b data-ref="mv${i}"></b></div><div class="track"><b data-ref="mb${i}"></b></div></div>`).join('');

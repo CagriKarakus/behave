@@ -1,5 +1,6 @@
 // Küçük ortak parçalar: yatay göstergeler ve SVG metin sarma.
-import { el } from '../ui';
+import { pc as fmtPc, el } from '../ui';
+import { L } from './text';
 
 export interface BarDef { label: string; color: string }
 /** Etiket + iz + değer satırları; dönen fonksiyon yüzdeleri (0-1) ve isteğe bağlı değer metinlerini yazar. */
@@ -11,7 +12,7 @@ export function bars(host: HTMLElement, defs: BarDef[]): (vals: number[], texts?
   });
   return (vals, texts) => rows.forEach(([b, e], i) => {
     b.style.width = `${Math.round(Math.max(0, Math.min(1, vals[i])) * 100)}%`;
-    e.textContent = texts?.[i] ?? `%${Math.round(vals[i] * 100)}`;
+    e.textContent = texts?.[i] ?? fmtPc(vals[i]);
   });
 }
 
@@ -26,8 +27,4 @@ export function wrap(s: string, n: number): string[] {
   return out;
 }
 
-export const CH_NAME: Record<string, string> = {
-  ch01: 'Davranış', ch02: 'Bir Saniye Önce', ch03: 'Saniyeler ila Dakikalar Önce', ch04: 'Saatler ila Günler Önce',
-  ch12: 'Hiyerarşi, İtaat ve Direniş', ch17: 'Savaş ve Barış',
-};
-export const chLink = (ch: string): string => `<a href="#/bolum/${ch}">Bölüm ${+ch.slice(2)}, ${CH_NAME[ch] ?? ''}</a>`;
+export const chLink = (ch: string): string => `<a href="#/bolum/${ch}">${L().chapterLink(+ch.slice(2), L().chapterNames[ch] ?? '')}</a>`;
