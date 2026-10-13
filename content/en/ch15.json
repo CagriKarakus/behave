@@ -316,12 +316,5 @@
     ]
    }
   }
- },
- "_uncertain": [
-  "ch15-e1: name 'Cyberball social exclusion experiment (Eisenberger)' - source paper title is 'Does Rejection Hurt? An fMRI Study of Social Exclusion'; 'Cyberball' is the standard paradigm name.",
-  "ch15-e2: name 'Watching a loved one in pain (Singer et al.)' is a descriptive rendering of the Turkish name; the paper is 'Empathy for Pain Involves the Affective but Not Sensory Components of Pain'.",
-  "ch15-e8: name is descriptive ('Lying by mouth versus by hand and choice of cleansing product'); related literature names: 'Dirty Hands and Dirty Mouths' (Lee and Schwarz 2010).",
-  "ch15-keyConcepts: 'Macbeth effect' and 'Visceral to moral disgust' are used as given in the Turkish parentheses (not in glossary).",
-  "ch15-summary: Turkish 'anlamak' (to understand) example rendered as 'grasp' (an English physical metaphor for understanding) to preserve the point; the original word's literal metaphor is language-specific."
- ]
+ }
 }

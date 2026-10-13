@@ -336,9 +336,5 @@
     ]
    }
   }
- },
- "_uncertain": [
-  "ch02-e1 name: Turkish '(kaygı ve korku)' rendered as '(anxiety and fear)'; the underlying paper title is 'Neurobiological Substrates of Dread' (Science 2006) and there is no established short name for the study.",
-  "ch02-e4 name: 'Köpek-kedi melez görüntüleri' rendered as 'Dog–cat morph images'; the study has no standard short name (paper: 'Categorical Representation of Visual Stimuli in the Primate Prefrontal Cortex')."
- ]
+ }
 }

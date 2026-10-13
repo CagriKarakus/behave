@@ -807,6 +807,134 @@
    "en": "interoception",
    "note": "",
    "avoid": []
+  },
+  {
+   "tr": "göz resimlerinin gözetleme etkisi",
+   "en": "watching eyes effect",
+   "note": "Bateson ve ark.; 'watching-eyes' tireli yazım da kabul, deney adında 'Watching eyes effect (images of eyes)'.",
+   "avoid": [
+    "gazing eyes"
+   ]
+  },
+  {
+   "tr": "ingroup / outgroup (kendi grubu / öteki grup)",
+   "en": "ingroup / outgroup",
+   "note": "Tek sözcük yazılır.",
+   "avoid": []
+  },
+  {
+   "tr": "bedava binen",
+   "en": "free rider",
+   "note": "",
+   "avoid": [
+    "freerider"
+   ]
+  },
+  {
+   "tr": "reaksiyon normu",
+   "en": "reaction norm",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "sıcak ışıltı",
+   "en": "warm glow",
+   "note": "İktisattaki standart terim.",
+   "avoid": []
+  },
+  {
+   "tr": "kaudat çekirdek",
+   "en": "caudate nucleus",
+   "note": "",
+   "avoid": [
+    "caudate core"
+   ]
+  },
+  {
+   "tr": "Gelenek öncesi / Geleneksel / Gelenek sonrası (Kohlberg)",
+   "en": "Preconventional / Conventional / Postconventional",
+   "note": "Kohlberg'in standart İngilizce terimleri.",
+   "avoid": []
+  },
+  {
+   "tr": "eksik kalıtılabilirlik",
+   "en": "missing heritability",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "ortak (Asch deneyinde araştırmacıyla çalışan kişi)",
+   "en": "confederate",
+   "note": "Asch deneyinin standart terimi; katılımcı için 'participant'.",
+   "avoid": []
+  },
+  {
+   "tr": "divan-ı harp",
+   "en": "court-martial",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "Rekabetçi Tepki Süresi Görevi",
+   "en": "Competitive Reaction Time Task",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "bölgeci özgecilik",
+   "en": "parochial altruism",
+   "note": "De Dreu ve ark. 2010; oksitosin çalışmasının literatürdeki adı.",
+   "avoid": []
+  },
+  {
+   "tr": "Bükreş Erken Müdahale Projesi",
+   "en": "Bucharest Early Intervention Project (BEIP)",
+   "note": "Romanya yetimhaneleri çalışması.",
+   "avoid": []
+  },
+  {
+   "tr": "Cyberball",
+   "en": "Cyberball",
+   "note": "Paradigma adı çevrilmez.",
+   "avoid": []
+  },
+  {
+   "tr": "Macbeth etkisi",
+   "en": "Macbeth effect",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "Dunbar sayısı",
+   "en": "Dunbar's number",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "Hakikat ve Uzlaşma Komisyonu",
+   "en": "Truth and Reconciliation Commission",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "strese tepkisiz dönem",
+   "en": "stress hyporesponsive period",
+   "note": "",
+   "avoid": []
+  },
+  {
+   "tr": "çıkarma ve yerine koyma deneyi",
+   "en": "subtraction-and-replacement experiment (subtract and replace)",
+   "note": "Sapolsky'nin deyişi; 'ablation and replacement' eşanlamlı.",
+   "avoid": []
+  },
+  {
+   "tr": "tartışmalı (replikasyon durumu)",
+   "en": "contested",
+   "note": "Tek tip: 'contested' ('disputed' kullanılmaz). Arayüz etiketleri: robust / mixed / contested / unknown.",
+   "avoid": [
+    "disputed replication"
+   ]
   }
  ]
 }

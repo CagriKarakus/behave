@@ -276,7 +276,7 @@
    }
   },
   "ch07-e10": {
-   "name": "Children raised in Romanian orphanages",
+   "name": "Children raised in Romanian orphanages (Bucharest Early Intervention Project)",
    "researchers": "Charles Nelson, Nathan Fox, Charles Zeanah et al. (M. Sheridan et al.; N. Tottenham et al.)",
    "question": "How does early childhood spent in institutions lacking care, contact and stimulation affect brain development?",
    "method": "Children left in institutions during the Ceausescu era were followed as those adopted by Western families, those returned to their families, and those who remained in the institution. In the Bucharest Early Intervention Project, some of the institutionalized children were randomly selected and placed with high-quality foster families; brain structure (MRI) and function (EEG) were measured.",
@@ -324,12 +324,5 @@
     ]
    }
   }
- },
- "_uncertain": [
-  "ch07-e2: experiment name is a descriptive translation ('The child brain while watching another's pain'); no standard literature title exists (nearest sources: Decety and Michalska 2010; Decety et al. 2008).",
-  "ch07-e1: name is a descriptive rendering of the source title (Young et al. 2010, 'Disruption of the Right Temporoparietal Junction with TMS Reduces the Role of Beliefs in Moral Judgments').",
-  "ch07-e7: name 'Legalized abortion and crime rates' paraphrases the source title 'The Impact of Legalized Abortion on Crime'.",
-  "ch07-e10: 'Children raised in Romanian orphanages' used; the standard study name would be Bucharest Early Intervention Project (BEIP), which appears only in the method text.",
-  "ch07-e8 / keyConcepts: 'Stress hyporesponsive period' kept as in TR parenthesis; 'attachment' used for 'bağlanma' (including odor attraction in pups), per Sullivan's usage 'attachment/approach learning'."
- ]
+ }
 }

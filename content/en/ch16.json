@@ -244,13 +244,5 @@
     ]
    }
   }
- },
- "_uncertain": [
-  "ch16 keyConcepts: term 'Limbic punishment' taken from the Turkish parenthesis '(limbic punishment)' for 'Cezanın duygusal temeli'; not a standard literature term.",
-  "ch16-e1: name rendered as 'Impulse control in adolescents and the APA's seemingly inconsistent stance (Steinberg)'; 'APA'nin celiskili tutumu' has no standard English title (source paper: 'Are Adolescents Less Mature Than Adults? ... the Alleged APA Flip-flop').",
-  "ch16-e4: name 'Interfering with the cortex through magnetic stimulation and moral decisions' is descriptive; no named study exists in the book (representative: Young et al. 2010).",
-  "ch16-e5: name 'Predictability of depression from biological factors' is descriptive (Sapolsky's worked example, not a named study).",
-  "ch16-e6: Turkish 'Ultimatom Oyunu' (typo) rendered as 'Ultimatum Game' per glossary.",
-  "ch16 keyStudies: 'Studies of predictive power' / 'Brain imaging of punishment' / 'Causation through magnetic stimulation' are descriptive names, not literature names."
- ]
+ }
 }

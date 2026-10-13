@@ -302,13 +302,5 @@
     ]
    }
   }
- },
- "_uncertain": [
-  "ch05-e6: no primary paper for the five-day blindfold study; name is descriptive ('Five days of blindfolding and remapping of the visual cortex'), not a literature title.",
-  "ch05-e9: no standard short name; I used 'Altman and Das: first evidence of postnatal hippocampal neurogenesis in rats' based on the citation title.",
-  "ch05-e10: no standard short name; I used the Goldman and Nottebohm (1983) citation title, 'Neuronal production, migration, and differentiation in the adult canary brain' (shortened from '... in a Vocal Control Nucleus of the Adult Female Canary Brain').",
-  "ch05-e8: name combines the Draganski 2004 title with a descriptive suffix '(three months of juggling)'.",
-  "ch05-e7: no literature title for the piano experiment; name is descriptive ('Five-finger piano exercise and the motor cortex').",
-  "keyStudies 'Nottebohm's bird study' / 'Blindfold experiments' are descriptive names, not formal study titles."
- ]
+ }
 }

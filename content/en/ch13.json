@@ -328,16 +328,5 @@
     ]
    }
   }
- },
- "_uncertain": [
-  "ch13-e1 name: no fixed literature title for the scenario; used 'Side-effect effect: the chairman scenario (Knobe)' (Knobe's paper is 'Intentional Action and Side Effects in Ordinary Language'; the Turkish says 'Patron', so the text says 'boss' while the name uses the standard 'chairman').",
-  "ch13-e2 name: Turkish title is descriptive; used the paper's title 'Social evaluation by preverbal infants' plus the Turkish gloss.",
-  "ch13-e3 name: used the paper's title 'Monkeys Reject Unequal Pay' plus a descriptive gloss; the Turkish name has no standard English form.",
-  "ch13-e5 name: used the paper's title 'Business culture and dishonesty in the banking industry' with the Turkish descriptive gloss.",
-  "ch13-e8 name/keyStudies: Turkish (and the book) says 25 small-scale cultures while the cited Henrich et al. 2010 paper covers 15 societies (flagged in the Turkish replication note); I kept '25' as in the Turkish.",
-  "ch13-e10 name: 'Die-roll reporting' is my descriptive term; the paper is 'Intrinsic Honesty and the Prevalence of Rule Violations across Societies'.",
-  "ch13-e12 name: descriptive name from the Turkish; the paper is 'Patterns of neural activity associated with honest and dishonest moral decisions'.",
-  "keyConcepts 'Self-serving bias': the Turkish heading 'Seçici ahlaki tutarsızlık' (selective moral inconsistency) does not exactly match the English parenthesis 'self-serving bias'; I used the parenthetical term as required.",
-  "keyConcepts 'Grace vs will': the Turkish heading is 'ruhsal otomatiklik'; term kept as the English parenthesis."
- ]
+ }
 }

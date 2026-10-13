@@ -36,7 +36,7 @@
    "finding": "A rat exposed to shock attacks a smaller rat nearby, a beta male baboon defeated by an alpha male chases the lowest-ranking (omega) male, and rates of domestic violence rise when unemployment increases. This tendency can lower the aggressor's stress hormones."
   },
   {
-   "name": "Newspaper investigation of organ donors (MacFarquhar, 2009)",
+   "name": "Magazine profile of organ donors (MacFarquhar, 2009)",
    "finding": "People who donate kidneys to strangers display a self-sacrifice that expects nothing in return but appears unemotional. This lack of emotion creates suspicion and unease in those around them."
   }
  ],
@@ -119,10 +119,5 @@
     "refs": []
    }
   }
- },
- "_uncertain": [
-  "ch01-e2 name/keyStudies: Turkish calls the MacFarquhar piece 'dergi incelemesi' in the experiment but 'gazete incelemesi' in keyStudies (the source is a New Yorker article); I kept 'Magazine profile' for the experiment and 'Newspaper investigation' in keyStudies to stay faithful to the Turkish, but the keyStudies wording should probably be 'Magazine'.",
-  "ch01-e3 name: no standard literature name exists for this study (King et al. 2006, 'Doing the Right Thing'); I used 'Virtual room experiment (bandage or fire)'.",
-  "ch01-e1 name: no standard literature name; used 'Shock-induced displaced aggression (rat) and stress buffering'."
- ]
+ }
 }

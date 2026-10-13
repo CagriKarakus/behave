@@ -57,7 +57,7 @@
   },
   {
    "name": "Asch conformity experiments (1950s)",
-   "finding": "Participants left alone almost never got the line length wrong, whereas in a group of seven that unanimously gave the wrong answer, about one-third of participants went along with the wrong answer. Conformity becomes noticeable from three people and peaks at around six people."
+   "finding": "Participants left alone almost never got the line length wrong, whereas in a group of seven that unanimously gave the wrong answer, participants went along with the wrong answer on about one-third of trials. Conformity becomes noticeable from three people and peaks at around six people."
   },
   {
    "name": "Milgram obedience experiments (1960s)",
@@ -275,7 +275,7 @@
    "name": "Milgram obedience experiments",
    "researchers": "S. Milgram",
    "question": "When an authority gives the order, do ordinary people obey in a way that inflicts pain on another?",
-   "method": "In the early 1960s at Yale, of two volunteers taking part in a “memory study,” one became the “teacher” and the other the “learner”; the learner was in fact an actor working with the researchers. Working in separate rooms, without hearing or seeing each other, the teacher believed that he was giving the learner shocks of increasing intensity (up to 450 volts) at each wrong answer; at the start he had been given a real sample shock. When the teacher hesitated, the researcher in a lab coat beside him asked him to continue with increasingly firm commands and said that the responsibility was not his.",
+   "method": "In the early 1960s at Yale, of two volunteers taking part in a “memory study,” one became the “teacher” and the other the “learner”; the learner was in fact an actor working with the researchers. Working in separate rooms, without seeing each other, the teacher believed that he was giving the learner shocks of increasing intensity (up to 450 volts) at each wrong answer; at the start he had been given a real sample shock. When the teacher hesitated, the researcher in a lab coat beside him asked him to continue with increasingly firm commands and said that the responsibility was not his.",
    "finding": "Most volunteers obeyed even as they protested and even wept; in the first study 65% went up to 450 volts, the highest shock. In later variations, obedience decreased when the researcher was in another room, when the experiment was held in an ordinary office instead of Yale, or when the learner was in the same room as the teacher.",
    "roleInChapter": "Shows that situational pressure (authority, the diffusion of responsibility, distance from the victim) can bring ordinary people to the point of causing harm. It is the center of the chapter's discussion of obedience.",
    "caveats": "According to Gina Perry's review of Milgram's unpublished documents and recordings, teachers had refused to give shocks much more often than reported, and many of them had realized that the learner was an actor. According to the book, an obedience rate of about 60% has been repeated, but most of the repetitions are reenactments made for film and television, not peer-reviewed academic studies.",
@@ -320,14 +320,5 @@
     ]
    }
   }
- },
- "_uncertain": [
-  "ch12-e11: Turkish name '2001 BBC Hapishane Deneyi'; I used '2001 BBC Prison Study' because the cited paper title is 'The BBC Prison Study' (Reicher and Haslam 2006). The Turkish 'Deney' could also be rendered 'Experiment'.",
-  "ch12-e2: name '(kare deneyi)' rendered 'the squares experiment'; the literature title is 'Big and Mighty: Preverbal Infants Mentally Represent Social Dominance'; no standard short name.",
-  "ch12-e1: Turkish name has no standard literature name; I used 'Group size and brain structure in macaques (Sallet et al.)' (paper title: 'Social Network Size Affects Neural Circuits in Macaques').",
-  "ch12-e5: name kept as 'Stress in alpha baboons (Altmann and Alberts findings)'; paper title is 'Life at the Top: Rank and Stress in Wild Baboons'.",
-  "ch12-e8 / keyStudies: Turkish keyStudies says about one-third of participants conformed, while ch12-e8 says one-third of trials; translated each faithfully (source inconsistency).",
-  "ch12-e9: method says teacher and learner worked 'without hearing or seeing each other' yet finding mentions varying proximity; translated faithfully from Turkish.",
-  "ch12 summary: 'konformizm' rendered as 'conformity' (glossary term); 'Dunbar sayisi' as 'Dunbar's number'."
- ]
+ }
 }

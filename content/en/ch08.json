@@ -322,11 +322,5 @@
     ]
    }
   }
- },
- "_uncertain": [
-  "ch08-e4: Crabbe et al. 1999 has no formal short name; I used the paper title plus the descriptive '(three-laboratory mouse study)'.",
-  "ch08-e6: 'pantolon indirme geni' rendered as 'pants-dropping gene' (informal Sapolsky-style wording, not a standard term); 'Brunner syndrome' kept from Turkish note.",
-  "ch08-e2/e3/e7/e9/e10/e11/e12: names use the source paper titles (verified against sources[].citation) rather than a conventional short name; shorten if you prefer.",
-  "keyConcepts 'Transpozon (transposable genetic element)': used 'Transposable genetic element' as term."
- ]
+ }
 }

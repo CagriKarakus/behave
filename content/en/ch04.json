@@ -222,7 +222,7 @@
    }
   },
   "ch04-e8": {
-   "name": "Oxytocin and the us-versus-them distinction (De Dreu)",
+   "name": "Oxytocin and parochial altruism: the us-versus-them distinction (De Dreu)",
    "researchers": "C. de Dreu et al.",
    "question": "Does oxytocin increase cooperation only for ‘us’, or does it also raise prejudice and hostility toward the out-group?",
    "method": "In the first study, male participants were divided into small teams, received oxytocin or placebo, and decided how much of their money to put into a common pool shared with teammates; they then played a game resembling the prisoner’s dilemma against someone from the opposing team. In the second study, Dutch students took the Implicit Association Test, and in the dilemma of ‘sacrificing one person to save five’ the name of the person to be sacrificed was varied to be typically Dutch, German or Middle Eastern.",
@@ -292,13 +292,5 @@
     ]
    }
   }
- },
- "_uncertain": [
-  "keyConcepts[1].term: 'Çıkarma ve yerine koyma deneyi' is not in the glossary; I used 'Subtraction-and-replacement experiment' (the usual literature wording is 'remove-and-replace' / 'ablation and replacement'; Sapolsky uses 'subtract and replace').",
-  "ch04-e1: name 'Testosterone and dominance rank in talapoin monkeys' is built from the Dixson & Herbert 1977 citation title ('Testosterone, Aggressive Behavior and Dominance Rank in Captive Adult Male Talapoin Monkeys'); there is no standard shorter name.",
-  "ch04-e3: 'Testosterone belief experiment' has no standard literature name (Eisenegger et al. 2010 describe it as the effect of subjects' beliefs about receiving testosterone vs placebo).",
-  "ch04-e5: researchers/caveats name the species as 'prairie vole', 'montane vole', 'meadow vole' (monogamous bozkir/dag/cayir tarla faresi) by standard common names; Lim et al. 2004 used meadow vole (Microtus pennsylvanicus) and ventral pallidum.",
-  "ch04-e8: name uses 'us-versus-them distinction' per the Turkish; the literature title for the work is 'parochial altruism' (De Dreu et al. 2010) and 'ethnocentrism' (2011).",
-  "ch04-e12: name 'Pain empathy toward a stranger mouse (glucocorticoid blockade)' has no standard literature name; Martin et al. 2015 title is 'Reducing Social Stress Elicits Emotional Contagion of Pain in Mouse and Human Strangers'."
- ]
+ }
 }

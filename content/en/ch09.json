@@ -321,12 +321,5 @@
     ]
    }
   }
- },
- "_uncertain": [
-  "ch09-e1: 'Cinsiyet eşitliği ve matematik puanı farkı' has no formal study name; I used 'Gender equality and the math score gap' (source title: 'Culture, Gender, and Math').",
-  "ch09-e2: 'Holistic vs. analytic attention (picture context experiment)' follows the Masuda and Nisbett source title ('Attending Holistically vs. Analytically'); 'picture context experiment' is a descriptive gloss.",
-  "ch09-e5: 'Hallway insult experiment' is the descriptive name; the formal study title is 'Insult, Aggression, and the Southern Culture of Honor: An Experimental Ethnography' (Cohen et al. 1996).",
-  "ch09-e9: 'Ethnic patch size and boundary model' is descriptive; source titles are 'Global Pattern Formation and Ethnic/Cultural Violence' (Lim et al.) and 'Good Fences' (Rutherford et al.).",
-  "ch09-e7/e8: 'Sıçan' (rat) kept as 'rat' per the Turkish text although Calhoun's best-known 'Universe 25' work used mice; Turkish source was not changed."
- ]
+ }
 }

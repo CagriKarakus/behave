@@ -188,7 +188,7 @@
           "finding": "Şoka maruz kalan bir sıçan yakındaki daha küçük bir sıçana saldırır, alfa erkeğe yenilen beta erkek babun, en alttaki (omega) erkeği kovalar ve işsizlik arttığında aile içi şiddet oranları yükselir. Bu eğilim, saldırganın stres hormonlarını düşürebilir."
         },
         {
-          "name": "Organ bağışçıları üzerine gazete incelemesi (MacFarquhar, 2009)",
+          "name": "Organ bağışçıları üzerine dergi incelemesi (MacFarquhar, 2009)",
           "finding": "Yabancılara böbrek bağışlayan insanlar, karşılık beklemeyen ama duygusuz görünen bir özveri sergiler. Bu duygusuzluk, çevredekilerde kuşku ve huzursuzluk yaratır."
         }
       ],
@@ -5936,10 +5936,10 @@
         },
         {
           "id": "ch11-e11",
-          "name": "Clark ve Clark'ın bebek bezi çalışmaları",
+          "name": "Clark ve Clark'ın oyuncak bebek çalışmaları",
           "researchers": "K. B. Clark ve M. P. Clark",
           "year": 1947,
-          "question": "Afrikalı Amerikalı çocuklar, ayrımcılığın yaygın olduğu bir ortamda kendi ırklarını nasıl algılar ve hangi bebek bezini tercih eder?",
+          "question": "Afrikalı Amerikalı çocuklar, ayrımcılığın yaygın olduğu bir ortamda kendi ırklarını nasıl algılar ve hangi oyuncak bebeği tercih eder?",
           "method": "1940'larda başlayan çalışmalarda çocuklara siyah ve beyaz oyuncak bebekler gösterildi; hangisiyle oynamak istedikleri ve hangisine 'iyi', 'güzel' gibi olumlu özellikler yükledikleri soruldu.",
           "finding": "Afrikalı Amerikalı çocuklar da beyaz çocuklar gibi beyaz bebeklerle oynamayı tercih etti ve onlara daha olumlu özellikler yükledi. Etkinin segregasyonlu okullardaki siyah çocuklarda en belirgin olması, Brown v. Board of Education davasında kanıt olarak anıldı. Kitap aynı bağlamda bugün Afrikalı Amerikalıların, eşcinsellerin ve kadınların yaklaşık yüzde 40-50'sinin IAT'de sırasıyla beyazlar, heteroseksüeller ve erkekler lehine otomatik önyargı gösterdiğini aktarır.",
           "roleInChapter": "Önyargının yalnızca ayrımcı tarafta değil, ayrımcılığa uğrayan tarafta da içselleştirilebildiğini gösterir. Bölümün kendinden nefret eden dışgrup üyesi örüntüsünün tarihsel kanıtı olarak sunulur.",
@@ -6077,7 +6077,7 @@
         },
         {
           "name": "Asch konformite deneyleri (1950'ler)",
-          "finding": "Yalnız bırakılan katılımcılar çizgi uzunluğunu neredeyse hiç yanlış bilmezken, yedi kişilik ve oybirliğiyle yanlış cevap veren bir grupta katılımcıların yaklaşık üçte biri yanlış cevaba katıldı. Konformizm, üç kişiden itibaren belirginleşiyor ve altı kişi civarında en yüksek düzeye çıkıyor."
+          "finding": "Yalnız bırakılan katılımcılar çizgi uzunluğunu neredeyse hiç yanlış bilmezken, yedi kişilik ve oybirliğiyle yanlış cevap veren bir grupta katılımcılar denemelerin yaklaşık üçte birinde yanlış cevaba katıldı. Konformizm, üç kişiden itibaren belirginleşiyor ve altı kişi civarında en yüksek düzeye çıkıyor."
         },
         {
           "name": "Milgram itaat deneyleri (1960'lar)",
@@ -6468,7 +6468,7 @@
           "researchers": "S. Milgram",
           "year": 1963,
           "question": "Bir otorite emrettiğinde, sıradan insanlar başkasına acı verecek biçimde itaat eder mi?",
-          "method": "1960'ların başında Yale'de 'bellek çalışmasına' katılan iki gönüllüden biri 'öğretmen', öteki 'öğrenci' oldu; öğrenci aslında araştırmacılarla çalışan bir oyuncuydu. Ayrı odalarda, birbirini duyup görmeden çalışırken öğretmen her yanlış cevapta öğrenciye giderek artan şiddette (450 volta kadar) şok verdiğini sanıyordu; başta kendisine gerçek bir örnek şok verilmişti. Öğretmen duraksadığında yanındaki önlüklü araştırmacı giderek kesinleşen komutlarla devam etmesini istiyor ve sorumluluğun kendisinde olmadığını söylüyordu.",
+          "method": "1960'ların başında Yale'de 'bellek çalışmasına' katılan iki gönüllüden biri 'öğretmen', öteki 'öğrenci' oldu; öğrenci aslında araştırmacılarla çalışan bir oyuncuydu. Ayrı odalarda, birbirini görmeden çalışırken öğretmen her yanlış cevapta öğrenciye giderek artan şiddette (450 volta kadar) şok verdiğini sanıyordu; başta kendisine gerçek bir örnek şok verilmişti. Öğretmen duraksadığında yanındaki önlüklü araştırmacı giderek kesinleşen komutlarla devam etmesini istiyor ve sorumluluğun kendisinde olmadığını söylüyordu.",
           "finding": "Gönüllülerin çoğu itiraz edip hatta ağlasa da itaat etti; ilk çalışmada yüzde 65'i en yüksek şok olan 450 volta kadar çıktı. Sonraki varyasyonlarda araştırmacı başka odadayken, deney Yale yerine sıradan bir büroda yapıldığında ya da öğrenci öğretmenle aynı odadayken itaat azaldı.",
           "roleInChapter": "Durumsal baskının (otorite, sorumluluğun dağılması, kurbanla mesafe) sıradan insanları zarar verme noktasına getirebildiğini gösterir. Bölümün itaat tartışmasının merkezidir.",
           "sources": [
@@ -7044,7 +7044,7 @@
           "researchers": "J. Henrich ve ark.",
           "year": 2010,
           "question": "Pazara entegrasyon, topluluk büyüklüğü ve dinsel mensubiyet, insanların adil davranışını ve adaleti ihlal edeni cezalandırma isteğini nasıl etkiler?",
-          "method": "Kitaba göre yirmi beş küçük ölçekli kültürden binlerce katılımcı (göçebe çobanlar, avcı-toplayıcılar, yerleşik bahçecilik yapanlar, geçimlik çiftçi/ücretli çalışanlar) ile Missouri ve Akra'dan (Gana) kentli kontrol grupları üç oyun oynadı: Diktatör Oyunu, Ültimatom Oyunu (kendine haksızlık yapanı ödeyerek cezalandırma) ve üçüncü taraf cezalandırma oyunu. Pazar entegrasyonu, satın alınarak elde edilen kalorinin yüzdesiyle ölçüldü.",
+          "method": "Kitaba göre yirmi beş küçük ölçekli kültürden binlerce katılımcı (göçebe çobanlar, avcı-toplayıcılar, yerleşik bahçecilik yapanlar, geçimlik çiftçi/ücretli çalışanlar) ile Missouri ve Akra'dan (Gana) kentli kontrol grupları üç oyun oynadı: Diktatör Oyunu, Ultimatum Oyunu (kendine haksızlık yapanı ödeyerek cezalandırma) ve üçüncü taraf cezalandırma oyunu. Pazar entegrasyonu, satın alınarak elde edilen kalorinin yüzdesiyle ölçüldü.",
           "finding": "Pazar entegrasyonu (Hadza'da yüzde 0'dan yerleşik balıkçı topluluklarda yaklaşık yüzde 90'a) arttıkça üç oyunda da teklifler adilleşti ve cezalandırma isteği arttı: Hadza Diktatör Oyununda payın ortalama yüzde 73'ünü kendine ayırırken Sanquianga balıkçıları ve kentliler 50:50'ye yaklaştı. Topluluk büyüdükçe ikinci ve üçüncü taraf cezası arttı (50 kişiden küçük Hadza gruplarında sıfırın üstündeki hemen her teklif kabul edildi; 5000+ kişilik topluluklarda adil olmayan teklifler reddedildi). Dünya dinine mensup olma oranı arttıkça üçüncü taraf cezası arttı.",
           "roleInChapter": "Adaletin evrensel ve doğuştan gelen tek bir duygu olmadığını, ekonomik etkileşim ve büyük topluluklarla birlikte adalet anlayışının biçim değiştirdiğini gösterir.",
           "sources": [
@@ -8125,7 +8125,7 @@
           "researchers": "A. G. Sanfey ve ark.",
           "year": 2003,
           "question": "Ekonomik bir oyunda adaletsiz bir teklife karşı tepki, insula gibi visseral iğrenme bölgeleriyle mi ilişkilidir?",
-          "method": "Katılımcılar tarayıcıda Ültimatom Oyununda kendilerine yapılan para paylaşım tekliflerini kabul ya da reddetti; teklifler kimi zaman bir insandan, kimi zaman bilgisayardan geliyordu.",
+          "method": "Katılımcılar tarayıcıda Ultimatum Oyununda kendilerine yapılan para paylaşım tekliflerini kabul ya da reddetti; teklifler kimi zaman bir insandan, kimi zaman bilgisayardan geliyordu.",
           "finding": "İnsandan gelen adaletsiz teklifler insulayı etkinleştirdi (bilgisayardan gelenler bu kadar etkinleştirmedi); insula etkinliği ne kadar yüksekse teklifin reddedilme olasılığı o kadar arttı.",
           "roleInChapter": "Ahlaki iğrenme ile visseral iğrenme ayrımının sınırlarını gösterir. Teklifin fiziksel olarak iğrenç olmamasına rağmen insula’nın devreye girmesi, iki iğrenme türünün birbirine karıştığını destekler.",
           "sources": [
@@ -8685,7 +8685,7 @@
           "researchers": "J. W. Buckholtz ve ark.; K. Gospic ve ark.",
           "year": 2008,
           "question": "Suç sorumluluğu ve ceza miktarı kararları beyinde aynı bölgelerle mi ilişkilidir; ceza kararını duygusal bölgeler mi şekillendirir?",
-          "method": "Buckholtz ve ark. çalışmasında katılımcılar tarayıcıda norm ihlali senaryolarını okuyup failin sorumluluğunu ve uygun cezayı ayrı ayrı belirledi. Gospic ve ark. ise Ültimatom Oyununda adaletsiz tekliflerin anında reddedilmesi sırasında amigdala etkinliğini inceledi.",
+          "method": "Buckholtz ve ark. çalışmasında katılımcılar tarayıcıda norm ihlali senaryolarını okuyup failin sorumluluğunu ve uygun cezayı ayrı ayrı belirledi. Gospic ve ark. ise Ultimatum Oyununda adaletsiz tekliflerin anında reddedilmesi sırasında amigdala etkinliğini inceledi.",
           "finding": "Suçluluk/sorumluluk kararı bilişsel dlPFC etkinliğiyle ilişkiliydi; uygun ceza kararı ise duygusal vmPFC, amigdala ve insulayı etkinleştirdi ve etkinlik arttıkça verilen ceza da arttı. Adaletsiz teklifin anında reddi amigdala etkinliğiyle bağlantılıydı.",
           "roleInChapter": "Cezalandırma isteğinin “soğukkanlı akıldan” çok limbik bir sürece dayandığını gösterir. Bu, cezanın ahlaki bir erdem olarak savunulmasını zorlaştırır.",
           "sources": [

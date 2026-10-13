@@ -322,12 +322,5 @@
     ]
    }
   }
- },
- "_uncertain": [
-  "ch11-e11: Turkish source name and question say 'bebek bezi' (diaper), which is evidently a typo for 'oyuncak bebek' (doll); I translated as 'doll' (name: 'Clark and Clark's doll studies'; standard literature name: Clark doll test / 'Racial Identification and Preference Among Negro Children'). The Turkish source should be fixed.",
-  "ch11-e2: no single standard name for this study; name is a descriptive rendering based on the citation title ('The Evolution of Intergroup Bias: Perceptions and Attitudes in Rhesus Macaques'), chosen: 'Implicit intergroup bias in macaques'.",
-  "ch11-e4, e7, e8, e12: Turkish names are descriptive, not standard literature names; I used descriptive English renderings ('Imitation and helping experiment', 'Racial bias during ovulation', 'Recategorization by shirt color', 'Income inequality and stereotype perception in 37 countries (Durante et al.)').",
-  "ch11-e11 finding: 'yaklasik yuzde 40-50' rendered '40-50 percent' (source uses words, not a % sign).",
-  "ch11 links ch16/ch17/ch12/ch15 'why' texts: 'bolum' rendered as 'Chapter N' / 'the next chapter'."
- ]
+ }
 }

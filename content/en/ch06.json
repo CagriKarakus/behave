@@ -273,11 +273,5 @@
     "refs": []
    }
   }
- },
- "_uncertain": [
-  "ch06-e3: Turkish name 'Ergenlikte duygusal yüzlere tepki' has no standard literature name; I used 'Responses to emotional faces in adolescence' based on the citation title 'Facing Puberty: ... Neural Responses to Affective Facial Displays'.",
-  "ch06-e8: Turkish name has no standard literature name; I used 'Susceptibility to peer influence and premotor mimicry response' (citation title: 'Entering Adolescence: Resistance to Peer Influence...').",
-  "ch06-e9: 'liyakatçi' rendered as 'meritocratic' (Almas et al. use 'meritocrat'); 'faydacı' as 'utilitarian', 'liberter' as 'libertarian' (Almas et al. term 'libertarian egalitarian' may apply).",
-  "ch06-keyStudies: 'çekirdek accumbens' rendered as 'nucleus accumbens' (glossary term), and 'Cyberball' left untranslated as the standard name."
- ]
+ }
 }

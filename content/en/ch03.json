@@ -176,7 +176,7 @@
    }
   },
   "ch03-e4": {
-   "name": "Watching-eyes effect of eye images",
+   "name": "Watching eyes effect (images of eyes)",
    "researchers": "M. Bateson, D. Nettle and G. Roberts; D. Francey and R. Bergmüller",
    "question": "Does a small cue that we are being watched change helping and honest behavior in real life?",
    "method": "In a university coffee room, in an honesty-box system where money for drinks was left in a box, a picture of a pair of eyes or of flowers was hung above the box on alternating weeks, and the money collected was divided by the amount of milk consumed. The book also reports similar studies, such as litter collection at a bus stop and economic games played with an image of eyes on a computer screen.",
@@ -305,12 +305,5 @@
     ]
    }
   }
- },
- "_uncertain": [
-  "ch03-e2: 'Ateş etme görevi (Correll)' -> 'Shooter task (Correll)'; the literature also uses 'shooter bias task' / 'police officer's dilemma', I chose 'Shooter task'.",
-  "ch03-e4: 'Göz resimlerinin gözetleme etkisi' -> 'Watching-eyes effect of eye images'; standard literature term is 'watching eyes effect'.",
-  "ch03-e6: 'Korku teri koklatma çalışması' -> 'Fear sweat sniffing study'; no single standard study name, source title is 'Chemosensory Cues to Conspecific Emotional Stress Activate Amygdala in Humans'.",
-  "ch03-e1, ch03-e5, ch03-e10, ch03-e12: descriptive names chosen from source titles; no established short name (e12 uses the source title 'The Spreading of Disorder').",
-  "ch03 keyConcepts: 'Koku ve korku feromonları' -> 'Smell and fear pheromones' (term kept as in the Turkish source although 'pheromone' is contested for humans)."
- ]
+ }
 }
