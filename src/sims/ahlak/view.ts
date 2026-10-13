@@ -1,6 +1,6 @@
 import { mulberry32 } from '../rng';
 import { lazyNotes, pc, f1, f2, slider } from '../ui';
-import { getLocale, decimalSep } from '../../i18n/locale';
+import { decimalSep } from '../../i18n/locale';
 import { percent } from '../../i18n/fmt';
 import { L } from './text';
 import '../sim.css';

@@ -1,20 +1,22 @@
-import { slider } from '../ui';
+import { f2, pc, slider, repBadge } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, ref, svg, svgText, uid } from '../kit';
 import { createTour } from '../tour';
+import { t } from '../../i18n/t';
+import { num } from '../../i18n/fmt';
 import {
   CASES, FACTORS, LIBET, RESPS, RP_ONSET, SCH, artefactShare, clamp, clockAngle, defaultShares, evaluate,
   judgments, makePlayers, markAngle, outcome, punishStats, punishes, quadrant, quintiles, recommend, rpGap, rpLibet, runSchurger, sample,
   trueGap, vetoWindow, wFromAngles, wtp, type Resp, type SchParams, type SchRun,
 } from './model';
+import { L } from './text';
+import type { Strings } from './text.tr';
 
 type Tab = 'lib' | 'cok' | 'ceza';
 type View = 'libet' | 'sch' | 'both';
 
 const ms = (v: number): string => `${v < 0 ? '−' : ''}${Math.abs(Math.round(v))} ms`;
-const pc = (x: number): string => `%${Math.round(x * 100)}`;
-const f2 = (x: number): string => x.toFixed(2).replace('.', ',');
 const FCOL = ['var(--pit)', 'var(--amy)', 'var(--dop)', 'var(--gld)', 'var(--pfc)', 'var(--lesion)'];
 
 const sv = (w: number, h: number, inner: string): string => `<svg viewBox="0 0 ${w} ${h}" aria-hidden="true">${inner}</svg>`;
@@ -23,16 +25,25 @@ const line = (c: string, dash = ''): string => sv(26, 10, `<path d="M1 5H25" str
 const swatch = (c: string, o = 1): string => sv(16, 12, `<rect x="1" y="2" width="14" height="8" rx="2" fill="${c}" fill-opacity="${o}" stroke="${c}"/>`);
 const dotS = (filled: boolean): string => sv(14, 12, `<circle cx="7" cy="6" r="4.4" fill="${filled ? 'var(--amy)' : 'none'}" stroke="${filled ? 'var(--amy)' : 'var(--edge)'}" stroke-width="1.5"/>`);
 
-const TEMPLATE = (id: string) => `
+
+/** Sekme bölmesindeki "Kitapta" kutusu satırı: bağlantı + ayraç + öncül + replikasyon rozeti + ardıl. */
+type BookT = Strings['book']['libet'];
+const bookLi = (id: string, b: BookT, rep: Parameters<typeof repBadge>[0], tail = ''): string =>
+  `<li><a href="#/bolum/ch16?deney=${id}">${b.cite}</a>${b.lead}${b.pre} ${repBadge(rep)}${b.sep}${b.post}${tail}</li>`;
+const bookAside = (items: string): string => `<aside class="book" aria-label="${t('sim.book')}"><h3 class="sim-h">${t('sim.book')}</h3><ul>${items}</ul></aside>`;
+const howBox = (ps: string[]): string =>
+  `<details class="how"><summary>${t('sim.how')}</summary><div class="how-in">${ps.map((p) => `<p>${p}</p>`).join('')}</div></details>`;
+
+const TEMPLATE = (id: string, T: Strings) => `
 <div class="sim sim-ozg">
-  <p class="lede">Davranışın biyolojik nedenlerini anladıkça "suçlu" kavramına ne olur?</p>
-  <div class="tabs" role="tablist" aria-label="Simülasyon bölümleri">
-    <button class="tab" role="tab" id="${id}-tab-lib" data-pane="lib" aria-controls="${id}-pane-lib" aria-selected="true" type="button">Libet</button>
-    <button class="tab" role="tab" id="${id}-tab-cok" data-pane="cok" aria-controls="${id}-pane-cok" aria-selected="false" tabindex="-1" type="button">Çok etkenli tahmin</button>
-    <button class="tab" role="tab" id="${id}-tab-ceza" data-pane="ceza" aria-controls="${id}-pane-ceza" aria-selected="false" tabindex="-1" type="button">Ceza ve tatmin</button>
+  <p class="lede">${T.lede}</p>
+  <div class="tabs" role="tablist" aria-label="${T.tabsLabel}">
+    <button class="tab" role="tab" id="${id}-tab-lib" data-pane="lib" aria-controls="${id}-pane-lib" aria-selected="true" type="button">${T.tabs.lib}</button>
+    <button class="tab" role="tab" id="${id}-tab-cok" data-pane="cok" aria-controls="${id}-pane-cok" aria-selected="false" tabindex="-1" type="button">${T.tabs.cok}</button>
+    <button class="tab" role="tab" id="${id}-tab-ceza" data-pane="ceza" aria-controls="${id}-pane-ceza" aria-selected="false" tabindex="-1" type="button">${T.tabs.ceza}</button>
   </div>
 
-  <div class="sim-bar" role="group" aria-label="Anlık çıktılar"><div class="sim-bar-in">
+  <div class="sim-bar" role="group" aria-label="${T.outputsLabel}"><div class="sim-bar-in">
     <p class="say" data-ref="say"></p>
     <div class="meters" data-ref="meters"></div>
   </div></div>
@@ -41,135 +52,101 @@ const TEMPLATE = (id: string) => `
   <!-- ============ 1 · Libet ============ -->
   <section class="pane" role="tabpanel" id="${id}-pane-lib" data-pane="lib" aria-labelledby="${id}-tab-lib">
     <div data-ref="tour1"></div>
-    <section class="card" aria-label="Saat oyunu">
-      <h3 class="sim-h">1 · Saat oyunu: niyeti işaretle</h3>
+    <section class="card" aria-label="${T.lib.clockCard}">
+      <h3 class="sim-h">${T.lib.clockH}</h3>
       <p class="note" data-ref="clockNote"></p>
-      <div class="chart"><svg viewBox="0 0 360 220" role="img" aria-label="Saat: dönen nokta, hareket anı ve işaretlenen niyet anı" data-ref="clock"></svg></div>
-      ${lg([swatch('var(--pfc)'), 'nokta / hareket anı (M)'], [sv(14, 12, '<path d="M7 1L12.5 6L7 11L1.5 6z" fill="var(--dop)" stroke="var(--ink)" stroke-width="1"/>'), 'niyetin hissedildiği an (W)'])}
-      <div class="row"><button class="btn btn-go" type="button" data-ref="go">Başlat</button><button class="btn" type="button" data-ref="save" disabled>İşareti kaydet</button></div>
+      <div class="chart"><svg viewBox="0 0 360 220" role="img" aria-label="${T.lib.clockSvgLabel}" data-ref="clock"></svg></div>
+      ${lg([swatch('var(--pfc)'), T.lib.legendDot], [sv(14, 12, '<path d="M7 1L12.5 6L7 11L1.5 6z" fill="var(--dop)" stroke="var(--ink)" stroke-width="1"/>'), T.lib.legendW])}
+      <div class="row"><button class="btn btn-go" type="button" data-ref="go">${T.lib.start}</button><button class="btn" type="button" data-ref="save" disabled>${T.lib.saveMark}</button></div>
       <div class="sliders" data-ref="wSl"></div>
       <p class="note" data-ref="tries"></p>
     </section>
 
-    <section class="card" aria-label="Hazırlık potansiyeli">
-      <h3 class="sim-h">2 · Hazırlık potansiyeli (RP): iki yorum</h3>
-      <div class="chips" role="group" aria-label="Yorum" data-ref="viewChips"></div>
-      <div class="chart"><svg viewBox="0 0 360 214" role="img" aria-label="Hazırlık potansiyeli eğrisi" data-ref="rp"></svg></div>
+    <section class="card" aria-label="${T.lib.rpCard}">
+      <h3 class="sim-h">${T.lib.rpH}</h3>
+      <div class="chips" role="group" aria-label="${T.lib.viewGroup}" data-ref="viewChips"></div>
+      <div class="chart"><svg viewBox="0 0 360 214" role="img" aria-label="${T.lib.rpSvgLabel}" data-ref="rp"></svg></div>
       <div data-ref="rpKey"></div>
       <div class="sliders" data-ref="schSl"></div>
-      <div class="row" data-ref="schRow"><button class="btn" type="button" data-ref="rerun">Yeniden çalıştır</button></div>
+      <div class="row" data-ref="schRow"><button class="btn" type="button" data-ref="rerun">${T.lib.rerun}</button></div>
     </section>
 
-    <section class="card" aria-label="Veto penceresi">
-      <h3 class="sim-h">3 · Veto penceresi ve ölçüm kayması</h3>
+    <section class="card" aria-label="${T.lib.vetoCard}">
+      <h3 class="sim-h">${T.lib.vetoH}</h3>
       <div class="sliders" data-ref="vetoSl"></div>
       <div class="readout" data-ref="vetoRead"></div>
     </section>
 
-    <details class="how">
-      <summary>Model nasıl çalışıyor?</summary>
-      <div class="how-in">
-        <p>Libet eğrisi kitaptaki ilişkiye oturtuldu: RP, bildirilen niyetten yaklaşık yarım saniye önce başlıyor. W'nin başlangıç değeri (-200 ms), saatin tur süresi (2,5 sn), eğrinin biçimi ve veto için geri dönüşsüz son aralık (100 ms) modelin varsayımıdır.</p>
-        <p>Schurger tarzı model: bir birikim değişkeni sürüklenmeyle yükselir, sızıntıyla geri çekilir, gürültüyle dalgalanır; eşiğe varınca hareket başlar. Binlerce denemenin eşik öncesi izleri geçişe hizalanıp ortalanınca RP benzeri bir yükseliş çıkar; hizalanmayan ortalama düz kalır. Parametreler gerçek veriye oturtulmadı.</p>
-        <p>Kayma: bildirim gerçek niyetten geç ise gerçek niyet daha erkendir ve RP ile aradaki gerçek süre kısalır. Artefakt payı, kaymanın ölçülen aralığa oranıdır.</p>
-      </div>
-    </details>
-    <aside class="book" aria-label="Kitapta">
-      <h3 class="sim-h">Kitapta</h3>
-      <ul>
-        <li><a href="#/bolum/ch16?deney=ch16-e2">Libet ve ark. (1983)</a>: RP, bildirilen niyetten yaklaşık yarım saniye önce başladı; Libet, aradaki sürede vetoyu mümkün gördü. Eleştirmenler gecikmeyi saatin okunmasına ve dikkate bağlar. Replikasyon: tartışmalı. RP önce başlıyor bulgusu tekrarlandı; Schurger ve ark. (2012) RP'nin karar sinyali değil, rastgele dalgalanmaların birikimi olabileceğini gösterdi.</li>
-      </ul>
-    </aside>
+    ${howBox(T.lib.how)}
+    ${bookAside(bookLi('ch16-e2', T.book.libet, 'tartışmalı'))}
   </section>
 
   <!-- ============ 2 · Çok etkenli tahmin ============ -->
   <section class="pane" role="tabpanel" id="${id}-pane-cok" data-pane="cok" aria-labelledby="${id}-tab-cok" hidden>
     <div data-ref="tour2"></div>
-    <section class="card" aria-label="Etkenler">
-      <h3 class="sim-h">1 · Hangi etkenler biliniyor?</h3>
-      <div class="fgrid" role="group" aria-label="Bilinen etkenler" data-ref="facts"></div>
+    <section class="card" aria-label="${T.cok.factsCard}">
+      <h3 class="sim-h">${T.cok.factsH}</h3>
+      <div class="fgrid" role="group" aria-label="${T.cok.factsGroup}" data-ref="facts"></div>
       <div class="sliders" data-ref="geneSl"></div>
     </section>
-    <section class="card" aria-label="Öngörü gücü">
-      <h3 class="sim-h">2 · Öngörü gücü</h3>
-      <div class="chart"><svg viewBox="0 0 360 100" role="img" aria-label="Bilinen etkenlerin açıkladığı pay" data-ref="stack"></svg></div>
+    <section class="card" aria-label="${T.cok.powerCard}">
+      <h3 class="sim-h">${T.cok.powerH}</h3>
+      <div class="chart"><svg viewBox="0 0 360 100" role="img" aria-label="${T.cok.stackSvgLabel}" data-ref="stack"></svg></div>
     </section>
-    <section class="card" aria-label="Yüz kişi">
-      <h3 class="sim-h">3 · Aynı etkenler, 100 kişi</h3>
-      <p class="note">Her halka bir kişi. Satırlar, bilinen etkenlere göre sıralanan beşte birler; üstte en riskli olanlar.</p>
-      <div class="chart"><svg viewBox="0 0 360 196" role="img" aria-label="Yüz kişi, risk gruplarına göre" data-ref="grid"></svg></div>
-      ${lg([dotS(true), 'davranışı gösterdi'], [dotS(false), 'göstermedi'])}
-      <div class="row"><button class="btn" type="button" data-ref="reseedC">Başka örneklem</button></div>
+    <section class="card" aria-label="${T.cok.crowdCard}">
+      <h3 class="sim-h">${T.cok.crowdH}</h3>
+      <p class="note">${T.cok.crowdNote}</p>
+      <div class="chart"><svg viewBox="0 0 360 196" role="img" aria-label="${T.cok.gridLabel}" data-ref="grid"></svg></div>
+      ${lg([dotS(true), T.cok.legendShown], [dotS(false), T.cok.legendNot])}
+      <div class="row"><button class="btn" type="button" data-ref="reseedC">${T.cok.reseed}</button></div>
       <div class="readout" data-ref="cokRead"></div>
     </section>
-    <details class="how">
-      <summary>Model nasıl çalışıyor?</summary>
-      <div class="how-in">
-        <p>Her etkenin payı birbirinden bağımsız varsayılır; öngörü gücü, bilinen etkenlerin açıkladığı payların toplamıdır. Gizli bir eğilim, etkenlerin katkısı ile açıklanamayan rastlantının toplamından oluşur; üst %20'de olan kişi davranışı gösterir (oran modelin varsayımı).</p>
-        <p>İlk üç pay kitabın %10, %25 ve %40 basamaklarına oturtuldu. Kitap sırayla kortizolu, kültürü ve adet döngüsünü ekler ("biraz daha"; altıncıda "belki %50'nin üstü"); bu üç payın her birini %4 aldık, toplam %52 olur. Tek tek paylar ve etkenlerin yaygınlığı modelin varsayımıdır. Kitap ayrıca yeterince etken eklenince öngörünün %100'e (kırık kemik örneği) yaklaşacağını söyler: fark miktarda değil, nedensellik türünde. Burada yalnızca kitabın saydığı altı etken var; kitaptaki tahminlerin kendisi de kabadır.</p>
-        <p>Rakamlar sabit tohumlu 4000 kişilik bir örneklemden gelir. Halkalar ise 100 kişilik örneklemdir ve "Başka örneklem" ile değişir; aynı örneklemde kişiler ve sonuçlar sabit kalır, yalnızca bilinen etkenler değişir.</p>
-      </div>
-    </details>
-    <aside class="book" aria-label="Kitapta">
-      <h3 class="sim-h">Kitapta</h3>
-      <ul>
-        <li><a href="#/bolum/ch16?deney=ch16-e5">Sapolsky'nin hesap örneği</a>: yalnızca gen ~%10, ebeveyn kaybıyla ~%25, yoksulluk ve yalnızlıkla ~%40; kortizol, kültür ve adet döngüsü eklenince "belki %50'nin üstü"; yeterince etkenle kırık kemik örneğindeki gibi %100'e yaklaşılır. Belirli davranış sonuçlarının çoğunda ise öngörü %50'nin altında, çoğu zaman çok altında kalır (model bunu modellemez). Sayılar kitapta da kaba tahmindir. Replikasyon: tartışmalı. Dayandığı gen × stres etkileşimi büyük ortak analizlerde tekrarlanamadı (38.000'den fazla kişi).</li>
-      </ul>
-    </aside>
+    ${howBox(T.cok.how)}
+    ${bookAside(bookLi('ch16-e5', T.book.sapolsky, 'tartışmalı'))}
   </section>
 
   <!-- ============ 3 · Ceza ve tatmin ============ -->
   <section class="pane" role="tabpanel" id="${id}-pane-ceza" data-pane="ceza" aria-labelledby="${id}-tab-ceza" hidden>
     <div data-ref="tour3"></div>
-    <section class="card" data-card="pun" aria-label="Cezanın tatmini">
-      <h3 class="sim-h">1 · Ceza neden tatmin eder?</h3>
-      <p class="note">Her nokta bir oyuncu. Yatay eksen: bedelsiz cezalandırırken ödül devresinin (striatumdaki kaudat) etkinliği. Dikey eksen: bedelli durumda ödemeye razı olduğu en yüksek bedel.</p>
-      <div class="chart"><svg viewBox="0 0 360 230" role="img" aria-label="Kaudat etkinliğine göre ödemeye razı olunan bedel" data-ref="scat"></svg></div>
-      ${lg([dotS(true), 'cezalandırıyor'], [dotS(false), 'cezalandırmıyor'], [line('var(--ink)', ' stroke-dasharray="4 3"'), 'cezanın bedeli'])}
+    <section class="card" data-card="pun" aria-label="${T.ceza.punCard}">
+      <h3 class="sim-h">${T.ceza.punH}</h3>
+      <p class="note">${T.ceza.punNote}</p>
+      <div class="chart"><svg viewBox="0 0 360 230" role="img" aria-label="${T.ceza.scatLabel}" data-ref="scat"></svg></div>
+      ${lg([dotS(true), T.ceza.legendPun], [dotS(false), T.ceza.legendNoPun], [line('var(--ink)', ' stroke-dasharray="4 3"'), T.ceza.legendCost])}
       <div class="sliders" data-ref="punSl"></div>
-      <div class="row"><button class="btn" type="button" data-ref="reseedP">Başka oyuncular</button></div>
+      <div class="row"><button class="btn" type="button" data-ref="reseedP">${T.ceza.reseed}</button></div>
       <div class="readout" data-ref="punRead"></div>
     </section>
 
-    <section class="card" data-card="case" aria-label="Sorumluluk ve ceza kararı">
-      <h3 class="sim-h">2 · Sorumluluk kararı ile ceza kararı ayrı devreler</h3>
-      <div class="chips" role="group" aria-label="Vaka" data-ref="caseChips"></div>
+    <section class="card" data-card="case" aria-label="${T.ceza.caseCard}">
+      <h3 class="sim-h">${T.ceza.caseH}</h3>
+      <div class="chips" role="group" aria-label="${T.ceza.caseGroup}" data-ref="caseChips"></div>
       <p class="note" data-ref="caseText"></p>
       <div class="sliders" data-ref="bioSl"></div>
       <div class="dual" data-ref="dual"></div>
       <p class="note" data-ref="dualNote"></p>
     </section>
 
-    <section class="card" data-card="case" aria-label="Suçlama ve tehlikelilik">
-      <h3 class="sim-h">3 · Aynı vaka, iki ayrı soru</h3>
-      <p class="note">Freni bozuk bir araç yoldan çekilir ve onarılır; kimse arabayı suçlamaz. Aynı vakada "ne kadar suçlu?" ile "ne kadar tehlikeli?" ayrı sorulardır; her biri için puan ver.</p>
+    <section class="card" data-card="case" aria-label="${T.ceza.rateCard}">
+      <h3 class="sim-h">${T.ceza.rateH}</h3>
+      <p class="note">${T.ceza.rateNote}</p>
       <div class="sliders" data-ref="rateSl"></div>
-      <div class="seg" role="group" aria-label="Önlem" data-ref="resps"></div>
+      <div class="seg" role="group" aria-label="${T.ceza.respGroup}" data-ref="resps"></div>
       <div class="dual" data-ref="outs"></div>
       <p class="note" data-ref="advice"></p>
-      <div class="chart"><svg viewBox="0 0 360 250" role="img" aria-label="Vakaların suçlama ve tehlikelilik puanları" data-ref="quad"></svg></div>
+      <div class="chart"><svg viewBox="0 0 360 250" role="img" aria-label="${T.ceza.quadLabel}" data-ref="quad"></svg></div>
       <div data-ref="quadKey"></div>
     </section>
 
-    <details class="how">
-      <summary>Model nasıl çalışıyor?</summary>
-      <div class="how-in">
-        <p>Ödemeye razılık = adaletsizlik x (norm payı + ödül ağırlığı x kaudat etkinliği + bireysel fark). Kitaptan yalnızca yön gelir: bedelsiz cezada ödül devresi ne kadar etkinse, bedelli durumda o kadar çok ödenir. Dağılımlar ve ağırlıklar modelin varsayımıdır.</p>
-        <p>Sorumluluk kararı (dlPFC, bilişsel) biyolojik açıklama arttıkça düşer. Ceza dürtüsü (vmPFC, amigdala, insula; duygusal) zarara bağlıdır ve bilgiyle çok az düşer. Yön Buckholtz'un bulgusundan gelir; ağırlıklar varsayımdır.</p>
-        <p>Vakalar kurgudur ve kitapta bu adla yoktur. Önlemlerin güvenlik, neden giderme ve tatmin katsayıları modelin varsayımıdır; amaç, suçlama ile tehlikeliliğin ayrı sorular olduğunu göstermektir. Tehlikelilik önerisi yalnızca tehlikelilik puanına ve tedavi edilebilirliğe bakar.</p>
-      </div>
-    </details>
-    <aside class="book" aria-label="Kitapta">
-      <h3 class="sim-h">Kitapta</h3>
-      <ul>
-        <li><a href="#/bolum/ch16?deney=ch16-e7">de Quervain ve ark. (2004)</a>: bedelsiz cezalandırmada ödül sistemi ne kadar etkinse, katılımcı cezalandırmak için o kadar çok ödemeye razıydı. Replikasyon: karışık. Striatum etkinleşmesi desteklendi, ama bunun intikam hazzı mı yoksa hedef beklentisi mi olduğu tartışmalı; örneklem küçüktü.</li>
-        <li><a href="#/bolum/ch16?deney=ch16-e6">Buckholtz ve ark. (2008)</a>: sorumluluk kararı dlPFC ile, ceza miktarı vmPFC, amigdala ve insulayla ilişkiliydi. Replikasyon: bilinmiyor; dlPFC rolü sonradan TMS ile küçük örneklemlerde sınandı.</li>
-        <li><a href="#/bolum/ch16?deney=ch16-e1">Steinberg ve ark. (2009)</a>, ergen vakası: ergen frontal korteksinin olgunlaşmamışlığı saniyelik dürtü kontrolü için belirleyicidir. Replikasyon: sağlam. Modellenmedi: <a href="#/bolum/ch16?deney=ch16-e3">Dweck</a> (tartışmalı), <a href="#/bolum/ch16?deney=ch16-e4">TMS ile ahlaki karar</a> (bilinmiyor).</li>
-      </ul>
-    </aside>
+    ${howBox(T.ceza.how)}
+    ${bookAside(
+      bookLi('ch16-e7', T.book.quervain, 'karışık') +
+      bookLi('ch16-e6', T.book.buckholtz, 'bilinmiyor') +
+      bookLi('ch16-e1', T.book.steinberg, 'sağlam', ` ${T.book.notModeled} <a href="#/bolum/ch16?deney=ch16-e3">${T.book.dweck}</a> (${t('repl.tartışmalı')}), <a href="#/bolum/ch16?deney=ch16-e4">${T.book.tms}</a> (${t('repl.bilinmiyor')}).`),
+    )}
   </section>
 
-  <p class="foot">Nitel model: sayılar ölçüm değildir, ilişkilerin yönünü gösterir. Kitaptan: RP'nin niyetten yaklaşık yarım saniye önce başlaması; öngörü basamakları ~%10, ~%25, ~%40 ve altı etkenle %50 dolayına (belki biraz üstüne) varılması (kaba tahmin); bedelsiz cezada ödül devresi etkinliğinin ödeme isteğini öngörmesi; sorumluluk için dlPFC, ceza miktarı için duygusal bölgeler. Saatin devri, geri dönüşsüz aralık, Schurger parametreleri, etken payları ve yaygınlıkları, oyuncu dağılımları, vakalar ve önlem katsayıları modelin varsayımıdır.</p>
+  <p class="foot">${T.foot}</p>
 </div>`;
 
 interface SliderHandle { inp: HTMLInputElement; set: (v: number) => void }

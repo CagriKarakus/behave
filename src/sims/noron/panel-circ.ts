@@ -1,12 +1,14 @@
 // Sekme 3: Devre. Yanal inhibisyon (uzayda keskinleştirme), negatif geri bildirim (sinyali kısaltır), ileri beslemeli inhibisyon (zamanda keskinleştirir).
+import { t } from '../../i18n/t';
+import { pct } from '../../i18n/fmt';
 import { svg, svgText } from '../kit';
 import { DT_C, N_UNITS, T_MAX, clamp, edgeStats, f1, f2, feedback, feedforward, lateral, pattern, tInput, tStats, type SPat, type TPat } from './model';
 import type { TourStep } from '../tour';
+import { L } from './text';
 import { chipRow, gridY, linePath, makeSlider, type Ctx, type Meter, type SliderHandle } from './ui';
 
 export type Motif = 'lat' | 'fb' | 'ff';
 export interface CircSet { motif: Motif; sp?: SPat; tp?: TPat; g?: number; reach?: number; delay?: number }
-const MOTIFS: Array<{ key: Motif; label: string }> = [{ key: 'lat', label: 'Yanal inhibisyon' }, { key: 'fb', label: 'Negatif geri bildirim' }, { key: 'ff', label: 'İleri beslemeli' }];
 const COL = (i: number): number => 14 + i * 21.5;
 const CT = { x0: 34, x1: 352, top: 10, h: 130, ymax: 1.2 };
 const cx = (ms: number): number => CT.x0 + ms / T_MAX * (CT.x1 - CT.x0);
@@ -27,43 +29,45 @@ function node(parent: Element, x: number, y: number, t: string): void {
 }
 
 export function createCircPanel(ctx: Ctx, host: HTMLElement) {
+  const X = L().circ;
+  const MOTIFS: Array<{ key: Motif; label: string }> = [{ key: 'lat', label: X.motifLat }, { key: 'fb', label: X.motifFb }, { key: 'ff', label: X.motifFf }];
   const S = { motif: 'lat' as Motif, sp: 'basamak' as SPat, tp: 'uzun' as TPat, glat: 1, reach: 2, gfb: 2, gff: 1, delay: 10 };
   let dirty = true;
 
   host.innerHTML =
-    '<p class="note">Üç küçük devre sinyali farklı yerden keskinleştirir. Devre ve giriş deseni seç, gücü ayarla.</p>' +
+    `<p class="note">${X.note}</p>` +
     '<div class="chips" data-ref="motif"></div>' +
     '<div class="chips" data-ref="sp"></div><div class="chips" data-ref="tp" hidden></div>' +
-    '<div class="stage" data-ref="latBox"><svg viewBox="0 0 360 258" role="img" aria-label="On altı nöron: giriş ve çıkış çubukları, komşu bastırma" data-ref="lat"></svg>' +
-    '<div class="legend"><span><i style="background:var(--edge);opacity:.6;border-radius:2px"></i>giriş</span><span><i style="background:var(--dop);border-radius:2px"></i>çıkış</span><span><i style="background:var(--pfc)"></i>komşuyu bastırma</span><span>kesikli çizgi: girişin kendisi</span></div></div>' +
-    '<div class="stage" data-ref="tBox" hidden><svg viewBox="0 0 360 118" role="img" aria-label="Devre şeması" data-ref="diag"></svg>' +
-    '<div class="legend"><span><i style="background:var(--dop)"></i>uyarıcı bağlantı</span><span><i style="background:var(--pfc)"></i>engelleyici bağlantı</span><span>G girdi, H hedef nöron, A ara nöron</span></div></div>' +
-    '<div class="chart" data-ref="tChart" hidden><h4 class="sim-h">Hedef nöronun çıkışı (ms)</h4><svg viewBox="0 0 360 160" role="img" aria-label="Girdi ve hedef nöron çıkışı" data-ref="tc"></svg>' +
-    '<div class="legend"><span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M1 5H25" stroke="var(--edge)" stroke-width="1.6" stroke-dasharray="4 3"/></svg>girdi</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M1 5H25" stroke="var(--lesion)" stroke-width="1.8" stroke-dasharray="1 3"/></svg>inhibisyon yok</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M1 5H25" stroke="var(--ink)" stroke-width="2.6"/></svg>çıkış</span></div></div>' +
-    '<div class="card"><h3 class="sim-h">Girdiler</h3><div class="sliders" data-ref="sl"></div></div>' +
-    '<details class="more"><summary>Model nasıl çalışıyor?</summary>' +
-    '<p>Kitaptan: negatif geri bildirim sinyali kısaltır, ileri beslemeli inhibisyon zamanda keskinleştirir, yanal inhibisyon komşuları susturarak mekansal kontrastı artırır. Melzack ve Wall\'ın ağrı kapısı devresi burada modellenmedi.</p>' +
-    '<p>Yanal inhibisyon: her birim menzildeki komşularının çıkışıyla orantılı bastırılır (yakın komşu daha çok), ağ sonuca oturur. Kenarın parlak yanı az, karanlık yanı çok bastırılır; bedeli düz bölgelerin zayıflamasıdır. Kenar zıtlığı = kenardaki komşu çıkış farkı / düz bölgeler arası fark (inhibisyonsuz 1). Geri bildirimde çıkış yavaş bir ara nöronu uyarır, o da çıkışı bastırır; ileri beslemelide aynı girdi ara nöronu uyarır ve baskı gecikmeyle gelir. Yanıt süresi: çıkışın girdi genliğinin yarısının üstünde kaldığı süre. Zaman sabitleri (8, 25, 3 ms), desenler ve güçler varsayımdır.</p></details>';
+    `<div class="stage" data-ref="latBox"><svg viewBox="0 0 360 258" role="img" aria-label="${X.latAria}" data-ref="lat"></svg>` +
+    `<div class="legend"><span><i style="background:var(--edge);opacity:.6;border-radius:2px"></i>${X.legIn}</span><span><i style="background:var(--dop);border-radius:2px"></i>${X.legOut}</span><span><i style="background:var(--pfc)"></i>${X.legSup}</span><span>${X.legDash}</span></div></div>` +
+    `<div class="stage" data-ref="tBox" hidden><svg viewBox="0 0 360 118" role="img" aria-label="${X.diagAria}" data-ref="diag"></svg>` +
+    `<div class="legend"><span><i style="background:var(--dop)"></i>${X.legExcConn}</span><span><i style="background:var(--pfc)"></i>${X.legInhConn}</span><span>${X.legNodes}</span></div></div>` +
+    `<div class="chart" data-ref="tChart" hidden><h4 class="sim-h">${X.tTitle}</h4><svg viewBox="0 0 360 160" role="img" aria-label="${X.tAria}" data-ref="tc"></svg>` +
+    `<div class="legend"><span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M1 5H25" stroke="var(--edge)" stroke-width="1.6" stroke-dasharray="4 3"/></svg>${X.legTin}</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M1 5H25" stroke="var(--lesion)" stroke-width="1.8" stroke-dasharray="1 3"/></svg>${X.legTref}</span><span><svg viewBox="0 0 26 10" aria-hidden="true"><path d="M1 5H25" stroke="var(--ink)" stroke-width="2.6"/></svg>${X.legTout}</span></div></div>` +
+    `<div class="card"><h3 class="sim-h">${L().inputs}</h3><div class="sliders" data-ref="sl"></div></div>` +
+    `<details class="more"><summary>${t('sim.how')}</summary>` +
+    `<p>${X.howA}</p>` +
+    `<p>${X.howB}</p></details>`;
 
   const q = <T extends Element = HTMLElement>(k: string) => host.querySelector<T>(`[data-ref="${k}"]`)!;
   const sync = { m: (_k: string | null) => {}, s: (_k: string | null) => {}, t: (_k: string | null) => {} };
-  sync.m = chipRow(q('motif'), ctx, MOTIFS, (k) => { S.motif = k as Motif; dirty = true; }, 'Devre');
-  sync.s = chipRow(q('sp'), ctx, [{ key: 'basamak', label: 'Basamak (kenar)' }, { key: 'cubuk', label: 'Çubuk' }, { key: 'gurultu', label: 'Gürültülü kenar' }], (k) => { S.sp = k as SPat; dirty = true; }, 'Giriş deseni');
-  sync.t = chipRow(q('tp'), ctx, [{ key: 'kisa', label: 'Kısa vuru' }, { key: 'uzun', label: 'Uzun basamak' }, { key: 'iki', label: 'İki vuru' }], (k) => { S.tp = k as TPat; dirty = true; }, 'Giriş deseni');
+  sync.m = chipRow(q('motif'), ctx, MOTIFS, (k) => { S.motif = k as Motif; dirty = true; }, X.motifLabel);
+  sync.s = chipRow(q('sp'), ctx, [{ key: 'basamak', label: X.spStep }, { key: 'cubuk', label: X.spBar }, { key: 'gurultu', label: X.spNoise }], (k) => { S.sp = k as SPat; dirty = true; }, X.patLabel);
+  sync.t = chipRow(q('tp'), ctx, [{ key: 'kisa', label: X.tpShort }, { key: 'uzun', label: X.tpLong }, { key: 'iki', label: X.tpTwo }], (k) => { S.tp = k as TPat; dirty = true; }, X.patLabel);
 
   const sl = q('sl');
   const hs: Record<string, SliderHandle> = {};
-  hs.glat = makeSlider(ctx, sl, 'glat', 'Yanal inhibisyon gücü', 'Her nöron komşularını ne kadar susturuyor?', 0, 15, 10, (v) => { S.glat = v / 10; dirty = true; }, (v) => f1(v / 10), 'var(--pfc)');
-  hs.reach = makeSlider(ctx, sl, 'reach', 'Komşuluk menzili', 'Kaç komşuya kadar bastırma uzanıyor.', 1, 4, 2, (v) => { S.reach = v; dirty = true; }, (v) => `${v} birim`, 'var(--pfc)');
-  hs.gfb = makeSlider(ctx, sl, 'gfb', 'Geri bildirim gücü', 'Ara nöron çıkışı ne kadar sert baskılıyor.', 0, 30, 20, (v) => { S.gfb = v / 10; dirty = true; }, (v) => f1(v / 10), 'var(--pfc)');
-  hs.gff = makeSlider(ctx, sl, 'gff', 'İleri inhibisyon gücü', '1 iken gecikmeden sonra çıkış tamamen susar.', 0, 12, 10, (v) => { S.gff = v / 10; dirty = true; }, (v) => f1(v / 10), 'var(--pfc)');
-  hs.delay = makeSlider(ctx, sl, 'dl', 'Baskının gecikmesi', 'Yanıtın genişliğini belirler.', 2, 40, 10, (v) => { S.delay = v; dirty = true; }, (v) => `${v} ms`, 'var(--ink)');
+  hs.glat = makeSlider(ctx, sl, 'glat', X.slLat.name, X.slLat.hint, 0, 15, 10, (v) => { S.glat = v / 10; dirty = true; }, (v) => f1(v / 10), 'var(--pfc)');
+  hs.reach = makeSlider(ctx, sl, 'reach', X.slReach.name, X.slReach.hint, 1, 4, 2, (v) => { S.reach = v; dirty = true; }, (v) => X.units(v), 'var(--pfc)');
+  hs.gfb = makeSlider(ctx, sl, 'gfb', X.slFb.name, X.slFb.hint, 0, 30, 20, (v) => { S.gfb = v / 10; dirty = true; }, (v) => f1(v / 10), 'var(--pfc)');
+  hs.gff = makeSlider(ctx, sl, 'gff', X.slFf.name, X.slFf.hint, 0, 12, 10, (v) => { S.gff = v / 10; dirty = true; }, (v) => f1(v / 10), 'var(--pfc)');
+  hs.delay = makeSlider(ctx, sl, 'dl', X.slDelay.name, X.slDelay.hint, 2, 40, 10, (v) => { S.delay = v; dirty = true; }, (v) => `${v} ms`, 'var(--ink)');
 
   /* ---------- Yanal inhibisyon ---------- */
   const lat = q<SVGSVGElement>('lat');
-  svgText(lat, { x: 6, y: 12, class: 'lb' }, 'Giriş (ör. ışık şiddeti)');
-  svgText(lat, { x: 6, y: 118, class: 'lb' }, 'Nöronlar');
-  svgText(lat, { x: 6, y: 160, class: 'lb' }, 'Çıkış (ateşleme)');
+  svgText(lat, { x: 6, y: 12, class: 'lb' }, X.svgIn);
+  svgText(lat, { x: 6, y: 118, class: 'lb' }, X.svgNeurons);
+  svgText(lat, { x: 6, y: 160, class: 'lb' }, X.svgOut);
   const arcs = [1, 2, 3, 4].map(() => svg('path', { class: 'arc', d: '' }, lat));
   const inB: SVGElement[] = [], outB: SVGElement[] = [];
   for (let i = 0; i < N_UNITS; i++) {
@@ -75,7 +79,7 @@ export function createCircPanel(ctx: Ctx, host: HTMLElement) {
   svg('line', { class: 'grid', x1: 8, x2: 352, y1: 246, y2: 246 }, lat);
   const outline = svg('path', { class: 'olin', d: '' }, lat);
   const edgeL = svg('line', { class: 'edge', y1: 20, y2: 250 }, lat);
-  const edgeT = svgText(lat, { class: 'lb', y: 32 }, 'kenar');
+  const edgeT = svgText(lat, { class: 'lb', y: 32 }, X.svgEdge);
   let latStats = { contrast: 1, plateau: 1, overshoot: 0 };
   function drawLat(): void {
     const p = pattern(S.sp), out = lateral(p.v, S.glat, S.reach);
@@ -113,22 +117,22 @@ export function createCircPanel(ctx: Ctx, host: HTMLElement) {
     const path = (a: number[]) => linePath(a.map((v, i) => [cx(i * DT_C), cy(v)] as [number, number]));
     inP.setAttribute('d', path(inp)); refP.setAttribute('d', path(ref)); outP.setAttribute('d', path(out));
     diag.innerHTML = '';
-    node(diag, 34, 58, 'G'); node(diag, S.motif === 'fb' ? 140 : 210, 46, 'H');
+    node(diag, 34, 58, X.nodeIn); node(diag, S.motif === 'fb' ? 140 : 210, 46, X.nodeTarget);
     svg('path', { d: `M${S.motif === 'fb' ? 156 : 226} 46H280`, stroke: 'var(--ink)', 'stroke-width': 2.4, fill: 'none' }, diag);
     svg('path', { d: 'M280 40L292 46L280 52Z', fill: 'var(--ink)' }, diag);
-    svgText(diag, { x: 296, y: 50, class: 'lb' }, 'çıkış');
+    svgText(diag, { x: 296, y: 50, class: 'lb' }, X.output);
     if (S.motif === 'fb') {
       link(diag, [49, 54, 90, 48, 124, 46], 'e', 2.4);
-      node(diag, 190, 92, 'A');
+      node(diag, 190, 92, X.nodeInter);
       link(diag, [150, 60, 156, 90, 174, 92], 'e', 2.4);
       link(diag, [175, 100, 134, 108, 134, 62], 'i', 1 + S.gfb * 1.2);
-      svgText(diag, { x: 6, y: 112, class: 'lb' }, 'çıkış ara nöronu uyarır, o da çıkışı bastırır');
+      svgText(diag, { x: 6, y: 112, class: 'lb' }, X.fbNote);
     } else {
       link(diag, [49, 52, 120, 40, 194, 44], 'e', 2.4);
-      node(diag, 120, 94, 'A');
+      node(diag, 120, 94, X.nodeInter);
       link(diag, [48, 64, 70, 94, 104, 94], 'e', 2.4);
       link(diag, [135, 90, 190, 84, 208, 62], 'i', 1 + S.gff * 2.4);
-      svgText(diag, { x: 150, y: 112, class: 'lb' }, `baskı ${S.delay} ms gecikmeyle gelir`);
+      svgText(diag, { x: 150, y: 112, class: 'lb' }, X.ffNote(S.delay));
     }
   }
 
@@ -143,35 +147,35 @@ export function createCircPanel(ctx: Ctx, host: HTMLElement) {
     if (lt) drawLat(); else drawTime();
   };
   apply();
-  const half = (): string => (S.motif === 'fb' ? 'ara nöron çıkışı bastırıyor' : 'gecikmeli baskı geliyor');
   return {
     resume: () => { dirty = true; },
     draw(): boolean { if (!dirty) return false; dirty = false; apply(); return true; },
     say(): string {
+      const X = L().circ;
       if (S.motif === 'lat') {
         const st = latStats;
-        return S.glat === 0 ? 'Yanal inhibisyon yok: çıkış girişin aynısı, kenar olduğu kadar belirgin.'
-          : `Komşular birbirini bastırıyor: kenarda zıtlık ${f1(st.contrast)} kat, parlak tarafta %${Math.round(st.overshoot * 100)} aşım, karanlık tarafta çukur. Düz bölgeler zayıfladı (girişin %${Math.round(st.plateau * 100)}'i).`;
+        return S.glat === 0 ? X.sayLatOff : X.sayLat(f1(st.contrast), pct(st.overshoot), pct(st.plateau));
       }
       const g = S.motif === 'fb' ? S.gfb : S.gff;
-      if (g === 0) return 'Baskı yok: çıkış girdiyi gecikmeli izliyor, girdi sürdükçe sürüyor.';
+      if (g === 0) return X.sayNoInh;
       return S.motif === 'fb'
-        ? `Çıkış arttıkça ${half()}: zirve ${f2(tS.peak)}, yanıt ${Math.round(tS.dur)} ms yarım düzeyin üstünde kalıyor (girdi ${Math.round(inDur)} ms). Sinyal kısalıyor.`
-        : `Aynı girdi ara nöronu da uyarıyor, ${half()}: yanıt ${Math.round(tS.dur)} ms (girdi ${Math.round(inDur)} ms). Zamanda keskinleşiyor, gecikme ${S.delay} ms.`;
+        ? X.sayFb(f2(tS.peak), Math.round(tS.dur), Math.round(inDur))
+        : X.sayFf(Math.round(tS.dur), Math.round(inDur), S.delay);
     },
     meters(): Meter[] {
+      const X = L().circ;
       if (S.motif === 'lat') {
         const st = latStats;
         return [
-          { label: 'Kenar zıtlığı', value: `${f1(st.contrast)} kat`, frac: (st.contrast - 1) / 1.5, color: 'var(--pfc)' },
-          { label: 'Düz bölge düzeyi (girişe göre)', value: `%${Math.round(st.plateau * 100)}`, frac: st.plateau, color: 'var(--dop)' },
-          { label: 'Parlak kenarda aşım', value: `%${Math.round(st.overshoot * 100)}`, frac: st.overshoot / 0.8, color: 'var(--ink)' },
+          { label: X.mContrast, value: X.contrastVal(f1(st.contrast)), frac: (st.contrast - 1) / 1.5, color: 'var(--pfc)' },
+          { label: X.mPlateau, value: pct(st.plateau), frac: st.plateau, color: 'var(--dop)' },
+          { label: X.mOver, value: pct(st.overshoot), frac: st.overshoot / 0.8, color: 'var(--ink)' },
         ];
       }
       return [
-        { label: 'Çıkış zirvesi', value: f2(tS.peak), frac: tS.peak, color: 'var(--ink)' },
-        { label: 'Yanıt süresi (yarım düzeyin üstü)', value: `${Math.round(tS.dur)} ms`, frac: tS.dur / 160, color: 'var(--pfc)' },
-        { label: 'Girdi sürerken sondaki yanıt', value: f2(tS.tail), frac: tS.tail, color: 'var(--dop)' },
+        { label: X.mPeak, value: f2(tS.peak), frac: tS.peak, color: 'var(--ink)' },
+        { label: X.mDur, value: `${Math.round(tS.dur)} ms`, frac: tS.dur / 160, color: 'var(--pfc)' },
+        { label: X.mTail, value: f2(tS.tail), frac: tS.tail, color: 'var(--dop)' },
       ];
     },
     /** Rehberli tur için. */
@@ -192,41 +196,14 @@ export function createCircPanel(ctx: Ctx, host: HTMLElement) {
 type CircPanel = ReturnType<typeof createCircPanel>;
 
 /** Devre sekmesinin rehberli turu (sekmeyle birlikte tembel yüklenir). */
-export const circTour = (circ: CircPanel): TourStep[] => [
-  {
-    title: 'İnhibisyon yokken',
-    text: 'Her nöron girdisini olduğu gibi iletir; kenar iki düzey arasında düz bir basamaktır.',
-    look: 'Çıkış girişin kopyası, kenar zıtlığı 1 kat.',
-    apply: () => circ.scene({ motif: 'lat', sp: 'basamak', g: 0 }),
-  },
-  {
-    title: 'Yanal inhibisyon',
-    text: 'Her nöron komşularını bastırır. Kenarın parlak yanı daha az, karanlık yanı daha çok bastırıldığı için kenar belirginleşir.',
-    look: 'Parlak tarafta aşım, karanlık tarafta çukur.',
-    apply: () => circ.scene({ motif: 'lat', sp: 'basamak', g: 1, reach: 2 }),
-  },
-  {
-    title: 'Keskinliğin bedeli',
-    text: 'Daha güçlü ve geniş bastırmada kenar daha belirgin, ama düz bölgelerin düzeyi düşer. Gürültülü girişte de kenar seçilir.',
-    look: 'Düz bölge düzeyi çubuğu düşüyor.',
-    apply: () => circ.scene({ motif: 'lat', sp: 'gurultu', g: 1.5, reach: 3 }),
-  },
-  {
-    title: 'Negatif geri bildirim',
-    text: 'Çıkış ara nöronu uyarır, ara nöron çıkışı bastırır. Uzun girdi bile kısa bir patlamaya dönüşür: sinyal kısalır.',
-    look: 'Siyah çıkış zirve yapıp alçalıyor; kesikli girdi sürüyor.',
-    apply: () => circ.scene({ motif: 'fb', tp: 'uzun', g: 2 }),
-  },
-  {
-    title: 'İleri beslemeli inhibisyon',
-    text: 'Aynı girdi ara nöron aracılığıyla gecikmeli baskı da gönderir. Yanıt gecikme kadar sürer: sinyal zamanda keskinleşir.',
-    look: '~10 ms genişliğinde dar bir tepe.',
-    apply: () => circ.scene({ motif: 'ff', tp: 'uzun', g: 1, delay: 10 }),
-  },
-  {
-    title: 'Üçü üç ayrı iş yapar',
-    text: 'Yanal inhibisyon uzayda, ileri beslemeli zamanda keskinleştirir; geri bildirim sinyali kısaltır. İki vuru, iki ayrı kısa yanıt olur.',
-    look: 'İki dar tepe; gecikmeyi artırınca genişler.',
-    apply: () => circ.scene({ motif: 'ff', tp: 'iki', g: 1, delay: 10 }),
-  },
-];
+export const circTour = (circ: CircPanel): TourStep[] => {
+  const TS = L().tourCirc;
+  return [
+    { ...TS[0], apply: () => circ.scene({ motif: 'lat', sp: 'basamak', g: 0 }) },
+    { ...TS[1], apply: () => circ.scene({ motif: 'lat', sp: 'basamak', g: 1, reach: 2 }) },
+    { ...TS[2], apply: () => circ.scene({ motif: 'lat', sp: 'gurultu', g: 1.5, reach: 3 }) },
+    { ...TS[3], apply: () => circ.scene({ motif: 'fb', tp: 'uzun', g: 2 }) },
+    { ...TS[4], apply: () => circ.scene({ motif: 'ff', tp: 'uzun', g: 1, delay: 10 }) },
+    { ...TS[5], apply: () => circ.scene({ motif: 'ff', tp: 'iki', g: 1, delay: 10 }) },
+  ];
+};

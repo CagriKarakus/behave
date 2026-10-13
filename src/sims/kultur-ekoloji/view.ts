@@ -1,9 +1,9 @@
 import { repBadge } from '../ui';
-import { t, type MsgKey } from '../../i18n/t';
-import { percent } from '../../i18n/fmt';
+import { t } from '../../i18n/t';
+import type { MsgKey } from '../../i18n/messages';
+import { percent, pct as pctS } from '../../i18n/fmt';
 import { L } from './text';
 import type { BK, RP, RS, Strings } from './text.tr';
-import type { RepStatus } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, uid } from '../kit';
@@ -28,7 +28,7 @@ const SCEN: Scen[] = [
 const TOOLS = ['look', 'wall', 'erase', 'aut'] as const;
 type Tool = (typeof TOOLS)[number];
 
-const PGG_PRESETS = [
+const PGG_PRESETS: Array<{ id: 'hi' | 'lo'; ineq: number; trust: number }> = [
   { id: 'hi', ineq: 0.2, trust: 0.85 },
   { id: 'lo', ineq: 0.7, trust: 0.25 },
 ];
@@ -342,16 +342,17 @@ export function mount(container: HTMLElement): () => void {
     h += `<text x="4" y="212" class="nv">${T.mapNote}</text>`;
     mapSvg.innerHTML = h;
   }
-  const rep = repBadge('karışık');
   function drawTests(): void {
+    const T = L();
+    const rep = repBadge('karışık');
     const c = cultureOf(S.L, S.V);
-    const dv = (x: number) => (x >= 1 ? `+%${Math.round((x - 1) * 100)}` : `-%${Math.round((1 - x) * 100)}`);
+    const dv = (x: number) => (x >= 1 ? `+${percent(String(Math.round((x - 1) * 100)))}` : `-${percent(String(Math.round((1 - x) * 100)))}`);
     $('tests').innerHTML =
-      `<div class="tc"><h4>Sosyogram ${rep}</h4>${bar('Kendini arkadaştan büyük çizme', (c.self - 0.7) / 0.7, c.self >= 1.03 ? `${dv(c.self)} büyük` : c.self <= 0.97 ? `${dv(c.self)} küçük` : 'eşit', 'var(--pfc)')}</div>` +
-      `<div class="tc"><h4>Tavşan, köpek, havuç ${rep}</h4>${bar('Tavşan ile havucu eşleştirme (ilişkisel)', c.rel, `%${pct(c.rel)}`, 'var(--pit)')}${bar('Tavşan ile köpeği eşleştirme (kategori)', 1 - c.rel, `%${pct(1 - c.rel)}`, 'var(--edge)')}</div>` +
-      `<div class="tc"><h4>Bölge göstergeleri ${rep}</h4>${bar('Boşanma oranı (göreli)', c.divorce / 2, dv(c.divorce), 'var(--dop)')}${bar('Patent başvurusu (göreli)', c.patent / 2, dv(c.patent), 'var(--gld)')}</div>` +
-      `<div class="tc"><h4>Resim bağlamı (Masuda ve Nisbett) ${rep}</h4>${bar('Arka planı hatırlama', c.ctx, `%${pct(c.ctx)}`, 'var(--pit)')}${bar('Merkezdeki nesneyi hatırlama', c.ctr, `%${pct(c.ctr)}`, 'var(--pfc)')}</div>` +
-      `<p class="sl-hint">Göreli değerler, kollektivizm orta düzeydeyken 0 kabul edilir. Pirinç ve buğday değerleri kitaptaki yönü izler; sayılar modelindir.</p>`;
+      `<div class="tc"><h4>${T.tSocio} ${rep}</h4>${bar(T.tSelf, (c.self - 0.7) / 0.7, c.self >= 1.03 ? T.selfBig(dv(c.self)) : c.self <= 0.97 ? T.selfSmall(dv(c.self)) : T.selfEq, 'var(--pfc)')}</div>` +
+      `<div class="tc"><h4>${T.tTriad} ${rep}</h4>${bar(T.tRel, c.rel, pctS(c.rel), 'var(--pit)')}${bar(T.tCat, 1 - c.rel, pctS(1 - c.rel), 'var(--edge)')}</div>` +
+      `<div class="tc"><h4>${T.tRegion} ${rep}</h4>${bar(T.tDivorce, c.divorce / 2, dv(c.divorce), 'var(--dop)')}${bar(T.tPatent, c.patent / 2, dv(c.patent), 'var(--gld)')}</div>` +
+      `<div class="tc"><h4>${T.tPicture} ${rep}</h4>${bar(T.tBack, c.ctx, pctS(c.ctx), 'var(--pit)')}${bar(T.tCenter, c.ctr, pctS(c.ctr), 'var(--pfc)')}</div>` +
+      `<p class="sl-hint">${T.testsNote}</p>`;
   }
   function pickEco(id: string): void {
     const e = ECOS.find((x) => x.id === id)!;
@@ -368,43 +369,46 @@ export function mount(container: HTMLElement): () => void {
   // ---------- 3. Koridor ve kamu malı ----------
   const hall = $('hall');
   function drawHall(): void {
+    const T = L();
     hall.innerHTML =
       `<rect x="4" y="22" width="352" height="52" rx="6" fill="none" stroke="var(--edge)" stroke-width="1.5"/>` +
-      `<rect x="318" y="34" width="28" height="28" rx="4" fill="var(--panel)" stroke="var(--edge)" stroke-width="1.5"/><text x="332" y="52" text-anchor="middle" class="nv">anket</text>` +
-      `<circle cx="70" cy="48" r="11" fill="var(--pfc)"/><text x="70" y="86" text-anchor="middle" class="nv">katılımcı</text>` +
-      `<circle cx="${S.insult ? 150 : 200}" cy="48" r="17" fill="var(--edge)"/><text x="${S.insult ? 150 : 200}" y="86" text-anchor="middle" class="nv">iri yapılı işbirlikçi</text>` +
-      (S.insult ? `<path d="M108,34 L126,40 L116,48 L128,56 L108,62 L112,48 Z" fill="var(--red)"/><rect x="170" y="2" width="120" height="22" rx="8" fill="var(--panel)" stroke="var(--red)" stroke-width="1.5"/><text x="230" y="17" text-anchor="middle" class="nt">omuz atar, hakaret eder</text>` : `<text x="230" y="17" text-anchor="middle" class="nv">olaysız geçiş</text>`);
+      `<rect x="318" y="34" width="28" height="28" rx="4" fill="var(--panel)" stroke="var(--edge)" stroke-width="1.5"/><text x="332" y="52" text-anchor="middle" class="nv">${T.hallSurvey}</text>` +
+      `<circle cx="70" cy="48" r="11" fill="var(--pfc)"/><text x="70" y="86" text-anchor="middle" class="nv">${T.hallPart}</text>` +
+      `<circle cx="${S.insult ? 150 : 200}" cy="48" r="17" fill="var(--edge)"/><text x="${S.insult ? 150 : 200}" y="86" text-anchor="middle" class="nv">${T.hallConf}</text>` +
+      (S.insult ? `<path d="M108,34 L126,40 L116,48 L128,56 L108,62 L112,48 Z" fill="var(--red)"/><rect x="170" y="2" width="120" height="22" rx="8" fill="var(--panel)" stroke="var(--red)" stroke-width="1.5"/><text x="230" y="17" text-anchor="middle" class="nt">${T.hallBump}</text>` : `<text x="230" y="17" text-anchor="middle" class="nv">${T.hallCalm}</text>`);
   }
   function drawCor(): void {
+    const T = L();
     const ctl = corridor(S.h, false, 200, S.cseed), ins = corridor(S.h, true, 200, S.cseed + 50);
     const row = (name: string, a: number, b: number, color: string) =>
-      `<div class="pair"><span class="pl">${name}</span><div class="bar" style="--c:${color}"><div class="bar-top"><span>Kontrol</span><b>${pct(a)}</b></div><div class="track"><b style="width:${pct(a)}%"></b></div></div><div class="bar" style="--c:${color}"><div class="bar-top"><span>Hakaret</span><b>${pct(b)}</b></div><div class="track"><b style="width:${pct(b)}%"></b></div></div></div>`;
+      `<div class="pair"><span class="pl">${name}</span><div class="bar" style="--c:${color}"><div class="bar-top"><span>${T.ctl}</span><b>${pct(a)}</b></div><div class="track"><b style="width:${pct(a)}%"></b></div></div><div class="bar" style="--c:${color}"><div class="bar-top"><span>${T.ins}</span><b>${pct(b)}</b></div><div class="track"><b style="width:${pct(b)}%"></b></div></div></div>`;
     const dots = corridor(S.h, S.insult, 40, S.cseed + 7).dots;
     $('ctests').innerHTML =
-      row('Testosteron yükselişi', ctl.dT, ins.dT, 'var(--eff)') + row('Glukokortikoid yükselişi', ctl.dC, ins.dC, 'var(--amy)') + row('Hikâyeyi şiddetle bitirenler (%)', ctl.violent, ins.violent, 'var(--red)') +
-      `<div class="dots" role="img" aria-label="40 katılımcının hikâye sonu: dolu kare şiddetle biten">${dots.map((d) => `<i class="${d ? 'v' : ''}"></i>`).join('')}</div><p class="sl-hint">Her işaret bir katılımcı; dolu kare hikâyeyi şiddetle bitirdi (${S.insult ? 'hakaret' : 'kontrol'} koşulu, tohum ${S.cseed}). Replikasyon: bilinmiyor.</p>`;
+      row(T.rowT, ctl.dT, ins.dT, 'var(--eff)') + row(T.rowC, ctl.dC, ins.dC, 'var(--amy)') + row(T.rowV, ctl.violent, ins.violent, 'var(--red)') +
+      `<div class="dots" role="img" aria-label="${T.dotsAria}">${dots.map((d) => `<i class="${d ? 'v' : ''}"></i>`).join('')}</div><p class="sl-hint">${(S.insult ? T.dotsNoteIns : T.dotsNoteCtl)(S.cseed, t('repl.badge', { s: t('repl.bilinmiyor') }))}</p>`;
   }
   function runPgg(): void {
     S.pg = playPgg({ ineq: S.ineq, trust: S.trust, cost: S.cost, seed: S.pseed });
     S.sweep = pggSweep(S.trust, S.cost);
   }
   function drawPgg(): void {
+    const T = L();
     const r = S.pg, tot = r.pro + r.anti;
     $('ptests').innerHTML =
-      `<div class="tc"><h4>Ceza kime gitti?</h4><div class="stack" role="img" aria-label="Ceza puanlarının dağılımı"><b class="s1" style="width:${tot ? pct(r.pro / tot) : 0}%"></b><b class="s2" style="width:${tot ? pct(r.anti / tot) : 0}%"></b></div>` +
-      `<div class="legend"><span><i class="sq" style="background:var(--gld)"></i>hile yapana (prososyal): ${Math.round(r.pro)} puan</span><span><i class="sq" style="background:var(--red)"></i>cömert olana (antisosyal): ${Math.round(r.anti)} puan</span></div></div>`;
+      `<div class="tc"><h4>${T.punWho}</h4><div class="stack" role="img" aria-label="${T.punAria}"><b class="s1" style="width:${tot ? pct(r.pro / tot) : 0}%"></b><b class="s2" style="width:${tot ? pct(r.anti / tot) : 0}%"></b></div>` +
+      `<div class="legend"><span><i class="sq" style="background:var(--gld)"></i>${T.punPro(Math.round(r.pro))}</span><span><i class="sq" style="background:var(--red)"></i>${T.punAnti(Math.round(r.anti))}</span></div></div>`;
     const px = (t: number, n: number) => 34 + (t / Math.max(1, n - 1)) * 316, py = (v: number) => 112 - v * 96;
     const line = (a: number[], cls: string, col: string) => `<polyline points="${a.map((v, t) => `${px(t, a.length).toFixed(1)},${py(v).toFixed(1)}`).join(' ')}" class="ln ${cls}" stroke="${col}"/>`;
     $('pchart').innerHTML = `<line class="grid" x1="34" y1="112" x2="350" y2="112"/><line class="grid" x1="34" y1="16" x2="34" y2="112"/>` +
       line(r.coop, '', 'var(--pfc)') + line(r.trust, 'dash', 'var(--gld)') +
-      `<text x="350" y="126" text-anchor="end">tur (1-10)</text><text x="30" y="20" text-anchor="end">1</text><text x="30" y="112" text-anchor="end">0</text>` +
-      `<text x="346" y="${py(r.coop[r.coop.length - 1]) - 5}" text-anchor="end" class="gl">katkı oranı</text><text x="346" y="${py(r.trust[r.trust.length - 1]) + 12}" text-anchor="end" class="gl">güven</text>`;
+      `<text x="350" y="126" text-anchor="end">${T.axisRound}</text><text x="30" y="20" text-anchor="end">1</text><text x="30" y="112" text-anchor="end">0</text>` +
+      `<text x="346" y="${py(r.coop[r.coop.length - 1]) - 5}" text-anchor="end" class="gl">${T.labCoop}</text><text x="346" y="${py(r.trust[r.trust.length - 1]) + 12}" text-anchor="end" class="gl">${T.labTrust}</text>`;
     const sx = (v: number) => 34 + v * 316, n = S.sweep;
     const sl = (key: 'capital' | 'antiShare', cls: string, col: string) => `<polyline points="${n.map((p) => `${sx(p.ineq).toFixed(1)},${py(p[key]).toFixed(1)}`).join(' ')}" class="ln ${cls}" stroke="${col}"/>`;
     $('schart').innerHTML = `<line class="grid" x1="34" y1="112" x2="350" y2="112"/><line class="grid" x1="34" y1="16" x2="34" y2="112"/>` +
       sl('capital', '', 'var(--gld)') + sl('antiShare', 'dash', 'var(--red)') +
       `<line x1="${sx(S.ineq)}" y1="16" x2="${sx(S.ineq)}" y2="112" stroke="var(--ink)" stroke-width="1.4" stroke-dasharray="2 3"/>` +
-      `<text x="350" y="126" text-anchor="end">gelir eşitsizliği</text><text x="40" y="${py(n[0].capital) - 6}" class="gl">sosyal sermaye</text><text x="346" y="${py(n[n.length - 1].antiShare) - 6}" text-anchor="end" class="gl">antisosyal ceza payı</text>`;
+      `<text x="350" y="126" text-anchor="end">${T.axisIneq}</text><text x="40" y="${py(n[0].capital) - 6}" class="gl">${T.labCapital}</text><text x="346" y="${py(n[n.length - 1].antiShare) - 6}" text-anchor="end" class="gl">${T.labAntiShare}</text>`;
   }
 
   // ---------- Çubuk ve çizim ----------
@@ -412,35 +416,35 @@ export function mount(container: HTMLElement): () => void {
     if (S.tab === 0) {
       drawGrid(); drawChart();
       const m = S.m;
-      meter(0, 'Ortalama parça', Math.min(1, m.meanKm / 100), `${Math.round(m.meanKm)} km`, 'var(--pfc)');
-      meter(1, 'Çatışma riski', m.risk, `%${pct(m.risk)}`, 'var(--red)');
-      meter(2, 'Mutsuz kişi', m.unhappy, `%${pct(m.unhappy)}`, 'var(--lesion)');
+      meter(0, L().mAvgPatch, Math.min(1, m.meanKm / 100), `${Math.round(m.meanKm)} km`, 'var(--pfc)');
+      meter(1, L().mRisk, m.risk, pctS(m.risk), 'var(--red)');
+      meter(2, L().mUnhappy, m.unhappy, pctS(m.unhappy), 'var(--lesion)');
     } else if (S.tab === 1) {
       drawMap(); drawTests();
       const c = cultureOf(S.L, S.V);
-      meter(0, 'Kollektivizm', c.K, `%${pct(c.K)}`, 'var(--pfc)'); meter(1, 'Bütüncül dikkat', c.Hol, `%${pct(c.Hol)}`, 'var(--pit)'); meter(2, 'Onur duyarlılığı', c.O, `%${pct(c.O)}`, 'var(--amy)');
+      meter(0, L().mK, c.K, pctS(c.K), 'var(--pfc)'); meter(1, L().mHol, c.Hol, pctS(c.Hol), 'var(--pit)'); meter(2, L().mO, c.O, pctS(c.O), 'var(--amy)');
     } else {
       drawHall(); drawCor(); drawPgg();
       const ins = corridor(S.h, true, 200, S.cseed + 50);
-      meter(0, 'Hakaret sonrası şiddet', ins.violent, `%${pct(ins.violent)}`, 'var(--red)');
-      meter(1, 'Antisosyal ceza payı', S.pg.antiShare, `%${pct(S.pg.antiShare)}`, 'var(--amy)');
-      meter(2, 'Sosyal sermaye', S.pg.capital, `%${pct(S.pg.capital)}`, 'var(--gld)');
+      meter(0, L().mViolence, ins.violent, pctS(ins.violent), 'var(--red)');
+      meter(1, L().mAnti, S.pg.antiShare, pctS(S.pg.antiShare), 'var(--amy)');
+      meter(2, L().mCapital, S.pg.capital, pctS(S.pg.capital), 'var(--gld)');
     }
     sayEl.textContent = say();
   }
   function say(): string {
     if (S.tab === 0) {
       const base = describeGrid(S.m, S.pref, S.fenced);
-      return S.calm >= 5 ? `${base} Hareket durdu: denge.` : base;
+      return S.calm >= 5 ? L().gridCalm(base) : base;
     }
     if (S.tab === 1) {
       const c = cultureOf(S.L, S.V);
-      const kind = c.K > 0.55 ? 'kollektivist ve bütüncül' : c.O > 0.5 ? 'bireyci, onurunu sert savunan' : 'bireyci ve analitik';
-      return `Bu ekolojide eğilim: ${kind}. Kollektivizm %${pct(c.K)}, bütüncül dikkat %${pct(c.Hol)}, onur duyarlılığı %${pct(c.O)}.`;
+      const kind = c.K > 0.55 ? 'coll' : c.O > 0.5 ? 'honor' : 'indiv';
+      return L().ecoSay[kind](pctS(c.K), pctS(c.Hol), pctS(c.O));
     }
     if (S.last === 'pgg') return describePgg(S.pg);
     const c0 = corridor(S.h, S.insult, 200, S.cseed + (S.insult ? 50 : 0));
-    return `Onur kültürü %${pct(S.h)}: ${S.insult ? 'hakaretten sonra' : 'hakaret olmadan'} hikâyeyi şiddetle bitirenler %${pct(c0.violent)}.`;
+    return (S.insult ? L().corSayIns : L().corSayCtl)(pctS(S.h), pctS(c0.violent));
   }
   const announce = scope.announcer($('live'), () => sayEl.textContent ?? '', 700);
 
@@ -519,20 +523,16 @@ export function mount(container: HTMLElement): () => void {
   }
 
   // ---------- Rehberli tur ----------
-  const tour = createTour(scope, [
-    { title: 'Karışık yaşam', text: 'İki grup iç içe yaşıyor, parçalar küçük. Henüz çatışmaya elverişli büyüklükte bir ada yok.', look: 'Ortalama parça yaklaşık 10 km, risk göstergesi düşük.',
-      apply: () => { selectTab(0); applyScen(SCEN[0]); setPlaying(false); } },
-    { title: 'Orta büyüklükte adalar', text: 'Benzerlik tercihi komşuluğu ayrıştırır, parçalar büyür. Kitaptaki gibi 20-60 km çaplı adalar oluşunca çatışma riski tepe yapar (Lim ve ark.).', look: 'Grafikte kırmızı çizginin sarı bandın içinde yükselmesi; kırmızı temas çizgileri.',
-      apply: () => { selectTab(0); applyScen(SCEN[1], 7); setPlaying(false); } },
-    { title: 'Net sınır', text: 'Hareketlilik düşükse orta adalar kalıcı olur. Sınırlar net ve tanınan (özerk) olunca temas çatışmaya dönüşmez (Rutherford: iyi çitler). "Sınırları kaldır" ile karşılaştırılabilir.', look: 'Yeşil özerk bölgeler ve risk çubuğunun düşüşü.',
-      apply: () => { selectTab(0); applyScen(SCEN[2], 60); grantAll(S.w, S.m); S.fenced = true; S.m = analyze(S.w, S.pref); dirty = true; setPlaying(false); } },
-    { title: 'Pirinç ve buğday', text: 'Pirinç, komşularla ortak sulama emeği ister; buğday bireysel çalışılır. Pirinç bölgelerinde kollektivist, bütüncül eğilim daha belirgin (Talhelm, Masuda ve Nisbett). Her iki replikasyon da karışık.', look: 'Haritada kalın çizgiler; "Buğday" düğmesine geçince kollektivizmin düşmesi.',
-      apply: () => { selectTab(1); pickEco('rice'); } },
-    { title: 'Onur kültürü', text: 'Hırsızlığa açık sürü ekolojisinden gelen onur kültüründe hakaret, kişisel saldırı sayılır. Koridor deneyinde hakarete uğrayan Güneyli erkeklerde hormonlar ve hayal edilen şiddet artar, Kuzeylilerde artmaz.', look: 'Güneyli ve Kuzeyli seçince "Hakaret" sütunundaki farklar.',
-      apply: () => { selectTab(2); setCor(0.8, true); } },
-    { title: 'Antisosyal ceza', text: 'Güven ve hukuk zayıf, gelir eşitsizliği yüksekse ceza hile yapana değil, cömert olana da gider (Yunanistan ve Umman). Avustralya örüntüsünde bu neredeyse yoktur.', look: 'Ceza çubuğunda kırmızı pay ve eşitsizlik eğrisinde sosyal sermayenin düşüşü.',
-      apply: () => { selectTab(2); setPgg('lo'); } },
-  ]);
+  const TS = L().tour;
+  const applies = [
+    () => { selectTab(0); applyScen(SCEN[0]); setPlaying(false); },
+    () => { selectTab(0); applyScen(SCEN[1], 7); setPlaying(false); },
+    () => { selectTab(0); applyScen(SCEN[2], 60); grantAll(S.w, S.m); S.fenced = true; S.m = analyze(S.w, S.pref); dirty = true; setPlaying(false); },
+    () => { selectTab(1); pickEco('rice'); },
+    () => { selectTab(2); setCor(0.8, true); },
+    () => { selectTab(2); setPgg('lo'); },
+  ];
+  const tour = createTour(scope, TS.map((s, i) => ({ ...s, apply: applies[i] })));
   $('tourHost').appendChild(tour.el);
 
   // ---------- Başlangıç ----------

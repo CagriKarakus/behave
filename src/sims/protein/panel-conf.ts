@@ -1,4 +1,5 @@
 // Sekme 3: Konformasyon ve işlev. Bir protein, bağlanan moleküle göre açık ve kapalı şekil arasında geçer (anahtar-kilit; enzim ya da reseptör).
+import { percent } from '../../i18n/fmt';
 import { mulberry32 } from '../rng';
 import { svg, svgText } from '../kit';
 import { chips, el, f1, pc, slider, type Ctx, type Meter } from '../ui';
@@ -126,7 +127,7 @@ export function createConfPanel(ctx: Ctx, host: HTMLElement) {
   function say(): string {
     const o = confOut(P);
     const who = P.lig === 'none' ? c0.whoNone : P.lig === 'good' ? c0.whoGood(f1(P.conc)) : c0.whoLike(f1(P.conc));
-    const warp = o.shape < 0.95 ? c0.warpSay(`%${Math.round((1 - o.shape) * 100)}`) : '';
+    const warp = o.shape < 0.95 ? c0.warpSay(percent(String(Math.round((1 - o.shape) * 100)))) : '';
     return c0.say(who, pc(o.closed), f1(o.rate), warp);
   }
 

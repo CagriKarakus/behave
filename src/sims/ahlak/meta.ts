@@ -6,4 +6,5 @@ export const meta: SimMeta = {
   title: 'Ahlak ve sezgi',
   blurb: 'Trolley, kamu malı ve ceza, zar ve dürüstlük',
   order: 1,
+  en: { title: 'Morality and intuition', blurb: 'Trolley, public goods and punishment, dice and honesty' },
 };

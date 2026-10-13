@@ -1,4 +1,5 @@
 // Sekme 2: Gen düzenlenmesi. Sinyal -> transkripsiyon faktörü (TF) -> promotör -> gen; metilasyon kilidi; alternatif ekleme.
+import { percent } from '../../i18n/fmt';
 import { svg, svgText } from '../kit';
 import { el, pc, slider, type Ctx, type Meter } from '../ui';
 import { EXONS, expression, splice, type RegOut } from './model';
@@ -28,10 +29,10 @@ export function createRegPanel(ctx: Ctx, host: HTMLElement) {
   const sl = q('sl');
   const hs = [0, 1].map((i) => slider(ctx.scope, sl, {
     id: `${ctx.id}-sig${i}`, name: r.sigName('AB'[i]), hint: i ? r.sigHintHigh : r.sigHintLow,
-    min: 0, max: 100, value: S.sig[i], cls: 'sl', color: 'var(--eff)', fmt: (v) => `%${v}`, onInput: (v) => { S.sig[i] = v; mark(); },
+    min: 0, max: 100, value: S.sig[i], cls: 'sl', color: 'var(--eff)', fmt: (v) => percent(String(v)), onInput: (v) => { S.sig[i] = v; mark(); },
   }));
   const hTf = slider(ctx.scope, sl, {
-    id: `${ctx.id}-tf`, name: r.tfName, hint: r.tfHint, min: 0, max: 100, value: S.tf, cls: 'sl', color: 'var(--pfc)', fmt: (v) => `%${v}`,
+    id: `${ctx.id}-tf`, name: r.tfName, hint: r.tfHint, min: 0, max: 100, value: S.tf, cls: 'sl', color: 'var(--pfc)', fmt: (v) => percent(String(v)),
     onInput: (v) => { S.tf = v; mark(); },
   });
   const mt = q('mt');

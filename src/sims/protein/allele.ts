@@ -1,4 +1,5 @@
 // Küçük ek kart: bir varyantın (alelin) popülasyonda yayılması. Wright-Fisher: her nesil seçilim + rastlantısal örnekleme (sürüklenme).
+import { percent } from '../../i18n/fmt';
 import { mulberry32 } from '../rng';
 import { svg, svgText } from '../kit';
 import { chips, el, pc, slider, type Ctx } from '../ui';
@@ -25,8 +26,8 @@ export function createAllele(ctx: Ctx, host: HTMLElement, getF: () => number) {
   const setMode = chips(q('mo'), ctx.scope, (['notr', 'yararli', 'zararli', 'denge'] as const).map((key) => ({ key, label: a.modes[key] })),
     (k) => { mode = k as SelMode; setMode(mode); touch(); }, a.modeAria);
   const sl = q('sl');
-  const sS = slider(ctx.scope, sl, { id: `${ctx.id}-al-s`, name: a.sName, hint: a.sHint, min: 1, max: 20, value: strength, cls: 'sl', fmt: (v) => `%${v}`, onInput: (v) => { strength = v; touch(); } });
-  slider(ctx.scope, sl, { id: `${ctx.id}-al-p`, name: a.pName, hint: a.pHint, min: 1, max: 50, value: p0, cls: 'sl', fmt: (v) => `%${v}`, onInput: (v) => { p0 = v; touch(); } });
+  const sS = slider(ctx.scope, sl, { id: `${ctx.id}-al-s`, name: a.sName, hint: a.sHint, min: 1, max: 20, value: strength, cls: 'sl', fmt: (v) => percent(String(v)), onInput: (v) => { strength = v; touch(); } });
+  slider(ctx.scope, sl, { id: `${ctx.id}-al-p`, name: a.pName, hint: a.pHint, min: 1, max: 50, value: p0, cls: 'sl', fmt: (v) => percent(String(v)), onInput: (v) => { p0 = v; touch(); } });
   slider(ctx.scope, sl, { id: `${ctx.id}-al-n`, name: a.nName, hint: a.nHint, min: 0, max: SIZES.length - 1, value: ni, cls: 'sl', fmt: (v) => a.nFmt(SIZES[v]), onInput: (v) => { ni = v; touch(); } });
   const ac = q('ac');
   const again = el(ac, 'button', 'btn', a.again); again.type = 'button';

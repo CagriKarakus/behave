@@ -7,7 +7,6 @@ import { L } from './text';
 import { relatedBox, type Ctx, type Meter, type Panel } from './ui';
 
 type Tab = 'sum' | 'syn' | 'circ';
-const TAB_KEYS: Tab[] = ['sum', 'syn', 'circ'];
 
 const TEMPLATE = (id: string) => {
   const V = L().view;
