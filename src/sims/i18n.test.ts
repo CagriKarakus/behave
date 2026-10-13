@@ -13,7 +13,6 @@ const enTexts = import.meta.glob<{ default: unknown }>('./*/text.en.ts');
 const TR_ONLY = /[ışğİŞĞ]/;
 const BAD = /undefined|NaN|\[object|\{\w+\}/;
 
-type Shape = string;
 function shape(a: unknown, b: unknown, path: string, errs: string[]): void {
   if (typeof a === 'string') { if (typeof b !== 'string' || !b.trim()) errs.push(`${path}: boş/yanlış tip`); return; }
   if (typeof a === 'function') { if (typeof b !== 'function' || (b as () => void).length !== (a as () => void).length) errs.push(`${path}: fonksiyon imzası farklı`); return; }

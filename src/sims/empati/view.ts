@@ -213,7 +213,7 @@ export function mount(container: HTMLElement): () => void {
   }
 
   // ---- Arayüz yardımcıları ----
-  function addSlider(parent: HTMLElement, key: string, name: string, hint: string, min: number, max: number, step: number,
+  function addSlider(parent: HTMLElement, key: string, [name, hint]: string[], min: number, max: number, step: number,
     fmt: (v: number) => string, onInput: (v: number) => void): (v: number) => void {
     const w = document.createElement('div');
     w.innerHTML = `<div class="sl-top"><label class="sl-name" for="${id}-s-${key}">${name}</label><span class="sl-val"></span></div>` +
@@ -302,10 +302,10 @@ export function mount(container: HTMLElement): () => void {
     syncE(); changeE();
   });
   const eIn = $('e-in');
-  const sPain = addSlider(eIn, 'pain', ...T.e.sliders.pain, 0, 1, 0.05, (v) => pct(v) + '%', (v) => { S.e.pain = v; changeE(); });
-  const sSelf = addSlider(eIn, 'self', ...T.e.sliders.self, 0, 1, 0.05, (v) => pct(v) + '%', (v) => { S.e.selfFocus = v; changeE(); });
-  const sTrain = addSlider(eIn, 'train', ...T.e.sliders.train, 0, 1, 0.05, (v) => pct(v) + '%', (v) => { S.e.training = v; changeE(); });
-  const sStress = addSlider(eIn, 'stress', ...T.e.sliders.stress, 0, 1, 0.05, (v) => pct(v) + '%', (v) => { S.e.stress = v; changeE(); });
+  const sPain = addSlider(eIn, 'pain', T.e.sliders.pain, 0, 1, 0.05, (v) => pct(v) + '%', (v) => { S.e.pain = v; changeE(); });
+  const sSelf = addSlider(eIn, 'self', T.e.sliders.self, 0, 1, 0.05, (v) => pct(v) + '%', (v) => { S.e.selfFocus = v; changeE(); });
+  const sTrain = addSlider(eIn, 'train', T.e.sliders.train, 0, 1, 0.05, (v) => pct(v) + '%', (v) => { S.e.training = v; changeE(); });
+  const sStress = addSlider(eIn, 'stress', T.e.sliders.stress, 0, 1, 0.05, (v) => pct(v) + '%', (v) => { S.e.stress = v; changeE(); });
   function syncE(): void {
     sPain(S.e.pain); sSelf(S.e.selfFocus); sTrain(S.e.training); sStress(S.e.stress);
     ePre([EMPATHY_TRAINING, COMPASSION_TRAINING, EMPATHY_DEFAULT].findIndex((p) => (Object.keys(p) as Array<keyof EmpathyInputs>).every((k) => p[k] === S.e[k])));
@@ -374,9 +374,9 @@ export function mount(container: HTMLElement): () => void {
   const setTarget = addChips($('b-tg'), T.groups, (i) => { S.b.target = TARGETS[i]; setTarget(i); changeB(); });
   const setRear = addChips($('b-rear'), T.b.rear, (i) => { S.b.rearing = i ? 'dark' : 'light'; setRear(i); changeB(); });
   const bIn = $('b-in');
-  const sDays = addSlider(bIn, 'days', ...T.b.days, 0, 14, 1, T.b.daysVal, (v) => { S.b.days = v; changeB(); });
-  const sCost = addSlider(bIn, 'cost', ...T.b.cost, 0, 0.8, 0.05, (v) => pct(v) + '%', (v) => { S.b.cost = v; changeB(); });
-  const sPartner = addSlider(bIn, 'pp', ...T.b.pp, 0, 1, 0.05, (v) => pct(v) + '%', (v) => { S.b.partnerPain = v; changeB(); });
+  const sDays = addSlider(bIn, 'days', T.b.days, 0, 14, 1, T.b.daysVal, (v) => { S.b.days = v; changeB(); });
+  const sCost = addSlider(bIn, 'cost', T.b.cost, 0, 0.8, 0.05, (v) => pct(v) + '%', (v) => { S.b.cost = v; changeB(); });
+  const sPartner = addSlider(bIn, 'pp', T.b.pp, 0, 1, 0.05, (v) => pct(v) + '%', (v) => { S.b.partnerPain = v; changeB(); });
   const tgGc = addToggle(bIn, T.b.gc[0], T.b.gc[1], () => { S.b.gcBlock = !S.b.gcBlock; tgGc(S.b.gcBlock); changeB(); });
   function syncB(): void {
     setTarget(TARGETS.indexOf(S.b.target)); setRear(S.b.rearing === 'dark' ? 1 : 0);
@@ -429,9 +429,9 @@ export function mount(container: HTMLElement): () => void {
   ];
   const gPre = addChips($('g-pre'), GPRE.map((p) => p[0]), (i) => { S.g = { ...GPRE[i][1], amount: S.g.amount }; syncG(); changeG(); });
   const gIn = $('g-in');
-  const sAltru = addSlider(gIn, 'altru', ...T.g.altru, 0, 1, 0.05, (v) => pct(v) + '%', (v) => { S.g.altru = v; syncG(); changeG(); });
-  const sWarm = addSlider(gIn, 'warm', ...T.g.warm, 0, 1, 0.05, (v) => pct(v) + '%', (v) => { S.g.warm = v; syncG(); changeG(); });
-  const sAmount = addSlider(gIn, 'amt', ...T.g.amount, 0.1, 0.9, 0.05, (v) => pct(v) + '%', (v) => { S.g.amount = v; changeG(); });
+  const sAltru = addSlider(gIn, 'altru', T.g.altru, 0, 1, 0.05, (v) => pct(v) + '%', (v) => { S.g.altru = v; syncG(); changeG(); });
+  const sWarm = addSlider(gIn, 'warm', T.g.warm, 0, 1, 0.05, (v) => pct(v) + '%', (v) => { S.g.warm = v; syncG(); changeG(); });
+  const sAmount = addSlider(gIn, 'amt', T.g.amount, 0.1, 0.9, 0.05, (v) => pct(v) + '%', (v) => { S.g.amount = v; changeG(); });
   const tgRep = addToggle(gIn, T.g.rep[0], T.g.rep[1], () => { S.rep = S.rep === 'orig' ? 'small' : 'orig'; tgRep(S.rep === 'small'); renderG(); });
   function syncG(): void {
     sAltru(S.g.altru); sWarm(S.g.warm); sAmount(S.g.amount); tgRep(S.rep === 'small');

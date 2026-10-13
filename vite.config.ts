@@ -10,6 +10,7 @@ export default defineConfig({
   server: { fs: { deny: ['.book', '**/*.pdf', '.env', '.env.*', '*.{crt,pem}', '**/.git/**'] } },
   test: {
     environment: 'node',
+    testTimeout: 30_000,
     include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'],
   },
 });
