@@ -3,14 +3,14 @@ import { mulberry32 } from '../rng';
 import { svg, svgText } from '../kit';
 import { chips, el, f1, pc, slider, type Ctx, type Meter } from '../ui';
 import { CONF_DEFAULT, confOut, stepConf, ST, type ConfP, type Lig } from './model';
+import { L } from './text';
 
 const HIST = 240;       // 24 sn (0,1 sn aralıkla)
-const LIGS: Array<{ key: Lig; label: string }> = [
-  { key: 'none', label: 'Molekül yok' }, { key: 'good', label: 'Doğru molekül (anahtar)' }, { key: 'like', label: 'Benzer ama uymayan' },
-];
+const LIG_KEYS: Lig[] = ['none', 'good', 'like'];
 const CX0 = 44, CX1 = 350;
 
 export function createConfPanel(ctx: Ctx, host: HTMLElement) {
+  const c0 = L().conf;
   const P: ConfP = { ...CONF_DEFAULT };
   const rnd = mulberry32(3);
   let st: number = ST.EO, c = 0, last = -1, flash = -1e9, paused = false, dirty = true, turns = 0;
@@ -18,28 +18,28 @@ export function createConfPanel(ctx: Ctx, host: HTMLElement) {
   let acc = 0;
 
   host.innerHTML =
-    '<p class="note">Protein, şekline göre iş görür. Uyan molekül bağlanınca iki lob kapanır; ürün çıkınca yeniden açılır. Ekranda tek bir molekül, çubukta ise beklenen ortalama var.</p>' +
+    `<p class="note">${c0.intro}</p>` +
     '<div class="chips" data-ref="lg"></div>' +
-    '<div class="stage"><svg viewBox="0 0 360 190" role="img" aria-label="Protein: iki lob, bağlanma çukuru, serbest moleküller" data-ref="pr"></svg>' +
-    '<div class="legend"><span><i style="background:var(--eff)"></i>doğru molekül (çukura uyar)</span><span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0L12 6L6 12L0 6Z" fill="var(--red)"/></svg>benzer molekül (uymaz)</span><span><i style="background:var(--gld)"></i>ürün</span></div></div>' +
-    '<div class="chart"><h4 class="sim-h">Tek molekülün şeklinin zamanla değişimi</h4><svg viewBox="0 0 360 110" role="img" aria-label="Açık ve kapalı şekil arasındaki geçişlerin zaman çizgisi" data-ref="tr"></svg></div>' +
+    `<div class="stage"><svg viewBox="0 0 360 190" role="img" aria-label="${c0.sceneAria}" data-ref="pr"></svg>` +
+    `<div class="legend"><span><i style="background:var(--eff)"></i>${c0.legGood}</span><span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0L12 6L6 12L0 6Z" fill="var(--red)"/></svg>${c0.legLike}</span><span><i style="background:var(--gld)"></i>${c0.legProduct}</span></div></div>` +
+    `<div class="chart"><h4 class="sim-h">${c0.traceTitle}</h4><svg viewBox="0 0 360 110" role="img" aria-label="${c0.traceAria}" data-ref="tr"></svg></div>` +
     '<div class="row" data-ref="ac"></div>' +
-    '<div class="card"><h3 class="sim-h">Girdiler</h3><div class="sliders" data-ref="sl"></div></div>';
+    `<div class="card"><h3 class="sim-h">${c0.inputs}</h3><div class="sliders" data-ref="sl"></div></div>`;
   const q = <T extends HTMLElement | SVGElement = HTMLElement>(k: string): T => host.querySelector<T>(`[data-ref="${k}"]`) as T;
   const mark = (): void => { dirty = true; ctx.touch(); };
 
-  const setLg = chips(q('lg'), ctx.scope, LIGS, (k) => { P.lig = k as Lig; setLg(k); mark(); }, 'Bağlanan molekül');
+  const setLg = chips(q('lg'), ctx.scope, LIG_KEYS.map((key) => ({ key, label: c0.ligs[key] })), (k) => { P.lig = k as Lig; setLg(k); mark(); }, c0.ligAria);
   setLg(P.lig);
   const sl = q('sl');
   const hs = {
-    conc: slider(ctx.scope, sl, { id: `${ctx.id}-conc`, name: 'Molekül derişimi', hint: 'Fazla molekül bağlanmayı sıklaştırır, ama bir noktadan sonra doyar.', min: 0, max: 10, step: 0.5, value: P.conc, cls: 'sl', color: 'var(--eff)', fmt: (v) => f1(v), onInput: (v) => { P.conc = v; mark(); } }),
-    temp: slider(ctx.scope, sl, { id: `${ctx.id}-temp`, name: 'Sıcaklık', hint: 'Isınınca hızlanır, çok ısınınca şekil bozulur (modelin varsayımı).', min: 0, max: 60, value: P.temp, cls: 'sl', color: 'var(--red)', fmt: (v) => `${v} °C`, onInput: (v) => { P.temp = v; mark(); } }),
-    ph: slider(ctx.scope, sl, { id: `${ctx.id}-ph`, name: 'Asitlik (pH)', hint: 'Nötre yakın en iyi; asidik ya da bazik uçta şekil kayar.', min: 4, max: 10, step: 0.1, value: P.ph, cls: 'sl', color: 'var(--pit)', fmt: (v) => f1(v), onInput: (v) => { P.ph = v; mark(); } }),
+    conc: slider(ctx.scope, sl, { id: `${ctx.id}-conc`, name: c0.concName, hint: c0.concHint, min: 0, max: 10, step: 0.5, value: P.conc, cls: 'sl', color: 'var(--eff)', fmt: (v) => f1(v), onInput: (v) => { P.conc = v; mark(); } }),
+    temp: slider(ctx.scope, sl, { id: `${ctx.id}-temp`, name: c0.tempName, hint: c0.tempHint, min: 0, max: 60, value: P.temp, cls: 'sl', color: 'var(--red)', fmt: (v) => `${v} °C`, onInput: (v) => { P.temp = v; mark(); } }),
+    ph: slider(ctx.scope, sl, { id: `${ctx.id}-ph`, name: c0.phName, hint: c0.phHint, min: 4, max: 10, step: 0.1, value: P.ph, cls: 'sl', color: 'var(--pit)', fmt: (v) => f1(v), onInput: (v) => { P.ph = v; mark(); } }),
   };
   const ac = q('ac');
-  const pauseB = el(ac, 'button', 'btn', 'Duraklat'); pauseB.type = 'button'; pauseB.setAttribute('aria-pressed', 'false');
-  ctx.scope.on(pauseB, 'click', () => { paused = !paused; pauseB.setAttribute('aria-pressed', String(paused)); pauseB.textContent = paused ? 'Devam' : 'Duraklat'; dirty = true; ctx.touch(); });
-  const resetB = el(ac, 'button', 'btn', 'Sıfırla'); resetB.type = 'button';
+  const pauseB = el(ac, 'button', 'btn', c0.pause); pauseB.type = 'button'; pauseB.setAttribute('aria-pressed', 'false');
+  ctx.scope.on(pauseB, 'click', () => { paused = !paused; pauseB.setAttribute('aria-pressed', String(paused)); pauseB.textContent = paused ? c0.resume : c0.pause; dirty = true; ctx.touch(); });
+  const resetB = el(ac, 'button', 'btn', c0.reset); resetB.type = 'button';
   ctx.scope.on(resetB, 'click', () => { reset(); mark(); });
 
   function reset(): void { st = ST.EO; c = 0; hist = []; turns = 0; acc = 0; flash = -1e9; dirty = true; }
@@ -47,13 +47,13 @@ export function createConfPanel(ctx: Ctx, host: HTMLElement) {
   /* ---------- Sahne ---------- */
   const s = q<SVGElement>('pr');
   svg('path', { d: 'M62 104h6', class: 'dna' }, s);
-  svgText(s, { x: 60, y: 108, 'text-anchor': 'end' }, 'menteşe');
+  svgText(s, { x: 60, y: 108, 'text-anchor': 'end' }, c0.hinge);
   const top = svg('g', {}, s);
   svg('rect', { x: 70, y: 44, width: 150, height: 54, rx: 20, class: 'lobe' }, top);
   const botG = svg('g', {}, s);
   const bot = svg('rect', { x: 70, y: 102, width: 150, height: 54, rx: 20, class: 'lobe' }, botG);
   svg('circle', { cx: 176, cy: 102, r: 13, class: 'pocket' }, s);
-  svgText(s, { x: 176, y: 174, 'text-anchor': 'middle' }, 'bağlanma çukuru');
+  svgText(s, { x: 176, y: 174, 'text-anchor': 'middle' }, c0.pocket);
   const stateT = svgText(s, { x: 8, y: 16, class: 'st' }, '');
   const warpT = svgText(s, { x: 8, y: 30 }, '');
   const bound = svg('g', {}, s);
@@ -71,13 +71,13 @@ export function createConfPanel(ctx: Ctx, host: HTMLElement) {
   const yC = 26, yO = 70;
   svg('line', { x1: CX0, x2: CX1, y1: yC, y2: yC, class: 'grid' }, tr);
   svg('line', { x1: CX0, x2: CX1, y1: yO, y2: yO, class: 'grid' }, tr);
-  svgText(tr, { x: CX0 - 6, y: yC + 3, 'text-anchor': 'end' }, 'kapalı');
-  svgText(tr, { x: CX0 - 6, y: yO + 3, 'text-anchor': 'end' }, 'açık');
-  svgText(tr, { x: CX0, y: 100 }, '24 sn önce');
-  svgText(tr, { x: CX1, y: 100, 'text-anchor': 'end' }, 'şimdi');
+  svgText(tr, { x: CX0 - 6, y: yC + 3, 'text-anchor': 'end' }, c0.closedLbl);
+  svgText(tr, { x: CX0 - 6, y: yO + 3, 'text-anchor': 'end' }, c0.openLbl);
+  svgText(tr, { x: CX0, y: 100 }, c0.ago);
+  svgText(tr, { x: CX1, y: 100, 'text-anchor': 'end' }, c0.now);
   const line = svg('path', { class: 'ln tr-ln', d: '' }, tr);
   const dots = svg('g', {}, tr);
-  svgText(tr, { x: CX1, y: 11, 'text-anchor': 'end' }, 'yeşil nokta: bir ürün çıktı');
+  svgText(tr, { x: CX1, y: 11, 'text-anchor': 'end' }, c0.greenDot);
 
   function renderSlow(): void {
     // Serbest moleküller: derişime göre sayı; bağlıyken çukurda biri durur.
@@ -101,8 +101,8 @@ export function createConfPanel(ctx: Ctx, host: HTMLElement) {
     botG.setAttribute('transform', `rotate(${warp * 10} 70 129)`);
     bot.classList.toggle('warp', warp > 0.3);
     top.classList.toggle('warp', warp > 0.3);
-    stateT.textContent = `şekil: ${closedT ? 'kapalı' : 'açık'}${st === ST.SC ? ' (aktif)' : ''}`;
-    warpT.textContent = warp > 0.05 ? `şekil bozulması: ${pc(warp)}` : '';
+    stateT.textContent = c0.shapeState(!!closedT, st === ST.SC);
+    warpT.textContent = warp > 0.05 ? c0.warping(pc(warp)) : '';
     const g = free.children;
     for (let i = 0; i < g.length; i++) {
       const x = 270 + (i % 3) * 28 + Math.sin(now / 700 + i * 2.1) * 10;
@@ -125,9 +125,9 @@ export function createConfPanel(ctx: Ctx, host: HTMLElement) {
 
   function say(): string {
     const o = confOut(P);
-    const who = P.lig === 'none' ? 'Molekül yok' : P.lig === 'good' ? `Doğru molekül, derişim ${f1(P.conc)}` : `Benzer ama uymayan molekül, derişim ${f1(P.conc)}`;
-    const warp = o.shape < 0.95 ? ` Şekil %${Math.round((1 - o.shape) * 100)} bozuk.` : '';
-    return `${who}: beklenen kapalı şekil payı ${pc(o.closed)}, işlev hızı ${f1(o.rate)} tur/sn.${warp}`;
+    const who = P.lig === 'none' ? c0.whoNone : P.lig === 'good' ? c0.whoGood(f1(P.conc)) : c0.whoLike(f1(P.conc));
+    const warp = o.shape < 0.95 ? c0.warpSay(`%${Math.round((1 - o.shape) * 100)}`) : '';
+    return c0.say(who, pc(o.closed), f1(o.rate), warp);
   }
 
   return {
@@ -135,9 +135,9 @@ export function createConfPanel(ctx: Ctx, host: HTMLElement) {
     meters(): Meter[] {
       const o = confOut(P);
       return [
-        { label: 'Kapalı şekil payı', value: pc(o.closed), frac: o.closed, color: 'var(--pit)' },
-        { label: 'İşlev hızı', value: `${f1(o.rate)} tur/sn`, frac: o.rate / 1.1, color: 'var(--gld)' },
-        { label: 'Şeklin sağlamlığı', value: pc(o.shape), frac: o.shape, color: 'var(--pfc)' },
+        { label: c0.mClosed, value: pc(o.closed), frac: o.closed, color: 'var(--pit)' },
+        { label: c0.mRate, value: c0.rateVal(f1(o.rate)), frac: o.rate / 1.1, color: 'var(--gld)' },
+        { label: c0.mShape, value: pc(o.shape), frac: o.shape, color: 'var(--pfc)' },
       ];
     },
     draw(now = performance.now()): boolean {

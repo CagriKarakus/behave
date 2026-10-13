@@ -8,9 +8,9 @@ import type { MsgKey } from '../../i18n/messages';
 import type { RepStatus } from '../ui';
 import { L } from './text';
 import {
-  FAST_DEFAULT, KINDS, MASK_MS, STIM, STREET_DEFAULT, T_END, compare, decide, describeFast, describeStreet,
+  FAST_DEFAULT, KINDS, MASK_MS, STREET_DEFAULT, T_END, compare, decide, describeFast, describeStreet,
   disorderOf, newStreet, simulateFast, times,
-  type Comparison, type FastInputs, type FastResult, type Kind, type Stim, type StreetCfg, type StreetState,
+  type Comparison, type FastInputs, type FastResult, type Stim, type StreetCfg, type StreetState,
 } from './model';
 
 const SLOW = 0.25;

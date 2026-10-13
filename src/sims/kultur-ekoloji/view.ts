@@ -1,8 +1,9 @@
 import { repBadge } from '../ui';
-import { t } from '../../i18n/t';
+import { t, type MsgKey } from '../../i18n/t';
 import { percent } from '../../i18n/fmt';
 import { L } from './text';
-import type { BK, RP, RS } from './text.tr';
+import type { BK, RP, RS, Strings } from './text.tr';
+import type { RepStatus } from '../ui';
 import '../sim.css';
 import './view.css';
 import { Scope, pct, ref, uid } from '../kit';
@@ -32,6 +33,9 @@ const PGG_PRESETS = [
   { id: 'lo', ineq: 0.7, trust: 0.25 },
 ];
 
+const ecoName = (id: string): string => L().eco[id as keyof Strings['eco']];
+const RS: RS = (s) => t(`repl.${s}` as MsgKey);
+const RP: RP = (s, bold) => (bold ? `<span class="rep">${t('repl.badge', { s: `<b>${RS(s)}</b>` })}</span>` : repBadge(s));
 const BOOK: BK = (id, label) => `<a href="#/bolum/ch09?deney=${id}">${label}</a>`;
 
 const slider = (k: keyof Strings['sl'], min: number, max: number, stp: number, cls = '') => {
@@ -189,9 +193,10 @@ export function mount(container: HTMLElement): () => void {
 
   // ---------- Kaydırıcılar ----------
   const inputs = Array.from(root.querySelectorAll<HTMLInputElement>('input[data-k]'));
+  const pv = (v: number) => percent(String(v));
   const fmt: Record<string, (v: number) => string> = {
-    pref: (v) => `%${v}`, mob: (v) => `${Math.round(v)} (yarıçap ${1 + Math.round(v / 11.1)} hücre)`, ratio: (v) => `%${v} / %${100 - v}`,
-    L: (v) => `%${v}`, V: (v) => `%${v}`, h: (v) => `%${v}`, ineq: (v) => `%${v}`, trust: (v) => `%${v}`, cost: (v) => `${v}:1`,
+    pref: pv, mob: (v) => L().mobVal(Math.round(v), 1 + Math.round(v / 11.1)), ratio: (v) => `${pv(v)} / ${pv(100 - v)}`,
+    L: pv, V: pv, h: pv, ineq: pv, trust: pv, cost: (v) => `${v}:1`,
   };
   function syncSliders(): void {
     const vals: Record<string, number> = {
@@ -222,7 +227,7 @@ export function mount(container: HTMLElement): () => void {
     S.m = analyze(S.w, S.pref); dirty = true;
   }
   const playBtn = $<HTMLButtonElement>('play');
-  function setPlaying(v: boolean): void { S.playing = v; playBtn.setAttribute('aria-pressed', String(v)); playBtn.textContent = v ? 'Duraklat' : 'Oynat'; }
+  function setPlaying(v: boolean): void { S.playing = v; playBtn.setAttribute('aria-pressed', String(v)); playBtn.textContent = v ? L().pause : L().play; }
   function setScen(id: string | null): void {
     S.scen = id;
     root.querySelectorAll<HTMLElement>('[data-s]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.s === id)));
@@ -300,17 +305,18 @@ export function mount(container: HTMLElement): () => void {
       `<polyline points="${pts}" class="ln" stroke="var(--amy)" stroke-width="2"/>` +
       `<circle cx="${px(cur[0]).toFixed(1)}" cy="${py(cur[1]).toFixed(1)}" r="5" fill="var(--ink)" stroke="var(--panel)" stroke-width="2"/>` +
       [5, 10, 20, 40, 80].map((k) => `<text x="${px(k)}" y="130" text-anchor="middle">${k}</text>`).join('') +
-      `<text x="350" y="141" text-anchor="end">ortalama parça çapı (km)</text>` +
-      `<text x="${(a + b) / 2}" y="11" text-anchor="middle" class="bandlab">20-60 km (kitap)</text>` +
-      `<text x="30" y="20" text-anchor="end">risk</text><text x="30" y="116" text-anchor="end">0</text>`;
+      `<text x="350" y="141" text-anchor="end">${L().axisKm}</text>` +
+      `<text x="${(a + b) / 2}" y="11" text-anchor="middle" class="bandlab">${L().bandLab}</text>` +
+      `<text x="30" y="20" text-anchor="end">${L().axisRisk}</text><text x="30" y="116" text-anchor="end">0</text>`;
   }
 
   // ---------- 2. Ekoloji haritası ----------
   const ecoNode = (i: number) => ({ x: 4, y: 6 + i * 41, w: 96, h: 30 });
-  const MECH = [{ k: 'L', n: 'Ortak emek', x: 138, y: 34 }, { k: 'V', n: 'Mal savunma', x: 138, y: 134 }];
-  const CULT = [{ k: 'K', n: 'Kollektivizm', y: 14 }, { k: 'Hol', n: 'Bütüncül dikkat', y: 84 }, { k: 'O', n: 'Onur duyarlılığı', y: 154 }];
+  const MECH = [{ k: 'L', x: 138, y: 34 }, { k: 'V', x: 138, y: 134 }];
+  const CULT = [{ k: 'K', y: 14 }, { k: 'Hol', y: 84 }, { k: 'O', y: 154 }];
   const mapSvg = $('map');
   function drawMap(): void {
+    const T = L();
     const cu = cultureOf(S.L, S.V);
     const val: Record<string, number> = { L: S.L, V: S.V, K: cu.K, Hol: cu.Hol, O: cu.O };
     let h = '';
@@ -324,16 +330,16 @@ export function mount(container: HTMLElement): () => void {
       + ln(218, MECH[0].y + 18, 258, CULT[2].y + 18, S.L * 0.5, 0.5, true) + ln(218, MECH[1].y + 18, 258, CULT[0].y + 18, S.V * 0.3, 0.5, true);
     ECOS.forEach((e, i) => {
       const n = ecoNode(i), sel = S.eco === e.id;
-      h += `<g class="node" data-e="${e.id}" role="button" tabindex="0" aria-pressed="${sel}" aria-label="${e.name}"><rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="8" class="nb${sel ? ' sel' : ''}"/><text x="${n.x + 8}" y="${n.y + 19}" class="nt">${e.name.split(' (')[0]}${e.book ? '' : ' *'}</text></g>`;
+      h += `<g class="node" data-e="${e.id}" role="button" tabindex="0" aria-pressed="${sel}" aria-label="${ecoName(e.id)}"><rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="8" class="nb${sel ? ' sel' : ''}"/><text x="${n.x + 8}" y="${n.y + 19}" class="nt">${ecoName(e.id).split(' (')[0]}${e.book ? '' : ' *'}</text></g>`;
     });
     const box = (x: number, y: number, w: number, name: string, k: string, color: string) => {
       const v = val[k];
       return `<g><rect x="${x}" y="${y}" width="${w}" height="36" rx="8" class="nb"/><rect x="${x + 1}" y="${y + 1}" width="${((w - 2) * v).toFixed(1)}" height="34" rx="7" fill="${color}" fill-opacity=".28"/>` +
-        `<text x="${x + 8}" y="${y + 15}" class="nt">${name}</text><text x="${x + 8}" y="${y + 29}" class="nv nvv">%${pct(v)}</text></g>`;
+        `<text x="${x + 8}" y="${y + 15}" class="nt">${name}</text><text x="${x + 8}" y="${y + 29}" class="nv nvv">${pctS(v)}</text></g>`;
     };
-    MECH.forEach((m) => { h += box(m.x, m.y, 80, m.n, m.k, m.k === 'L' ? 'var(--gld)' : 'var(--amy)'); });
-    CULT.forEach((c) => { h += box(258, c.y, 100, c.n, c.k, c.k === 'K' ? 'var(--pfc)' : c.k === 'Hol' ? 'var(--pit)' : 'var(--amy)'); });
-    h += `<text x="4" y="212" class="nv">* kitapta ayrıntısı yok, modelin örneği</text>`;
+    MECH.forEach((m, i) => { h += box(m.x, m.y, 80, T.mech[i], m.k, m.k === 'L' ? 'var(--gld)' : 'var(--amy)'); });
+    CULT.forEach((c, i) => { h += box(258, c.y, 100, T.cult[i], c.k, c.k === 'K' ? 'var(--pfc)' : c.k === 'Hol' ? 'var(--pit)' : 'var(--amy)'); });
+    h += `<text x="4" y="212" class="nv">${T.mapNote}</text>`;
     mapSvg.innerHTML = h;
   }
   const rep = repBadge('karışık');
